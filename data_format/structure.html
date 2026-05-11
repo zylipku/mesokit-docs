@@ -339,70 +339,58 @@
         <article role="main" id="furo-main-content">
           <section id="data-structure">
 <h1>Data Structure<a class="headerlink" href="#data-structure" title="Link to this heading">¶</a></h1>
-<p>This page is the canonical reference for what a <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> trajectory dataset
-contains. It is split between the in-memory Python container and the on-disk
-HDF5 file; the two are mirror images, but the on-disk layout is the source of
-truth for interchange.</p>
-<p>The detailed v1 schema is defined in code by
-<a class="reference internal" href="../apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TRAJECTORY_CACHE_V1" title="mesokit.data.format.TRAJECTORY_CACHE_V1"><code class="xref py py-data docutils literal notranslate"><span class="pre">mesokit.data.format.TRAJECTORY_CACHE_V1</span></code></a> (also re-exported as
-<a class="reference internal" href="../apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT" title="mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT"><code class="xref py py-data docutils literal notranslate"><span class="pre">mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT</span></code></a>). The tables
-below are rendered from that schema; the prose explains the conventions
-around it.</p>
-<section id="in-memory-container-trajectorydataset">
-<h2>In-Memory Container — <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code><a class="headerlink" href="#in-memory-container-trajectorydataset" title="Link to this heading">¶</a></h2>
-<p><a class="reference download internal" download="" href="../_downloads/98f1dcb2c59397bf212ac00dac8d47fd/trajectory.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code></span></a> is a frozen
-dataclass with the following fields:</p>
+<p>Three distinct objects in <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> all get called “data” or “dataset”
+in conversation. Naming them up front prevents the rest of this page
+from being ambiguous:</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Field</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Notes</p></th>
+<tr class="row-odd"><th class="head"><p>Object</p></th>
+<th class="head"><p>Concrete type</p></th>
+<th class="head"><p>Lifetime</p></th>
+<th class="head"><p>Role</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></p></td>
-<td><p>Shape <code class="docutils literal notranslate"><span class="pre">(n_traj,</span> <span class="pre">n_time,</span> <span class="pre">n_channel,</span> <span class="pre">*grid_shape)</span></code>.</p></td>
+<tr class="row-even"><td><p>Cache file</p></td>
+<td><p>HDF5 file (<code class="docutils literal notranslate"><span class="pre">*.h5</span></code>)</p></td>
+<td><p>Persistent on disk</p></td>
+<td><p>The interchange format; what <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code> writes and <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code> accepts.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">times</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></p></td>
-<td><p>Shape <code class="docutils literal notranslate"><span class="pre">(n_time,)</span></code>. Floating, strictly increasing.</p></td>
+<tr class="row-odd"><td><p>In-memory bundle</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code> (Python <code class="docutils literal notranslate"><span class="pre">&#64;dataclass</span></code>)</p></td>
+<td><p>One per file load</p></td>
+<td><p>The canonical Python container; what every model and interpretability extractor consumes.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dyn</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
-<td><p>Compulsory dynamics identifier (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;allen_cahn_1d&quot;</span></code>).</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">physical</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">Any]</span></code></p></td>
-<td><p>Equation/domain parameters. Open-content.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">numerical</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">Any]</span></code></p></td>
-<td><p>Discretization and solver parameters. Open-content.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">provenance</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">Any]</span></code></p></td>
-<td><p>How this file was produced. Open-content.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">channel_names</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">tuple[str,</span> <span class="pre">...]</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
-<td><p>Optional channel labels; length must equal <code class="docutils literal notranslate"><span class="pre">data.shape[2]</span></code>.</p></td>
+<tr class="row-even"><td><p>Training view</p></td>
+<td><p>Subclasses of <code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code></p></td>
+<td><p>One per training run</p></td>
+<td><p>Samplers that slice an in-memory bundle into batched <code class="docutils literal notranslate"><span class="pre">(input,</span> <span class="pre">target)</span></code> pairs for a <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code>.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Convenience properties:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">n_traj</span></code>, <code class="docutils literal notranslate"><span class="pre">n_time</span></code>, <code class="docutils literal notranslate"><span class="pre">n_channel</span></code> — integer accessors for the four leading
-axes of <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> — tuple of the remaining trailing axes (e.g. <code class="docutils literal notranslate"><span class="pre">(Nx,)</span></code> for 1D).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code> — read-only flat view bundling <code class="docutils literal notranslate"><span class="pre">dyn</span></code>, <code class="docutils literal notranslate"><span class="pre">channel_names</span></code>, and the
-three group dicts for one-shot inspection.</p></li>
-</ul>
-</section>
-<section id="on-disk-layout-hdf5">
-<h2>On-Disk Layout — HDF5<a class="headerlink" href="#on-disk-layout-hdf5" title="Link to this heading">¶</a></h2>
+<p><strong><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code> is not a <code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code>.</strong> The shared
+word “Dataset” is unfortunate but historical: <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code> is a
+plain dataclass holding tensors and dicts, while the training views are
+PyTorch samplers whose <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> slices over that bundle. Likewise,
+the word “dataset” inside an HDF5 file is the h5py term for a named
+array — a third unrelated usage.</p>
+<p>This page is the canonical reference for the cache file and the
+in-memory bundle (its Python mirror). The training views are summarized
+at the bottom with a pointer to their module reference.</p>
+<p>The detailed v1 schema is defined in code by
+<a class="reference internal" href="../apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TRAJECTORY_CACHE_V1" title="mesokit.data.format.TRAJECTORY_CACHE_V1"><code class="xref py py-data docutils literal notranslate"><span class="pre">mesokit.data.format.TRAJECTORY_CACHE_V1</span></code></a> (also re-exported as
+<a class="reference internal" href="../apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT" title="mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT"><code class="xref py py-data docutils literal notranslate"><span class="pre">mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT</span></code></a>). The
+tables below are rendered from that schema; the prose explains the
+conventions around it.</p>
+<section id="cache-file-hdf5">
+<h2>Cache File (HDF5)<a class="headerlink" href="#cache-file-hdf5" title="Link to this heading">¶</a></h2>
+<p>The cache file is the source of truth for interchange. The Python helper
+<a class="reference download internal" download="" href="../_downloads/98f1dcb2c59397bf212ac00dac8d47fd/trajectory.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.save_hdf5</span></code></span></a>
+produces this layout, and the matching <code class="docutils literal notranslate"><span class="pre">load_hdf5</span></code> parses it back; an
+external exporter (numpy / MATLAB / a custom solver) can produce the
+same layout directly with <code class="docutils literal notranslate"><span class="pre">h5py</span></code> (see <a class="reference internal" href="custom.html"><span class="std std-doc">Custom Datasets</span></a>).</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;dataset&gt;.h5
 ├── (root attrs)
 │   ├── format        &quot;mesokit-trajectory&quot;
@@ -410,19 +398,20 @@ three group dicts for one-shot inspection.</p></li>
 │   ├── dyn           &lt;string&gt;
 │   ├── data_dtype    &quot;float32&quot; | &quot;float64&quot; | ...
 │   └── channel_names (optional) array&lt;string&gt;
-├── data         dataset, shape (n_traj, n_time, n_channel, *grid_shape)
-├── times        dataset, shape (n_time,)
+├── data         h5py dataset, shape (n_traj, n_time, n_channel, *grid_shape)
+├── times        h5py dataset, shape (n_time,)
 ├── physical/    group with arbitrary scalar attrs
 ├── numerical/   group with arbitrary scalar attrs
 └── provenance/  group with arbitrary scalar attrs
 </pre></div>
 </div>
-<p>The two required datasets live at the root; metadata is partitioned across
-the closed root attributes and the three open-content groups. The Python
-helper <a class="reference download internal" download="" href="../_downloads/98f1dcb2c59397bf212ac00dac8d47fd/trajectory.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.save_hdf5</span></code></span></a>
-produces this layout, and the matching <code class="docutils literal notranslate"><span class="pre">load_hdf5</span></code> parses it back.</p>
-<section id="required-datasets">
-<h3>Required Datasets<a class="headerlink" href="#required-datasets" title="Link to this heading">¶</a></h3>
+<p>Two required h5py datasets live at the root; metadata is partitioned
+across the closed root attributes and the three open-content groups.</p>
+<section id="required-h5py-datasets">
+<h3>Required H5py Datasets<a class="headerlink" href="#required-h5py-datasets" title="Link to this heading">¶</a></h3>
+<p>In HDF5 terminology, a “dataset” is a named array stored inside a file.
+These are the two arrays the schema requires, with the shape and dtype
+checks the validator applies to each.</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -455,9 +444,10 @@ produces this layout, and the matching <code class="docutils literal notranslate
 </section>
 <section id="root-attributes">
 <h3>Root Attributes<a class="headerlink" href="#root-attributes" title="Link to this heading">¶</a></h3>
-<p>Root attributes are a <strong>closed</strong> set: the validator rejects any root-level
-attribute not listed below. Domain-specific or equation-specific values
-belong inside one of the three metadata groups, never at the root.</p>
+<p>Root attributes are a <strong>closed</strong> set: the validator rejects any
+root-level attribute not listed below. Domain-specific or equation-
+specific values belong inside one of the three metadata groups, never at
+the root.</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -539,37 +529,38 @@ conventions, not a closed set.</p>
 </div>
 <p>The split matters because the three categories age differently:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">physical/</span></code> describes the continuum problem — these values are properties
-of the equation and domain (<code class="docutils literal notranslate"><span class="pre">Lx</span></code>, <code class="docutils literal notranslate"><span class="pre">T</span></code>, <code class="docutils literal notranslate"><span class="pre">eps</span></code>) and travel with the dataset
-forever.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">numerical/</span></code> describes the discretization — <code class="docutils literal notranslate"><span class="pre">Nx</span></code>, <code class="docutils literal notranslate"><span class="pre">dx</span></code>, <code class="docutils literal notranslate"><span class="pre">dt</span></code>, integrator
-knobs (<code class="docutils literal notranslate"><span class="pre">T_save_steps</span></code>, <code class="docutils literal notranslate"><span class="pre">dealias</span></code>, …). Resampling, downscaling, or rerunning
-with a different scheme produces a new dataset with a new <code class="docutils literal notranslate"><span class="pre">numerical/</span></code>
-block but typically the same <code class="docutils literal notranslate"><span class="pre">physical/</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">physical/</span></code> describes the continuum problem — these values are
+properties of the equation and domain (<code class="docutils literal notranslate"><span class="pre">Lx</span></code>, <code class="docutils literal notranslate"><span class="pre">T</span></code>, <code class="docutils literal notranslate"><span class="pre">eps</span></code>) and travel
+with the dataset forever.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numerical/</span></code> describes the discretization — <code class="docutils literal notranslate"><span class="pre">Nx</span></code>, <code class="docutils literal notranslate"><span class="pre">dx</span></code>, <code class="docutils literal notranslate"><span class="pre">dt</span></code>,
+integrator knobs (<code class="docutils literal notranslate"><span class="pre">T_save_steps</span></code>, <code class="docutils literal notranslate"><span class="pre">dealias</span></code>, …). Resampling,
+downscaling, or rerunning with a different scheme produces a new file
+with a new <code class="docutils literal notranslate"><span class="pre">numerical/</span></code> block but typically the same <code class="docutils literal notranslate"><span class="pre">physical/</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">provenance/</span></code> is about how this particular file was produced — seeds,
-rejection thresholds, generator references, source identifiers. Two files
-with identical <code class="docutils literal notranslate"><span class="pre">physical/</span></code> and <code class="docutils literal notranslate"><span class="pre">numerical/</span></code> can still differ here.</p></li>
+rejection thresholds, generator references, source identifiers. Two
+files with identical <code class="docutils literal notranslate"><span class="pre">physical/</span></code> and <code class="docutils literal notranslate"><span class="pre">numerical/</span></code> can still differ
+here.</p></li>
 </ul>
 </section>
-</section>
 <section id="axis-contract">
-<h2>Axis Contract<a class="headerlink" href="#axis-contract" title="Link to this heading">¶</a></h2>
+<h3>Axis Contract<a class="headerlink" href="#axis-contract" title="Link to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">data[i,</span> <span class="pre">j,</span> <span class="pre">c,</span> <span class="pre">...]</span></code> is channel <code class="docutils literal notranslate"><span class="pre">c</span></code> of trajectory <code class="docutils literal notranslate"><span class="pre">i</span></code> at time <code class="docutils literal notranslate"><span class="pre">times[j]</span></code>.</p>
-<p>All trajectories in the same file share the same <code class="docutils literal notranslate"><span class="pre">times</span></code> and <code class="docutils literal notranslate"><span class="pre">channel_names</span></code>.
-Single-field equations use <code class="docutils literal notranslate"><span class="pre">n_channel</span> <span class="pre">=</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">channel_names</span> <span class="pre">=</span> <span class="pre">(&quot;u&quot;,)</span></code>;
-multi-field systems list one name per coupled component.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">n_channel</span></code> axis is always present — even when there is only one field.
-This keeps the contract uniform across single- and multi-channel data;
-trainers and dataset adapters that target single-field models can select a
-channel up-front (see <a class="reference internal" href="examples.html"><span class="std std-doc">Examples</span></a>).</p>
+<p>All trajectories in the same file share the same <code class="docutils literal notranslate"><span class="pre">times</span></code> and
+<code class="docutils literal notranslate"><span class="pre">channel_names</span></code>. Single-field equations use <code class="docutils literal notranslate"><span class="pre">n_channel</span> <span class="pre">=</span> <span class="pre">1</span></code> and
+<code class="docutils literal notranslate"><span class="pre">channel_names</span> <span class="pre">=</span> <span class="pre">(&quot;u&quot;,)</span></code>; multi-field systems list one name per coupled
+component.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">n_channel</span></code> axis is always present — even when there is only one
+field. This keeps the contract uniform across single- and multi-channel
+data; training-view adapters that target single-field models can select
+a channel up-front (see below).</p>
 </section>
 <section id="dtype-rules">
-<h2>Dtype Rules<a class="headerlink" href="#dtype-rules" title="Link to this heading">¶</a></h2>
+<h3>Dtype Rules<a class="headerlink" href="#dtype-rules" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">data</span></code> must have a floating dtype, and its actual dtype must match the
-string declared in the <code class="docutils literal notranslate"><span class="pre">data_dtype</span></code> root attribute (commonly <code class="docutils literal notranslate"><span class="pre">&quot;float32&quot;</span></code>
-or <code class="docutils literal notranslate"><span class="pre">&quot;float64&quot;</span></code>). Mismatches are a validator error: writers must keep the
-attribute in sync with the array.</p></li>
+string declared in the <code class="docutils literal notranslate"><span class="pre">data_dtype</span></code> root attribute (commonly
+<code class="docutils literal notranslate"><span class="pre">&quot;float32&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;float64&quot;</span></code>). Mismatches are a validator error: writers
+must keep the attribute in sync with the array.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">times</span></code> must have a floating dtype. Its precision is not declared
 separately; pick <code class="docutils literal notranslate"><span class="pre">float64</span></code> if step sizes need it.</p></li>
 <li><p>Group attributes are passed through <code class="docutils literal notranslate"><span class="pre">h5py</span></code> and round-tripped via the
@@ -579,6 +570,116 @@ native Python types.</p></li>
 <li><p>Finite values are required for <code class="docutils literal notranslate"><span class="pre">data</span></code> and <code class="docutils literal notranslate"><span class="pre">times</span></code>; <code class="docutils literal notranslate"><span class="pre">NaN</span></code> / <code class="docutils literal notranslate"><span class="pre">Inf</span></code> are
 rejected by the validator.</p></li>
 </ul>
+</section>
+</section>
+<section id="in-memory-bundle-trajectorydataset">
+<h2>In-Memory Bundle (<code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code>)<a class="headerlink" href="#in-memory-bundle-trajectorydataset" title="Link to this heading">¶</a></h2>
+<p><a class="reference download internal" download="" href="../_downloads/98f1dcb2c59397bf212ac00dac8d47fd/trajectory.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code></span></a> is a Python
+<code class="docutils literal notranslate"><span class="pre">&#64;dataclass</span></code> (not a <code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code>). It mirrors the cache
+file one-to-one: every required HDF5 entry has a corresponding dataclass
+field, and the three open-content metadata groups become three plain
+Python dicts.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Mirrors (on disk)</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data</span></code> dataset</p></td>
+<td><p>Shape <code class="docutils literal notranslate"><span class="pre">(n_traj,</span> <span class="pre">n_time,</span> <span class="pre">n_channel,</span> <span class="pre">*grid_shape)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">times</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Tensor</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">times</span></code> dataset</p></td>
+<td><p>Shape <code class="docutils literal notranslate"><span class="pre">(n_time,)</span></code>. Floating, strictly increasing.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dyn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dyn</span></code> root attr</p></td>
+<td><p>Compulsory dynamics identifier (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;allen_cahn_1d&quot;</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">physical</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">Any]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">physical/.attrs</span></code></p></td>
+<td><p>Equation/domain parameters. Open-content.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">numerical</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">Any]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">numerical/.attrs</span></code></p></td>
+<td><p>Discretization and solver parameters. Open-content.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">provenance</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">Any]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">provenance/.attrs</span></code></p></td>
+<td><p>How this file was produced. Open-content.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">channel_names</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tuple[str,</span> <span class="pre">...]</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">channel_names</span></code> root attr</p></td>
+<td><p>Optional channel labels; length must equal <code class="docutils literal notranslate"><span class="pre">data.shape[2]</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Convenience properties:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n_traj</span></code>, <code class="docutils literal notranslate"><span class="pre">n_time</span></code>, <code class="docutils literal notranslate"><span class="pre">n_channel</span></code> — integer accessors for the three
+leading axes of <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> — tuple of the remaining trailing axes (e.g. <code class="docutils literal notranslate"><span class="pre">(Nx,)</span></code> for
+1D).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code> — read-only flat view bundling <code class="docutils literal notranslate"><span class="pre">dyn</span></code>, <code class="docutils literal notranslate"><span class="pre">channel_names</span></code>, and
+the three group dicts for one-shot inspection.</p></li>
+</ul>
+<p>The dataclass enforces the cache-file invariants at construction time
+(non-empty <code class="docutils literal notranslate"><span class="pre">dyn</span></code>, <code class="docutils literal notranslate"><span class="pre">data.ndim</span> <span class="pre">&gt;=</span> <span class="pre">4</span></code>, <code class="docutils literal notranslate"><span class="pre">times.shape</span> <span class="pre">==</span> <span class="pre">(n_time,)</span></code>,
+<code class="docutils literal notranslate"><span class="pre">len(channel_names)</span> <span class="pre">==</span> <span class="pre">n_channel</span></code>), so an in-memory bundle that
+type-checks is guaranteed to round-trip through <code class="docutils literal notranslate"><span class="pre">save_hdf5</span></code> /
+<code class="docutils literal notranslate"><span class="pre">load_hdf5</span></code> without losing information.</p>
+</section>
+<section id="training-views-torch-utils-data-dataset-adapters">
+<h2>Training Views (<code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code> adapters)<a class="headerlink" href="#training-views-torch-utils-data-dataset-adapters" title="Link to this heading">¶</a></h2>
+<p>A <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code> is not directly iterable by a
+<code class="docutils literal notranslate"><span class="pre">torch.utils.data.DataLoader</span></code>. The package ships two thin adapters in
+<a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.html#module-mesokit.data.datasets" title="mesokit.data.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a> that wrap a <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code> and
+expose the standard <code class="docutils literal notranslate"><span class="pre">__len__</span></code> / <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> interface expected by
+PyTorch:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Adapter</p></th>
+<th class="head"><p>Yields</p></th>
+<th class="head"><p>Use case</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(u_t,</span> <span class="pre">u_{t+stride})</span></code></p></td>
+<td><p>Autoregressive one-step (or <code class="docutils literal notranslate"><span class="pre">k</span></code>-step) predictors.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LookbackWindowDataset</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(stack(u_{t-k+1},</span> <span class="pre">...,</span> <span class="pre">u_t),</span> <span class="pre">u_{t+lead})</span></code></p></td>
+<td><p>Models that condition on more than the current state (RNN-style, memory).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Both adapters take a <code class="docutils literal notranslate"><span class="pre">channel:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></code> kwarg so they yield
+<code class="docutils literal notranslate"><span class="pre">(*grid_shape,)</span></code>-shaped samples by default — preserving the
+single-channel input contract that built-in models like <code class="docutils literal notranslate"><span class="pre">FNO1d</span></code> and
+<code class="docutils literal notranslate"><span class="pre">SpectralOnsagerNet1d</span></code> expect. Multi-channel datasets either select one
+channel per adapter instance, or a future model can consume the full
+<code class="docutils literal notranslate"><span class="pre">data[i,</span> <span class="pre">t,</span> <span class="pre">:,</span> <span class="pre">:]</span></code> tensor directly.</p>
+<p>These adapters are toolkit examples, not requirements — every trainer
+in <code class="docutils literal notranslate"><span class="pre">mesokit.trainers</span></code> accepts an arbitrary <code class="docutils literal notranslate"><span class="pre">torch.utils.data.DataLoader</span></code>,
+so a user is free to write their own adapter if their paper needs a
+different sampling view (operator pairs, contrastive crops, …). See
+<a class="reference internal" href="examples.html"><span class="std std-doc">Examples</span></a> for end-to-end usage.</p>
 </section>
 </section>
 
@@ -638,15 +739,16 @@ rejected by the validator.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Data Structure</a><ul>
-<li><a class="reference internal" href="#in-memory-container-trajectorydataset">In-Memory Container — <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code></a></li>
-<li><a class="reference internal" href="#on-disk-layout-hdf5">On-Disk Layout — HDF5</a><ul>
-<li><a class="reference internal" href="#required-datasets">Required Datasets</a></li>
+<li><a class="reference internal" href="#cache-file-hdf5">Cache File (HDF5)</a><ul>
+<li><a class="reference internal" href="#required-h5py-datasets">Required H5py Datasets</a></li>
 <li><a class="reference internal" href="#root-attributes">Root Attributes</a></li>
 <li><a class="reference internal" href="#metadata-groups">Metadata Groups</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#axis-contract">Axis Contract</a></li>
 <li><a class="reference internal" href="#dtype-rules">Dtype Rules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#in-memory-bundle-trajectorydataset">In-Memory Bundle (<code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code>)</a></li>
+<li><a class="reference internal" href="#training-views-torch-utils-data-dataset-adapters">Training Views (<code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code> adapters)</a></li>
 </ul>
 </li>
 </ul>
