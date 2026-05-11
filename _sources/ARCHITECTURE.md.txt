@@ -98,28 +98,31 @@ data loaders that read from disk on equal footing — anything is a
 
 `TrajectoryDataset` round-trips to HDF5 via `save_hdf5` / `load_hdf5`. The
 detailed cache-file contract is the
-{py:data}`mesokit.data.format.TRAJECTORY_CACHE_V1` schema, with the human
-overview in [Data Format](DATA_FORMAT.md). The v1 layout is deliberately flat
-and matches what the code reads today:
+{py:data}`mesokit.data.format.TRAJECTORY_CACHE_V1` schema (also exported as
+{py:data}`mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT`), with the
+human overview in [Data Format](DATA_FORMAT.md). The v1 layout pins identity
+on the root and partitions metadata by meaning:
 
 ```
 my_data.h5
-├── data    [dataset]   shape (n_traj, n_time, *spatial),  numeric dtype
-├── times   [dataset]   shape (n_time,),                   numeric dtype
-├── mesh    [dataset]   shape (*spatial,),                 numeric dtype
-└── attrs/                                                 free-form metadata
-    ├── dyn            e.g. "allen_cahn_1d", "kdv_1d"
-    ├── eps            e.g. 0.1
-    └── ...            any HDF5-compatible scalar / string
+├── (root attrs)
+│   ├── format        "mesokit-trajectory"
+│   ├── version       1
+│   ├── dyn           e.g. "allen_cahn_1d"
+│   ├── data_dtype    e.g. "float32"
+│   └── channel_names ["u"]                            (optional)
+├── data         [dataset]   shape (n_traj, n_time, n_channel, *grid_shape), floating
+├── times        [dataset]   shape (n_time,),                                floating
+├── physical/    [group]     attrs:   Lx, T, eps, ...                  (equation/domain)
+├── numerical/   [group]     attrs:   Nx, dx, dt, dealias, ...         (discretization)
+└── provenance/  [group]     attrs:   seed, source, generator, ...     (how produced)
 ```
 
-The three top-level datasets are required; everything else lives on the
-file's attributes and round-trips into the in-memory `metadata` dict. The
-format is deliberately flat so a user can build it by hand from any
-source — PDE solvers, finite-difference codes, MD, agent-based simulations —
-without learning a domain-specific schema. The same file is what built-in
-simulators emit when called from `mesokit data generate`, so generated and
-user-supplied datasets are indistinguishable to the rest of the toolkit.
+Root attributes are a **closed** set; the three metadata groups are
+**open-content**, so any HDF5-attribute-compatible scalar/string/array is
+allowed. The same file is what built-in simulators emit when called from
+`mesokit data generate`, so generated and user-supplied datasets are
+indistinguishable to the rest of the toolkit.
 
 The current format is a single trajectory bundle only. Paired
 microscopic/mesoscopic data should be introduced as a versioned extension with
@@ -142,22 +145,25 @@ dataset directly.
 Before the entry is written, a **sanity check** validates the file. It
 verifies:
 
-- the file opens as HDF5 and contains the three required datasets
-  `data`, `times`, `mesh`;
-- `data` has at least three axes; the inferred shape is
-  `(n_traj, n_time, *spatial)`;
+- the file opens as HDF5 and the required root attributes
+  (`format`, `version`, `dyn`, `data_dtype`) are present and well-typed;
+- the required datasets `data` and `times` are present, with `data.ndim >= 4`
+  giving the inferred shape `(n_traj, n_time, n_channel, *grid_shape)`;
 - `times` is one-dimensional with shape `(n_time,)`, monotonically
   increasing, and finite;
-- `mesh` has shape `(*spatial,)` matching the trailing dimensions of `data`;
-- all three datasets have numeric dtypes and contain no `NaN` / `Inf`
-  values.
+- `data` has a floating dtype that matches the declared `data_dtype` and
+  contains no `NaN` / `Inf` values;
+- when `channel_names` is present, its length matches `n_channel`;
+- the three required metadata groups (`physical`, `numerical`,
+  `provenance`) are present (their contents are open and untyped);
+- no unknown root attributes are present.
 
-On success the CLI prints the inferred summary — `n_traj`, `n_time`,
-`spatial_shape`, `dt` (when the time grid is uniform, with a tolerance), and
-the metadata attributes read off `attrs/` — so the user can confirm the file
-was interpreted as intended. On failure the message points at the specific
-axis, dataset, or attribute that did not match, and the file is **not**
-registered.
+On success the CLI prints the inferred summary — `dyn`, `n_traj`, `n_time`,
+`n_channel`, `grid_shape`, `dt` (when the time grid is uniform, with a
+tolerance), and the metadata groups' contents — so the user can confirm the
+file was interpreted as intended. On failure the message points at the
+specific axis, dataset, attribute, or group that did not match, and the file
+is **not** registered.
 
 The sanity check is also exposed as a standalone helper
 (`mesokit.data.validate(path) -> ValidationReport`) so a user can run it

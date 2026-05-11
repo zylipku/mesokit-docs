@@ -31,10 +31,6 @@
   - ```{autodoc2-docstring} mesokit.data.validate.validate
     :summary:
     ```
-* - {py:obj}`_decode_attr <mesokit.data.validate._decode_attr>`
-  - ```{autodoc2-docstring} mesokit.data.validate._decode_attr
-    :summary:
-    ```
 ````
 
 ### API
@@ -67,6 +63,17 @@
 
 ````
 
+````{py:attribute} dyn
+:canonical: mesokit.data.validate.ValidationReport.dyn
+:type: str | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.dyn
+```
+
+````
+
 ````{py:attribute} n_traj
 :canonical: mesokit.data.validate.ValidationReport.n_traj
 :type: int | None
@@ -89,13 +96,46 @@
 
 ````
 
-````{py:attribute} spatial_shape
-:canonical: mesokit.data.validate.ValidationReport.spatial_shape
+````{py:attribute} n_channel
+:canonical: mesokit.data.validate.ValidationReport.n_channel
+:type: int | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.n_channel
+```
+
+````
+
+````{py:attribute} grid_shape
+:canonical: mesokit.data.validate.ValidationReport.grid_shape
 :type: tuple[int, ...] | None
 :value: >
    None
 
-```{autodoc2-docstring} mesokit.data.validate.ValidationReport.spatial_shape
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.grid_shape
+```
+
+````
+
+````{py:attribute} data_dtype
+:canonical: mesokit.data.validate.ValidationReport.data_dtype
+:type: str | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.data_dtype
+```
+
+````
+
+````{py:attribute} times_dtype
+:canonical: mesokit.data.validate.ValidationReport.times_dtype
+:type: str | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.times_dtype
 ```
 
 ````
@@ -111,13 +151,46 @@
 
 ````
 
-````{py:attribute} metadata
-:canonical: mesokit.data.validate.ValidationReport.metadata
+````{py:attribute} channel_names
+:canonical: mesokit.data.validate.ValidationReport.channel_names
+:type: tuple[str, ...] | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.channel_names
+```
+
+````
+
+````{py:attribute} physical
+:canonical: mesokit.data.validate.ValidationReport.physical
 :type: dict[str, typing.Any]
 :value: >
    'field(...)'
 
-```{autodoc2-docstring} mesokit.data.validate.ValidationReport.metadata
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.physical
+```
+
+````
+
+````{py:attribute} numerical
+:canonical: mesokit.data.validate.ValidationReport.numerical
+:type: dict[str, typing.Any]
+:value: >
+   'field(...)'
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.numerical
+```
+
+````
+
+````{py:attribute} provenance
+:canonical: mesokit.data.validate.ValidationReport.provenance
+:type: dict[str, typing.Any]
+:value: >
+   'field(...)'
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.provenance
 ```
 
 ````
@@ -144,12 +217,5 @@
 :canonical: mesokit.data.validate.validate
 
 ```{autodoc2-docstring} mesokit.data.validate.validate
-```
-````
-
-````{py:function} _decode_attr(value: typing.Any) -> typing.Any
-:canonical: mesokit.data.validate._decode_attr
-
-```{autodoc2-docstring} mesokit.data.validate._decode_attr
 ```
 ````

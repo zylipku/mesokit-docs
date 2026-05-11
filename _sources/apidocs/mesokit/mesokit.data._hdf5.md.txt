@@ -1,0 +1,86 @@
+# {py:mod}`mesokit.data._hdf5`
+
+```{py:module} mesokit.data._hdf5
+```
+
+```{autodoc2-docstring} mesokit.data._hdf5
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`encode_attr <mesokit.data._hdf5.encode_attr>`
+  - ```{autodoc2-docstring} mesokit.data._hdf5.encode_attr
+    :summary:
+    ```
+* - {py:obj}`decode_attr <mesokit.data._hdf5.decode_attr>`
+  - ```{autodoc2-docstring} mesokit.data._hdf5.decode_attr
+    :summary:
+    ```
+* - {py:obj}`read_group_attrs <mesokit.data._hdf5.read_group_attrs>`
+  - ```{autodoc2-docstring} mesokit.data._hdf5.read_group_attrs
+    :summary:
+    ```
+* - {py:obj}`write_group_attrs <mesokit.data._hdf5.write_group_attrs>`
+  - ```{autodoc2-docstring} mesokit.data._hdf5.write_group_attrs
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.data._hdf5.__all__>`
+  - ```{autodoc2-docstring} mesokit.data._hdf5.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} encode_attr(value: typing.Any) -> typing.Any
+:canonical: mesokit.data._hdf5.encode_attr
+
+```{autodoc2-docstring} mesokit.data._hdf5.encode_attr
+```
+````
+
+````{py:function} decode_attr(value: typing.Any) -> typing.Any
+:canonical: mesokit.data._hdf5.decode_attr
+
+```{autodoc2-docstring} mesokit.data._hdf5.decode_attr
+```
+````
+
+````{py:function} read_group_attrs(group: h5py.Group | None) -> dict[str, typing.Any]
+:canonical: mesokit.data._hdf5.read_group_attrs
+
+```{autodoc2-docstring} mesokit.data._hdf5.read_group_attrs
+```
+````
+
+````{py:function} write_group_attrs(group: h5py.Group, values: dict[str, typing.Any]) -> None
+:canonical: mesokit.data._hdf5.write_group_attrs
+
+```{autodoc2-docstring} mesokit.data._hdf5.write_group_attrs
+```
+````
+
+````{py:data} __all__
+:canonical: mesokit.data._hdf5.__all__
+:value: >
+   ['decode_attr', 'encode_attr', 'read_group_attrs', 'write_group_attrs']
+
+```{autodoc2-docstring} mesokit.data._hdf5.__all__
+```
+
+````

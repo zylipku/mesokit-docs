@@ -8,7 +8,8 @@ so a contributor can pick one off.
 ## Data
 
 - [x] `TrajectoryDataset` in-memory container — shape
-  `(n_traj, n_time, *spatial)` plus `mesh`, `times`, free-form `metadata`.
+  `(n_traj, n_time, n_channel, *grid_shape)` plus `times`, compulsory `dyn`,
+  and three open-content metadata dicts (`physical`, `numerical`, `provenance`).
 - [x] HDF5 on-disk format with `save_hdf5` / `load_hdf5` round-trip.
 - [x] Detailed HDF5 cache contract modeled as
   `mesokit.data.format.TRAJECTORY_CACHE_V1`, with the human overview in
@@ -27,12 +28,13 @@ so a contributor can pick one off.
   `(input function, query) → value` pairs from a `TrajectoryDataset` at load
   time; lives next to the operator module (per `docs/ARCHITECTURE.md`).
 - [ ] Universal microscopic-/mesoscopic-paired data format. Open questions:
-  - the paired format should be a versioned extension, not hidden inside the
-    current flat v1 cache metadata;
+  - the paired format should be a versioned extension on top of v1, not
+    hidden inside the existing metadata groups;
   - how to express the coarse-graining map (averaging window, slow-mode
     projector, etc.) as dedicated metadata and/or arrays;
-  - whether microscopic trajectories share the `(n_traj, n_time, *spatial)`
-    layout or need a separate container.
+  - whether microscopic trajectories share the
+    `(n_traj, n_time, n_channel, *grid_shape)` layout or need a separate
+    container.
 
 ## Models
 

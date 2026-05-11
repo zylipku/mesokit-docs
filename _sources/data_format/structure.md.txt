@@ -1,0 +1,122 @@
+# Data Structure
+
+This page is the canonical reference for what a `mesokit` trajectory dataset
+contains. It is split between the in-memory Python container and the on-disk
+HDF5 file; the two are mirror images, but the on-disk layout is the source of
+truth for interchange.
+
+The detailed v1 schema is defined in code by
+{py:data}`mesokit.data.format.TRAJECTORY_CACHE_V1` (also re-exported as
+{py:data}`mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT`). The tables
+below are rendered from that schema; the prose explains the conventions
+around it.
+
+## In-Memory Container — `TrajectoryDataset`
+
+[`TrajectoryDataset`](../../src/mesokit/data/trajectory.py) is a frozen
+dataclass with the following fields:
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `data` | `Tensor` | Shape `(n_traj, n_time, n_channel, *grid_shape)`. |
+| `times` | `Tensor` | Shape `(n_time,)`. Floating, strictly increasing. |
+| `dyn` | `str` | Compulsory dynamics identifier (e.g. `"allen_cahn_1d"`). |
+| `physical` | `dict[str, Any]` | Equation/domain parameters. Open-content. |
+| `numerical` | `dict[str, Any]` | Discretization and solver parameters. Open-content. |
+| `provenance` | `dict[str, Any]` | How this file was produced. Open-content. |
+| `channel_names` | `tuple[str, ...] \| None` | Optional channel labels; length must equal `data.shape[2]`. |
+
+Convenience properties:
+
+- `n_traj`, `n_time`, `n_channel` — integer accessors for the four leading
+  axes of `data`.
+- `grid_shape` — tuple of the remaining trailing axes (e.g. `(Nx,)` for 1D).
+- `metadata` — read-only flat view bundling `dyn`, `channel_names`, and the
+  three group dicts for one-shot inspection.
+
+## On-Disk Layout — HDF5
+
+```text
+<dataset>.h5
+├── (root attrs)
+│   ├── format        "mesokit-trajectory"
+│   ├── version       1
+│   ├── dyn           <string>
+│   ├── data_dtype    "float32" | "float64" | ...
+│   └── channel_names (optional) array<string>
+├── data         dataset, shape (n_traj, n_time, n_channel, *grid_shape)
+├── times        dataset, shape (n_time,)
+├── physical/    group with arbitrary scalar attrs
+├── numerical/   group with arbitrary scalar attrs
+└── provenance/  group with arbitrary scalar attrs
+```
+
+The two required datasets live at the root; metadata is partitioned across
+the closed root attributes and the three open-content groups. The Python
+helper [`TrajectoryDataset.save_hdf5`](../../src/mesokit/data/trajectory.py)
+produces this layout, and the matching `load_hdf5` parses it back.
+
+### Required Datasets
+
+```{trajectory-cache-format} datasets
+```
+
+### Root Attributes
+
+Root attributes are a **closed** set: the validator rejects any root-level
+attribute not listed below. Domain-specific or equation-specific values
+belong inside one of the three metadata groups, never at the root.
+
+```{trajectory-cache-format} attributes
+```
+
+### Metadata Groups
+
+Metadata is partitioned by meaning into three HDF5 groups. Each group's
+`.attrs` is **open**: writers may include any HDF5-attribute-compatible
+scalar, string, or simple array. The example-key columns below document
+conventions, not a closed set.
+
+```{trajectory-cache-format} groups
+```
+
+The split matters because the three categories age differently:
+
+- `physical/` describes the continuum problem — these values are properties
+  of the equation and domain (`Lx`, `T`, `eps`) and travel with the dataset
+  forever.
+- `numerical/` describes the discretization — `Nx`, `dx`, `dt`, integrator
+  knobs (`T_save_steps`, `dealias`, …). Resampling, downscaling, or rerunning
+  with a different scheme produces a new dataset with a new `numerical/`
+  block but typically the same `physical/`.
+- `provenance/` is about how this particular file was produced — seeds,
+  rejection thresholds, generator references, source identifiers. Two files
+  with identical `physical/` and `numerical/` can still differ here.
+
+## Axis Contract
+
+`data[i, j, c, ...]` is channel `c` of trajectory `i` at time `times[j]`.
+
+All trajectories in the same file share the same `times` and `channel_names`.
+Single-field equations use `n_channel = 1` and `channel_names = ("u",)`;
+multi-field systems list one name per coupled component.
+
+The `n_channel` axis is always present — even when there is only one field.
+This keeps the contract uniform across single- and multi-channel data;
+trainers and dataset adapters that target single-field models can select a
+channel up-front (see [Examples](examples.md)).
+
+## Dtype Rules
+
+- `data` must have a floating dtype, and its actual dtype must match the
+  string declared in the `data_dtype` root attribute (commonly `"float32"`
+  or `"float64"`). Mismatches are a validator error: writers must keep the
+  attribute in sync with the array.
+- `times` must have a floating dtype. Its precision is not declared
+  separately; pick `float64` if step sizes need it.
+- Group attributes are passed through `h5py` and round-tripped via the
+  shared decoder in [`_hdf5.py`](../../src/mesokit/data/_hdf5.py) so
+  `bytes`/`str`, 0-d NumPy arrays, and list-shaped values come back as
+  native Python types.
+- Finite values are required for `data` and `times`; `NaN` / `Inf` are
+  rejected by the validator.

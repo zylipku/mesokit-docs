@@ -23,6 +23,10 @@
   - ```{autodoc2-docstring} mesokit.data.format.HDF5AttributeEntry
     :summary:
     ```
+* - {py:obj}`HDF5GroupEntry <mesokit.data.format.HDF5GroupEntry>`
+  - ```{autodoc2-docstring} mesokit.data.format.HDF5GroupEntry
+    :summary:
+    ```
 * - {py:obj}`TrajectoryCacheFormat <mesokit.data.format.TrajectoryCacheFormat>`
   - ```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat
     :summary:
@@ -35,6 +39,10 @@
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`FORMAT_NAME <mesokit.data.format.FORMAT_NAME>`
+  - ```{autodoc2-docstring} mesokit.data.format.FORMAT_NAME
+    :summary:
+    ```
 * - {py:obj}`TRAJECTORY_CACHE_V1 <mesokit.data.format.TRAJECTORY_CACHE_V1>`
   - ```{autodoc2-docstring} mesokit.data.format.TRAJECTORY_CACHE_V1
     :summary:
@@ -188,6 +196,58 @@
 
 `````
 
+`````{py:class} HDF5GroupEntry
+:canonical: mesokit.data.format.HDF5GroupEntry
+
+```{autodoc2-docstring} mesokit.data.format.HDF5GroupEntry
+```
+
+````{py:attribute} path
+:canonical: mesokit.data.format.HDF5GroupEntry.path
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5GroupEntry.path
+```
+
+````
+
+````{py:attribute} required
+:canonical: mesokit.data.format.HDF5GroupEntry.required
+:type: bool
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5GroupEntry.required
+```
+
+````
+
+````{py:attribute} description
+:canonical: mesokit.data.format.HDF5GroupEntry.description
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5GroupEntry.description
+```
+
+````
+
+````{py:attribute} example_keys
+:canonical: mesokit.data.format.HDF5GroupEntry.example_keys
+:type: tuple[str, ...]
+:value: >
+   ()
+
+```{autodoc2-docstring} mesokit.data.format.HDF5GroupEntry.example_keys
+```
+
+````
+
+`````
+
 `````{py:class} TrajectoryCacheFormat
 :canonical: mesokit.data.format.TrajectoryCacheFormat
 
@@ -249,10 +309,37 @@
 
 ````
 
+````{py:attribute} groups
+:canonical: mesokit.data.format.TrajectoryCacheFormat.groups
+:type: tuple[mesokit.data.format.HDF5GroupEntry, ...]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.groups
+```
+
+````
+
 ````{py:method} required_dataset_paths() -> tuple[str, ...]
 :canonical: mesokit.data.format.TrajectoryCacheFormat.required_dataset_paths
 
 ```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.required_dataset_paths
+```
+
+````
+
+````{py:method} required_attribute_names() -> tuple[str, ...]
+:canonical: mesokit.data.format.TrajectoryCacheFormat.required_attribute_names
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.required_attribute_names
+```
+
+````
+
+````{py:method} required_group_paths() -> tuple[str, ...]
+:canonical: mesokit.data.format.TrajectoryCacheFormat.required_group_paths
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.required_group_paths
 ```
 
 ````
@@ -273,7 +360,25 @@
 
 ````
 
+````{py:method} group(path: str) -> mesokit.data.format.HDF5GroupEntry
+:canonical: mesokit.data.format.TrajectoryCacheFormat.group
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.group
+```
+
+````
+
 `````
+
+````{py:data} FORMAT_NAME
+:canonical: mesokit.data.format.FORMAT_NAME
+:value: >
+   'mesokit-trajectory'
+
+```{autodoc2-docstring} mesokit.data.format.FORMAT_NAME
+```
+
+````
 
 ````{py:data} TRAJECTORY_CACHE_V1
 :canonical: mesokit.data.format.TRAJECTORY_CACHE_V1
@@ -298,7 +403,7 @@
 ````{py:data} __all__
 :canonical: mesokit.data.format.__all__
 :value: >
-   ['CURRENT_TRAJECTORY_CACHE_FORMAT', 'HDF5AttributeEntry', 'HDF5DatasetEntry', 'TRAJECTORY_CACHE_V1',...
+   ['CURRENT_TRAJECTORY_CACHE_FORMAT', 'FORMAT_NAME', 'HDF5AttributeEntry', 'HDF5DatasetEntry', 'HDF5Gr...
 
 ```{autodoc2-docstring} mesokit.data.format.__all__
 ```

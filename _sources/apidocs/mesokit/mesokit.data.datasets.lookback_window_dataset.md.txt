@@ -23,7 +23,7 @@
 
 ### API
 
-`````{py:class} LookbackWindowDataset(traj: mesokit.data.trajectory.TrajectoryDataset, *, lookback: int, lead: int = 1, stride: int = 1)
+`````{py:class} LookbackWindowDataset(traj: mesokit.data.trajectory.TrajectoryDataset, *, lookback: int, lead: int = 1, stride: int = 1, channel: int = 0)
 :canonical: mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset
 
 Bases: {py:obj}`torch.utils.data.Dataset`\[{py:obj}`tuple`\[{py:obj}`torch.Tensor`\, {py:obj}`torch.Tensor`\]\]

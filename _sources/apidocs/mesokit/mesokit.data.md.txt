@@ -24,6 +24,7 @@ mesokit.data.datasets
 :titlesonly:
 :maxdepth: 1
 
+mesokit.data._hdf5
 mesokit.data.simulator_base
 mesokit.data.trajectory
 mesokit.data.validate
@@ -51,7 +52,7 @@ mesokit.data._progress
 ````{py:data} __all__
 :canonical: mesokit.data.__all__
 :value: >
-   ['Simulator', 'CURRENT_TRAJECTORY_CACHE_FORMAT', 'HDF5AttributeEntry', 'HDF5DatasetEntry', 'TRAJECTO...
+   ['Simulator', 'CURRENT_TRAJECTORY_CACHE_FORMAT', 'FORMAT_NAME', 'HDF5AttributeEntry', 'HDF5DatasetEn...
 
 ```{autodoc2-docstring} mesokit.data.__all__
 ```

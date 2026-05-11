@@ -1,0 +1,138 @@
+# Examples
+
+End-to-end snippets that combine the pieces from
+[Predefined Datasets](predefined.md), [Custom Datasets](custom.md), and the
+underlying [Data Structure](structure.md). Each example is a paste-into-a-
+notebook or paste-into-a-script unit; nothing depends on local state beyond
+the cwd-resolved registry under `.mesokit/`.
+
+## Generate, Load, Inspect
+
+The fastest end-to-end loop is a built-in simulator followed by a round
+trip through HDF5:
+
+```python
+from mesokit.data import simulate, TrajectoryDataset
+
+ds = simulate("kdv_1d", Nx=64, T=0.05, n_traj=4)
+ds.save_hdf5("data/kdv_quick.h5")
+
+loaded = TrajectoryDataset.load_hdf5("data/kdv_quick.h5")
+print(loaded.dyn, loaded.data.shape, loaded.grid_shape)
+print(loaded.physical, loaded.numerical, loaded.provenance)
+```
+
+Expected: `loaded.data.shape` is `(4, n_time, 1, 64)`, with `physical`
+holding `{"Lx": ..., "T": 0.05}` and `numerical` holding the
+discretization knobs.
+
+## Use a Dataset For Training
+
+The standard `torch.utils.data` views slice along time and pick a single
+channel by default, which keeps single-field models happy without code
+changes:
+
+```python
+from torch.utils.data import DataLoader
+from mesokit.data import simulate
+from mesokit.data.datasets import SnapshotPairDataset
+
+ds = simulate("allen_cahn_1d", Nx=128, T=0.05, n_traj=8)
+loader = DataLoader(SnapshotPairDataset(ds), batch_size=4, shuffle=True)
+
+u_t, u_tp1 = next(iter(loader))
+print(u_t.shape, u_tp1.shape)   # (4, 128), (4, 128)
+```
+
+For multi-channel datasets, pass `channel=i` to either
+`SnapshotPairDataset` or `LookbackWindowDataset` to pick which channel
+feeds the model.
+
+## Build a Conforming File From Scratch
+
+When the data does not come from a `mesokit` simulator, the
+[Custom Datasets](custom.md) workflow applies: write the HDF5 file
+directly, then validate.
+
+```python
+import h5py
+import numpy as np
+
+rng = np.random.default_rng(0)
+n_traj, n_time, n_channel, Nx = 2, 11, 1, 64
+data = rng.standard_normal((n_traj, n_time, n_channel, Nx)).astype(np.float32)
+times = np.linspace(0.0, 1.0, n_time, dtype=np.float32)
+
+with h5py.File("data/external.h5", "w") as f:
+    f.create_dataset("data", data=data)
+    f.create_dataset("times", data=times)
+    f.attrs["format"] = "mesokit-trajectory"
+    f.attrs["version"] = 1
+    f.attrs["dyn"] = "external_demo"
+    f.attrs["data_dtype"] = str(data.dtype)
+    f.attrs["channel_names"] = ["u"]
+    f.create_group("physical").attrs["Lx"] = 1.0
+    f.create_group("numerical").attrs["Nx"] = Nx
+    f.create_group("provenance").attrs["source"] = "examples.md"
+```
+
+Notice that `data_dtype` is derived from the array — never hard-coded — so
+it cannot drift out of sync.
+
+## Validate Before Registering
+
+```python
+from mesokit.data import validate
+
+report = validate("data/external.h5")
+print(report.summary())
+```
+
+A successful report includes the inferred shape, the inferred uniform `dt`
+(when the time grid is uniform), and the contents of the three metadata
+groups. A failed report lists each violated check with a one-line
+explanation; see the common validator errors table in
+[Custom Datasets](custom.md) for representative fixes.
+
+Once the report is clean, register the file:
+
+```sh
+mesokit data register --name external_demo_v0 --file data/external.h5
+```
+
+After registration, `mesokit data list` shows the entry, and downstream
+commands resolve `--data external_demo_v0` through the registry.
+
+## A Sketch of a Multi-Channel Dataset
+
+The single-channel convention used by Allen-Cahn and KdV is just a
+parametric choice of `n_channel = 1`. Coupled systems live in the same
+contract with `n_channel > 1` and one name per coupled field:
+
+```python
+import numpy as np
+import torch
+from mesokit.data import TrajectoryDataset
+
+n_traj, n_time, Nx = 4, 21, 64
+u = torch.randn(n_traj, n_time, Nx)
+v = torch.randn(n_traj, n_time, Nx)
+data = torch.stack([u, v], dim=2)   # (n_traj, n_time, 2, Nx)
+
+ds = TrajectoryDataset(
+    data=data,
+    times=torch.linspace(0.0, 1.0, n_time),
+    dyn="toy_coupled_1d",
+    physical={"Lx": 2 * np.pi, "T": 1.0},
+    numerical={"Nx": Nx, "dt": 0.05},
+    provenance={"source": "examples.md"},
+    channel_names=("u", "v"),
+)
+ds.save_hdf5("data/toy_coupled.h5")
+```
+
+`SnapshotPairDataset(ds, channel=0)` yields `(u_t, u_{t+1})` pairs for the
+first field, `channel=1` for the second. A future model that consumes both
+fields at once would slice the full `data[i, t, :, :]` tensor instead. The
+on-disk schema is identical; only the size of the channel axis and the
+content of `channel_names` change.

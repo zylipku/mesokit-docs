@@ -51,24 +51,57 @@
 
 ````
 
-````{py:attribute} mesh
-:canonical: mesokit.data.trajectory.TrajectoryDataset.mesh
-:type: torch.Tensor
+````{py:attribute} dyn
+:canonical: mesokit.data.trajectory.TrajectoryDataset.dyn
+:type: str
 :value: >
    None
 
-```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.mesh
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.dyn
 ```
 
 ````
 
-````{py:attribute} metadata
-:canonical: mesokit.data.trajectory.TrajectoryDataset.metadata
+````{py:attribute} physical
+:canonical: mesokit.data.trajectory.TrajectoryDataset.physical
 :type: dict[str, typing.Any]
 :value: >
    'field(...)'
 
-```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.metadata
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.physical
+```
+
+````
+
+````{py:attribute} numerical
+:canonical: mesokit.data.trajectory.TrajectoryDataset.numerical
+:type: dict[str, typing.Any]
+:value: >
+   'field(...)'
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.numerical
+```
+
+````
+
+````{py:attribute} provenance
+:canonical: mesokit.data.trajectory.TrajectoryDataset.provenance
+:type: dict[str, typing.Any]
+:value: >
+   'field(...)'
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.provenance
+```
+
+````
+
+````{py:attribute} channel_names
+:canonical: mesokit.data.trajectory.TrajectoryDataset.channel_names
+:type: tuple[str, ...] | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.channel_names
 ```
 
 ````
@@ -99,11 +132,29 @@
 
 ````
 
-````{py:property} spatial_shape
-:canonical: mesokit.data.trajectory.TrajectoryDataset.spatial_shape
+````{py:property} n_channel
+:canonical: mesokit.data.trajectory.TrajectoryDataset.n_channel
+:type: int
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.n_channel
+```
+
+````
+
+````{py:property} grid_shape
+:canonical: mesokit.data.trajectory.TrajectoryDataset.grid_shape
 :type: tuple[int, ...]
 
-```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.spatial_shape
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.grid_shape
+```
+
+````
+
+````{py:property} metadata
+:canonical: mesokit.data.trajectory.TrajectoryDataset.metadata
+:type: dict[str, typing.Any]
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.metadata
 ```
 
 ````

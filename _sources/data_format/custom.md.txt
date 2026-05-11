@@ -1,0 +1,134 @@
+# Custom Datasets
+
+Bring-your-own-data flows produce an HDF5 file outside `mesokit` (from a
+PDE solver, MD trajectory, finite-difference export, …) and then have
+`mesokit` validate and register it. Once registered, a custom dataset is
+indistinguishable from a built-in one to the rest of the toolkit.
+
+This page walks through the conformance checklist, the minimal writer, the
+validator, and the registration command.
+
+## Required Structure At a Glance
+
+A conforming v1 file has:
+
+- two top-level datasets — `data` of shape
+  `(n_traj, n_time, n_channel, *grid_shape)` and `times` of shape `(n_time,)`;
+- four required root attributes — `format = "mesokit-trajectory"`,
+  `version = 1`, a non-empty string `dyn`, and `data_dtype` mirroring the
+  dtype of `data`;
+- three required groups — `physical/`, `numerical/`, `provenance/`. They
+  may be empty; only their *presence* is required.
+
+Optional pieces:
+
+- `channel_names` root attribute (array of strings, one per channel — must
+  match `data.shape[2]` when present);
+- any HDF5-attribute-compatible scalar / string / array inside the three
+  metadata groups.
+
+See [Data Structure](structure.md) for the schema reference tables and the
+full list of validator checks.
+
+## Minimal Writer
+
+Any export pipeline that can write HDF5 can produce a conforming file
+directly:
+
+```python
+import h5py
+import numpy as np
+
+# (n_traj, n_time, n_channel, *grid_shape)
+data = np.asarray(data, dtype=np.float32)
+times = np.asarray(times, dtype=np.float32)  # (n_time,)
+
+with h5py.File("my_data.h5", "w") as f:
+    f.create_dataset("data", data=data)
+    f.create_dataset("times", data=times)
+    f.attrs["format"] = "mesokit-trajectory"
+    f.attrs["version"] = 1
+    f.attrs["dyn"] = "my_dynamics"
+    f.attrs["data_dtype"] = str(data.dtype)        # mirrors data.dtype
+    f.attrs["channel_names"] = ["u"]
+
+    physical = f.create_group("physical")
+    physical.attrs["Lx"] = 6.283185307179586
+    physical.attrs["T"] = 0.1
+
+    numerical = f.create_group("numerical")
+    numerical.attrs["Nx"] = data.shape[-1]
+    numerical.attrs["dt"] = 4e-5
+
+    provenance = f.create_group("provenance")
+    provenance.attrs["seed"] = 0
+    provenance.attrs["source"] = "external_export"
+```
+
+`data_dtype` must agree with the actual dtype of the `data` array; the
+validator cross-checks this and refuses the file otherwise. The three
+groups are created up-front so even a metadata-light export is conforming.
+
+## Validating
+
+`mesokit.data.validate(path)` runs the full set of schema checks and
+returns a `ValidationReport`:
+
+```python
+from mesokit.data import validate
+
+report = validate("data/my_data.h5")
+if not report.ok:
+    print(report.summary())   # all failing checks, one per line
+else:
+    print(report.dyn, report.n_traj, report.n_time, report.n_channel)
+    print(report.physical, report.numerical, report.provenance)
+```
+
+The validator catches schema-level mistakes — missing required entries,
+shape mismatches, non-floating dtypes, declared-vs-actual dtype skew,
+non-monotonic `times`, length-vs-channel mismatch on `channel_names`, and
+any unexpected root attributes. It does *not* attempt to verify that the
+dataset is physically meaningful; that is the simulator's responsibility.
+
+## Registering
+
+Once a file validates, register it under a name:
+
+```sh
+mesokit data register --name my_dataset --file data/my_data.h5
+```
+
+This re-runs `validate(path)`, then writes a record into the local
+`.mesokit/datasets.json` registry pointing at the file. From this point on,
+`mesokit train --data my_dataset ...` and other CLI commands resolve the
+name through the registry.
+
+Useful flags:
+
+- `--force` — overwrite an existing entry of the same name.
+
+The registry record is *not* part of the HDF5 cache contract; it lives on
+disk under the project root and is project-local. Two checkouts of the
+same project can have different registries.
+
+## Common Validator Errors
+
+A handful of mistakes are common when wiring up a new exporter. Each is
+caught at the validator and reported on a single line.
+
+| Message | What it means | Fix |
+| --- | --- | --- |
+| `missing required root attribute 'format'` | The file was written without the v1 schema attrs. | Add `f.attrs["format"] = "mesokit-trajectory"` and the other required root attrs. |
+| `root attribute 'version' = N; expected 1` | The file is tagged as a different schema version. | Confirm you are on v1 (this docs site); set `f.attrs["version"] = 1`. |
+| `'data' must have shape (n_traj, n_time, n_channel, *grid_shape); got (...)` | `data` has fewer than four axes — likely missing the channel axis. | Insert a length-1 channel axis at position 2: `data[:, :, None, :]`. |
+| `'data' must have a floating dtype` | The array is integer or boolean. | Convert to `float32` or `float64` before writing. |
+| `root attribute 'data_dtype' = 'float64' disagrees with actual dtype float32` | The declared dtype and the array dtype drifted apart. | Always derive the attr from the array: `f.attrs["data_dtype"] = str(data.dtype)`. |
+| `'times' is not strictly monotonically increasing` | Snapshots are out of order or there are duplicates. | Sort by time before writing; deduplicate exact ties. |
+| `'channel_names' length 1 does not match n_channel=2` | The label vector and the data axis disagree. | Make `len(channel_names) == data.shape[2]`. |
+| `unexpected root attribute 'eps'; allowed: ['channel_names', ...]` | A domain-specific value leaked to the file root. | Move it inside `physical/.attrs` (or one of the other groups). |
+| `missing required metadata group 'numerical'` | The group was never created. | Always create the three groups, even if empty: `f.create_group("numerical")`. |
+
+If a real exporter trips a check that isn't in this table and you think the
+diagnostic should be friendlier, that's a bug — open an issue with the
+failing message and a minimal reproducer.

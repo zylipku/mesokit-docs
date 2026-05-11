@@ -1,0 +1,144 @@
+# Predefined Datasets
+
+`mesokit` ships a small catalog of pre-defined simulators that produce
+conforming trajectory cache files out of the box. They are the fastest way
+to obtain a dataset that downstream models, trainers, and interpretability
+extractors can immediately consume — no schema bookkeeping required.
+
+The catalog is registered automatically when `mesokit.data` is imported, and
+the same simulator can be called from the CLI, from a notebook, or from a
+training script through the universal `simulate(name, **params)` surface.
+
+## Listing What's Available
+
+From the CLI:
+
+```sh
+mesokit data avail
+```
+
+prints the list of registered simulators (currently `allen_cahn_1d` and
+`kdv_1d`) along with the Python target each one dispatches to.
+
+Programmatically:
+
+```python
+from mesokit.data import available, get
+
+print(available())           # ['allen_cahn_1d', 'kdv_1d']
+sim = get("allen_cahn_1d")   # the simulator callable
+```
+
+`mesokit data list` is the complementary command for **already-registered
+datasets** on disk; see [Custom Datasets](custom.md) for the registration
+workflow.
+
+## Generating From the CLI
+
+The most common entry point is the `data generate` subcommand:
+
+```sh
+mesokit data generate --dyn allen_cahn_1d --config default
+```
+
+This runs the registered simulator with the parameters from
+`configs/data/allen_cahn_1d/default.yaml`, writes the resulting HDF5 file
+under `data/allen_cahn_1d/<auto-name>.h5`, and registers the file under
+that auto-generated name (`<dyn>_v<n>` — the next free `v0`, `v1`, …).
+
+Useful flags:
+
+- `--name my_run` — explicit registry name instead of the auto `<dyn>_v<n>`.
+- `--output path/to/file.h5` — explicit output path instead of the default.
+- `--no-registry` — write the file but skip the registry (the `--name` flag
+  is rejected in this mode).
+- `--verbose` — keep the underlying solver's per-step logs visible. Default
+  is quiet, with a single overwriting progress line on stderr.
+
+The simulator's metadata (the `physical` / `numerical` / `provenance`
+groups described in [Data Structure](structure.md)) is filled in from the
+config and from generator-side facts like the random seed.
+
+## Generating Programmatically
+
+The same simulators are accessible by name from Python:
+
+```python
+from mesokit.data import simulate
+
+ds = simulate("allen_cahn_1d", eps=0.1, Nx=256, T=0.1)
+ds.save_hdf5("data/ac_quick.h5")     # optional — same v1 layout as the CLI
+```
+
+`simulate(name, **params)` dispatches to the registered callable with the
+kwargs you provide; defaults match the canonical config in
+`configs/data/<name>/default.yaml`. The returned `TrajectoryDataset` is
+ready to feed into a `SnapshotPairDataset` or `LookbackWindowDataset`
+without saving to disk first.
+
+## What Ends Up in the File
+
+Built-in simulators populate metadata according to a consistent scheme. For
+`allen_cahn_1d` (defaults shown):
+
+```text
+root attrs
+  format         "mesokit-trajectory"
+  version        1
+  dyn            "allen_cahn_1d"
+  data_dtype     "float32"
+  channel_names  ["u"]
+
+physical/
+  Lx    6.283185307179586
+  T     0.1
+  eps   0.1
+
+numerical/
+  Nx             256
+  dx             0.024543692606170173
+  dt             4e-05
+  T_save_steps   25
+  Nk             3
+  max_k          10
+  dealias        2
+
+provenance/
+  seed     0
+  u_bound  10.0
+```
+
+`kdv_1d` produces an analogous file without the equation-specific `eps`
+entry. Every value is read from the simulator's call signature — see
+[`allen_cahn_1d.py`](../../src/mesokit/data/allen_cahn/allen_cahn_1d.py) and
+[`kdv_1d.py`](../../src/mesokit/data/kdv/kdv_1d.py) for the exact
+defaults — and the on-disk file is bit-for-bit the same as one produced by
+the minimal external-writer snippet in [Custom Datasets](custom.md).
+
+## Adding a New Predefined Simulator
+
+A new family of dataset is a new module that registers itself under a name:
+
+```python
+from mesokit.data import register
+from mesokit.data.trajectory import TrajectoryDataset
+
+@register("my_dynamics_1d")
+def simulate_my_dynamics_1d(*, verbose: bool = False, **params) -> TrajectoryDataset:
+    ...
+    return TrajectoryDataset(
+        data=...,                # (n_traj, n_time, n_channel, *grid_shape)
+        times=...,
+        dyn="my_dynamics_1d",
+        physical={...},
+        numerical={...},
+        provenance={...},
+        channel_names=("u",),
+    )
+```
+
+Provide a `configs/data/my_dynamics_1d/default.yaml` to make
+`mesokit data generate --dyn my_dynamics_1d` work end-to-end. The simulator
+must accept `verbose: bool` (see
+{py:class}`mesokit.data.simulator_base.Simulator`); everything else is up
+to the family.
