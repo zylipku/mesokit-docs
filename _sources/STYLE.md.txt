@@ -1,0 +1,87 @@
+# Code Style
+
+Conventions for writing or editing code in this repository. Applied alongside
+the design rules in [ARCHITECTURE.md](ARCHITECTURE.md) and the workflow rules
+in [../CONTRIBUTING.md](../CONTRIBUTING.md).
+
+## Formatting
+
+Configured in [`../pyproject.toml`](../pyproject.toml) under `[tool.ruff]`,
+enforced by the pre-commit `ruff-format` hook:
+
+- 120-character line limit
+- 4-space indentation
+- Double quotes for strings
+- Auto line endings
+- Docstring code blocks formatted at 80-character line length
+
+Linting rules enabled: pycodestyle (`E`), Pyflakes (`F`), pyupgrade (`UP`),
+flake8-bugbear (`B`), flake8-simplify (`SIM`), isort (`I`).
+
+Ignored: `B905` (zip without `strict=`), `F541` (f-string without variables).
+`__init__.py` files additionally ignore `F401`, `E402`.
+
+## Imports
+
+- Import `torch` and `einops` as top-level packages — never alias them:
+
+  ```python
+  import torch
+  import einops
+  ```
+
+- Import submodules with `from ... import ...`:
+
+  ```python
+  from torch import nn, optim
+  from torch.nn import functional as F
+  ```
+
+- Never do `import torch.nn as nn` or `from torch import functional`.
+
+## Package layout
+
+- **`__init__.py` re-exports only** — no concrete classes, functions, or other
+  logic defined inline. Each public class lives in its own file named after the
+  class (e.g. `models/spectral_onsagernet/spectral_onsagernet_1d.py` for
+  `SpectralOnsagerNet1d`); `__init__.py` is purely a re-export hub.
+- **One model family per sub-package** under
+  [`src/mesokit/models/`](../src/mesokit/models/) (e.g. `fno/`,
+  `spectral_onsagernet/`). See
+  [ARCHITECTURE.md § Model registry](ARCHITECTURE.md#model-registry).
+
+## Instruction documents
+
+[`.claude/CLAUDE.md`](../.claude/CLAUDE.md) and similar always-loaded prompts
+must be a **thin index of pointers** to canonical docs (README, ARCHITECTURE,
+ROADMAP, CONTRIBUTING, this file), not inline restatements.
+
+The CLI figures out which doc to read from the pointer table; duplicating
+content there causes the always-loaded prompt to bloat and drift from the
+linked docs. Only inline content that is (a) not documented anywhere else, or
+(b) a tripwire-style hard rule the assistant must read every session.
+
+## Project root setup
+
+The repo has a [`.project-root`](../.project-root) marker. When a notebook or
+script needs to resolve paths relative to the repo root, use
+[`rootutils`](https://pypi.org/project/rootutils/) — never hardcode `../../`
+or `os.chdir`.
+
+**Python scripts** (e.g. `src/mesokit/tutorial/training/train.py`):
+
+```python
+import rootutils
+
+rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
+```
+
+**Notebooks** (e.g. `notebooks/04_physics_structured.ipynb`):
+
+```python
+import rootutils
+
+ROOT = rootutils.setup_root(".", indicator=".project-root", pythonpath=True)
+```
+
+Use `ROOT / "some/path"` for all file paths derived from the project root.

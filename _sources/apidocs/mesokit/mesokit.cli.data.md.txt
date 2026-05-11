@@ -1,0 +1,119 @@
+# {py:mod}`mesokit.cli.data`
+
+```{py:module} mesokit.cli.data
+```
+
+```{autodoc2-docstring} mesokit.cli.data
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`list_ <mesokit.cli.data.list_>`
+  - ```{autodoc2-docstring} mesokit.cli.data.list_
+    :summary:
+    ```
+* - {py:obj}`_available_impl <mesokit.cli.data._available_impl>`
+  - ```{autodoc2-docstring} mesokit.cli.data._available_impl
+    :summary:
+    ```
+* - {py:obj}`generate <mesokit.cli.data.generate>`
+  - ```{autodoc2-docstring} mesokit.cli.data.generate
+    :summary:
+    ```
+* - {py:obj}`_next_version_name <mesokit.cli.data._next_version_name>`
+  - ```{autodoc2-docstring} mesokit.cli.data._next_version_name
+    :summary:
+    ```
+* - {py:obj}`register <mesokit.cli.data.register>`
+  - ```{autodoc2-docstring} mesokit.cli.data.register
+    :summary:
+    ```
+* - {py:obj}`_register_file <mesokit.cli.data._register_file>`
+  - ```{autodoc2-docstring} mesokit.cli.data._register_file
+    :summary:
+    ```
+* - {py:obj}`_jsonable <mesokit.cli.data._jsonable>`
+  - ```{autodoc2-docstring} mesokit.cli.data._jsonable
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`app <mesokit.cli.data.app>`
+  - ```{autodoc2-docstring} mesokit.cli.data.app
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} app
+:canonical: mesokit.cli.data.app
+:value: >
+   'Typer(...)'
+
+```{autodoc2-docstring} mesokit.cli.data.app
+```
+
+````
+
+````{py:function} list_() -> None
+:canonical: mesokit.cli.data.list_
+
+```{autodoc2-docstring} mesokit.cli.data.list_
+```
+````
+
+````{py:function} _available_impl() -> None
+:canonical: mesokit.cli.data._available_impl
+
+```{autodoc2-docstring} mesokit.cli.data._available_impl
+```
+````
+
+````{py:function} generate(dyn: typing.Annotated[str, typer.Option('--dyn', help='Registered dynamics name, e.g. allen_cahn_1d.')], output: typing.Annotated[pathlib.Path | None, typer.Option('--output', help='HDF5 path to write. Defaults to data/<dyn>/<name>.h5.')] = None, config: typing.Annotated[str | None, typer.Option('--config', help="Named config under configs/data/<dyn>/ (no extension). Defaults to 'default'.")] = None, name: typing.Annotated[str | None, typer.Option('--name', help='Register the generated file under this name. Defaults to <dyn>_v<n>.')] = None, no_registry: typing.Annotated[bool, typer.Option('--no-registry', help='Skip auto-registration. Mutually exclusive with --name.')] = False, force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing registry entry.')] = False, verbose: typing.Annotated[bool, typer.Option('--verbose', help="Show the simulator's full chatter (e.g. Dedalus per-step logs).")] = False) -> None
+:canonical: mesokit.cli.data.generate
+
+```{autodoc2-docstring} mesokit.cli.data.generate
+```
+````
+
+````{py:function} _next_version_name(dyn: str) -> str
+:canonical: mesokit.cli.data._next_version_name
+
+```{autodoc2-docstring} mesokit.cli.data._next_version_name
+```
+````
+
+````{py:function} register(name: typing.Annotated[str, typer.Option('--name', help='Name to register the dataset under.')], file: typing.Annotated[pathlib.Path, typer.Option('--file', help='Existing HDF5 file to register.')], force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing entry.')] = False) -> None
+:canonical: mesokit.cli.data.register
+
+```{autodoc2-docstring} mesokit.cli.data.register
+```
+````
+
+````{py:function} _register_file(name: str, file: pathlib.Path, *, force: bool) -> mesokit.data.validate.ValidationReport
+:canonical: mesokit.cli.data._register_file
+
+```{autodoc2-docstring} mesokit.cli.data._register_file
+```
+````
+
+````{py:function} _jsonable(d: dict[str, typing.Any]) -> dict[str, typing.Any]
+:canonical: mesokit.cli.data._jsonable
+
+```{autodoc2-docstring} mesokit.cli.data._jsonable
+```
+````

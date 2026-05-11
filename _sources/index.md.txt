@@ -1,0 +1,33 @@
+# mesokit
+
+A toolkit and tutorial for learning **mesoscopic dynamics** from data.
+
+`mesokit` is a step-by-step companion: the tutorial and the library evolve
+together. The product framing is **interpretability** — predictive accuracy
+is a precondition, not the headline. See
+[Architecture](ARCHITECTURE.md) for the design and
+[Roadmap](ROADMAP.md) for what's done and what's next.
+
+```{toctree}
+:maxdepth: 2
+:caption: Project
+
+ARCHITECTURE
+DATA_FORMAT
+ROADMAP
+STYLE
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: Tutorial
+
+tutorial
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: API reference
+
+apidocs/mesokit/mesokit
+```

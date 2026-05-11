@@ -1,0 +1,1729 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#"><link rel="search" title="Search" href="search.html">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 --><title>Index - mesokit</title>
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mesokit</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <span class="sidebar-brand-text">mesokit</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ARCHITECTURE.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DATA_FORMAT.html">Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ROADMAP.html">Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="STYLE.html">Code Style</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit</span></code></a><input aria-label="Toggle navigation of mesokit" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret</span></code></a><input aria-label="Toggle navigation of mesokit.interpret" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.compare.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.compare</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.plotter.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.plotter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.viz.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.viz" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.viz.plots.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz.plots</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.training.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.training" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.training.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training.train</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils</span></code></a><input aria-label="Toggle navigation of mesokit.utils" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.mlp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.mlp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.activation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.activation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers</span></code></a><input aria-label="Toggle navigation of mesokit.trainers" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer</span></code></a><input aria-label="Toggle navigation of mesokit.trainers.lit_trainer" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer._lit_module</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer.lit_trainer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.trainer_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.trainer_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli</span></code></a><input aria-label="Toggle navigation of mesokit.cli" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models</span></code></a><input aria-label="Toggle navigation of mesokit.models" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.sindy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.sindy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.deeponet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.deeponet</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.artifacts</span></code></a></li>
+<li class="toctree-l4 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet.potential" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.base</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.polynomial</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno</span></code></a><input aria-label="Toggle navigation of mesokit.models.fno" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.fno1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.dynamics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.dynamics_base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data</span></code></a><input aria-label="Toggle navigation of mesokit.data" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.kdv.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv</span></code></a><input aria-label="Toggle navigation of mesokit.data.kdv" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.kdv.kdv_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv.kdv_1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn</span></code></a><input aria-label="Toggle navigation of mesokit.data.allen_cahn" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.allen_cahn.allen_cahn_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn.allen_cahn_1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.validate.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.validate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.format.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.format</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          
+<section class="genindex-section">
+  <h1 id="index">Index</h1>
+  <div class="genindex-jumpbox"><a href="#_"><strong>_</strong></a> | <a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#K"><strong>K</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#O"><strong>O</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#V"><strong>V</strong></a></div>
+</section>
+<section id="_" class="genindex-section">
+  <h2>_</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.cli.html#mesokit.cli.__all__">__all__ (in module mesokit.cli)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.html#mesokit.data.__all__">(in module mesokit.data)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.allen_cahn.html#mesokit.data.allen_cahn.__all__">(in module mesokit.data.allen_cahn)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.datasets.html#mesokit.data.datasets.__all__">(in module mesokit.data.datasets)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.__all__">(in module mesokit.data.format)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.kdv.html#mesokit.data.kdv.__all__">(in module mesokit.data.kdv)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.interpret.html#mesokit.interpret.__all__">(in module mesokit.interpret)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.html#mesokit.models.__all__">(in module mesokit.models)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.fno.html#mesokit.models.fno.__all__">(in module mesokit.models.fno)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.html#mesokit.models.spectral_onsagernet.__all__">(in module mesokit.models.spectral_onsagernet)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html#mesokit.models.spectral_onsagernet.potential.__all__">(in module mesokit.models.spectral_onsagernet.potential)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.trainers.html#mesokit.trainers.__all__">(in module mesokit.trainers)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer.html#mesokit.trainers.lit_trainer.__all__">(in module mesokit.trainers.lit_trainer)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.utils.html#mesokit.utils.__all__">(in module mesokit.utils)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate.ValidationReport.__bool__">__bool__() (mesokit.data.validate.ValidationReport method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.simulator_base.html#mesokit.data.simulator_base.Simulator.__call__">__call__() (mesokit.data.simulator_base.Simulator method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html#mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset.__getitem__">__getitem__() (mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html#mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__getitem__">(mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html#mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset.__len__">__len__() (mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html#mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__len__">(mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset.__post_init__">__post_init__() (mesokit.data.trajectory.TrajectoryDataset method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.html#mesokit.__version__">__version__ (in module mesokit)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._allen_cahn_reference_energy">_allen_cahn_reference_energy() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin._append_metric">_append_metric() (mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data._available_impl">_available_impl() (in module mesokit.cli.data)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._build_reference_scatter">_build_reference_scatter() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._checkpoint_record">_checkpoint_record() (in module mesokit.cli.train)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#mesokit.cli.interpret._checkpoint_state_dict">_checkpoint_state_dict() (in module mesokit.cli.interpret)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._collapse_energy">_collapse_energy() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin._compute_loss">_compute_loss() (mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate._decode_attr">_decode_attr() (in module mesokit.data.validate)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data._progress.html#mesokit.data._progress._DEDALUS_NOISY_LOGGERS">_DEDALUS_NOISY_LOGGERS (in module mesokit.data._progress)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dFdu">_dFdu() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV0du">_dV0du() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV0du_h">_dV0du_h() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV1du_h">_dV1du_h() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV2du_h">_dV2du_h() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin">_DynamicsLitModuleMixin (class in mesokit.trainers.lit_trainer._lit_module)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._evaluate_components">_evaluate_components() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._evaluate_gradient_slice">_evaluate_gradient_slice() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._evaluate_total_potential">_evaluate_total_potential() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#mesokit.cli.interpret._existing_file">_existing_file() (in module mesokit.cli.interpret)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._flatten_1d_snapshots">_flatten_1d_snapshots() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._infer_dt">_infer_dt() (in module mesokit.cli.train)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.training.train.html#mesokit.tutorial.training.train._infer_dt">(in module mesokit.tutorial.training.train)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._instantiate_dataset">_instantiate_dataset() (in module mesokit.cli.train)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._instantiate_loader">_instantiate_loader() (in module mesokit.cli.train)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#mesokit.cli.interpret._instantiate_model">_instantiate_model() (in module mesokit.cli.interpret)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._instantiate_model">(in module mesokit.cli.train)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data._jsonable">_jsonable() (in module mesokit.cli.data)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html#mesokit.trainers.lit_trainer.lit_trainer._lightning">_lightning() (in module mesokit.trainers.lit_trainer.lit_trainer)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#mesokit.cli.interpret._load_config">_load_config() (in module mesokit.cli.interpret)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#mesokit.cli.interpret._load_reference_dataset">_load_reference_dataset() (in module mesokit.cli.interpret)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#mesokit.cli.interpret._load_registered_model">_load_registered_model() (in module mesokit.cli.interpret)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._load_train_config">_load_train_config() (in module mesokit.cli.train)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._load_trajectory">_load_trajectory() (in module mesokit.cli.train)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin._loss">_loss() (mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._metadata_float">_metadata_float() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._model_device">_model_device() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._model_dtype">_model_dtype() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._next_checkpoint_name">_next_checkpoint_name() (in module mesokit.cli.train)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data._next_version_name">_next_version_name() (in module mesokit.cli.data)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._plot_landscape">_plot_landscape() (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._plot_modes">_plot_modes() (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._plot_scatter">_plot_scatter() (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#mesokit.interpret.plotter._pyplot">_pyplot() (in module mesokit.interpret.plotter)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._pyplot">(in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.data.allen_cahn.allen_cahn_1d.html#mesokit.data.allen_cahn.allen_cahn_1d._random_periodic_ic">_random_periodic_ic() (in module mesokit.data.allen_cahn.allen_cahn_1d)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.kdv.kdv_1d.html#mesokit.data.kdv.kdv_1d._random_periodic_ic">(in module mesokit.data.kdv.kdv_1d)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.RegistryStore._read">_read() (mesokit.cli._registry_store.RegistryStore method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#mesokit.cli.interpret._record_or_config_value">_record_or_config_value() (in module mesokit.cli.interpret)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data._register_file">_register_file() (in module mesokit.cli.data)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.registry.html#mesokit.data.registry._REGISTRY">_REGISTRY (in module mesokit.data.registry)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.registry.html#mesokit.models.registry._REGISTRY">(in module mesokit.models.registry)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.trainers.registry.html#mesokit.trainers.registry._REGISTRY">(in module mesokit.trainers.registry)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._repr_html_">_repr_html_() (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.allen_cahn.allen_cahn_1d.html#mesokit.data.allen_cahn.allen_cahn_1d._rescale_to_unit_interval">_rescale_to_unit_interval() (in module mesokit.data.allen_cahn.allen_cahn_1d)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._resolved_config">_resolved_config() (in module mesokit.cli.train)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d._rhs_hat">_rhs_hat() (mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._scatter_stats">_scatter_stats() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d._step_hat">_step_hat() (mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._train_config_dir">_train_config_dir() (in module mesokit.cli.train)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._trainer_config">_trainer_config() (in module mesokit.cli.train)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._V0">_V0() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._V1">_V1() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._V2">_V2() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.RegistryStore._write">_write() (mesokit.cli._registry_store.RegistryStore method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="A" class="genindex-section">
+  <h2>A</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.a">a (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 property)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html#mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential.a">(mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential property)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html#mesokit.models.spectral_onsagernet.potential.PolynomialPotential.a">(mesokit.models.spectral_onsagernet.potential.PolynomialPotential property)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.utils.activation.html#mesokit.utils.activation.Activation">Activation (class in mesokit.utils.activation)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.RegistryStore.add">add() (mesokit.cli._registry_store.RegistryStore method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data.app">app (in module mesokit.cli.data)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#mesokit.cli.interpret.app">(in module mesokit.cli.interpret)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.cli.main.html#mesokit.cli.main.app">(in module mesokit.cli.main)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.cli.model.html#mesokit.cli.model.app">(in module mesokit.cli.model)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.dynamics_base.html#mesokit.models.dynamics_base.DynamicsModel.artifact">artifact() (mesokit.models.dynamics_base.DynamicsModel method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.fno.fno1d.html#mesokit.models.fno.fno1d.FNO1d.artifact">(mesokit.models.fno.fno1d.FNO1d method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.artifact">(mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.interpret.base.html#mesokit.interpret.base.InterpretabilityArtifact.artifact_name">artifact_name (mesokit.interpret.base.InterpretabilityArtifact attribute)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.artifact_name">(mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#mesokit.interpret.plotter.ArtifactPlotter">ArtifactPlotter (class in mesokit.interpret.plotter)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#mesokit.interpret.plotter.ArtifactPlotter.artifacts">artifacts (mesokit.interpret.plotter.ArtifactPlotter attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TrajectoryCacheFormat.attribute">attribute() (mesokit.data.format.TrajectoryCacheFormat method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TrajectoryCacheFormat.attributes">attributes (mesokit.data.format.TrajectoryCacheFormat attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.registry.html#mesokit.data.registry.available">available() (in module mesokit.data.registry)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.registry.html#mesokit.models.registry.available">(in module mesokit.models.registry)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.registry.html#mesokit.trainers.registry.available_trainers">available_trainers() (in module mesokit.trainers.registry)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="B" class="genindex-section">
+  <h2>B</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.b">b (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 property)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="C" class="genindex-section">
+  <h2>C</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.trainers.trainer_base.html#mesokit.trainers.trainer_base.TrainResult.checkpoint_path">checkpoint_path (mesokit.trainers.trainer_base.TrainResult attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.checkpoints_store">checkpoints_store() (in module mesokit.cli._registry_store)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5DatasetEntry.checks">checks (mesokit.data.format.HDF5DatasetEntry attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6">CoerciveAutogradPotentialV6 (class in mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.interpret.compare.html#mesokit.interpret.compare.compare">compare() (in module mesokit.interpret.compare)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.components">components (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.configure_optimizers">configure_optimizers() (mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT">CURRENT_TRAJECTORY_CACHE_FORMAT (in module mesokit.data.format)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="D" class="genindex-section">
+  <h2>D</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset.data">data (mesokit.data.trajectory.TrajectoryDataset attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TrajectoryCacheFormat.dataset">dataset() (mesokit.data.format.TrajectoryCacheFormat method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TrajectoryCacheFormat.datasets">datasets (mesokit.data.format.TrajectoryCacheFormat attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.datasets_store">datasets_store() (in module mesokit.cli._registry_store)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5AttributeEntry.description">description (mesokit.data.format.HDF5AttributeEntry attribute)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5DatasetEntry.description">(mesokit.data.format.HDF5DatasetEntry attribute)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TrajectoryCacheFormat.description">(mesokit.data.format.TrajectoryCacheFormat attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate.ValidationReport.dt">dt (mesokit.data.validate.ValidationReport attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5AttributeEntry.dtype">dtype (mesokit.data.format.HDF5AttributeEntry attribute)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5DatasetEntry.dtype">(mesokit.data.format.HDF5DatasetEntry attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.dVdu">dVdu() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html#mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential.dVdu">(mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html#mesokit.models.spectral_onsagernet.potential.PolynomialPotential.dVdu">(mesokit.models.spectral_onsagernet.potential.PolynomialPotential method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.base.html#mesokit.models.spectral_onsagernet.potential.base.Potential.dVdu_h">dVdu_h() (mesokit.models.spectral_onsagernet.potential.base.Potential method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.dVdu_h">(mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html#mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential.dVdu_h">(mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html#mesokit.models.spectral_onsagernet.potential.PolynomialPotential.dVdu_h">(mesokit.models.spectral_onsagernet.potential.PolynomialPotential method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.dVdu_values">dVdu_values (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.interpret.base.html#mesokit.interpret.base.InterpretabilityArtifact.dyn_name">dyn_name (mesokit.interpret.base.InterpretabilityArtifact attribute)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.dyn_name">(mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.dynamics_base.html#mesokit.models.dynamics_base.DynamicsModel">DynamicsModel (class in mesokit.models.dynamics_base)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="E" class="genindex-section">
+  <h2>E</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter.eps">eps (mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate.ValidationReport.errors">errors (mesokit.data.validate.ValidationReport attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.dynamics_base.html#mesokit.models.dynamics_base.euler_step">euler_step() (in module mesokit.models.dynamics_base)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#mesokit.cli.interpret.extract">extract() (in module mesokit.cli.interpret)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="F" class="genindex-section">
+  <h2>F</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html#mesokit.trainers.lit_trainer.lit_trainer.LitTrainer.fit">fit() (mesokit.trainers.lit_trainer.lit_trainer.LitTrainer method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.trainers.trainer_base.html#mesokit.trainers.trainer_base.Trainer.fit">(mesokit.trainers.trainer_base.Trainer method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.Fmap">Fmap() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.fno.fno1d.html#mesokit.models.fno.fno1d.FNO1d">FNO1d (class in mesokit.models.fno.fno1d)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.dynamics_base.html#mesokit.models.dynamics_base.DynamicsModel.forward">forward() (mesokit.models.dynamics_base.DynamicsModel method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.fno.fno1d.html#mesokit.models.fno.fno1d.FNO1d.forward">(mesokit.models.fno.fno1d.FNO1d method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.forward">(mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.utils.activation.html#mesokit.utils.activation.Activation.forward">(mesokit.utils.activation.Activation method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.utils.mlp.html#mesokit.utils.mlp.Mlp.forward">(mesokit.utils.mlp.Mlp method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#mesokit.interpret.plotter.ArtifactPlotter.from_artifacts">from_artifacts() (mesokit.interpret.plotter.ArtifactPlotter class method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#mesokit.interpret.plotter.ArtifactPlotter.from_model">from_model() (mesokit.interpret.plotter.ArtifactPlotter class method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.from_model">(mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape class method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="G" class="genindex-section">
+  <h2>G</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data.generate">generate() (in module mesokit.cli.data)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.registry.html#mesokit.data.registry.get">get() (in module mesokit.data.registry)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.registry.html#mesokit.models.registry.get">(in module mesokit.models.registry)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.RegistryStore.get">(mesokit.cli._registry_store.RegistryStore method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.trainers.registry.html#mesokit.trainers.registry.get_trainer">get_trainer() (in module mesokit.trainers.registry)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="H" class="genindex-section">
+  <h2>H</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5AttributeEntry">HDF5AttributeEntry (class in mesokit.data.format)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5DatasetEntry">HDF5DatasetEntry (class in mesokit.data.format)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.trainer_base.html#mesokit.trainers.trainer_base.TrainResult.history">history (mesokit.trainers.trainer_base.TrainResult attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter.intercept">intercept (mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.interpret.base.html#mesokit.interpret.base.InterpretabilityArtifact">InterpretabilityArtifact (class in mesokit.interpret.base)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="K" class="genindex-section">
+  <h2>K</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Km">Km (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.Km">(mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d property)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Kw">Kw (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.Kw">(mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d property)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="L" class="genindex-section">
+  <h2>L</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.base.html#mesokit.models.spectral_onsagernet.potential.base.Potential.L_hat">L_hat() (mesokit.models.spectral_onsagernet.potential.base.Potential method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.L_hat">(mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html#mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential.L_hat">(mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html#mesokit.models.spectral_onsagernet.potential.PolynomialPotential.L_hat">(mesokit.models.spectral_onsagernet.potential.PolynomialPotential method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter.learned">learned (mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.RegistryStore.list">list() (mesokit.cli._registry_store.RegistryStore method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data.list_">list_() (in module mesokit.cli.data)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#mesokit.cli.interpret.list_">(in module mesokit.cli.interpret)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.cli.model.html#mesokit.cli.model.list_">(in module mesokit.cli.model)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.dynamics_base.html#mesokit.models.dynamics_base.DynamicsModel.list_artifacts">list_artifacts() (mesokit.models.dynamics_base.DynamicsModel method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.fno.fno1d.html#mesokit.models.fno.fno1d.FNO1d.list_artifacts">(mesokit.models.fno.fno1d.FNO1d method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.list_artifacts">(mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html#mesokit.trainers.lit_trainer.lit_trainer.LitTrainer">LitTrainer (class in mesokit.trainers.lit_trainer.lit_trainer)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset.load_hdf5">load_hdf5() (mesokit.data.trajectory.TrajectoryDataset class method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html#mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset">LookbackWindowDataset (class in mesokit.data.datasets.lookback_window_dataset)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Lx">Lx (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="M" class="genindex-section">
+  <h2>M</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.cli.main.html#mesokit.cli.main.main">main() (in module mesokit.cli.main)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.training.train.html#mesokit.tutorial.training.train.main">(in module mesokit.tutorial.training.train)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset.mesh">mesh (mesokit.data.trajectory.TrajectoryDataset attribute)</a>
+</li>
+        <li>
+    mesokit
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.html#module-mesokit">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.cli
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.cli.html#module-mesokit.cli">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.cli._registry_store
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#module-mesokit.cli._registry_store">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.cli.data
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.cli.data.html#module-mesokit.cli.data">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.cli.interpret
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#module-mesokit.cli.interpret">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.cli.main
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.cli.main.html#module-mesokit.cli.main">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.cli.model
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.cli.model.html#module-mesokit.cli.model">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.cli.train
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.cli.train.html#module-mesokit.cli.train">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.html#module-mesokit.data">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data._progress
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data._progress.html#module-mesokit.data._progress">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.allen_cahn
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.allen_cahn.html#module-mesokit.data.allen_cahn">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.allen_cahn.allen_cahn_1d
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.allen_cahn.allen_cahn_1d.html#module-mesokit.data.allen_cahn.allen_cahn_1d">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.datasets
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.datasets.html#module-mesokit.data.datasets">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.datasets.lookback_window_dataset
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html#module-mesokit.data.datasets.lookback_window_dataset">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.datasets.snapshot_pair_dataset
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html#module-mesokit.data.datasets.snapshot_pair_dataset">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.format
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.format.html#module-mesokit.data.format">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.kdv
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.kdv.html#module-mesokit.data.kdv">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.kdv.kdv_1d
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.kdv.kdv_1d.html#module-mesokit.data.kdv.kdv_1d">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.registry
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.registry.html#module-mesokit.data.registry">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.simulator_base
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.simulator_base.html#module-mesokit.data.simulator_base">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.trajectory
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#module-mesokit.data.trajectory">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.data.validate
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.validate.html#module-mesokit.data.validate">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.interpret
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.interpret.html#module-mesokit.interpret">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.interpret.base
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.interpret.base.html#module-mesokit.interpret.base">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.interpret.compare
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.interpret.compare.html#module-mesokit.interpret.compare">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.interpret.plotter
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#module-mesokit.interpret.plotter">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.html#module-mesokit.models">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.deeponet
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.deeponet.html#module-mesokit.models.deeponet">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.dynamics_base
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.dynamics_base.html#module-mesokit.models.dynamics_base">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.fno
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.fno.html#module-mesokit.models.fno">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.fno.fno1d
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.fno.fno1d.html#module-mesokit.models.fno.fno1d">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.registry
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.registry.html#module-mesokit.models.registry">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.sindy
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.sindy.html#module-mesokit.models.sindy">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.spectral_onsagernet
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.html#module-mesokit.models.spectral_onsagernet">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.spectral_onsagernet.artifacts
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#module-mesokit.models.spectral_onsagernet.artifacts">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.spectral_onsagernet.potential
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html#module-mesokit.models.spectral_onsagernet.potential">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.spectral_onsagernet.potential.base
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.base.html#module-mesokit.models.spectral_onsagernet.potential.base">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#module-mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.spectral_onsagernet.potential.polynomial
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html#module-mesokit.models.spectral_onsagernet.potential.polynomial">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.models.spectral_onsagernet.spectral_onsagernet_1d
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#module-mesokit.models.spectral_onsagernet.spectral_onsagernet_1d">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.trainers
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.trainers.html#module-mesokit.trainers">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.trainers.lit_trainer
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer.html#module-mesokit.trainers.lit_trainer">module</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    mesokit.trainers.lit_trainer._lit_module
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#module-mesokit.trainers.lit_trainer._lit_module">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.trainers.lit_trainer.lit_trainer
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html#module-mesokit.trainers.lit_trainer.lit_trainer">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.trainers.registry
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.trainers.registry.html#module-mesokit.trainers.registry">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.trainers.trainer_base
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.trainers.trainer_base.html#module-mesokit.trainers.trainer_base">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.tutorial
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.html#module-mesokit.tutorial">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.tutorial.training
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.training.html#module-mesokit.tutorial.training">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.tutorial.training.train
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.training.train.html#module-mesokit.tutorial.training.train">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.tutorial.viz
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.viz.html#module-mesokit.tutorial.viz">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.tutorial.viz.plots
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.viz.plots.html#module-mesokit.tutorial.viz.plots">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.utils
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.utils.html#module-mesokit.utils">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.utils.activation
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.utils.activation.html#module-mesokit.utils.activation">module</a>
+</li>
+        </ul></li>
+        <li>
+    mesokit.utils.mlp
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.utils.mlp.html#module-mesokit.utils.mlp">module</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset.metadata">metadata (mesokit.data.trajectory.TrajectoryDataset attribute)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate.ValidationReport.metadata">(mesokit.data.validate.ValidationReport attribute)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.trainers.trainer_base.html#mesokit.trainers.trainer_base.TrainResult.metadata">(mesokit.trainers.trainer_base.TrainResult attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.utils.mlp.html#mesokit.utils.mlp.Mlp">Mlp (class in mesokit.utils.mlp)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.mode_numbers">mode_numbers (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.trainer_base.html#mesokit.trainers.trainer_base.TrainResult.model">model (mesokit.trainers.trainer_base.TrainResult attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.interpret.base.html#mesokit.interpret.base.InterpretabilityArtifact.model_name">model_name (mesokit.interpret.base.InterpretabilityArtifact attribute)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.model_name">(mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+        </ul></li>
+        <li>
+    module
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.html#module-mesokit">mesokit</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.cli.html#module-mesokit.cli">mesokit.cli</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#module-mesokit.cli._registry_store">mesokit.cli._registry_store</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.cli.data.html#module-mesokit.cli.data">mesokit.cli.data</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.cli.interpret.html#module-mesokit.cli.interpret">mesokit.cli.interpret</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.cli.main.html#module-mesokit.cli.main">mesokit.cli.main</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.cli.model.html#module-mesokit.cli.model">mesokit.cli.model</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.cli.train.html#module-mesokit.cli.train">mesokit.cli.train</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.html#module-mesokit.data">mesokit.data</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data._progress.html#module-mesokit.data._progress">mesokit.data._progress</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.allen_cahn.html#module-mesokit.data.allen_cahn">mesokit.data.allen_cahn</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.allen_cahn.allen_cahn_1d.html#module-mesokit.data.allen_cahn.allen_cahn_1d">mesokit.data.allen_cahn.allen_cahn_1d</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.datasets.html#module-mesokit.data.datasets">mesokit.data.datasets</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html#module-mesokit.data.datasets.lookback_window_dataset">mesokit.data.datasets.lookback_window_dataset</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html#module-mesokit.data.datasets.snapshot_pair_dataset">mesokit.data.datasets.snapshot_pair_dataset</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.format.html#module-mesokit.data.format">mesokit.data.format</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.kdv.html#module-mesokit.data.kdv">mesokit.data.kdv</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.kdv.kdv_1d.html#module-mesokit.data.kdv.kdv_1d">mesokit.data.kdv.kdv_1d</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.registry.html#module-mesokit.data.registry">mesokit.data.registry</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.simulator_base.html#module-mesokit.data.simulator_base">mesokit.data.simulator_base</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#module-mesokit.data.trajectory">mesokit.data.trajectory</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.validate.html#module-mesokit.data.validate">mesokit.data.validate</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.interpret.html#module-mesokit.interpret">mesokit.interpret</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.interpret.base.html#module-mesokit.interpret.base">mesokit.interpret.base</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.interpret.compare.html#module-mesokit.interpret.compare">mesokit.interpret.compare</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#module-mesokit.interpret.plotter">mesokit.interpret.plotter</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.html#module-mesokit.models">mesokit.models</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.deeponet.html#module-mesokit.models.deeponet">mesokit.models.deeponet</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.dynamics_base.html#module-mesokit.models.dynamics_base">mesokit.models.dynamics_base</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.fno.html#module-mesokit.models.fno">mesokit.models.fno</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.fno.fno1d.html#module-mesokit.models.fno.fno1d">mesokit.models.fno.fno1d</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.registry.html#module-mesokit.models.registry">mesokit.models.registry</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.sindy.html#module-mesokit.models.sindy">mesokit.models.sindy</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.html#module-mesokit.models.spectral_onsagernet">mesokit.models.spectral_onsagernet</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#module-mesokit.models.spectral_onsagernet.artifacts">mesokit.models.spectral_onsagernet.artifacts</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html#module-mesokit.models.spectral_onsagernet.potential">mesokit.models.spectral_onsagernet.potential</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.base.html#module-mesokit.models.spectral_onsagernet.potential.base">mesokit.models.spectral_onsagernet.potential.base</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#module-mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6">mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html#module-mesokit.models.spectral_onsagernet.potential.polynomial">mesokit.models.spectral_onsagernet.potential.polynomial</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#module-mesokit.models.spectral_onsagernet.spectral_onsagernet_1d">mesokit.models.spectral_onsagernet.spectral_onsagernet_1d</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.trainers.html#module-mesokit.trainers">mesokit.trainers</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer.html#module-mesokit.trainers.lit_trainer">mesokit.trainers.lit_trainer</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#module-mesokit.trainers.lit_trainer._lit_module">mesokit.trainers.lit_trainer._lit_module</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html#module-mesokit.trainers.lit_trainer.lit_trainer">mesokit.trainers.lit_trainer.lit_trainer</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.trainers.registry.html#module-mesokit.trainers.registry">mesokit.trainers.registry</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.trainers.trainer_base.html#module-mesokit.trainers.trainer_base">mesokit.trainers.trainer_base</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.html#module-mesokit.tutorial">mesokit.tutorial</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.training.html#module-mesokit.tutorial.training">mesokit.tutorial.training</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.training.train.html#module-mesokit.tutorial.training.train">mesokit.tutorial.training.train</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.viz.html#module-mesokit.tutorial.viz">mesokit.tutorial.viz</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.tutorial.viz.plots.html#module-mesokit.tutorial.viz.plots">mesokit.tutorial.viz.plots</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.utils.html#module-mesokit.utils">mesokit.utils</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.utils.activation.html#module-mesokit.utils.activation">mesokit.utils.activation</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.utils.mlp.html#module-mesokit.utils.mlp">mesokit.utils.mlp</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="N" class="genindex-section">
+  <h2>N</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.base.html#mesokit.models.spectral_onsagernet.potential.base.Potential.N_hat">N_hat() (mesokit.models.spectral_onsagernet.potential.base.Potential method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.N_hat">(mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html#mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential.N_hat">(mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html#mesokit.models.spectral_onsagernet.potential.PolynomialPotential.N_hat">(mesokit.models.spectral_onsagernet.potential.PolynomialPotential method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter.n_snapshots">n_snapshots (mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset.n_time">n_time (mesokit.data.trajectory.TrajectoryDataset property)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate.ValidationReport.n_time">(mesokit.data.validate.ValidationReport attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset.n_traj">n_traj (mesokit.data.trajectory.TrajectoryDataset property)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate.ValidationReport.n_traj">(mesokit.data.validate.ValidationReport attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5AttributeEntry.name">name (mesokit.data.format.HDF5AttributeEntry attribute)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TrajectoryCacheFormat.name">(mesokit.data.format.TrajectoryCacheFormat attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#mesokit.interpret.plotter.ArtifactPlotter.names">names() (mesokit.interpret.plotter.ArtifactPlotter method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Nx">Nx (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="O" class="genindex-section">
+  <h2>O</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate.ValidationReport.ok">ok (mesokit.data.validate.ValidationReport attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.on_train_epoch_end">on_train_epoch_end() (mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.on_validation_epoch_end">on_validation_epoch_end() (mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="P" class="genindex-section">
+  <h2>P</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5DatasetEntry.path">path (mesokit.data.format.HDF5DatasetEntry attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter.pearson_r">pearson_r (mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.interpret.base.html#mesokit.interpret.base.InterpretabilityArtifact.plot">plot() (mesokit.interpret.base.InterpretabilityArtifact method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#mesokit.interpret.plotter.ArtifactPlotter.plot">(mesokit.interpret.plotter.ArtifactPlotter method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.plot">(mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html#mesokit.models.spectral_onsagernet.potential.PolynomialPotential">PolynomialPotential (class in mesokit.models.spectral_onsagernet.potential)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html#mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential">(class in mesokit.models.spectral_onsagernet.potential.polynomial)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.base.html#mesokit.models.spectral_onsagernet.potential.base.Potential">Potential (class in mesokit.models.spectral_onsagernet.potential.base)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.potential_kind">potential_kind (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape">PotentialLandscape (class in mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="R" class="genindex-section">
+  <h2>R</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter.real">real (mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5AttributeEntry.recommended">recommended (mesokit.data.format.HDF5AttributeEntry attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.reference_scatter">reference_scatter (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter">ReferencePotentialScatter (class in mesokit.models.spectral_onsagernet.artifacts)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data.register">register() (in module mesokit.cli.data)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.cli.model.html#mesokit.cli.model.register">(in module mesokit.cli.model)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data.registry.html#mesokit.data.registry.register">(in module mesokit.data.registry)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.registry.html#mesokit.models.registry.register">(in module mesokit.models.registry)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.registry.html#mesokit.trainers.registry.register_trainer">register_trainer() (in module mesokit.trainers.registry)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.RegistryStore">RegistryStore (class in mesokit.cli._registry_store)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.RegistryStore.remove">remove() (mesokit.cli._registry_store.RegistryStore method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.interpret.base.html#mesokit.interpret.base.repr_html_summary">repr_html_summary() (in module mesokit.interpret.base)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5AttributeEntry.required">required (mesokit.data.format.HDF5AttributeEntry attribute)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5DatasetEntry.required">(mesokit.data.format.HDF5DatasetEntry attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TrajectoryCacheFormat.required_dataset_paths">required_dataset_paths() (mesokit.data.format.TrajectoryCacheFormat method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.fno.fno1d.html#mesokit.models.fno.fno1d.FNO1d.rhs">rhs() (mesokit.models.fno.fno1d.FNO1d method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.rhs">(mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.dynamics_base.html#mesokit.models.dynamics_base.rk4_step">rk4_step() (in module mesokit.models.dynamics_base)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.dynamics_base.html#mesokit.models.dynamics_base.rollout">rollout() (in module mesokit.models.dynamics_base)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.dynamics_base.html#mesokit.models.dynamics_base.DynamicsModel.rollout">(mesokit.models.dynamics_base.DynamicsModel method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.fno.fno1d.html#mesokit.models.fno.fno1d.FNO1d.rollout">(mesokit.models.fno.fno1d.FNO1d method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.rollout">(mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.trainer_base.html#mesokit.trainers.trainer_base.TrainResult.run_id">run_id (mesokit.trainers.trainer_base.TrainResult attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="S" class="genindex-section">
+  <h2>S</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.data.registry.html#mesokit.data.registry.S">S (in module mesokit.data.registry)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.interpret.base.html#mesokit.interpret.base.InterpretabilityArtifact.save">save() (mesokit.interpret.base.InterpretabilityArtifact method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#mesokit.interpret.plotter.ArtifactPlotter.save">(mesokit.interpret.plotter.ArtifactPlotter method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.save">(mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#mesokit.interpret.plotter.ArtifactPlotter.save_all">save_all() (mesokit.interpret.plotter.ArtifactPlotter method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset.save_hdf5">save_hdf5() (mesokit.data.trajectory.TrajectoryDataset method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.interpret.plotter.html#mesokit.interpret.plotter.ArtifactPlotter.save_one">save_one() (mesokit.interpret.plotter.ArtifactPlotter method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.SCHEMA_VERSION">SCHEMA_VERSION (in module mesokit.cli._registry_store)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5DatasetEntry.shape">shape (mesokit.data.format.HDF5DatasetEntry attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.registry.html#mesokit.data.registry.simulate">simulate() (in module mesokit.data.registry)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.allen_cahn.allen_cahn_1d.html#mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d">simulate_allen_cahn_1d() (in module mesokit.data.allen_cahn.allen_cahn_1d)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.data.kdv.kdv_1d.html#mesokit.data.kdv.kdv_1d.simulate_kdv_1d">simulate_kdv_1d() (in module mesokit.data.kdv.kdv_1d)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.simulator_base.html#mesokit.data.simulator_base.Simulator">Simulator (class in mesokit.data.simulator_base)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter.slope">slope (mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html#mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset">SnapshotPairDataset (class in mesokit.data.datasets.snapshot_pair_dataset)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data._progress.html#mesokit.data._progress.solver_progress">solver_progress() (in module mesokit.data._progress)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset.spatial_shape">spatial_shape (mesokit.data.trajectory.TrajectoryDataset property)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate.ValidationReport.spatial_shape">(mesokit.data.validate.ValidationReport attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html#mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d">SpectralOnsagerNet1d (class in mesokit.models.spectral_onsagernet.spectral_onsagernet_1d)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html#mesokit.trainers.lit_trainer.lit_trainer.SpectralOnsagerNetTrainer">SpectralOnsagerNetTrainer (in module mesokit.trainers.lit_trainer.lit_trainer)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate.ValidationReport.summary">summary() (mesokit.data.validate.ValidationReport method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.interpret.base.html#mesokit.interpret.base.InterpretabilityArtifact.summary">(mesokit.interpret.base.InterpretabilityArtifact method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.summary">(mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="T" class="genindex-section">
+  <h2>T</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.registry.html#mesokit.models.registry.T">T (in module mesokit.models.registry)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.trainers.registry.html#mesokit.trainers.registry.T">(in module mesokit.trainers.registry)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset.times">times (mesokit.data.trajectory.TrajectoryDataset attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train.train_command">train_command() (in module mesokit.cli.train)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.tutorial.training.train.html#mesokit.tutorial.training.train.train_snapshot_pairs">train_snapshot_pairs() (in module mesokit.tutorial.training.train)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.trainers.trainer_base.html#mesokit.trainers.trainer_base.Trainer">Trainer (class in mesokit.trainers.trainer_base)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.training_step">training_step() (mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.trainer_base.html#mesokit.trainers.trainer_base.TrainResult">TrainResult (class in mesokit.trainers.trainer_base)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TRAJECTORY_CACHE_V1">TRAJECTORY_CACHE_V1 (in module mesokit.data.format)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TrajectoryCacheFormat">TrajectoryCacheFormat (class in mesokit.data.format)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset">TrajectoryDataset (class in mesokit.data.trajectory)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="U" class="genindex-section">
+  <h2>U</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.u_values">u_values (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="V" class="genindex-section">
+  <h2>V</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.V">V() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html#mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential.V">(mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential method)</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html#mesokit.models.spectral_onsagernet.potential.PolynomialPotential.V">(mesokit.models.spectral_onsagernet.potential.PolynomialPotential method)</a>
+</li>
+        </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.V_values">V_values (mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate.validate">validate() (in module mesokit.data.validate)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.validation_step">validation_step() (mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin method)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.validate.html#mesokit.data.validate.ValidationReport">ValidationReport (class in mesokit.data.validate)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TrajectoryCacheFormat.version">version (mesokit.data.format.TrajectoryCacheFormat attribute)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html#mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.vmap">vmap() (mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6 method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Zhuoyuan Li
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

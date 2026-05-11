@@ -1,0 +1,90 @@
+# {py:mod}`mesokit.models.registry`
+
+```{py:module} mesokit.models.registry
+```
+
+```{autodoc2-docstring} mesokit.models.registry
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`register <mesokit.models.registry.register>`
+  - ```{autodoc2-docstring} mesokit.models.registry.register
+    :summary:
+    ```
+* - {py:obj}`get <mesokit.models.registry.get>`
+  - ```{autodoc2-docstring} mesokit.models.registry.get
+    :summary:
+    ```
+* - {py:obj}`available <mesokit.models.registry.available>`
+  - ```{autodoc2-docstring} mesokit.models.registry.available
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`T <mesokit.models.registry.T>`
+  - ```{autodoc2-docstring} mesokit.models.registry.T
+    :summary:
+    ```
+* - {py:obj}`_REGISTRY <mesokit.models.registry._REGISTRY>`
+  - ```{autodoc2-docstring} mesokit.models.registry._REGISTRY
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} T
+:canonical: mesokit.models.registry.T
+:value: >
+   'TypeVar(...)'
+
+```{autodoc2-docstring} mesokit.models.registry.T
+```
+
+````
+
+````{py:data} _REGISTRY
+:canonical: mesokit.models.registry._REGISTRY
+:type: dict[str, type]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.registry._REGISTRY
+```
+
+````
+
+````{py:function} register(name: str) -> collections.abc.Callable[[mesokit.models.registry.T], mesokit.models.registry.T]
+:canonical: mesokit.models.registry.register
+
+```{autodoc2-docstring} mesokit.models.registry.register
+```
+````
+
+````{py:function} get(name: str) -> type
+:canonical: mesokit.models.registry.get
+
+```{autodoc2-docstring} mesokit.models.registry.get
+```
+````
+
+````{py:function} available() -> list[str]
+:canonical: mesokit.models.registry.available
+
+```{autodoc2-docstring} mesokit.models.registry.available
+```
+````

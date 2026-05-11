@@ -1,0 +1,53 @@
+# {py:mod}`mesokit.trainers`
+
+```{py:module} mesokit.trainers
+```
+
+```{autodoc2-docstring} mesokit.trainers
+:allowtitles:
+```
+
+## Subpackages
+
+```{toctree}
+:titlesonly:
+:maxdepth: 3
+
+mesokit.trainers.lit_trainer
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.trainers.trainer_base
+mesokit.trainers.registry
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.trainers.__all__>`
+  - ```{autodoc2-docstring} mesokit.trainers.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.trainers.__all__
+:value: >
+   ['LitTrainer', 'SpectralOnsagerNetTrainer', 'Trainer', 'TrainResult', 'available_trainers', 'get_tra...
+
+```{autodoc2-docstring} mesokit.trainers.__all__
+```
+
+````

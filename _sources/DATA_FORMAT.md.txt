@@ -1,0 +1,178 @@
+# Data Format
+
+This document is the cache-file contract for datasets that `mesokit` writes,
+registers, and trains from. It describes the HDF5 file on disk. The in-memory
+object is [`TrajectoryDataset`](../src/mesokit/data/trajectory.py); see
+[Architecture](ARCHITECTURE.md) for how datasets compose with simulators,
+training, models, and interpretability.
+
+The detailed v1 contract is defined in code by
+{py:data}`mesokit.data.format.TRAJECTORY_CACHE_V1`. Sphinx renders the
+dataset and attribute tables below from that schema, and also renders the
+dataclasses and exported schema constant in the API reference under
+{py:mod}`mesokit.data.format`.
+
+## Scope
+
+A `mesokit` cache file is an HDF5 file produced by `mesokit data generate` or
+accepted by `mesokit data register`. Version 1 is intentionally small:
+
+- one observed trajectory bundle;
+- one shared time grid for every trajectory;
+- one shared mesh for every snapshot;
+- one state array with shape `(n_traj, n_time, *state_shape)`;
+- flat file attributes for metadata.
+
+Version 1 does not encode paired microscopic/mesoscopic data, ragged
+trajectories, multiple meshes, irregular particle clouds, or multiple coupled
+state arrays. Those require a versioned extension rather than overloading this
+format.
+
+## Layout Overview
+
+The v1 cache layout is flat:
+
+```text
+<dataset>.h5
+|-- data     dataset, shape (n_traj, n_time, *state_shape)
+|-- times    dataset, shape (n_time,)
+|-- mesh     dataset, shape (*state_shape)
+`-- attrs    HDF5 file attributes, flat metadata
+```
+
+The top-level datasets `data`, `times`, and `mesh` are required. The exact
+entry definitions, dtype families, and validation checks live in the
+`TRAJECTORY_CACHE_V1` schema.
+
+## Dataset Entries
+
+```{trajectory-cache-format} datasets
+```
+
+## Axis Contract
+
+`data[i, j, ...]` is the state of trajectory `i` at time `times[j]`.
+
+All trajectories in the same file share the same `times` and `mesh`. There is
+no support in v1 for variable-length trajectories, per-trajectory time grids,
+or per-trajectory meshes. Exporters should resample such data before writing a
+v1 cache file, or store it in a future format.
+
+This document calls the trailing dimensions `state_shape`. The current Python
+API exposes the same tuple as `TrajectoryDataset.spatial_shape`, because the
+first built-in datasets are 1D fields. For v1, `mesh.shape` must equal
+`state_shape`. In the 1D field case, `mesh[k]` is the coordinate of
+`data[i, j, k]`.
+
+The exact coordinate convention for higher-dimensional fields is not yet part
+of the v1 contract. A future format should add explicit coordinate axes or
+mesh groups instead of silently changing the meaning of the current `mesh`
+dataset.
+
+## Metadata Attributes
+
+All file attributes round-trip into `TrajectoryDataset.metadata`. Metadata is
+flat: each key maps to an HDF5-compatible scalar, string, or simple array.
+Nested Python objects are not part of the v1 contract.
+
+Files intended for the dataset registry should include `dyn` when known.
+Common optional attributes include physical parameters and provenance such as
+`dt`, `T`, `Lx`, `eps`, `seed`, and `source`. The API schema lists the current
+known attributes and whether they are required or recommended.
+
+```{trajectory-cache-format} attributes
+```
+
+Attributes beginning with `mesokit_` are reserved for future format markers
+and migration metadata. Domain parameters should use ordinary names such as
+`eps`, `Lx`, or project-specific prefixes.
+
+Shape summaries such as `n_traj`, `n_time`, and `state_shape` are derived from
+the datasets. They may appear in registry metadata, but they should not be
+treated as authoritative file attributes.
+
+## Minimal Writer
+
+External exporters can produce a conforming v1 cache file directly with
+`h5py`:
+
+```python
+import h5py
+import numpy as np
+
+data = np.asarray(data, dtype=np.float32)      # (n_traj, n_time, *state_shape)
+times = np.asarray(times, dtype=np.float32)    # (n_time,)
+mesh = np.asarray(mesh, dtype=np.float32)      # (*state_shape,)
+
+with h5py.File("my_data.h5", "w") as f:
+    f.create_dataset("data", data=data)
+    f.create_dataset("times", data=times)
+    f.create_dataset("mesh", data=mesh)
+    f.attrs["dyn"] = "my_dynamics"
+    f.attrs["source"] = "external_export"
+```
+
+Before registering the file, run:
+
+```sh
+mesokit data register --name my_dataset --file my_data.h5
+```
+
+Registration validates the HDF5 layout and writes a local registry record
+under `.mesokit/`. The registry record is not part of the HDF5 cache contract.
+
+## Validation And Loading
+
+`mesokit.data.validate(path)` is the public validator for v1 cache files. It
+uses the same `TRAJECTORY_CACHE_V1` schema for required HDF5 paths, then
+applies the shape, dtype, finiteness, and monotonic-time checks documented by
+that schema.
+
+`TrajectoryDataset.load_hdf5(path)` assumes the file follows this contract and
+then constructs the in-memory object. It is suitable for trusted cache files.
+Use `validate` first when accepting user-supplied or externally generated
+files.
+
+## Compatibility Rules
+
+The v1 compatibility promise is path- and shape-based:
+
+- `data`, `times`, and `mesh` keep their current top-level names;
+- `data` keeps `(n_traj, n_time, *state_shape)`;
+- `times` keeps `(n_time,)`;
+- `mesh` keeps `state_shape`;
+- unknown metadata attributes are allowed and should be ignored by generic
+  consumers;
+- changing the required layout or the meaning of required arrays requires a
+  new format version.
+
+New metadata attributes are additive. New required arrays, nested groups, or
+non-flat metadata should be introduced only through a documented extension.
+
+## Future Paired Micro/Meso Format
+
+Microscopic/mesoscopic paired data should not be hidden inside v1 metadata.
+The relationship between a microscopic state and a mesoscopic state is part of
+the data model, not just provenance.
+
+A future paired format should likely introduce explicit top-level groups such
+as:
+
+```text
+<paired>.h5
+|-- meso/
+|   |-- data
+|   |-- times
+|   `-- mesh
+|-- micro/
+|   |-- data
+|   |-- times
+|   `-- mesh
+`-- coarse_graining/
+    `-- attrs describing the map from micro to meso
+```
+
+The exact micro layout is still open. It may share the v1 trajectory shape for
+grid-based microscopic fields, but particle or agent trajectories probably
+need a separate container. Existing models should still be able to load the
+`meso/` group as a regular `TrajectoryDataset` once that extension exists.

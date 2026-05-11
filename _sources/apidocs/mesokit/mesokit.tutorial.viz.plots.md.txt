@@ -1,0 +1,8 @@
+# {py:mod}`mesokit.tutorial.viz.plots`
+
+```{py:module} mesokit.tutorial.viz.plots
+```
+
+```{autodoc2-docstring} mesokit.tutorial.viz.plots
+:allowtitles:
+```

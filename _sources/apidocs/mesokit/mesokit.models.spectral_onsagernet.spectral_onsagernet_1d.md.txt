@@ -1,0 +1,114 @@
+# {py:mod}`mesokit.models.spectral_onsagernet.spectral_onsagernet_1d`
+
+```{py:module} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d
+```
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`SpectralOnsagerNet1d <mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} SpectralOnsagerNet1d(Nx: int = 256, Lx: float = 2.0 * math.pi, learn_M: bool = True, learn_W: bool = True, potential: mesokit.models.spectral_onsagernet.potential.Potential | None = None, step_method: str = 'sbdf1')
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d
+
+Bases: {py:obj}`torch.nn.Module`
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.__init__
+```
+
+````{py:property} Km
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.Km
+:type: torch.Tensor
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.Km
+```
+
+````
+
+````{py:property} Kw
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.Kw
+:type: torch.Tensor
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.Kw
+```
+
+````
+
+````{py:method} _rhs_hat(u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d._rhs_hat
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d._rhs_hat
+```
+
+````
+
+````{py:method} rhs(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.rhs
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.rhs
+```
+
+````
+
+````{py:method} forward(u: torch.Tensor, dt: float) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.forward
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.forward
+```
+
+````
+
+````{py:method} _step_hat(u_hat: torch.Tensor, dt: float) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d._step_hat
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d._step_hat
+```
+
+````
+
+````{py:method} rollout(u0: torch.Tensor, n_steps: int, dt: float) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.rollout
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.rollout
+```
+
+````
+
+````{py:method} list_artifacts() -> list[str]
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.list_artifacts
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.list_artifacts
+```
+
+````
+
+````{py:method} artifact(name: str) -> mesokit.interpret.InterpretabilityArtifact
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.artifact
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d.artifact
+```
+
+````
+
+`````

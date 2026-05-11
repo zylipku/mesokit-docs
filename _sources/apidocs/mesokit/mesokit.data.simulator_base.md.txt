@@ -1,0 +1,42 @@
+# {py:mod}`mesokit.data.simulator_base`
+
+```{py:module} mesokit.data.simulator_base
+```
+
+```{autodoc2-docstring} mesokit.data.simulator_base
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`Simulator <mesokit.data.simulator_base.Simulator>`
+  - ```{autodoc2-docstring} mesokit.data.simulator_base.Simulator
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} Simulator
+:canonical: mesokit.data.simulator_base.Simulator
+
+Bases: {py:obj}`typing.Protocol`
+
+```{autodoc2-docstring} mesokit.data.simulator_base.Simulator
+```
+
+````{py:method} __call__(*, verbose: bool = False, **params: object) -> mesokit.data.trajectory.TrajectoryDataset
+:canonical: mesokit.data.simulator_base.Simulator.__call__
+
+```{autodoc2-docstring} mesokit.data.simulator_base.Simulator.__call__
+```
+
+````
+
+`````

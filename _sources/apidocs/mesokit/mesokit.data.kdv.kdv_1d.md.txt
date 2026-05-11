@@ -1,0 +1,42 @@
+# {py:mod}`mesokit.data.kdv.kdv_1d`
+
+```{py:module} mesokit.data.kdv.kdv_1d
+```
+
+```{autodoc2-docstring} mesokit.data.kdv.kdv_1d
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`simulate_kdv_1d <mesokit.data.kdv.kdv_1d.simulate_kdv_1d>`
+  - ```{autodoc2-docstring} mesokit.data.kdv.kdv_1d.simulate_kdv_1d
+    :summary:
+    ```
+* - {py:obj}`_random_periodic_ic <mesokit.data.kdv.kdv_1d._random_periodic_ic>`
+  - ```{autodoc2-docstring} mesokit.data.kdv.kdv_1d._random_periodic_ic
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} simulate_kdv_1d(*, n_traj: int = 1000, Nx: int = 256, Lx: float = 2.0 * np.pi, T: float = 0.1, T_save_steps: int = 25, timestep: float = 0.001 / 25, Nk: int = 3, max_k: int = 6, u_bound: float = 10.0, dealias: int = 2, seed: int = 0, verbose: bool = False) -> mesokit.data.trajectory.TrajectoryDataset
+:canonical: mesokit.data.kdv.kdv_1d.simulate_kdv_1d
+
+```{autodoc2-docstring} mesokit.data.kdv.kdv_1d.simulate_kdv_1d
+```
+````
+
+````{py:function} _random_periodic_ic(x: numpy.ndarray, *, Nk: int, max_k: int, rng: numpy.random.Generator) -> numpy.ndarray
+:canonical: mesokit.data.kdv.kdv_1d._random_periodic_ic
+
+```{autodoc2-docstring} mesokit.data.kdv.kdv_1d._random_periodic_ic
+```
+````

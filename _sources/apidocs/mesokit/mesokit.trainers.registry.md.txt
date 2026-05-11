@@ -1,0 +1,90 @@
+# {py:mod}`mesokit.trainers.registry`
+
+```{py:module} mesokit.trainers.registry
+```
+
+```{autodoc2-docstring} mesokit.trainers.registry
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`register_trainer <mesokit.trainers.registry.register_trainer>`
+  - ```{autodoc2-docstring} mesokit.trainers.registry.register_trainer
+    :summary:
+    ```
+* - {py:obj}`get_trainer <mesokit.trainers.registry.get_trainer>`
+  - ```{autodoc2-docstring} mesokit.trainers.registry.get_trainer
+    :summary:
+    ```
+* - {py:obj}`available_trainers <mesokit.trainers.registry.available_trainers>`
+  - ```{autodoc2-docstring} mesokit.trainers.registry.available_trainers
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`T <mesokit.trainers.registry.T>`
+  - ```{autodoc2-docstring} mesokit.trainers.registry.T
+    :summary:
+    ```
+* - {py:obj}`_REGISTRY <mesokit.trainers.registry._REGISTRY>`
+  - ```{autodoc2-docstring} mesokit.trainers.registry._REGISTRY
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} T
+:canonical: mesokit.trainers.registry.T
+:value: >
+   'TypeVar(...)'
+
+```{autodoc2-docstring} mesokit.trainers.registry.T
+```
+
+````
+
+````{py:data} _REGISTRY
+:canonical: mesokit.trainers.registry._REGISTRY
+:type: dict[str, type]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.trainers.registry._REGISTRY
+```
+
+````
+
+````{py:function} register_trainer(name: str) -> collections.abc.Callable[[mesokit.trainers.registry.T], mesokit.trainers.registry.T]
+:canonical: mesokit.trainers.registry.register_trainer
+
+```{autodoc2-docstring} mesokit.trainers.registry.register_trainer
+```
+````
+
+````{py:function} get_trainer(name: str) -> type
+:canonical: mesokit.trainers.registry.get_trainer
+
+```{autodoc2-docstring} mesokit.trainers.registry.get_trainer
+```
+````
+
+````{py:function} available_trainers() -> list[str]
+:canonical: mesokit.trainers.registry.available_trainers
+
+```{autodoc2-docstring} mesokit.trainers.registry.available_trainers
+```
+````

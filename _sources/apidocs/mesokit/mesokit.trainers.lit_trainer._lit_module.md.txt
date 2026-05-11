@@ -1,0 +1,102 @@
+# {py:mod}`mesokit.trainers.lit_trainer._lit_module`
+
+```{py:module} mesokit.trainers.lit_trainer._lit_module
+```
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_DynamicsLitModuleMixin <mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin>`
+  - ```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} _DynamicsLitModuleMixin(model: torch.nn.Module, *, lr: float, weight_decay: float, optimizer: str, scheduler: str | None, rollout_steps: int, dt: float)
+:canonical: mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.__init__
+```
+
+````{py:method} training_step(batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> torch.Tensor
+:canonical: mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.training_step
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.training_step
+```
+
+````
+
+````{py:method} validation_step(batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> torch.Tensor
+:canonical: mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.validation_step
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.validation_step
+```
+
+````
+
+````{py:method} on_train_epoch_end() -> None
+:canonical: mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.on_train_epoch_end
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.on_train_epoch_end
+```
+
+````
+
+````{py:method} on_validation_epoch_end() -> None
+:canonical: mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.on_validation_epoch_end
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.on_validation_epoch_end
+```
+
+````
+
+````{py:method} configure_optimizers() -> typing.Any
+:canonical: mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.configure_optimizers
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin.configure_optimizers
+```
+
+````
+
+````{py:method} _loss(batch: tuple[torch.Tensor, torch.Tensor]) -> torch.Tensor
+:canonical: mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin._loss
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin._loss
+```
+
+````
+
+````{py:method} _compute_loss(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin._compute_loss
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin._compute_loss
+```
+
+````
+
+````{py:method} _append_metric(name: str, value: typing.Any) -> None
+:canonical: mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin._append_metric
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin._append_metric
+```
+
+````
+
+`````

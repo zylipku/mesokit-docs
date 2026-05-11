@@ -1,0 +1,8 @@
+# {py:mod}`mesokit.models.deeponet`
+
+```{py:module} mesokit.models.deeponet
+```
+
+```{autodoc2-docstring} mesokit.models.deeponet
+:allowtitles:
+```

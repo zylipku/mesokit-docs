@@ -1,0 +1,45 @@
+# {py:mod}`mesokit.interpret`
+
+```{py:module} mesokit.interpret
+```
+
+```{autodoc2-docstring} mesokit.interpret
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.interpret.base
+mesokit.interpret.compare
+mesokit.interpret.plotter
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.interpret.__all__>`
+  - ```{autodoc2-docstring} mesokit.interpret.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.interpret.__all__
+:value: >
+   ['ArtifactPlotter', 'InterpretabilityArtifact', 'compare', 'repr_html_summary']
+
+```{autodoc2-docstring} mesokit.interpret.__all__
+```
+
+````

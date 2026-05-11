@@ -1,0 +1,59 @@
+# {py:mod}`mesokit.models.spectral_onsagernet.potential.base`
+
+```{py:module} mesokit.models.spectral_onsagernet.potential.base
+```
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`Potential <mesokit.models.spectral_onsagernet.potential.base.Potential>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.Potential
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} Potential
+:canonical: mesokit.models.spectral_onsagernet.potential.base.Potential
+
+Bases: {py:obj}`torch.nn.Module`, {py:obj}`abc.ABC`
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.Potential
+```
+
+````{py:method} dVdu_h(u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.base.Potential.dVdu_h
+:abstractmethod:
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.Potential.dVdu_h
+```
+
+````
+
+````{py:method} L_hat() -> torch.Tensor | float
+:canonical: mesokit.models.spectral_onsagernet.potential.base.Potential.L_hat
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.Potential.L_hat
+```
+
+````
+
+````{py:method} N_hat(u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.base.Potential.N_hat
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.Potential.N_hat
+```
+
+````
+
+`````

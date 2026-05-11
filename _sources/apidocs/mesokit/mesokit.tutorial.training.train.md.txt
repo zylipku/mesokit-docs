@@ -1,0 +1,53 @@
+# {py:mod}`mesokit.tutorial.training.train`
+
+```{py:module} mesokit.tutorial.training.train
+```
+
+```{autodoc2-docstring} mesokit.tutorial.training.train
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`train_snapshot_pairs <mesokit.tutorial.training.train.train_snapshot_pairs>`
+  - ```{autodoc2-docstring} mesokit.tutorial.training.train.train_snapshot_pairs
+    :summary:
+    ```
+* - {py:obj}`_infer_dt <mesokit.tutorial.training.train._infer_dt>`
+  - ```{autodoc2-docstring} mesokit.tutorial.training.train._infer_dt
+    :summary:
+    ```
+* - {py:obj}`main <mesokit.tutorial.training.train.main>`
+  - ```{autodoc2-docstring} mesokit.tutorial.training.train.main
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} train_snapshot_pairs(traj: mesokit.data.TrajectoryDataset | None = None, *, dyn: str = 'allen_cahn_1d', model_name: str = 'spectral_onsagernet_1d', max_epochs: int = 20, batch_size: int = 4, accelerator: str = 'cpu', devices: int | str = 1, simulate_kwargs: dict[str, typing.Any] | None = None) -> mesokit.trainers.TrainResult
+:canonical: mesokit.tutorial.training.train.train_snapshot_pairs
+
+```{autodoc2-docstring} mesokit.tutorial.training.train.train_snapshot_pairs
+```
+````
+
+````{py:function} _infer_dt(traj: mesokit.data.TrajectoryDataset) -> float
+:canonical: mesokit.tutorial.training.train._infer_dt
+
+```{autodoc2-docstring} mesokit.tutorial.training.train._infer_dt
+```
+````
+
+````{py:function} main() -> None
+:canonical: mesokit.tutorial.training.train.main
+
+```{autodoc2-docstring} mesokit.tutorial.training.train.main
+```
+````

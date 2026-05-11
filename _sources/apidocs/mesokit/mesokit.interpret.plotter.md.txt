@@ -1,0 +1,120 @@
+# {py:mod}`mesokit.interpret.plotter`
+
+```{py:module} mesokit.interpret.plotter
+```
+
+```{autodoc2-docstring} mesokit.interpret.plotter
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`ArtifactPlotter <mesokit.interpret.plotter.ArtifactPlotter>`
+  - ```{autodoc2-docstring} mesokit.interpret.plotter.ArtifactPlotter
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_pyplot <mesokit.interpret.plotter._pyplot>`
+  - ```{autodoc2-docstring} mesokit.interpret.plotter._pyplot
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} ArtifactPlotter
+:canonical: mesokit.interpret.plotter.ArtifactPlotter
+
+```{autodoc2-docstring} mesokit.interpret.plotter.ArtifactPlotter
+```
+
+````{py:attribute} artifacts
+:canonical: mesokit.interpret.plotter.ArtifactPlotter.artifacts
+:type: list[mesokit.interpret.base.InterpretabilityArtifact]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.interpret.plotter.ArtifactPlotter.artifacts
+```
+
+````
+
+````{py:method} from_model(model: typing.Any, names: collections.abc.Sequence[str] | None = None) -> mesokit.interpret.plotter.ArtifactPlotter
+:canonical: mesokit.interpret.plotter.ArtifactPlotter.from_model
+:classmethod:
+
+```{autodoc2-docstring} mesokit.interpret.plotter.ArtifactPlotter.from_model
+```
+
+````
+
+````{py:method} from_artifacts(artifacts: collections.abc.Iterable[mesokit.interpret.base.InterpretabilityArtifact]) -> mesokit.interpret.plotter.ArtifactPlotter
+:canonical: mesokit.interpret.plotter.ArtifactPlotter.from_artifacts
+:classmethod:
+
+```{autodoc2-docstring} mesokit.interpret.plotter.ArtifactPlotter.from_artifacts
+```
+
+````
+
+````{py:method} names() -> list[str]
+:canonical: mesokit.interpret.plotter.ArtifactPlotter.names
+
+```{autodoc2-docstring} mesokit.interpret.plotter.ArtifactPlotter.names
+```
+
+````
+
+````{py:method} plot() -> typing.Any
+:canonical: mesokit.interpret.plotter.ArtifactPlotter.plot
+
+```{autodoc2-docstring} mesokit.interpret.plotter.ArtifactPlotter.plot
+```
+
+````
+
+````{py:method} save(path: str | pathlib.Path, *, dpi: int = 180, close: bool = True) -> pathlib.Path
+:canonical: mesokit.interpret.plotter.ArtifactPlotter.save
+
+```{autodoc2-docstring} mesokit.interpret.plotter.ArtifactPlotter.save
+```
+
+````
+
+````{py:method} save_all(output_dir: str | pathlib.Path, *, extension: str = 'png') -> list[pathlib.Path]
+:canonical: mesokit.interpret.plotter.ArtifactPlotter.save_all
+
+```{autodoc2-docstring} mesokit.interpret.plotter.ArtifactPlotter.save_all
+```
+
+````
+
+````{py:method} save_one(artifact_name: str, output: str | pathlib.Path) -> pathlib.Path
+:canonical: mesokit.interpret.plotter.ArtifactPlotter.save_one
+
+```{autodoc2-docstring} mesokit.interpret.plotter.ArtifactPlotter.save_one
+```
+
+````
+
+`````
+
+````{py:function} _pyplot() -> typing.Any
+:canonical: mesokit.interpret.plotter._pyplot
+
+```{autodoc2-docstring} mesokit.interpret.plotter._pyplot
+```
+````

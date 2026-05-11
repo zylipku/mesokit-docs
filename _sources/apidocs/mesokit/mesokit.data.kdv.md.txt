@@ -1,0 +1,43 @@
+# {py:mod}`mesokit.data.kdv`
+
+```{py:module} mesokit.data.kdv
+```
+
+```{autodoc2-docstring} mesokit.data.kdv
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.data.kdv.kdv_1d
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.data.kdv.__all__>`
+  - ```{autodoc2-docstring} mesokit.data.kdv.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.data.kdv.__all__
+:value: >
+   ['simulate_kdv_1d']
+
+```{autodoc2-docstring} mesokit.data.kdv.__all__
+```
+
+````

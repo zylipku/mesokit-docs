@@ -1,0 +1,107 @@
+# {py:mod}`mesokit.models.dynamics_base`
+
+```{py:module} mesokit.models.dynamics_base
+```
+
+```{autodoc2-docstring} mesokit.models.dynamics_base
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`DynamicsModel <mesokit.models.dynamics_base.DynamicsModel>`
+  - ```{autodoc2-docstring} mesokit.models.dynamics_base.DynamicsModel
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`euler_step <mesokit.models.dynamics_base.euler_step>`
+  - ```{autodoc2-docstring} mesokit.models.dynamics_base.euler_step
+    :summary:
+    ```
+* - {py:obj}`rk4_step <mesokit.models.dynamics_base.rk4_step>`
+  - ```{autodoc2-docstring} mesokit.models.dynamics_base.rk4_step
+    :summary:
+    ```
+* - {py:obj}`rollout <mesokit.models.dynamics_base.rollout>`
+  - ```{autodoc2-docstring} mesokit.models.dynamics_base.rollout
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} DynamicsModel
+:canonical: mesokit.models.dynamics_base.DynamicsModel
+
+Bases: {py:obj}`typing.Protocol`
+
+```{autodoc2-docstring} mesokit.models.dynamics_base.DynamicsModel
+```
+
+````{py:method} forward(u: torch.Tensor, dt: float) -> torch.Tensor
+:canonical: mesokit.models.dynamics_base.DynamicsModel.forward
+
+```{autodoc2-docstring} mesokit.models.dynamics_base.DynamicsModel.forward
+```
+
+````
+
+````{py:method} rollout(u0: torch.Tensor, n_steps: int, dt: float) -> torch.Tensor
+:canonical: mesokit.models.dynamics_base.DynamicsModel.rollout
+
+```{autodoc2-docstring} mesokit.models.dynamics_base.DynamicsModel.rollout
+```
+
+````
+
+````{py:method} list_artifacts() -> list[str]
+:canonical: mesokit.models.dynamics_base.DynamicsModel.list_artifacts
+
+```{autodoc2-docstring} mesokit.models.dynamics_base.DynamicsModel.list_artifacts
+```
+
+````
+
+````{py:method} artifact(name: str) -> mesokit.interpret.InterpretabilityArtifact
+:canonical: mesokit.models.dynamics_base.DynamicsModel.artifact
+
+```{autodoc2-docstring} mesokit.models.dynamics_base.DynamicsModel.artifact
+```
+
+````
+
+`````
+
+````{py:function} euler_step(rhs: collections.abc.Callable[[torch.Tensor], torch.Tensor], u: torch.Tensor, dt: float) -> torch.Tensor
+:canonical: mesokit.models.dynamics_base.euler_step
+
+```{autodoc2-docstring} mesokit.models.dynamics_base.euler_step
+```
+````
+
+````{py:function} rk4_step(rhs: collections.abc.Callable[[torch.Tensor], torch.Tensor], u: torch.Tensor, dt: float) -> torch.Tensor
+:canonical: mesokit.models.dynamics_base.rk4_step
+
+```{autodoc2-docstring} mesokit.models.dynamics_base.rk4_step
+```
+````
+
+````{py:function} rollout(forward: collections.abc.Callable[[torch.Tensor, float], torch.Tensor], u0: torch.Tensor, n_steps: int, dt: float) -> torch.Tensor
+:canonical: mesokit.models.dynamics_base.rollout
+
+```{autodoc2-docstring} mesokit.models.dynamics_base.rollout
+```
+````

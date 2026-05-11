@@ -1,0 +1,136 @@
+# Roadmap
+
+This document tracks **what is built**, **what is in progress**, and **where to
+pick up work**. Items checked `[x]` are landed on `main`; `[ ]` items are
+queued or in flight. Sub-bullets give the concrete sub-tasks for each item
+so a contributor can pick one off.
+
+## Data
+
+- [x] `TrajectoryDataset` in-memory container — shape
+  `(n_traj, n_time, *spatial)` plus `mesh`, `times`, free-form `metadata`.
+- [x] HDF5 on-disk format with `save_hdf5` / `load_hdf5` round-trip.
+- [x] Detailed HDF5 cache contract modeled as
+  `mesokit.data.format.TRAJECTORY_CACHE_V1`, with the human overview in
+  [`docs/DATA_FORMAT.md`](DATA_FORMAT.md).
+- [x] `Simulator` producer protocol (`mesokit.data.simulator_base`) with the
+  registry / `simulate(name, **params)` dispatch.
+- [x] Allen-Cahn 1D simulator (`mesokit.data.allen_cahn`) — Dedalus-backed,
+  registered as `"allen_cahn_1d"`.
+- [x] KdV 1D simulator (`mesokit.data.kdv`) — Dedalus-backed (periodic
+  Fourier basis, SBDF2 split with `u_xxx` stiff, `3 (u^2)_x` nonlinear),
+  registered as `"kdv_1d"`. Shares the sum-of-sines random-IC convention
+  with Allen-Cahn (no `[-1, 1]` rescale).
+- [x] HDF5 sanity check (`mesokit.data.validate`) wired into
+  `mesokit data register`, with a `ValidationReport` exposed for notebook use.
+- [ ] Operator-pair adapter for FNO / DeepONet — constructs
+  `(input function, query) → value` pairs from a `TrajectoryDataset` at load
+  time; lives next to the operator module (per `docs/ARCHITECTURE.md`).
+- [ ] Universal microscopic-/mesoscopic-paired data format. Open questions:
+  - the paired format should be a versioned extension, not hidden inside the
+    current flat v1 cache metadata;
+  - how to express the coarse-graining map (averaging window, slow-mode
+    projector, etc.) as dedicated metadata and/or arrays;
+  - whether microscopic trajectories share the `(n_traj, n_time, *spatial)`
+    layout or need a separate container.
+
+## Models
+
+- [x] `DynamicsModel` `typing.Protocol` (replaces the old ABC) — `forward`,
+  `rollout`, `list_artifacts`, `artifact`.
+- [x] Free-function explicit steppers (`euler_step`, `rk4_step`, `rollout`)
+  in `mesokit.models.dynamics_base`.
+- [x] Model registry (`@register("name")` + `available()` / `get()`).
+- [x] `FNO1d` — operator-style, neuralop-backed; uses `rhs` + Euler stepper.
+- [x] `SpectralOnsagerNet1d` — Onsager-structured potential dynamics in
+  Fourier space; SBDF1 / RK2 / Euler / RK4 step options.
+- [x] `PolynomialPotential` and `CoerciveAutogradPotentialV6` for the
+  Spectral OnsagerNet potential parameterization.
+- [ ] SINDy model family — sparse symbolic `rhs`, registered as `"sindy"`,
+  composed with the shared explicit steppers. Stub at
+  `src/mesokit/models/sindy/`.
+- [ ] DeepONet model family — branch / trunk operator network. Stub at
+  `src/mesokit/models/deeponet/`.
+
+## Interpretability artifacts
+
+- [x] `InterpretabilityArtifact` `typing.Protocol` — `model_name`, `dyn_name`,
+  `artifact_name`, `summary()`, `plot()`.
+- [x] `repr_html_summary()` free helper for notebook display.
+- [x] `PotentialLandscape` (Spectral OnsagerNet) — `V` on a grid, `Km` / `Kw`
+  per-mode multipliers, slices. Lives under the model package and is wired into
+  `SpectralOnsagerNet1d.artifact("potential")`.
+- [ ] `OperatorDiagnostics` (FNO / DeepONet) — per-mode error spectrum,
+  response to standard perturbations, residual of conserved quantities.
+  Wired into `FNO1d.artifact("spectrum")`.
+- [ ] `SymbolicLaw` (SINDy) — sympy expression, sparsity statistics, LaTeX
+  render. Wired into `SINDy.artifact("law")`.
+- [x] Basic side-by-side `compare(artifacts)` / `ArtifactPlotter` harness in
+  `mesokit.interpret.compare`, using only the protocol surface so the
+  comparison knows nothing of concrete subclasses.
+
+## Training
+
+- [x] Per-family `Trainer` protocol + concrete trainers —
+  `mesokit.trainers.trainer_base.Trainer` with
+  `fit(model, train_loader, val_loader=None) -> TrainResult`, a parallel
+  `register_trainer` registry, and one trainer per model family under
+  `src/mesokit/trainers/<kind>/`. `LitTrainer` wraps Lightning for
+  `DynamicsModel`-style one-step models, resolves through the trainer registry by model name, writes
+  `checkpoints/<dyn>/<run_id>/model.pt` as the Lightning-free canonical
+  artifact, and lets `mesokit train` register that artifact into
+  `.mesokit/checkpoints.json`.
+- [ ] Cross-parameter sweep machinery — drive the loop over a grid of
+  physical parameters (e.g. `eps` for Allen-Cahn) and produce one
+  registered checkpoint per combination.
+- [ ] Pretrained checkpoint zoo — host trained checkpoints for the headline
+  models so the tutorial can demo interpretation without an upfront train.
+  Hosting / versioning still TBD; gated until the training loop lands.
+
+## CLI (`mesokit`)
+
+- [x] Top-level Typer app with `data`, `model`, `train`, `interpret` groups.
+- [x] `mesokit data generate --dyn ...` — runs a registered simulator via
+  Hydra config (read from `configs/data/<dyn>/default.yaml`, or
+  `<stem>.yaml` via `--config <stem>`), writes HDF5 (default
+  `data/<dyn>/<name>.h5`, override with `--output`), and auto-registers
+  under `<dyn>_v<n>` (or `--name NAME`; opt out with `--no-registry`).
+  `--verbose` surfaces the underlying solver's per-step logs.
+- [x] `mesokit data register --name ... --file ...` — sanity-checks an
+  external HDF5 file and registers it under a name.
+- [x] `mesokit data list` — registered datasets grouped by dynamics, with a
+  trailing `custom:` group for entries whose `dyn` isn't a registered
+  simulator; each row shows the cache status and the on-disk path.
+- [x] `mesokit data avail` (alias: `available`) — catalog of pre-defined
+  simulator recipes (DYN, target callable).
+- [x] `mesokit model list` / `mesokit model register --model ... --file ...
+  --config ...` — checkpoint registry stored at `.mesokit/checkpoints.json`.
+- [x] `mesokit train --model ... --dyn ... --data ... --config ...` — loads
+  a registered dataset name or HDF5 path, wraps it via
+  `configs/train/<dyn>/<model>/<stem>.yaml`, resolves the trainer by model
+  name (or `--trainer`), runs `fit`, writes `config.yaml` / `history.json`
+  beside `model.pt`, and registers the checkpoint unless `--no-registry`.
+- [x] `mesokit interpret list --model NAME` — calls `list_artifacts()` on
+  the registered checkpoint.
+- [x] `mesokit interpret extract --model NAME --artifact NAME --output PATH`
+  — calls `model.artifact(name)` and renders `summary()` / `plot()` to disk.
+
+## Tutorial
+
+- [ ] `notebooks/01_introduction.ipynb` — mesoscopic-modelling motivation.
+- [ ] `notebooks/02_data_generation.ipynb` — Allen-Cahn data generation
+  walkthrough plus a tour of `TrajectoryDataset`.
+- [ ] `notebooks/03_baselines.ipynb` — operator and symbolic baselines
+  (FNO, DeepONet, SINDy) end-to-end on the same data, including each
+  family's interpretability artifact.
+- [ ] `notebooks/04_physics_structured.ipynb` — Spectral OnsagerNet
+  end-to-end, headline interpretability story (`PotentialLandscape`).
+- [ ] `notebooks/05_comparison.ipynb` — side-by-side comparison report
+  driven by `mesokit.interpret.compare`.
+- [ ] Plotting helpers in `mesokit.tutorial.viz` shared across notebooks.
+
+## Documentation
+
+- [x] Documentation site scaffold: Sphinx + MyST + `sphinx-autodoc2` +
+  `furo`. `docs/` is the Sphinx source root; build with `pixi run docs`.
+- [ ] Hosting (GitHub Pages or Read the Docs) — deferred.

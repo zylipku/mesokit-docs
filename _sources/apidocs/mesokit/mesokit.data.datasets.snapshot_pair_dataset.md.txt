@@ -1,0 +1,56 @@
+# {py:mod}`mesokit.data.datasets.snapshot_pair_dataset`
+
+```{py:module} mesokit.data.datasets.snapshot_pair_dataset
+```
+
+```{autodoc2-docstring} mesokit.data.datasets.snapshot_pair_dataset
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`SnapshotPairDataset <mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset>`
+  - ```{autodoc2-docstring} mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} SnapshotPairDataset(traj: mesokit.data.trajectory.TrajectoryDataset, *, stride: int = 1)
+:canonical: mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset
+
+Bases: {py:obj}`torch.utils.data.Dataset`\[{py:obj}`tuple`\[{py:obj}`torch.Tensor`\, {py:obj}`torch.Tensor`\]\]
+
+```{autodoc2-docstring} mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__init__
+```
+
+````{py:method} __len__() -> int
+:canonical: mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__len__
+
+```{autodoc2-docstring} mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__len__
+```
+
+````
+
+````{py:method} __getitem__(idx: int) -> tuple[torch.Tensor, torch.Tensor]
+:canonical: mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__getitem__
+
+```{autodoc2-docstring} mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__getitem__
+```
+
+````
+
+`````

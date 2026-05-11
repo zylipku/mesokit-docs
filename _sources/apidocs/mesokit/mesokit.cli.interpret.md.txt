@@ -1,0 +1,141 @@
+# {py:mod}`mesokit.cli.interpret`
+
+```{py:module} mesokit.cli.interpret
+```
+
+```{autodoc2-docstring} mesokit.cli.interpret
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`list_ <mesokit.cli.interpret.list_>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret.list_
+    :summary:
+    ```
+* - {py:obj}`extract <mesokit.cli.interpret.extract>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret.extract
+    :summary:
+    ```
+* - {py:obj}`_load_registered_model <mesokit.cli.interpret._load_registered_model>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret._load_registered_model
+    :summary:
+    ```
+* - {py:obj}`_load_config <mesokit.cli.interpret._load_config>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret._load_config
+    :summary:
+    ```
+* - {py:obj}`_instantiate_model <mesokit.cli.interpret._instantiate_model>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret._instantiate_model
+    :summary:
+    ```
+* - {py:obj}`_checkpoint_state_dict <mesokit.cli.interpret._checkpoint_state_dict>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret._checkpoint_state_dict
+    :summary:
+    ```
+* - {py:obj}`_load_reference_dataset <mesokit.cli.interpret._load_reference_dataset>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret._load_reference_dataset
+    :summary:
+    ```
+* - {py:obj}`_record_or_config_value <mesokit.cli.interpret._record_or_config_value>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret._record_or_config_value
+    :summary:
+    ```
+* - {py:obj}`_existing_file <mesokit.cli.interpret._existing_file>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret._existing_file
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`app <mesokit.cli.interpret.app>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret.app
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} app
+:canonical: mesokit.cli.interpret.app
+:value: >
+   'Typer(...)'
+
+```{autodoc2-docstring} mesokit.cli.interpret.app
+```
+
+````
+
+````{py:function} list_(model: typing.Annotated[str, typer.Option('--model', help='Registered checkpoint name.')]) -> None
+:canonical: mesokit.cli.interpret.list_
+
+```{autodoc2-docstring} mesokit.cli.interpret.list_
+```
+````
+
+````{py:function} extract(model: typing.Annotated[str, typer.Option('--model', help='Registered checkpoint name.')], artifact: typing.Annotated[str, typer.Option('--artifact', help="Artifact name, or 'all'.")], output: typing.Annotated[pathlib.Path, typer.Option('--output', help='Output file, or directory when --artifact all.')], max_snapshots: typing.Annotated[int, typer.Option('--max-snapshots', help='Maximum reference snapshots used by data-backed artifacts.')] = 5000) -> None
+:canonical: mesokit.cli.interpret.extract
+
+```{autodoc2-docstring} mesokit.cli.interpret.extract
+```
+````
+
+````{py:function} _load_registered_model(name: str, *, load_reference_dataset: bool, max_snapshots: int = 5000) -> tuple[typing.Any, dict[str, typing.Any]]
+:canonical: mesokit.cli.interpret._load_registered_model
+
+```{autodoc2-docstring} mesokit.cli.interpret._load_registered_model
+```
+````
+
+````{py:function} _load_config(record: dict[str, typing.Any]) -> omegaconf.DictConfig
+:canonical: mesokit.cli.interpret._load_config
+
+```{autodoc2-docstring} mesokit.cli.interpret._load_config
+```
+````
+
+````{py:function} _instantiate_model(record: dict[str, typing.Any], cfg: omegaconf.DictConfig, *, registry_name: str) -> typing.Any
+:canonical: mesokit.cli.interpret._instantiate_model
+
+```{autodoc2-docstring} mesokit.cli.interpret._instantiate_model
+```
+````
+
+````{py:function} _checkpoint_state_dict(path: pathlib.Path) -> dict[str, torch.Tensor]
+:canonical: mesokit.cli.interpret._checkpoint_state_dict
+
+```{autodoc2-docstring} mesokit.cli.interpret._checkpoint_state_dict
+```
+````
+
+````{py:function} _load_reference_dataset(record: dict[str, typing.Any], cfg: omegaconf.DictConfig) -> mesokit.data.TrajectoryDataset | None
+:canonical: mesokit.cli.interpret._load_reference_dataset
+
+```{autodoc2-docstring} mesokit.cli.interpret._load_reference_dataset
+```
+````
+
+````{py:function} _record_or_config_value(record: dict[str, typing.Any], cfg: omegaconf.DictConfig, key: str) -> typing.Any | None
+:canonical: mesokit.cli.interpret._record_or_config_value
+
+```{autodoc2-docstring} mesokit.cli.interpret._record_or_config_value
+```
+````
+
+````{py:function} _existing_file(value: typing.Any, *, label: str) -> pathlib.Path
+:canonical: mesokit.cli.interpret._existing_file
+
+```{autodoc2-docstring} mesokit.cli.interpret._existing_file
+```
+````

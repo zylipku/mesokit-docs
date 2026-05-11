@@ -1,0 +1,178 @@
+# {py:mod}`mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6`
+
+```{py:module} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6
+```
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`CoerciveAutogradPotentialV6 <mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} CoerciveAutogradPotentialV6(F_module: torch.nn.Module, v_module: torch.nn.Module, Lx: float = 2.0 * math.pi, Nx: int = 256, v_truncate: int = 16)
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6
+
+Bases: {py:obj}`mesokit.models.spectral_onsagernet.potential.base.Potential`
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.__init__
+```
+
+````{py:property} a
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.a
+:type: torch.Tensor
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.a
+```
+
+````
+
+````{py:property} b
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.b
+:type: torch.Tensor
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.b
+```
+
+````
+
+````{py:method} Fmap(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.Fmap
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.Fmap
+```
+
+````
+
+````{py:method} vmap(u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.vmap
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.vmap
+```
+
+````
+
+````{py:method} _V0(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._V0
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._V0
+```
+
+````
+
+````{py:method} _V1(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._V1
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._V1
+```
+
+````
+
+````{py:method} _V2(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._V2
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._V2
+```
+
+````
+
+````{py:method} V(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.V
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.V
+```
+
+````
+
+````{py:method} _dFdu(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dFdu
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dFdu
+```
+
+````
+
+````{py:method} _dV0du(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV0du
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV0du
+```
+
+````
+
+````{py:method} _dV0du_h(u_h: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV0du_h
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV0du_h
+```
+
+````
+
+````{py:method} _dV1du_h(u_h: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV1du_h
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV1du_h
+```
+
+````
+
+````{py:method} _dV2du_h(u_h: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV2du_h
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6._dV2du_h
+```
+
+````
+
+````{py:method} dVdu_h(u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.dVdu_h
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.dVdu_h
+```
+
+````
+
+````{py:method} dVdu(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.dVdu
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.dVdu
+```
+
+````
+
+````{py:method} L_hat() -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.L_hat
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.L_hat
+```
+
+````
+
+````{py:method} N_hat(u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.N_hat
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.CoerciveAutogradPotentialV6.N_hat
+```
+
+````
+
+`````

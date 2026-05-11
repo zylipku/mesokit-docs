@@ -1,0 +1,56 @@
+# {py:mod}`mesokit.data.datasets.lookback_window_dataset`
+
+```{py:module} mesokit.data.datasets.lookback_window_dataset
+```
+
+```{autodoc2-docstring} mesokit.data.datasets.lookback_window_dataset
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`LookbackWindowDataset <mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset>`
+  - ```{autodoc2-docstring} mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} LookbackWindowDataset(traj: mesokit.data.trajectory.TrajectoryDataset, *, lookback: int, lead: int = 1, stride: int = 1)
+:canonical: mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset
+
+Bases: {py:obj}`torch.utils.data.Dataset`\[{py:obj}`tuple`\[{py:obj}`torch.Tensor`\, {py:obj}`torch.Tensor`\]\]
+
+```{autodoc2-docstring} mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset.__init__
+```
+
+````{py:method} __len__() -> int
+:canonical: mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset.__len__
+
+```{autodoc2-docstring} mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset.__len__
+```
+
+````
+
+````{py:method} __getitem__(idx: int) -> tuple[torch.Tensor, torch.Tensor]
+:canonical: mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset.__getitem__
+
+```{autodoc2-docstring} mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset.__getitem__
+```
+
+````
+
+`````

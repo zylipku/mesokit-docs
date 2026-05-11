@@ -1,0 +1,59 @@
+# {py:mod}`mesokit.data`
+
+```{py:module} mesokit.data
+```
+
+```{autodoc2-docstring} mesokit.data
+:allowtitles:
+```
+
+## Subpackages
+
+```{toctree}
+:titlesonly:
+:maxdepth: 3
+
+mesokit.data.kdv
+mesokit.data.allen_cahn
+mesokit.data.datasets
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.data.simulator_base
+mesokit.data.trajectory
+mesokit.data.validate
+mesokit.data.registry
+mesokit.data.format
+mesokit.data._progress
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.data.__all__>`
+  - ```{autodoc2-docstring} mesokit.data.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.data.__all__
+:value: >
+   ['Simulator', 'CURRENT_TRAJECTORY_CACHE_FORMAT', 'HDF5AttributeEntry', 'HDF5DatasetEntry', 'TRAJECTO...
+
+```{autodoc2-docstring} mesokit.data.__all__
+```
+
+````

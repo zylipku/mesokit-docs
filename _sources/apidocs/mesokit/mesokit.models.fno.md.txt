@@ -1,0 +1,43 @@
+# {py:mod}`mesokit.models.fno`
+
+```{py:module} mesokit.models.fno
+```
+
+```{autodoc2-docstring} mesokit.models.fno
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.models.fno.fno1d
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.models.fno.__all__>`
+  - ```{autodoc2-docstring} mesokit.models.fno.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.models.fno.__all__
+:value: >
+   ['FNO1d']
+
+```{autodoc2-docstring} mesokit.models.fno.__all__
+```
+
+````

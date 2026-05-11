@@ -1,0 +1,17 @@
+# {py:mod}`mesokit.tutorial.training`
+
+```{py:module} mesokit.tutorial.training
+```
+
+```{autodoc2-docstring} mesokit.tutorial.training
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.tutorial.training.train
+```

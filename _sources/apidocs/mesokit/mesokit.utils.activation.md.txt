@@ -1,0 +1,48 @@
+# {py:mod}`mesokit.utils.activation`
+
+```{py:module} mesokit.utils.activation
+```
+
+```{autodoc2-docstring} mesokit.utils.activation
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`Activation <mesokit.utils.activation.Activation>`
+  - ```{autodoc2-docstring} mesokit.utils.activation.Activation
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} Activation(act_name: str | tuple[str, dict], split_complex: bool = False)
+:canonical: mesokit.utils.activation.Activation
+
+Bases: {py:obj}`torch.nn.Module`
+
+```{autodoc2-docstring} mesokit.utils.activation.Activation
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.utils.activation.Activation.__init__
+```
+
+````{py:method} forward(x: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.utils.activation.Activation.forward
+
+```{autodoc2-docstring} mesokit.utils.activation.Activation.forward
+```
+
+````
+
+`````

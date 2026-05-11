@@ -1,0 +1,64 @@
+# {py:mod}`mesokit.cli.model`
+
+```{py:module} mesokit.cli.model
+```
+
+```{autodoc2-docstring} mesokit.cli.model
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`list_ <mesokit.cli.model.list_>`
+  - ```{autodoc2-docstring} mesokit.cli.model.list_
+    :summary:
+    ```
+* - {py:obj}`register <mesokit.cli.model.register>`
+  - ```{autodoc2-docstring} mesokit.cli.model.register
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`app <mesokit.cli.model.app>`
+  - ```{autodoc2-docstring} mesokit.cli.model.app
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} app
+:canonical: mesokit.cli.model.app
+:value: >
+   'Typer(...)'
+
+```{autodoc2-docstring} mesokit.cli.model.app
+```
+
+````
+
+````{py:function} list_() -> None
+:canonical: mesokit.cli.model.list_
+
+```{autodoc2-docstring} mesokit.cli.model.list_
+```
+````
+
+````{py:function} register(model: typing.Annotated[str, typer.Option('--model', help='Name to register the checkpoint under.')], file: typing.Annotated[pathlib.Path, typer.Option('--file', help='Existing checkpoint (.pt) file to register.')], config: typing.Annotated[pathlib.Path, typer.Option('--config', help='Config YAML used to train the checkpoint.')], force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing entry.')] = False) -> None
+:canonical: mesokit.cli.model.register
+
+```{autodoc2-docstring} mesokit.cli.model.register
+```
+````

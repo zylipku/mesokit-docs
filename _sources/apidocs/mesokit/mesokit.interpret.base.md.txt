@@ -1,0 +1,110 @@
+# {py:mod}`mesokit.interpret.base`
+
+```{py:module} mesokit.interpret.base
+```
+
+```{autodoc2-docstring} mesokit.interpret.base
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`InterpretabilityArtifact <mesokit.interpret.base.InterpretabilityArtifact>`
+  - ```{autodoc2-docstring} mesokit.interpret.base.InterpretabilityArtifact
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`repr_html_summary <mesokit.interpret.base.repr_html_summary>`
+  - ```{autodoc2-docstring} mesokit.interpret.base.repr_html_summary
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} InterpretabilityArtifact
+:canonical: mesokit.interpret.base.InterpretabilityArtifact
+
+Bases: {py:obj}`typing.Protocol`
+
+```{autodoc2-docstring} mesokit.interpret.base.InterpretabilityArtifact
+```
+
+````{py:attribute} model_name
+:canonical: mesokit.interpret.base.InterpretabilityArtifact.model_name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.interpret.base.InterpretabilityArtifact.model_name
+```
+
+````
+
+````{py:attribute} dyn_name
+:canonical: mesokit.interpret.base.InterpretabilityArtifact.dyn_name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.interpret.base.InterpretabilityArtifact.dyn_name
+```
+
+````
+
+````{py:attribute} artifact_name
+:canonical: mesokit.interpret.base.InterpretabilityArtifact.artifact_name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.interpret.base.InterpretabilityArtifact.artifact_name
+```
+
+````
+
+````{py:method} summary() -> str
+:canonical: mesokit.interpret.base.InterpretabilityArtifact.summary
+
+```{autodoc2-docstring} mesokit.interpret.base.InterpretabilityArtifact.summary
+```
+
+````
+
+````{py:method} plot(ax: typing.Any | None = None) -> typing.Any
+:canonical: mesokit.interpret.base.InterpretabilityArtifact.plot
+
+```{autodoc2-docstring} mesokit.interpret.base.InterpretabilityArtifact.plot
+```
+
+````
+
+````{py:method} save(path: str | pathlib.Path, **kwargs: typing.Any) -> pathlib.Path
+:canonical: mesokit.interpret.base.InterpretabilityArtifact.save
+
+```{autodoc2-docstring} mesokit.interpret.base.InterpretabilityArtifact.save
+```
+
+````
+
+`````
+
+````{py:function} repr_html_summary(artifact: mesokit.interpret.base.InterpretabilityArtifact) -> str
+:canonical: mesokit.interpret.base.repr_html_summary
+
+```{autodoc2-docstring} mesokit.interpret.base.repr_html_summary
+```
+````

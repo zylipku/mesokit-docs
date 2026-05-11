@@ -1,0 +1,31 @@
+# {py:mod}`mesokit.interpret.compare`
+
+```{py:module} mesokit.interpret.compare
+```
+
+```{autodoc2-docstring} mesokit.interpret.compare
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`compare <mesokit.interpret.compare.compare>`
+  - ```{autodoc2-docstring} mesokit.interpret.compare.compare
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} compare(artifacts: collections.abc.Iterable[mesokit.interpret.base.InterpretabilityArtifact]) -> mesokit.interpret.plotter.ArtifactPlotter
+:canonical: mesokit.interpret.compare.compare
+
+```{autodoc2-docstring} mesokit.interpret.compare.compare
+```
+````

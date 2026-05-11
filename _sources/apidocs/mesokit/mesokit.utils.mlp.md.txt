@@ -1,0 +1,48 @@
+# {py:mod}`mesokit.utils.mlp`
+
+```{py:module} mesokit.utils.mlp
+```
+
+```{autodoc2-docstring} mesokit.utils.mlp
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`Mlp <mesokit.utils.mlp.Mlp>`
+  - ```{autodoc2-docstring} mesokit.utils.mlp.Mlp
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} Mlp(in_dim: int, hidden_dims: collections.abc.Sequence[int], out_dim: int, tgt_dim: int | None = None, act_name: str = 'relu', final_act_name: str | None = None, final_bias: bool = True, complex: bool = False)
+:canonical: mesokit.utils.mlp.Mlp
+
+Bases: {py:obj}`torch.nn.Module`
+
+```{autodoc2-docstring} mesokit.utils.mlp.Mlp
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.utils.mlp.Mlp.__init__
+```
+
+````{py:method} forward(x: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.utils.mlp.Mlp.forward
+
+```{autodoc2-docstring} mesokit.utils.mlp.Mlp.forward
+```
+
+````
+
+`````

@@ -1,0 +1,44 @@
+# {py:mod}`mesokit.data.datasets`
+
+```{py:module} mesokit.data.datasets
+```
+
+```{autodoc2-docstring} mesokit.data.datasets
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.data.datasets.lookback_window_dataset
+mesokit.data.datasets.snapshot_pair_dataset
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.data.datasets.__all__>`
+  - ```{autodoc2-docstring} mesokit.data.datasets.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.data.datasets.__all__
+:value: >
+   ['LookbackWindowDataset', 'SnapshotPairDataset']
+
+```{autodoc2-docstring} mesokit.data.datasets.__all__
+```
+
+````

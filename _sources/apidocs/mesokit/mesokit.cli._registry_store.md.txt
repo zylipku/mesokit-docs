@@ -1,0 +1,138 @@
+# {py:mod}`mesokit.cli._registry_store`
+
+```{py:module} mesokit.cli._registry_store
+```
+
+```{autodoc2-docstring} mesokit.cli._registry_store
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`RegistryStore <mesokit.cli._registry_store.RegistryStore>`
+  - ```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`datasets_store <mesokit.cli._registry_store.datasets_store>`
+  - ```{autodoc2-docstring} mesokit.cli._registry_store.datasets_store
+    :summary:
+    ```
+* - {py:obj}`checkpoints_store <mesokit.cli._registry_store.checkpoints_store>`
+  - ```{autodoc2-docstring} mesokit.cli._registry_store.checkpoints_store
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`SCHEMA_VERSION <mesokit.cli._registry_store.SCHEMA_VERSION>`
+  - ```{autodoc2-docstring} mesokit.cli._registry_store.SCHEMA_VERSION
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} SCHEMA_VERSION
+:canonical: mesokit.cli._registry_store.SCHEMA_VERSION
+:value: >
+   1
+
+```{autodoc2-docstring} mesokit.cli._registry_store.SCHEMA_VERSION
+```
+
+````
+
+`````{py:class} RegistryStore(path: pathlib.Path)
+:canonical: mesokit.cli._registry_store.RegistryStore
+
+```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore.__init__
+```
+
+````{py:method} _read() -> dict[str, typing.Any]
+:canonical: mesokit.cli._registry_store.RegistryStore._read
+
+```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore._read
+```
+
+````
+
+````{py:method} _write(payload: dict[str, typing.Any]) -> None
+:canonical: mesokit.cli._registry_store.RegistryStore._write
+
+```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore._write
+```
+
+````
+
+````{py:method} add(name: str, record: dict[str, typing.Any], *, overwrite: bool = False) -> None
+:canonical: mesokit.cli._registry_store.RegistryStore.add
+
+```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore.add
+```
+
+````
+
+````{py:method} get(name: str) -> dict[str, typing.Any]
+:canonical: mesokit.cli._registry_store.RegistryStore.get
+
+```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore.get
+```
+
+````
+
+````{py:method} list() -> dict[str, dict[str, typing.Any]]
+:canonical: mesokit.cli._registry_store.RegistryStore.list
+
+```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore.list
+```
+
+````
+
+````{py:method} remove(name: str) -> None
+:canonical: mesokit.cli._registry_store.RegistryStore.remove
+
+```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore.remove
+```
+
+````
+
+`````
+
+````{py:function} datasets_store() -> mesokit.cli._registry_store.RegistryStore
+:canonical: mesokit.cli._registry_store.datasets_store
+
+```{autodoc2-docstring} mesokit.cli._registry_store.datasets_store
+```
+````
+
+````{py:function} checkpoints_store() -> mesokit.cli._registry_store.RegistryStore
+:canonical: mesokit.cli._registry_store.checkpoints_store
+
+```{autodoc2-docstring} mesokit.cli._registry_store.checkpoints_store
+```
+````

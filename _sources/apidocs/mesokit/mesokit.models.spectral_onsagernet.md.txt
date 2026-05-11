@@ -1,0 +1,45 @@
+# {py:mod}`mesokit.models.spectral_onsagernet`
+
+```{py:module} mesokit.models.spectral_onsagernet
+```
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.models.spectral_onsagernet.spectral_onsagernet_1d
+mesokit.models.spectral_onsagernet.artifacts
+mesokit.models.spectral_onsagernet.potential
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.models.spectral_onsagernet.__all__>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.models.spectral_onsagernet.__all__
+:value: >
+   ['CoerciveAutogradPotentialV6', 'PotentialLandscape', 'PolynomialPotential', 'Potential', 'Reference...
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.__all__
+```
+
+````

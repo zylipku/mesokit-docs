@@ -1,0 +1,43 @@
+# {py:mod}`mesokit.data.allen_cahn`
+
+```{py:module} mesokit.data.allen_cahn
+```
+
+```{autodoc2-docstring} mesokit.data.allen_cahn
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.data.allen_cahn.allen_cahn_1d
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.data.allen_cahn.__all__>`
+  - ```{autodoc2-docstring} mesokit.data.allen_cahn.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.data.allen_cahn.__all__
+:value: >
+   ['simulate_allen_cahn_1d']
+
+```{autodoc2-docstring} mesokit.data.allen_cahn.__all__
+```
+
+````

@@ -1,0 +1,306 @@
+# {py:mod}`mesokit.data.format`
+
+```{py:module} mesokit.data.format
+```
+
+```{autodoc2-docstring} mesokit.data.format
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`HDF5DatasetEntry <mesokit.data.format.HDF5DatasetEntry>`
+  - ```{autodoc2-docstring} mesokit.data.format.HDF5DatasetEntry
+    :summary:
+    ```
+* - {py:obj}`HDF5AttributeEntry <mesokit.data.format.HDF5AttributeEntry>`
+  - ```{autodoc2-docstring} mesokit.data.format.HDF5AttributeEntry
+    :summary:
+    ```
+* - {py:obj}`TrajectoryCacheFormat <mesokit.data.format.TrajectoryCacheFormat>`
+  - ```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`TRAJECTORY_CACHE_V1 <mesokit.data.format.TRAJECTORY_CACHE_V1>`
+  - ```{autodoc2-docstring} mesokit.data.format.TRAJECTORY_CACHE_V1
+    :summary:
+    ```
+* - {py:obj}`CURRENT_TRAJECTORY_CACHE_FORMAT <mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT>`
+  - ```{autodoc2-docstring} mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT
+    :summary:
+    ```
+* - {py:obj}`__all__ <mesokit.data.format.__all__>`
+  - ```{autodoc2-docstring} mesokit.data.format.__all__
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} HDF5DatasetEntry
+:canonical: mesokit.data.format.HDF5DatasetEntry
+
+```{autodoc2-docstring} mesokit.data.format.HDF5DatasetEntry
+```
+
+````{py:attribute} path
+:canonical: mesokit.data.format.HDF5DatasetEntry.path
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5DatasetEntry.path
+```
+
+````
+
+````{py:attribute} shape
+:canonical: mesokit.data.format.HDF5DatasetEntry.shape
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5DatasetEntry.shape
+```
+
+````
+
+````{py:attribute} dtype
+:canonical: mesokit.data.format.HDF5DatasetEntry.dtype
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5DatasetEntry.dtype
+```
+
+````
+
+````{py:attribute} required
+:canonical: mesokit.data.format.HDF5DatasetEntry.required
+:type: bool
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5DatasetEntry.required
+```
+
+````
+
+````{py:attribute} description
+:canonical: mesokit.data.format.HDF5DatasetEntry.description
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5DatasetEntry.description
+```
+
+````
+
+````{py:attribute} checks
+:canonical: mesokit.data.format.HDF5DatasetEntry.checks
+:type: tuple[str, ...]
+:value: >
+   ()
+
+```{autodoc2-docstring} mesokit.data.format.HDF5DatasetEntry.checks
+```
+
+````
+
+`````
+
+`````{py:class} HDF5AttributeEntry
+:canonical: mesokit.data.format.HDF5AttributeEntry
+
+```{autodoc2-docstring} mesokit.data.format.HDF5AttributeEntry
+```
+
+````{py:attribute} name
+:canonical: mesokit.data.format.HDF5AttributeEntry.name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5AttributeEntry.name
+```
+
+````
+
+````{py:attribute} dtype
+:canonical: mesokit.data.format.HDF5AttributeEntry.dtype
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5AttributeEntry.dtype
+```
+
+````
+
+````{py:attribute} required
+:canonical: mesokit.data.format.HDF5AttributeEntry.required
+:type: bool
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5AttributeEntry.required
+```
+
+````
+
+````{py:attribute} description
+:canonical: mesokit.data.format.HDF5AttributeEntry.description
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.HDF5AttributeEntry.description
+```
+
+````
+
+````{py:attribute} recommended
+:canonical: mesokit.data.format.HDF5AttributeEntry.recommended
+:type: bool
+:value: >
+   False
+
+```{autodoc2-docstring} mesokit.data.format.HDF5AttributeEntry.recommended
+```
+
+````
+
+`````
+
+`````{py:class} TrajectoryCacheFormat
+:canonical: mesokit.data.format.TrajectoryCacheFormat
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat
+```
+
+````{py:attribute} name
+:canonical: mesokit.data.format.TrajectoryCacheFormat.name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.name
+```
+
+````
+
+````{py:attribute} version
+:canonical: mesokit.data.format.TrajectoryCacheFormat.version
+:type: int
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.version
+```
+
+````
+
+````{py:attribute} description
+:canonical: mesokit.data.format.TrajectoryCacheFormat.description
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.description
+```
+
+````
+
+````{py:attribute} datasets
+:canonical: mesokit.data.format.TrajectoryCacheFormat.datasets
+:type: tuple[mesokit.data.format.HDF5DatasetEntry, ...]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.datasets
+```
+
+````
+
+````{py:attribute} attributes
+:canonical: mesokit.data.format.TrajectoryCacheFormat.attributes
+:type: tuple[mesokit.data.format.HDF5AttributeEntry, ...]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.attributes
+```
+
+````
+
+````{py:method} required_dataset_paths() -> tuple[str, ...]
+:canonical: mesokit.data.format.TrajectoryCacheFormat.required_dataset_paths
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.required_dataset_paths
+```
+
+````
+
+````{py:method} dataset(path: str) -> mesokit.data.format.HDF5DatasetEntry
+:canonical: mesokit.data.format.TrajectoryCacheFormat.dataset
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.dataset
+```
+
+````
+
+````{py:method} attribute(name: str) -> mesokit.data.format.HDF5AttributeEntry
+:canonical: mesokit.data.format.TrajectoryCacheFormat.attribute
+
+```{autodoc2-docstring} mesokit.data.format.TrajectoryCacheFormat.attribute
+```
+
+````
+
+`````
+
+````{py:data} TRAJECTORY_CACHE_V1
+:canonical: mesokit.data.format.TRAJECTORY_CACHE_V1
+:value: >
+   'TrajectoryCacheFormat(...)'
+
+```{autodoc2-docstring} mesokit.data.format.TRAJECTORY_CACHE_V1
+```
+
+````
+
+````{py:data} CURRENT_TRAJECTORY_CACHE_FORMAT
+:canonical: mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.format.CURRENT_TRAJECTORY_CACHE_FORMAT
+```
+
+````
+
+````{py:data} __all__
+:canonical: mesokit.data.format.__all__
+:value: >
+   ['CURRENT_TRAJECTORY_CACHE_FORMAT', 'HDF5AttributeEntry', 'HDF5DatasetEntry', 'TRAJECTORY_CACHE_V1',...
+
+```{autodoc2-docstring} mesokit.data.format.__all__
+```
+
+````

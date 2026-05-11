@@ -1,0 +1,128 @@
+# {py:mod}`mesokit.data.trajectory`
+
+```{py:module} mesokit.data.trajectory
+```
+
+```{autodoc2-docstring} mesokit.data.trajectory
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`TrajectoryDataset <mesokit.data.trajectory.TrajectoryDataset>`
+  - ```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} TrajectoryDataset
+:canonical: mesokit.data.trajectory.TrajectoryDataset
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset
+```
+
+````{py:attribute} data
+:canonical: mesokit.data.trajectory.TrajectoryDataset.data
+:type: torch.Tensor
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.data
+```
+
+````
+
+````{py:attribute} times
+:canonical: mesokit.data.trajectory.TrajectoryDataset.times
+:type: torch.Tensor
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.times
+```
+
+````
+
+````{py:attribute} mesh
+:canonical: mesokit.data.trajectory.TrajectoryDataset.mesh
+:type: torch.Tensor
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.mesh
+```
+
+````
+
+````{py:attribute} metadata
+:canonical: mesokit.data.trajectory.TrajectoryDataset.metadata
+:type: dict[str, typing.Any]
+:value: >
+   'field(...)'
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.metadata
+```
+
+````
+
+````{py:method} __post_init__() -> None
+:canonical: mesokit.data.trajectory.TrajectoryDataset.__post_init__
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.__post_init__
+```
+
+````
+
+````{py:property} n_traj
+:canonical: mesokit.data.trajectory.TrajectoryDataset.n_traj
+:type: int
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.n_traj
+```
+
+````
+
+````{py:property} n_time
+:canonical: mesokit.data.trajectory.TrajectoryDataset.n_time
+:type: int
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.n_time
+```
+
+````
+
+````{py:property} spatial_shape
+:canonical: mesokit.data.trajectory.TrajectoryDataset.spatial_shape
+:type: tuple[int, ...]
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.spatial_shape
+```
+
+````
+
+````{py:method} save_hdf5(path: str | pathlib.Path) -> None
+:canonical: mesokit.data.trajectory.TrajectoryDataset.save_hdf5
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.save_hdf5
+```
+
+````
+
+````{py:method} load_hdf5(path: str | pathlib.Path) -> mesokit.data.trajectory.TrajectoryDataset
+:canonical: mesokit.data.trajectory.TrajectoryDataset.load_hdf5
+:classmethod:
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.load_hdf5
+```
+
+````
+
+`````

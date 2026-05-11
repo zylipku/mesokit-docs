@@ -1,0 +1,101 @@
+# {py:mod}`mesokit.data.registry`
+
+```{py:module} mesokit.data.registry
+```
+
+```{autodoc2-docstring} mesokit.data.registry
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`register <mesokit.data.registry.register>`
+  - ```{autodoc2-docstring} mesokit.data.registry.register
+    :summary:
+    ```
+* - {py:obj}`get <mesokit.data.registry.get>`
+  - ```{autodoc2-docstring} mesokit.data.registry.get
+    :summary:
+    ```
+* - {py:obj}`available <mesokit.data.registry.available>`
+  - ```{autodoc2-docstring} mesokit.data.registry.available
+    :summary:
+    ```
+* - {py:obj}`simulate <mesokit.data.registry.simulate>`
+  - ```{autodoc2-docstring} mesokit.data.registry.simulate
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`S <mesokit.data.registry.S>`
+  - ```{autodoc2-docstring} mesokit.data.registry.S
+    :summary:
+    ```
+* - {py:obj}`_REGISTRY <mesokit.data.registry._REGISTRY>`
+  - ```{autodoc2-docstring} mesokit.data.registry._REGISTRY
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} S
+:canonical: mesokit.data.registry.S
+:value: >
+   'TypeVar(...)'
+
+```{autodoc2-docstring} mesokit.data.registry.S
+```
+
+````
+
+````{py:data} _REGISTRY
+:canonical: mesokit.data.registry._REGISTRY
+:type: dict[str, mesokit.data.simulator_base.Simulator]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.registry._REGISTRY
+```
+
+````
+
+````{py:function} register(name: str) -> collections.abc.Callable[[mesokit.data.registry.S], mesokit.data.registry.S]
+:canonical: mesokit.data.registry.register
+
+```{autodoc2-docstring} mesokit.data.registry.register
+```
+````
+
+````{py:function} get(name: str) -> mesokit.data.simulator_base.Simulator
+:canonical: mesokit.data.registry.get
+
+```{autodoc2-docstring} mesokit.data.registry.get
+```
+````
+
+````{py:function} available() -> list[str]
+:canonical: mesokit.data.registry.available
+
+```{autodoc2-docstring} mesokit.data.registry.available
+```
+````
+
+````{py:function} simulate(name: str, **params: object) -> mesokit.data.trajectory.TrajectoryDataset
+:canonical: mesokit.data.registry.simulate
+
+```{autodoc2-docstring} mesokit.data.registry.simulate
+```
+````

@@ -1,0 +1,44 @@
+# {py:mod}`mesokit.utils`
+
+```{py:module} mesokit.utils
+```
+
+```{autodoc2-docstring} mesokit.utils
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.utils.mlp
+mesokit.utils.activation
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.utils.__all__>`
+  - ```{autodoc2-docstring} mesokit.utils.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.utils.__all__
+:value: >
+   ['Activation', 'Mlp']
+
+```{autodoc2-docstring} mesokit.utils.__all__
+```
+
+````

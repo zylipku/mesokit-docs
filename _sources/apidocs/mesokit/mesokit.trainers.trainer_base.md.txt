@@ -1,0 +1,109 @@
+# {py:mod}`mesokit.trainers.trainer_base`
+
+```{py:module} mesokit.trainers.trainer_base
+```
+
+```{autodoc2-docstring} mesokit.trainers.trainer_base
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`TrainResult <mesokit.trainers.trainer_base.TrainResult>`
+  - ```{autodoc2-docstring} mesokit.trainers.trainer_base.TrainResult
+    :summary:
+    ```
+* - {py:obj}`Trainer <mesokit.trainers.trainer_base.Trainer>`
+  - ```{autodoc2-docstring} mesokit.trainers.trainer_base.Trainer
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} TrainResult
+:canonical: mesokit.trainers.trainer_base.TrainResult
+
+```{autodoc2-docstring} mesokit.trainers.trainer_base.TrainResult
+```
+
+````{py:attribute} model
+:canonical: mesokit.trainers.trainer_base.TrainResult.model
+:type: torch.nn.Module
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.trainers.trainer_base.TrainResult.model
+```
+
+````
+
+````{py:attribute} checkpoint_path
+:canonical: mesokit.trainers.trainer_base.TrainResult.checkpoint_path
+:type: pathlib.Path
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.trainers.trainer_base.TrainResult.checkpoint_path
+```
+
+````
+
+````{py:attribute} run_id
+:canonical: mesokit.trainers.trainer_base.TrainResult.run_id
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.trainers.trainer_base.TrainResult.run_id
+```
+
+````
+
+````{py:attribute} history
+:canonical: mesokit.trainers.trainer_base.TrainResult.history
+:type: dict[str, list[float]]
+:value: >
+   'field(...)'
+
+```{autodoc2-docstring} mesokit.trainers.trainer_base.TrainResult.history
+```
+
+````
+
+````{py:attribute} metadata
+:canonical: mesokit.trainers.trainer_base.TrainResult.metadata
+:type: dict[str, typing.Any]
+:value: >
+   'field(...)'
+
+```{autodoc2-docstring} mesokit.trainers.trainer_base.TrainResult.metadata
+```
+
+````
+
+`````
+
+`````{py:class} Trainer
+:canonical: mesokit.trainers.trainer_base.Trainer
+
+Bases: {py:obj}`typing.Protocol`
+
+```{autodoc2-docstring} mesokit.trainers.trainer_base.Trainer
+```
+
+````{py:method} fit(model: torch.nn.Module, train_loader: torch.utils.data.DataLoader, val_loader: torch.utils.data.DataLoader | None = None) -> mesokit.trainers.trainer_base.TrainResult
+:canonical: mesokit.trainers.trainer_base.Trainer.fit
+
+```{autodoc2-docstring} mesokit.trainers.trainer_base.Trainer.fit
+```
+
+````
+
+`````

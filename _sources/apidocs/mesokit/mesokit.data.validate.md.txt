@@ -1,0 +1,155 @@
+# {py:mod}`mesokit.data.validate`
+
+```{py:module} mesokit.data.validate
+```
+
+```{autodoc2-docstring} mesokit.data.validate
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`ValidationReport <mesokit.data.validate.ValidationReport>`
+  - ```{autodoc2-docstring} mesokit.data.validate.ValidationReport
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`validate <mesokit.data.validate.validate>`
+  - ```{autodoc2-docstring} mesokit.data.validate.validate
+    :summary:
+    ```
+* - {py:obj}`_decode_attr <mesokit.data.validate._decode_attr>`
+  - ```{autodoc2-docstring} mesokit.data.validate._decode_attr
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} ValidationReport
+:canonical: mesokit.data.validate.ValidationReport
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport
+```
+
+````{py:attribute} ok
+:canonical: mesokit.data.validate.ValidationReport.ok
+:type: bool
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.ok
+```
+
+````
+
+````{py:attribute} errors
+:canonical: mesokit.data.validate.ValidationReport.errors
+:type: list[str]
+:value: >
+   'field(...)'
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.errors
+```
+
+````
+
+````{py:attribute} n_traj
+:canonical: mesokit.data.validate.ValidationReport.n_traj
+:type: int | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.n_traj
+```
+
+````
+
+````{py:attribute} n_time
+:canonical: mesokit.data.validate.ValidationReport.n_time
+:type: int | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.n_time
+```
+
+````
+
+````{py:attribute} spatial_shape
+:canonical: mesokit.data.validate.ValidationReport.spatial_shape
+:type: tuple[int, ...] | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.spatial_shape
+```
+
+````
+
+````{py:attribute} dt
+:canonical: mesokit.data.validate.ValidationReport.dt
+:type: float | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.dt
+```
+
+````
+
+````{py:attribute} metadata
+:canonical: mesokit.data.validate.ValidationReport.metadata
+:type: dict[str, typing.Any]
+:value: >
+   'field(...)'
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.metadata
+```
+
+````
+
+````{py:method} __bool__() -> bool
+:canonical: mesokit.data.validate.ValidationReport.__bool__
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.__bool__
+```
+
+````
+
+````{py:method} summary() -> str
+:canonical: mesokit.data.validate.ValidationReport.summary
+
+```{autodoc2-docstring} mesokit.data.validate.ValidationReport.summary
+```
+
+````
+
+`````
+
+````{py:function} validate(path: str | pathlib.Path) -> mesokit.data.validate.ValidationReport
+:canonical: mesokit.data.validate.validate
+
+```{autodoc2-docstring} mesokit.data.validate.validate
+```
+````
+
+````{py:function} _decode_attr(value: typing.Any) -> typing.Any
+:canonical: mesokit.data.validate._decode_attr
+
+```{autodoc2-docstring} mesokit.data.validate._decode_attr
+```
+````

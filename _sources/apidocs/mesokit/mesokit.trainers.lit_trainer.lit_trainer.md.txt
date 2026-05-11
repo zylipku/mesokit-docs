@@ -1,0 +1,87 @@
+# {py:mod}`mesokit.trainers.lit_trainer.lit_trainer`
+
+```{py:module} mesokit.trainers.lit_trainer.lit_trainer
+```
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer.lit_trainer
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`LitTrainer <mesokit.trainers.lit_trainer.lit_trainer.LitTrainer>`
+  - ```{autodoc2-docstring} mesokit.trainers.lit_trainer.lit_trainer.LitTrainer
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_lightning <mesokit.trainers.lit_trainer.lit_trainer._lightning>`
+  - ```{autodoc2-docstring} mesokit.trainers.lit_trainer.lit_trainer._lightning
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`SpectralOnsagerNetTrainer <mesokit.trainers.lit_trainer.lit_trainer.SpectralOnsagerNetTrainer>`
+  - ```{autodoc2-docstring} mesokit.trainers.lit_trainer.lit_trainer.SpectralOnsagerNetTrainer
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} LitTrainer(*, max_epochs: int = 100, lr: float = 0.001, weight_decay: float = 0.0, optimizer: str = 'adamw', scheduler: str | None = 'cosine', accelerator: str = 'auto', devices: int | str = 1, gradient_clip_val: float | None = None, rollout_steps: int = 1, dt: float = 1.0, checkpoint_root: pathlib.Path | str | None = None, run_id: str | None = None, enable_progress_bar: bool = True, log_every_n_steps: int = 1)
+:canonical: mesokit.trainers.lit_trainer.lit_trainer.LitTrainer
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer.lit_trainer.LitTrainer
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer.lit_trainer.LitTrainer.__init__
+```
+
+````{py:method} fit(model: torch.nn.Module, train_loader: torch.utils.data.DataLoader, val_loader: torch.utils.data.DataLoader | None = None) -> mesokit.trainers.trainer_base.TrainResult
+:canonical: mesokit.trainers.lit_trainer.lit_trainer.LitTrainer.fit
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer.lit_trainer.LitTrainer.fit
+```
+
+````
+
+`````
+
+````{py:function} _lightning() -> tuple[object, object]
+:canonical: mesokit.trainers.lit_trainer.lit_trainer._lightning
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer.lit_trainer._lightning
+```
+````
+
+````{py:data} SpectralOnsagerNetTrainer
+:canonical: mesokit.trainers.lit_trainer.lit_trainer.SpectralOnsagerNetTrainer
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.trainers.lit_trainer.lit_trainer.SpectralOnsagerNetTrainer
+```
+
+````

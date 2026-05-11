@@ -1,0 +1,29 @@
+# Tutorial
+
+The tutorial lives as a series of Jupyter notebooks under
+[`notebooks/`](https://github.com/zylipku/meso-tutorial/tree/main/notebooks)
+in the repository. They are rendered directly on GitHub — click any of the
+links below.
+
+The notebooks are the canonical source: they are the tutorial *and* the
+integration test for the public API.
+
+## Notebooks
+
+- `01_introduction.ipynb` — mesoscopic-modelling motivation.
+- `02_data_generation.ipynb` — Allen-Cahn data generation walkthrough plus
+  a tour of `TrajectoryDataset`.
+- `03_baselines.ipynb` — operator and symbolic baselines (FNO, DeepONet,
+  SINDy) end-to-end on the same data, including each family's
+  interpretability artifact.
+- `04_physics_structured.ipynb` — Spectral OnsagerNet end-to-end, headline
+  interpretability story (`PotentialLandscape`).
+- `05_comparison.ipynb` — side-by-side comparison report driven by
+  `mesokit.interpret.compare`.
+
+Training examples use the public `mesokit.trainers` registry and the
+`mesokit train` CLI. The CLI consumes registered HDF5 datasets, train configs
+under `configs/train/<dyn>/<model>/`, and writes Lightning-free `model.pt`
+checkpoints for later interpretation.
+
+See [Roadmap](ROADMAP.md) for current notebook status.

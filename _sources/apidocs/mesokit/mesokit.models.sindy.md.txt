@@ -1,0 +1,8 @@
+# {py:mod}`mesokit.models.sindy`
+
+```{py:module} mesokit.models.sindy
+```
+
+```{autodoc2-docstring} mesokit.models.sindy
+:allowtitles:
+```

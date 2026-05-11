@@ -1,0 +1,53 @@
+# {py:mod}`mesokit.cli.main`
+
+```{py:module} mesokit.cli.main
+```
+
+```{autodoc2-docstring} mesokit.cli.main
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`main <mesokit.cli.main.main>`
+  - ```{autodoc2-docstring} mesokit.cli.main.main
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`app <mesokit.cli.main.app>`
+  - ```{autodoc2-docstring} mesokit.cli.main.app
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} app
+:canonical: mesokit.cli.main.app
+:value: >
+   'Typer(...)'
+
+```{autodoc2-docstring} mesokit.cli.main.app
+```
+
+````
+
+````{py:function} main() -> None
+:canonical: mesokit.cli.main.main
+
+```{autodoc2-docstring} mesokit.cli.main.main
+```
+````
