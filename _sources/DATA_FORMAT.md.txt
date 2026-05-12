@@ -10,7 +10,7 @@ simulator-generated and user-provided data interchangeably.
 This section is the human-facing companion to the schema in code, which
 lives at {py:data}`mesokit.data.format.TRAJECTORY_CACHE_V1`. The current
 format version is **v1**; see [Versioning and Compatibility](data_format/versioning.md)
-for the evolution rules.
+for what v1 guarantees to readers and writers.
 
 ## File Layout At a Glance
 
@@ -51,10 +51,10 @@ Start with the page that matches your task:
   `mesokit.data.validate(path)`, and `mesokit data register`.
 - **Copy-paste workflows** — [Examples](data_format/examples.md) for
   end-to-end snippets that combine the above.
-- **Evolution rules** —
-  [Versioning and Compatibility](data_format/versioning.md) for what is
-  stable, what bumps the version, and the proposed future paired
-  micro/meso format.
+- **What v1 guarantees** —
+  [Versioning and Compatibility](data_format/versioning.md) for the
+  compatibility promise: which paths, shapes, and attributes a v1 file
+  can rely on.
 
 ```{toctree}
 :maxdepth: 1

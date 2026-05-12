@@ -25,5 +25,3 @@ Training examples use the public `mesokit.trainers` registry and the
 `mesokit train` CLI. The CLI consumes registered HDF5 datasets, train configs
 under `configs/train/<dyn>/<model>/`, and writes Lightning-free `model.pt`
 checkpoints for later interpretation.
-
-See [Roadmap](ROADMAP.md) for current notebook status.

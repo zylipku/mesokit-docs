@@ -17,7 +17,7 @@ and `version = 1` at the file root.
 The [Data Structure](structure.md) page is the reference for v1's layout
 and the validator's checks.
 
-## What's Stable
+## What v1 Guarantees
 
 The v1 compatibility promise is path- and shape-based:
 
@@ -34,74 +34,17 @@ The v1 compatibility promise is path- and shape-based:
 A file that satisfies all of the above today will satisfy `validate(path)`
 for the entire lifetime of v1.
 
-## Additive vs Breaking Changes
+When a future schema version ships, the v1 constant stays available so
+existing v1 files continue to load; no file ever auto-migrates at read
+time.
 
-The format evolves under two rules:
+## Reserved Names
 
-1. **Additive changes do not bump `version`.**
-   - New entries inside `physical/`, `numerical/`, or `provenance/`: free.
-   - New *optional* root attributes: free, as long as they are declared in
-     `TRAJECTORY_CACHE_V1.attributes` so the validator accepts them.
-2. **Anything else bumps `version`.**
-   - New required root attributes, datasets, or groups.
-   - Changing the shape, axis order, or required dtype of `data` or `times`.
-   - Reinterpreting an existing entry's meaning.
-
-When a new version ships, the previous schema constant
-(`TRAJECTORY_CACHE_V1`) stays in the module so users with v1 files can
-still parse them, and a `CURRENT_TRAJECTORY_CACHE_FORMAT` alias moves to
-the new version. Old files do not auto-migrate; a versioned migration
-helper is the right place for that work, not silent reinterpretation at
-load time.
-
-## Mesokit-Reserved Names
-
-Two namespaces are reserved for future format markers and toolkit
-metadata, and should not be co-opted for domain values:
+When writing your own metadata, avoid two reserved namespaces — they are
+held back for format markers added in later versions:
 
 - Root attributes beginning with `mesokit_`.
 - Group keys beginning with `_` (a single underscore).
 
-User-facing domain parameters should use ordinary names like `eps`, `Lx`,
-or a project-specific prefix.
-
-## Future Paired Micro/Meso Format
-
-Microscopic/mesoscopic paired data — where one trajectory bundle is a
-coarse-grained projection of another — is the next significant extension
-under consideration. The relationship between a microscopic and a
-mesoscopic state is part of the data model, not just provenance, and a
-future schema should make it explicit rather than tucking it inside one of
-v1's metadata groups.
-
-A likely structure is two side-by-side trajectory bundles with an
-explicit coarse-graining descriptor:
-
-```text
-<paired>.h5
-├── (root attrs)
-│   ├── format        "mesokit-trajectory-paired"
-│   └── version       1
-├── meso/
-│   ├── data
-│   ├── times
-│   ├── physical/
-│   ├── numerical/
-│   └── provenance/
-├── micro/
-│   ├── data
-│   ├── times
-│   ├── physical/
-│   ├── numerical/
-│   └── provenance/
-└── coarse_graining/
-    └── attrs describing the map from micro to meso
-```
-
-Each side would still follow the v1 conventions documented in
-[Data Structure](structure.md), so existing models could load the `meso/`
-group as a regular `TrajectoryDataset` once that extension exists. The
-exact micro layout is still open — particle/agent trajectories may need a
-separate container — and the coarse-graining descriptor's schema is
-similarly TBD. Concrete proposals belong in
-[`docs/ROADMAP.md`](../ROADMAP.md), not in v1 metadata.
+Use ordinary names like `eps`, `Lx`, or a project-specific prefix for
+your domain parameters.

@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Data Structure" href="data_format/structure.html"><link rel="prev" title="Architecture" href="ARCHITECTURE.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Data Structure" href="data_format/structure.html"><link rel="prev" title="Tutorial" href="tutorial.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Data Format - mesokit</title>
@@ -190,9 +190,10 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Project</span></p>
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ARCHITECTURE.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Data Format</a><input aria-label="Toggle navigation of Data Format" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="data_format/structure.html">Data Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_format/predefined.html">Predefined Datasets</a></li>
@@ -201,12 +202,6 @@
 <li class="toctree-l2"><a class="reference internal" href="data_format/versioning.html">Versioning and Compatibility</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="ROADMAP.html">Roadmap</a></li>
-<li class="toctree-l1"><a class="reference internal" href="STYLE.html">Code Style</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API reference</span></p>
 <ul>
@@ -348,7 +343,7 @@ simulator-generated and user-provided data interchangeably.</p>
 <p>This section is the human-facing companion to the schema in code, which
 lives at <a class="reference internal" href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.TRAJECTORY_CACHE_V1" title="mesokit.data.format.TRAJECTORY_CACHE_V1"><code class="xref py py-data docutils literal notranslate"><span class="pre">mesokit.data.format.TRAJECTORY_CACHE_V1</span></code></a>. The current
 format version is <strong>v1</strong>; see <a class="reference internal" href="data_format/versioning.html"><span class="std std-doc">Versioning and Compatibility</span></a>
-for the evolution rules.</p>
+for what v1 guarantees to readers and writers.</p>
 <section id="file-layout-at-a-glance">
 <h2>File Layout At a Glance<a class="headerlink" href="#file-layout-at-a-glance" title="Link to this heading">¶</a></h2>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;dataset&gt;.h5
@@ -386,10 +381,10 @@ catalog of currently shipped simulators.</p></li>
 <code class="docutils literal notranslate"><span class="pre">mesokit.data.validate(path)</span></code>, and <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code>.</p></li>
 <li><p><strong>Copy-paste workflows</strong> — <a class="reference internal" href="data_format/examples.html"><span class="std std-doc">Examples</span></a> for
 end-to-end snippets that combine the above.</p></li>
-<li><p><strong>Evolution rules</strong> —
-<a class="reference internal" href="data_format/versioning.html"><span class="std std-doc">Versioning and Compatibility</span></a> for what is
-stable, what bumps the version, and the proposed future paired
-micro/meso format.</p></li>
+<li><p><strong>What v1 guarantees</strong> —
+<a class="reference internal" href="data_format/versioning.html"><span class="std std-doc">Versioning and Compatibility</span></a> for the
+compatibility promise: which paths, shapes, and attributes a v1 file
+can rely on.</p></li>
 </ul>
 <div class="toctree-wrapper compound">
 </div>
@@ -410,14 +405,14 @@ micro/meso format.</p></li>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="ARCHITECTURE.html">
+          <a class="prev-page" href="tutorial.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Architecture</div>
+                <div class="title">Tutorial</div>
                 
               </div>
             </a>

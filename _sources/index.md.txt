@@ -1,28 +1,22 @@
 # mesokit
 
 A toolkit and tutorial for learning **mesoscopic dynamics** from data.
+`mesokit` is a step-by-step companion: the tutorial and the library
+evolve together. The product framing is **interpretability** —
+predictive accuracy is a precondition, not the headline.
 
-`mesokit` is a step-by-step companion: the tutorial and the library evolve
-together. The product framing is **interpretability** — predictive accuracy
-is a precondition, not the headline. See
-[Architecture](ARCHITECTURE.md) for the design and
-[Roadmap](ROADMAP.md) for what's done and what's next.
-
-```{toctree}
-:maxdepth: 2
-:caption: Project
-
-ARCHITECTURE
-DATA_FORMAT
-ROADMAP
-STYLE
-```
+Start with the [Quickstart](quickstart.md) for installation and the
+first end-to-end run. The [Tutorial](tutorial.md) walks through the
+same flow with figures and commentary, and [Data Format](DATA_FORMAT.md)
+is the reference for authoring or registering your own HDF5 files.
 
 ```{toctree}
 :maxdepth: 2
-:caption: Tutorial
+:caption: User Guide
 
+quickstart
 tutorial
+DATA_FORMAT
 ```
 
 ```{toctree}

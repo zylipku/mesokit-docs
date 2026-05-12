@@ -1,0 +1,161 @@
+# Quickstart
+
+Install `mesokit`, generate a dataset, train a model, and extract an
+interpretability artifact — end to end. The commands below run from the
+repository root.
+
+## Installation
+
+Environments are managed by [pixi](https://pixi.sh):
+
+```bash
+git clone <this-repo> meso-tutorial
+cd meso-tutorial
+pixi install
+```
+
+Requires a linux-64 platform with a CUDA-capable GPU (CUDA 12.6 or newer).
+
+All later commands in this page assume you are inside the project root
+with the environment installed. Prefix commands with `pixi run` (or open
+a `pixi shell`) if `mesokit` is not on your `PATH`.
+
+## Data Loading
+
+To see the catalog of pre-defined simulator recipes:
+
+```sh
+mesokit data avail   # alias: mesokit data available
+```
+
+To see which datasets are actually registered on this machine — grouped
+by dynamics, with `custom:` at the bottom for entries whose `dyn` isn't a
+registered simulator — and the cache path for each:
+
+```sh
+mesokit data list
+```
+
+### Generating From a Predefined Recipe
+
+Pre-defined datasets are generated on demand. The resulting file is
+auto-registered so the next `mesokit data list` shows it as cached and
+downstream commands can refer to it by name. With no `--name`, the dataset
+is registered as `<dyn>_v0`; repeated runs (e.g. with different parameters)
+get `_v1`, `_v2`, …. With no `--output`, the file is written to
+`data/<dyn>/<name>.h5`:
+
+```sh
+mesokit data generate --dyn allen_cahn_1d                                          # data/allen_cahn_1d/allen_cahn_1d_v0.h5
+mesokit data generate --dyn allen_cahn_1d                                          # data/allen_cahn_1d/allen_cahn_1d_v1.h5
+mesokit data generate --dyn allen_cahn_1d --name my_run                            # custom name -> data/allen_cahn_1d/my_run.h5
+mesokit data generate --dyn allen_cahn_1d --output data/scratch.h5 --no-registry   # explicit path, skip registration
+```
+
+`--name` and `--no-registry` are mutually exclusive.
+
+Each dynamics has its own config folder under
+[`configs/data/<dyn>/`](../configs/data/), with a `default.yaml` used when
+`--config` is not passed. To run a variant config, drop a sibling YAML next
+to `default.yaml` and select it by stem (no extension):
+
+```sh
+mesokit data generate --dyn allen_cahn_1d --config eps05    # reads configs/data/allen_cahn_1d/eps05.yaml
+```
+
+Pass `--verbose` to surface the underlying solver's per-step logs (default
+is a single concise progress line on stderr).
+
+### Registering a Custom Dataset
+
+For data produced outside `mesokit` (a separate solver, MD trajectories,
+a finite-difference export), write an HDF5 file that follows the cache
+contract and register it under a name:
+
+```sh
+mesokit data register --name DATASET_NAME --file data/my_data.h5
+```
+
+This runs a sanity check to verify the file is in the expected format and
+prints the inferred metadata (state shape, time step, …) for confirmation.
+The full cache-file contract — required datasets, root attributes, and
+metadata groups — is documented in [Data Format](DATA_FORMAT.md), with
+end-to-end snippets in [Examples](data_format/examples.md).
+
+## Training Models
+
+Training is routed through trainer classes under `mesokit.trainers`. The
+CLI keeps the surface uniform: `--model` resolves the architecture,
+`--trainer` optionally overrides the default trainer, and `--data` can be
+either a registered dataset name or a path to an HDF5 file.
+
+To train Spectral OnsagerNet on a registered Allen-Cahn dataset:
+
+```sh
+mesokit train \
+  --model spectral_onsagernet_1d \
+  --dyn allen_cahn_1d \
+  --data allen_cahn_1d_v0 \
+  --config default
+```
+
+Training configs live under
+[`configs/train/<dyn>/<model>/`](../configs/train/). Each config selects
+the model constructor, the `TrajectoryDataset` wrapper (for example
+`SnapshotPairDataset`), dataloader options, and trainer hyperparameters.
+Convenience overrides are available for common knobs:
+
+```sh
+mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 \
+  --epochs 5 --batch-size 8 --device cpu
+```
+
+The trainer writes a run directory at `checkpoints/<dyn>/<run_id>/`
+containing `model.pt` (plain `state_dict`, no Lightning required to load),
+`config.yaml`, and `history.json`. Unless `--no-registry` is passed, the
+run is registered in `.mesokit/checkpoints.json` under `--name` or the
+next `<model>_v<n>` slot.
+
+To list registered checkpoints:
+
+```sh
+mesokit model list
+```
+
+To register an externally trained checkpoint:
+
+```sh
+mesokit model register --model MODEL_NAME --file path/to/checkpoint.pt --config path/to/config.yaml
+```
+
+This adds the model to the registry, making it available for downstream
+evaluation and comparison.
+
+## Interpretability Artifacts
+
+Some models optionally produce an `InterpretabilityArtifact` — a
+structured, self-describing object containing a human-readable view of
+what the model learned (discovered equations, a learned free-energy
+landscape, a per-mode error spectrum, …).
+
+To see available artifacts for a registered model:
+
+```sh
+mesokit interpret list --model MODEL_NAME
+```
+
+To extract and visualize one:
+
+```sh
+mesokit interpret extract --model MODEL_NAME --artifact ARTIFACT_NAME --output figs/artifact.png
+```
+
+## Next Steps
+
+- The notebooks under [`notebooks/`](https://github.com/zylipku/mesokit/tree/main/notebooks)
+  walk through the same flow with figures and commentary — see
+  [Tutorial](tutorial.md).
+- For the schema details when authoring or registering your own HDF5
+  files, see [Data Format](DATA_FORMAT.md) and the deeper pages under
+  [Data Structure](data_format/structure.md), [Custom Datasets](data_format/custom.md),
+  and [Examples](data_format/examples.md).

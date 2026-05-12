@@ -190,9 +190,10 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Project</span></p>
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../ARCHITECTURE.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../DATA_FORMAT.html">Data Format</a><input aria-label="Toggle navigation of Data Format" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../data_format/structure.html">Data Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../data_format/predefined.html">Predefined Datasets</a></li>
@@ -201,12 +202,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../data_format/versioning.html">Versioning and Compatibility</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../ROADMAP.html">Roadmap</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../STYLE.html">Code Style</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API reference</span></p>
 <ul class="current">
@@ -343,7 +338,7 @@
 <p>A <em>simulator</em> is any callable that takes physical / numerical parameters as
 keyword arguments and returns a :class:<code class="docutils literal notranslate"><span class="pre">~mesokit.data.TrajectoryDataset</span></code>. The
 container shape <code class="docutils literal notranslate"><span class="pre">(n_traj,</span> <span class="pre">n_time,</span> <span class="pre">*spatial)</span></code> is the only thing the rest of
-the toolkit depends on — see <code class="docutils literal notranslate"><span class="pre">docs/ARCHITECTURE.md</span></code>.</p>
+the toolkit depends on — see <code class="docutils literal notranslate"><span class="pre">docs-dev/ARCHITECTURE.md</span></code>.</p>
 <p>This module defines the protocol; concrete simulators register themselves
 with :func:<code class="docutils literal notranslate"><span class="pre">mesokit.data.register</span></code> and are dispatched by name through</p>
 <dl class="myst field-list simple">

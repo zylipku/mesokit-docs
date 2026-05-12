@@ -190,9 +190,10 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Project</span></p>
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../ARCHITECTURE.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../DATA_FORMAT.html">Data Format</a><input aria-label="Toggle navigation of Data Format" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="structure.html">Data Structure</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Predefined Datasets</a></li>
@@ -201,12 +202,6 @@
 <li class="toctree-l2"><a class="reference internal" href="versioning.html">Versioning and Compatibility</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../ROADMAP.html">Roadmap</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../STYLE.html">Code Style</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API reference</span></p>
 <ul>
@@ -440,32 +435,6 @@ entry. Every value is read from the simulator’s call signature — see
 defaults — and the on-disk file is bit-for-bit the same as one produced by
 the minimal external-writer snippet in <a class="reference internal" href="custom.html"><span class="std std-doc">Custom Datasets</span></a>.</p>
 </section>
-<section id="adding-a-new-predefined-simulator">
-<h2>Adding a New Predefined Simulator<a class="headerlink" href="#adding-a-new-predefined-simulator" title="Link to this heading">¶</a></h2>
-<p>A new family of dataset is a new module that registers itself under a name:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mesokit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">register</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mesokit.data.trajectory</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrajectoryDataset</span>
-
-<span class="nd">@register</span><span class="p">(</span><span class="s2">&quot;my_dynamics_1d&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">simulate_my_dynamics_1d</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TrajectoryDataset</span><span class="p">:</span>
-    <span class="o">...</span>
-    <span class="k">return</span> <span class="n">TrajectoryDataset</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=...</span><span class="p">,</span>                <span class="c1"># (n_traj, n_time, n_channel, *grid_shape)</span>
-        <span class="n">times</span><span class="o">=...</span><span class="p">,</span>
-        <span class="n">dyn</span><span class="o">=</span><span class="s2">&quot;my_dynamics_1d&quot;</span><span class="p">,</span>
-        <span class="n">physical</span><span class="o">=</span><span class="p">{</span><span class="o">...</span><span class="p">},</span>
-        <span class="n">numerical</span><span class="o">=</span><span class="p">{</span><span class="o">...</span><span class="p">},</span>
-        <span class="n">provenance</span><span class="o">=</span><span class="p">{</span><span class="o">...</span><span class="p">},</span>
-        <span class="n">channel_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,),</span>
-    <span class="p">)</span>
-</pre></div>
-</div>
-<p>Provide a <code class="docutils literal notranslate"><span class="pre">configs/data/my_dynamics_1d/default.yaml</span></code> to make
-<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--dyn</span> <span class="pre">my_dynamics_1d</span></code> work end-to-end. The simulator
-must accept <code class="docutils literal notranslate"><span class="pre">verbose:</span> <span class="pre">bool</span></code> (see
-<a class="reference internal" href="../apidocs/mesokit/mesokit.data.simulator_base.html#mesokit.data.simulator_base.Simulator" title="mesokit.data.simulator_base.Simulator"><code class="xref py py-class docutils literal notranslate"><span class="pre">mesokit.data.simulator_base.Simulator</span></code></a>); everything else is up
-to the family.</p>
-</section>
 </section>
 
         </article>
@@ -528,7 +497,6 @@ to the family.</p>
 <li><a class="reference internal" href="#generating-from-the-cli">Generating From the CLI</a></li>
 <li><a class="reference internal" href="#generating-programmatically">Generating Programmatically</a></li>
 <li><a class="reference internal" href="#what-ends-up-in-the-file">What Ends Up in the File</a></li>
-<li><a class="reference internal" href="#adding-a-new-predefined-simulator">Adding a New Predefined Simulator</a></li>
 </ul>
 </li>
 </ul>

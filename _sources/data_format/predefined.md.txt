@@ -114,31 +114,3 @@ entry. Every value is read from the simulator's call signature — see
 [`kdv_1d.py`](../../src/mesokit/data/kdv/kdv_1d.py) for the exact
 defaults — and the on-disk file is bit-for-bit the same as one produced by
 the minimal external-writer snippet in [Custom Datasets](custom.md).
-
-## Adding a New Predefined Simulator
-
-A new family of dataset is a new module that registers itself under a name:
-
-```python
-from mesokit.data import register
-from mesokit.data.trajectory import TrajectoryDataset
-
-@register("my_dynamics_1d")
-def simulate_my_dynamics_1d(*, verbose: bool = False, **params) -> TrajectoryDataset:
-    ...
-    return TrajectoryDataset(
-        data=...,                # (n_traj, n_time, n_channel, *grid_shape)
-        times=...,
-        dyn="my_dynamics_1d",
-        physical={...},
-        numerical={...},
-        provenance={...},
-        channel_names=("u",),
-    )
-```
-
-Provide a `configs/data/my_dynamics_1d/default.yaml` to make
-`mesokit data generate --dyn my_dynamics_1d` work end-to-end. The simulator
-must accept `verbose: bool` (see
-{py:class}`mesokit.data.simulator_base.Simulator`); everything else is up
-to the family.
