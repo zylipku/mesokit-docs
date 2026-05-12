@@ -9,8 +9,8 @@ repository root.
 Environments are managed by [pixi](https://pixi.sh):
 
 ```bash
-git clone <this-repo> meso-tutorial
-cd meso-tutorial
+git clone <this-repo> mesokit
+cd mesokit
 pixi install
 ```
 
@@ -47,7 +47,7 @@ get `_v1`, `_v2`, …. With no `--output`, the file is written to
 
 ```sh
 mesokit data generate --dyn allen_cahn_1d                                          # data/allen_cahn_1d/allen_cahn_1d_v0.h5
-mesokit data generate --dyn allen_cahn_1d                                          # data/allen_cahn_1d/allen_cahn_1d_v1.h5
+mesokit data generate --dyn allen_cahn_1d                                          # data/allen_cahn_1d/allen_cahn_1d_v1.h5 # repeated run -> v1
 mesokit data generate --dyn allen_cahn_1d --name my_run                            # custom name -> data/allen_cahn_1d/my_run.h5
 mesokit data generate --dyn allen_cahn_1d --output data/scratch.h5 --no-registry   # explicit path, skip registration
 ```
@@ -60,7 +60,7 @@ Each dynamics has its own config folder under
 to `default.yaml` and select it by stem (no extension):
 
 ```sh
-mesokit data generate --dyn allen_cahn_1d --config eps05    # reads configs/data/allen_cahn_1d/eps05.yaml
+mesokit data generate --dyn allen_cahn_1d --config fdr    # reads configs/data/allen_cahn_1d/fdr.yaml
 ```
 
 Pass `--verbose` to surface the underlying solver's per-step logs (default
@@ -147,7 +147,7 @@ mesokit interpret list --model MODEL_NAME
 To extract and visualize one:
 
 ```sh
-mesokit interpret extract --model MODEL_NAME --artifact ARTIFACT_NAME --output figs/artifact.png
+mesokit interpret extract --model MODEL_NAME --artifact ARTIFACT_NAME --output figs/artifact.png # or mesokit interpret explain
 ```
 
 ## Next Steps

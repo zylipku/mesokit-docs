@@ -19,8 +19,8 @@
   - ```{autodoc2-docstring} mesokit.cli.interpret.list_
     :summary:
     ```
-* - {py:obj}`extract <mesokit.cli.interpret.extract>`
-  - ```{autodoc2-docstring} mesokit.cli.interpret.extract
+* - {py:obj}`_extract_impl <mesokit.cli.interpret._extract_impl>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret._extract_impl
     :summary:
     ```
 * - {py:obj}`_load_registered_model <mesokit.cli.interpret._load_registered_model>`
@@ -84,10 +84,10 @@
 ```
 ````
 
-````{py:function} extract(model: typing.Annotated[str, typer.Option('--model', help='Registered checkpoint name.')], artifact: typing.Annotated[str, typer.Option('--artifact', help="Artifact name, or 'all'.")], output: typing.Annotated[pathlib.Path, typer.Option('--output', help='Output file, or directory when --artifact all.')], max_snapshots: typing.Annotated[int, typer.Option('--max-snapshots', help='Maximum reference snapshots used by data-backed artifacts.')] = 5000) -> None
-:canonical: mesokit.cli.interpret.extract
+````{py:function} _extract_impl(model: typing.Annotated[str, typer.Option('--model', help='Registered checkpoint name.')], artifact: typing.Annotated[str, typer.Option('--artifact', help="Artifact name, or 'all'.")], output: typing.Annotated[pathlib.Path, typer.Option('--output', help='Output file, or directory when --artifact all.')], max_snapshots: typing.Annotated[int, typer.Option('--max-snapshots', help='Maximum reference snapshots used by data-backed artifacts.')] = 5000) -> None
+:canonical: mesokit.cli.interpret._extract_impl
 
-```{autodoc2-docstring} mesokit.cli.interpret.extract
+```{autodoc2-docstring} mesokit.cli.interpret._extract_impl
 ```
 ````
 

@@ -340,8 +340,8 @@ repository root.</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <p>Environments are managed by <a class="reference external" href="https://pixi.sh">pixi</a>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>&lt;this-repo&gt;<span class="w"> </span>meso-tutorial
-<span class="nb">cd</span><span class="w"> </span>meso-tutorial
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>&lt;this-repo&gt;<span class="w"> </span>mesokit
+<span class="nb">cd</span><span class="w"> </span>mesokit
 pixi<span class="w"> </span>install
 </pre></div>
 </div>
@@ -371,7 +371,7 @@ is registered as <code class="docutils literal notranslate"><span class="pre">&l
 get <code class="docutils literal notranslate"><span class="pre">_v1</span></code>, <code class="docutils literal notranslate"><span class="pre">_v2</span></code>, …. With no <code class="docutils literal notranslate"><span class="pre">--output</span></code>, the file is written to
 <code class="docutils literal notranslate"><span class="pre">data/&lt;dyn&gt;/&lt;name&gt;.h5</span></code>:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w">                                          </span><span class="c1"># data/allen_cahn_1d/allen_cahn_1d_v0.h5</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w">                                          </span><span class="c1"># data/allen_cahn_1d/allen_cahn_1d_v1.h5</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w">                                          </span><span class="c1"># data/allen_cahn_1d/allen_cahn_1d_v1.h5 # repeated run -&gt; v1</span>
 mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--name<span class="w"> </span>my_run<span class="w">                            </span><span class="c1"># custom name -&gt; data/allen_cahn_1d/my_run.h5</span>
 mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--output<span class="w"> </span>data/scratch.h5<span class="w"> </span>--no-registry<span class="w">   </span><span class="c1"># explicit path, skip registration</span>
 </pre></div>
@@ -381,7 +381,7 @@ mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="
 <a class="reference internal" href="#../configs/data/"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/</span></code></span></a>, with a <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> used when
 <code class="docutils literal notranslate"><span class="pre">--config</span></code> is not passed. To run a variant config, drop a sibling YAML next
 to <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> and select it by stem (no extension):</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>eps05<span class="w">    </span><span class="c1"># reads configs/data/allen_cahn_1d/eps05.yaml</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w">    </span><span class="c1"># reads configs/data/allen_cahn_1d/fdr.yaml</span>
 </pre></div>
 </div>
 <p>Pass <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> to surface the underlying solver’s per-step logs (default
@@ -452,7 +452,7 @@ landscape, a per-mode error spectrum, …).</p>
 </pre></div>
 </div>
 <p>To extract and visualize one:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>MODEL_NAME<span class="w"> </span>--artifact<span class="w"> </span>ARTIFACT_NAME<span class="w"> </span>--output<span class="w"> </span>figs/artifact.png
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>MODEL_NAME<span class="w"> </span>--artifact<span class="w"> </span>ARTIFACT_NAME<span class="w"> </span>--output<span class="w"> </span>figs/artifact.png<span class="w"> </span><span class="c1"># or mesokit interpret explain</span>
 </pre></div>
 </div>
 </section>
