@@ -1,0 +1,237 @@
+# {py:mod}`mesokit.cli._agent`
+
+```{py:module} mesokit.cli._agent
+```
+
+```{autodoc2-docstring} mesokit.cli._agent
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`AgentSpec <mesokit.cli._agent.AgentSpec>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.AgentSpec
+    :summary:
+    ```
+* - {py:obj}`BackendSpec <mesokit.cli._agent.BackendSpec>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.BackendSpec
+    :summary:
+    ```
+* - {py:obj}`BackendResult <mesokit.cli._agent.BackendResult>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.BackendResult
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_run_foreground <mesokit.cli._agent._run_foreground>`
+  - ```{autodoc2-docstring} mesokit.cli._agent._run_foreground
+    :summary:
+    ```
+* - {py:obj}`_run_tmux <mesokit.cli._agent._run_tmux>`
+  - ```{autodoc2-docstring} mesokit.cli._agent._run_tmux
+    :summary:
+    ```
+* - {py:obj}`skill_path <mesokit.cli._agent.skill_path>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.skill_path
+    :summary:
+    ```
+* - {py:obj}`build_prompt <mesokit.cli._agent.build_prompt>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.build_prompt
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`SKILL_RESOURCE <mesokit.cli._agent.SKILL_RESOURCE>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.SKILL_RESOURCE
+    :summary:
+    ```
+* - {py:obj}`AGENTS <mesokit.cli._agent.AGENTS>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.AGENTS
+    :summary:
+    ```
+* - {py:obj}`BACKENDS <mesokit.cli._agent.BACKENDS>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.BACKENDS
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} SKILL_RESOURCE
+:canonical: mesokit.cli._agent.SKILL_RESOURCE
+:value: >
+   'data_ingest.md'
+
+```{autodoc2-docstring} mesokit.cli._agent.SKILL_RESOURCE
+```
+
+````
+
+`````{py:class} AgentSpec
+:canonical: mesokit.cli._agent.AgentSpec
+
+```{autodoc2-docstring} mesokit.cli._agent.AgentSpec
+```
+
+````{py:attribute} binary
+:canonical: mesokit.cli._agent.AgentSpec.binary
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.AgentSpec.binary
+```
+
+````
+
+````{py:attribute} argv
+:canonical: mesokit.cli._agent.AgentSpec.argv
+:type: collections.abc.Callable[[str], list[str]]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.AgentSpec.argv
+```
+
+````
+
+`````
+
+`````{py:class} BackendSpec
+:canonical: mesokit.cli._agent.BackendSpec
+
+```{autodoc2-docstring} mesokit.cli._agent.BackendSpec
+```
+
+````{py:attribute} name
+:canonical: mesokit.cli._agent.BackendSpec.name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.BackendSpec.name
+```
+
+````
+
+````{py:attribute} run
+:canonical: mesokit.cli._agent.BackendSpec.run
+:type: collections.abc.Callable[[list[str], pathlib.Path], BackendResult]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.BackendSpec.run
+```
+
+````
+
+`````
+
+`````{py:class} BackendResult
+:canonical: mesokit.cli._agent.BackendResult
+
+```{autodoc2-docstring} mesokit.cli._agent.BackendResult
+```
+
+````{py:attribute} finished
+:canonical: mesokit.cli._agent.BackendResult.finished
+:type: bool
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.BackendResult.finished
+```
+
+````
+
+````{py:attribute} exit_code
+:canonical: mesokit.cli._agent.BackendResult.exit_code
+:type: int | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.BackendResult.exit_code
+```
+
+````
+
+````{py:attribute} handle
+:canonical: mesokit.cli._agent.BackendResult.handle
+:type: str | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.BackendResult.handle
+```
+
+````
+
+`````
+
+````{py:function} _run_foreground(argv: list[str], cwd: pathlib.Path) -> mesokit.cli._agent.BackendResult
+:canonical: mesokit.cli._agent._run_foreground
+
+```{autodoc2-docstring} mesokit.cli._agent._run_foreground
+```
+````
+
+````{py:function} _run_tmux(argv: list[str], cwd: pathlib.Path) -> mesokit.cli._agent.BackendResult
+:canonical: mesokit.cli._agent._run_tmux
+
+```{autodoc2-docstring} mesokit.cli._agent._run_tmux
+```
+````
+
+````{py:data} AGENTS
+:canonical: mesokit.cli._agent.AGENTS
+:type: dict[str, mesokit.cli._agent.AgentSpec]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.AGENTS
+```
+
+````
+
+````{py:data} BACKENDS
+:canonical: mesokit.cli._agent.BACKENDS
+:type: dict[str, mesokit.cli._agent.BackendSpec]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.BACKENDS
+```
+
+````
+
+````{py:function} skill_path() -> pathlib.Path
+:canonical: mesokit.cli._agent.skill_path
+
+```{autodoc2-docstring} mesokit.cli._agent.skill_path
+```
+````
+
+````{py:function} build_prompt(skill: pathlib.Path, file: pathlib.Path, output: pathlib.Path, hint: str | None) -> str
+:canonical: mesokit.cli._agent.build_prompt
+
+```{autodoc2-docstring} mesokit.cli._agent.build_prompt
+```
+````

@@ -240,6 +240,7 @@
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli</span></code></a><input aria-label="Toggle navigation of mesokit.cli" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></a></li>
@@ -269,6 +270,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.dynamics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.dynamics_base</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills</span></code></a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data</span></code></a><input aria-label="Toggle navigation of mesokit.data" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.kdv.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv</span></code></a><input aria-label="Toggle navigation of mesokit.data.kdv" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.kdv.kdv_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv.kdv_1d</span></code></a></li>
@@ -401,6 +403,34 @@ The full cache-file contract — required datasets, root attributes, and
 metadata groups — is documented in <a class="reference internal" href="DATA_FORMAT.html"><span class="std std-doc">Data Format</span></a>, with
 end-to-end snippets in <a class="reference internal" href="data_format/examples.html"><span class="std std-doc">Examples</span></a>.</p>
 </section>
+<section id="parsing-an-arbitrary-dataset-with-an-agent">
+<h3>Parsing An Arbitrary Dataset With An Agent<a class="headerlink" href="#parsing-an-arbitrary-dataset-with-an-agent" title="Link to this heading">¶</a></h3>
+<p>If your data is in a format that does not already match the cache
+contract (xarray, raw numpy, torch tensors + JSON/YAML metadata, …), you
+can hand the conversion off to an LLM coding agent you already have
+installed. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code> points the agent at the cache-contract
+skill shipped with the package, plus your file, and (optionally) any
+extra hints; on success it validates the produced HDF5 and — when
+<code class="docutils literal notranslate"><span class="pre">--name</span></code> is given — registers it the same way <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code>
+would.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>path/to/raw_data.nc<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--hint<span class="w"> </span><span class="s2">&quot;time dim is `t`, var is `u`&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--agent<span class="w"> </span>claude<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>from_agent
+</pre></div>
+</div>
+<p>Flags:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--agent</span></code>: which agent CLI to invoke (<code class="docutils literal notranslate"><span class="pre">claude</span></code>, <code class="docutils literal notranslate"><span class="pre">codex</span></code>); it must be
+on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--backend</span></code>: <code class="docutils literal notranslate"><span class="pre">foreground</span></code> (default; streams the agent’s output and
+blocks) or <code class="docutils literal notranslate"><span class="pre">tmux</span></code> (detaches into a session you can attach to later).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--hint</span></code>: free-form prompt fragment appended to the task.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: where to write the converted HDF5; defaults to
+<code class="docutils literal notranslate"><span class="pre">data/parsed/&lt;input_stem&gt;.h5</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code>: register the output under this name on success.</p></li>
+</ul>
+</section>
 </section>
 <section id="training-models">
 <h2>Training Models<a class="headerlink" href="#training-models" title="Link to this heading">¶</a></h2>
@@ -530,6 +560,7 @@ and <a class="reference internal" href="data_format/examples.html"><span class="
 <li><a class="reference internal" href="#data-loading">Data Loading</a><ul>
 <li><a class="reference internal" href="#generating-from-a-predefined-recipe">Generating From a Predefined Recipe</a></li>
 <li><a class="reference internal" href="#registering-a-custom-dataset">Registering a Custom Dataset</a></li>
+<li><a class="reference internal" href="#parsing-an-arbitrary-dataset-with-an-agent">Parsing An Arbitrary Dataset With An Agent</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#training-models">Training Models</a></li>

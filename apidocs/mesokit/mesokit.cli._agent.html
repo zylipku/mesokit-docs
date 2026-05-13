@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="mesokit.cli.train" href="mesokit.cli.train.html"><link rel="prev" title="mesokit.cli.interpret" href="mesokit.cli.interpret.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="mesokit.cli.interpret" href="mesokit.cli.interpret.html"><link rel="prev" title="mesokit.cli.main" href="mesokit.cli.main.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>mesokit.cli._registry_store - mesokit</title>
+        <title>mesokit.cli._agent - mesokit</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -240,9 +240,9 @@
 </li>
 <li class="toctree-l2 current has-children"><a class="reference internal" href="mesokit.cli.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli</span></code></a><input aria-label="Toggle navigation of mesokit.cli" checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._agent</span></code></a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.model</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
@@ -316,7 +316,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/apidocs/mesokit/mesokit.cli._registry_store.md.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/apidocs/mesokit/mesokit.cli._agent.md.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -334,15 +334,20 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="module-mesokit.cli._registry_store">
-<span id="mesokit-cli-registry-store"></span><h1><a class="reference internal" href="#module-mesokit.cli._registry_store" title="mesokit.cli._registry_store"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a><a class="headerlink" href="#module-mesokit.cli._registry_store" title="Link to this heading">¶</a></h1>
-<p>JSON-backed key-to-record store for project-local CLI registries.</p>
-<p>Backs <code class="docutils literal notranslate"><span class="pre">./.mesokit/datasets.json</span></code> and <code class="docutils literal notranslate"><span class="pre">./.mesokit/checkpoints.json</span></code>: a flat
-<code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">-&gt;</span> <span class="pre">record</span></code> map written atomically via <code class="docutils literal notranslate"><span class="pre">os.replace</span></code>. Anchored at the
-process CWD so each project gets its own registry.</p>
-<p>Concurrent CLI invocations cannot corrupt the file (atomic rename), but a
-read-modify-write race can lose updates. Acceptable for single-user tutorial
-use; documented as a known limitation.</p>
+          <section id="module-mesokit.cli._agent">
+<span id="mesokit-cli-agent"></span><h1><a class="reference internal" href="#module-mesokit.cli._agent" title="mesokit.cli._agent"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._agent</span></code></a><a class="headerlink" href="#module-mesokit.cli._agent" title="Link to this heading">¶</a></h1>
+<p>Agent + backend dispatch table for <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code>.</p>
+<p>This module is intentionally tiny. It declares which external CLI agents
+(<code class="docutils literal notranslate"><span class="pre">claude</span></code>, <code class="docutils literal notranslate"><span class="pre">codex</span></code>, …) and which workspace backends (<code class="docutils literal notranslate"><span class="pre">foreground</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tmux</span></code>) the <code class="docutils literal notranslate"><span class="pre">parse</span></code> command knows how to launch, plus a small helper
+that builds the prompt and the path to the shipped skill file.</p>
+<p>Adding a new agent or backend is one entry in :data:<code class="docutils literal notranslate"><span class="pre">AGENTS</span></code> or</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">data<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">BACKENDS</span></code> plus the matching runner — keep this file free of
+business logic so the CLI command stays the obvious place to read.</p>
+</dd>
+</dl>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
 <section id="classes">
@@ -350,8 +355,14 @@ use; documented as a known limitation.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-left">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore" title="mesokit.cli._registry_store.RegistryStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegistryStore</span></code></a></p></td>
-<td><p>Tiny key-&gt;record JSON store with atomic writes.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.AgentSpec" title="mesokit.cli._agent.AgentSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AgentSpec</span></code></a></p></td>
+<td><p>How to invoke a given agent CLI in non-interactive mode.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent.BackendSpec" title="mesokit.cli._agent.BackendSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BackendSpec</span></code></a></p></td>
+<td><p>How to launch the agent argv inside a chosen workspace.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.BackendResult" title="mesokit.cli._agent.BackendResult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BackendResult</span></code></a></p></td>
+<td><p>Outcome of a backend run.</p></td>
 </tr>
 </tbody>
 </table>
@@ -362,11 +373,17 @@ use; documented as a known limitation.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-left">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._registry_store.datasets_store" title="mesokit.cli._registry_store.datasets_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets_store</span></code></a></p></td>
-<td><p>Project-local registry of externally-produced datasets.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent._run_foreground" title="mesokit.cli._agent._run_foreground"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_run_foreground</span></code></a></p></td>
+<td><p>Run <code class="docutils literal notranslate"><span class="pre">argv</span></code> synchronously with inherited stdio.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._registry_store.checkpoints_store" title="mesokit.cli._registry_store.checkpoints_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkpoints_store</span></code></a></p></td>
-<td><p>Project-local registry of trained model checkpoints.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent._run_tmux" title="mesokit.cli._agent._run_tmux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_run_tmux</span></code></a></p></td>
+<td><p>Spawn <code class="docutils literal notranslate"><span class="pre">argv</span></code> inside a detached tmux session and return its name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.skill_path" title="mesokit.cli._agent.skill_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skill_path</span></code></a></p></td>
+<td><p>Return the on-disk path to the data-ingest skill markdown.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent.build_prompt" title="mesokit.cli._agent.build_prompt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_prompt</span></code></a></p></td>
+<td><p>Compose the prompt handed to the agent.</p></td>
 </tr>
 </tbody>
 </table>
@@ -377,7 +394,13 @@ use; documented as a known limitation.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-left">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._registry_store.SCHEMA_VERSION" title="mesokit.cli._registry_store.SCHEMA_VERSION"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SCHEMA_VERSION</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.SKILL_RESOURCE" title="mesokit.cli._agent.SKILL_RESOURCE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SKILL_RESOURCE</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent.AGENTS" title="mesokit.cli._agent.AGENTS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AGENTS</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.BACKENDS" title="mesokit.cli._agent.BACKENDS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BACKENDS</span></code></a></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -387,58 +410,112 @@ use; documented as a known limitation.</p>
 <section id="api">
 <h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
 <dl class="py data">
-<dt class="sig sig-object py" id="mesokit.cli._registry_store.SCHEMA_VERSION">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli._registry_store.</span></span><span class="sig-name descname"><span class="pre">SCHEMA_VERSION</span></span><a class="headerlink" href="#mesokit.cli._registry_store.SCHEMA_VERSION" title="Link to this definition">¶</a></dt>
-<dd><p>1</p>
+<dt class="sig sig-object py" id="mesokit.cli._agent.SKILL_RESOURCE">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">SKILL_RESOURCE</span></span><a class="headerlink" href="#mesokit.cli._agent.SKILL_RESOURCE" title="Link to this definition">¶</a></dt>
+<dd><p>‘data_ingest.md’</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.cli._registry_store.</span></span><span class="sig-name descname"><span class="pre">RegistryStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore" title="Link to this definition">¶</a></dt>
-<dd><p>Tiny key-&gt;record JSON store with atomic writes.</p>
-<p class="rubric">Initialization</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore._read">
-<span class="sig-name descname"><span class="pre">_read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore._read" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="mesokit.cli._agent.AgentSpec">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">AgentSpec</span></span><a class="headerlink" href="#mesokit.cli._agent.AgentSpec" title="Link to this definition">¶</a></dt>
+<dd><p>How to invoke a given agent CLI in non-interactive mode.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.AgentSpec.binary">
+<span class="sig-name descname"><span class="pre">binary</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.cli._agent.AgentSpec.binary" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore._write">
-<span class="sig-name descname"><span class="pre">_write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore._write" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.AgentSpec.argv">
+<span class="sig-name descname"><span class="pre">argv</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">collections.abc.Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.cli._agent.AgentSpec.argv" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore.add">
-<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore.add" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore.get" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="mesokit.cli._agent.BackendSpec">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">BackendSpec</span></span><a class="headerlink" href="#mesokit.cli._agent.BackendSpec" title="Link to this definition">¶</a></dt>
+<dd><p>How to launch the agent argv inside a chosen workspace.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.BackendSpec.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.cli._agent.BackendSpec.name" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore.list">
-<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore.list" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.BackendSpec.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">collections.abc.Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#mesokit.cli._agent.BackendResult" title="mesokit.cli._agent.BackendResult"><span class="pre">BackendResult</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.cli._agent.BackendSpec.run" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore.remove">
-<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore.remove" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mesokit.cli._agent.BackendResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">BackendResult</span></span><a class="headerlink" href="#mesokit.cli._agent.BackendResult" title="Link to this definition">¶</a></dt>
+<dd><p>Outcome of a backend run.</p>
+<p><code class="docutils literal notranslate"><span class="pre">finished</span></code> is True for synchronous backends (foreground) and False
+for detached ones (tmux). <code class="docutils literal notranslate"><span class="pre">exit_code</span></code> is meaningful only when
+<code class="docutils literal notranslate"><span class="pre">finished</span></code> is True. <code class="docutils literal notranslate"><span class="pre">handle</span></code> carries a backend-specific reference
+a user can re-attach to (e.g. a tmux session name).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.BackendResult.finished">
+<span class="sig-name descname"><span class="pre">finished</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#mesokit.cli._agent.BackendResult.finished" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.BackendResult.exit_code">
+<span class="sig-name descname"><span class="pre">exit_code</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#mesokit.cli._agent.BackendResult.exit_code" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.BackendResult.handle">
+<span class="sig-name descname"><span class="pre">handle</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#mesokit.cli._agent.BackendResult.handle" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="mesokit.cli._registry_store.datasets_store">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli._registry_store.</span></span><span class="sig-name descname"><span class="pre">datasets_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore" title="mesokit.cli._registry_store.RegistryStore"><span class="pre">mesokit.cli._registry_store.RegistryStore</span></a></span></span><a class="headerlink" href="#mesokit.cli._registry_store.datasets_store" title="Link to this definition">¶</a></dt>
-<dd><p>Project-local registry of externally-produced datasets.</p>
+<dt class="sig sig-object py" id="mesokit.cli._agent._run_foreground">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">_run_foreground</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mesokit.cli._agent.BackendResult" title="mesokit.cli._agent.BackendResult"><span class="pre">mesokit.cli._agent.BackendResult</span></a></span></span><a class="headerlink" href="#mesokit.cli._agent._run_foreground" title="Link to this definition">¶</a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">argv</span></code> synchronously with inherited stdio.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="mesokit.cli._registry_store.checkpoints_store">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli._registry_store.</span></span><span class="sig-name descname"><span class="pre">checkpoints_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore" title="mesokit.cli._registry_store.RegistryStore"><span class="pre">mesokit.cli._registry_store.RegistryStore</span></a></span></span><a class="headerlink" href="#mesokit.cli._registry_store.checkpoints_store" title="Link to this definition">¶</a></dt>
-<dd><p>Project-local registry of trained model checkpoints.</p>
+<dt class="sig sig-object py" id="mesokit.cli._agent._run_tmux">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">_run_tmux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mesokit.cli._agent.BackendResult" title="mesokit.cli._agent.BackendResult"><span class="pre">mesokit.cli._agent.BackendResult</span></a></span></span><a class="headerlink" href="#mesokit.cli._agent._run_tmux" title="Link to this definition">¶</a></dt>
+<dd><p>Spawn <code class="docutils literal notranslate"><span class="pre">argv</span></code> inside a detached tmux session and return its name.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mesokit.cli._agent.AGENTS">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">AGENTS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#mesokit.cli._agent.AgentSpec" title="mesokit.cli._agent.AgentSpec"><span class="pre">mesokit.cli._agent.AgentSpec</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.cli._agent.AGENTS" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mesokit.cli._agent.BACKENDS">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">BACKENDS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#mesokit.cli._agent.BackendSpec" title="mesokit.cli._agent.BackendSpec"><span class="pre">mesokit.cli._agent.BackendSpec</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.cli._agent.BACKENDS" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli._agent.skill_path">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">skill_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pathlib.Path</span></span></span><a class="headerlink" href="#mesokit.cli._agent.skill_path" title="Link to this definition">¶</a></dt>
+<dd><p>Return the on-disk path to the data-ingest skill markdown.</p>
+<p>Uses :func:<code class="docutils literal notranslate"><span class="pre">importlib.resources.as_file</span></code> so the path resolves whether
+the package is installed from a wheel or in editable mode. The
+returned path is valid for the lifetime of the process.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli._agent.build_prompt">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">build_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skill</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.cli._agent.build_prompt" title="Link to this definition">¶</a></dt>
+<dd><p>Compose the prompt handed to the agent.</p>
 </dd></dl>
 
 </section>
@@ -450,23 +527,23 @@ use; documented as a known limitation.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="mesokit.cli.train.html">
+          <a class="next-page" href="mesokit.cli.interpret.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></div>
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="mesokit.cli.interpret.html">
+          <a class="prev-page" href="mesokit.cli.main.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></div>
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></div>
                 
               </div>
             </a>
@@ -500,24 +577,35 @@ use; documented as a known limitation.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a><ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._agent</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#functions">Functions</a></li>
 <li><a class="reference internal" href="#data">Data</a></li>
 <li><a class="reference internal" href="#api">API</a><ul>
-<li><a class="reference internal" href="#mesokit.cli._registry_store.SCHEMA_VERSION"><code class="docutils literal notranslate"><span class="pre">SCHEMA_VERSION</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore"><code class="docutils literal notranslate"><span class="pre">RegistryStore</span></code></a><ul>
-<li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore._read"><code class="docutils literal notranslate"><span class="pre">RegistryStore._read()</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore._write"><code class="docutils literal notranslate"><span class="pre">RegistryStore._write()</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore.add"><code class="docutils literal notranslate"><span class="pre">RegistryStore.add()</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore.get"><code class="docutils literal notranslate"><span class="pre">RegistryStore.get()</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore.list"><code class="docutils literal notranslate"><span class="pre">RegistryStore.list()</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore.remove"><code class="docutils literal notranslate"><span class="pre">RegistryStore.remove()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.SKILL_RESOURCE"><code class="docutils literal notranslate"><span class="pre">SKILL_RESOURCE</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.AgentSpec"><code class="docutils literal notranslate"><span class="pre">AgentSpec</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit.cli._agent.AgentSpec.binary"><code class="docutils literal notranslate"><span class="pre">AgentSpec.binary</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.AgentSpec.argv"><code class="docutils literal notranslate"><span class="pre">AgentSpec.argv</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#mesokit.cli._registry_store.datasets_store"><code class="docutils literal notranslate"><span class="pre">datasets_store()</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli._registry_store.checkpoints_store"><code class="docutils literal notranslate"><span class="pre">checkpoints_store()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.BackendSpec"><code class="docutils literal notranslate"><span class="pre">BackendSpec</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit.cli._agent.BackendSpec.name"><code class="docutils literal notranslate"><span class="pre">BackendSpec.name</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.BackendSpec.run"><code class="docutils literal notranslate"><span class="pre">BackendSpec.run</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mesokit.cli._agent.BackendResult"><code class="docutils literal notranslate"><span class="pre">BackendResult</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit.cli._agent.BackendResult.finished"><code class="docutils literal notranslate"><span class="pre">BackendResult.finished</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.BackendResult.exit_code"><code class="docutils literal notranslate"><span class="pre">BackendResult.exit_code</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.BackendResult.handle"><code class="docutils literal notranslate"><span class="pre">BackendResult.handle</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mesokit.cli._agent._run_foreground"><code class="docutils literal notranslate"><span class="pre">_run_foreground()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent._run_tmux"><code class="docutils literal notranslate"><span class="pre">_run_tmux()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.AGENTS"><code class="docutils literal notranslate"><span class="pre">AGENTS</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.BACKENDS"><code class="docutils literal notranslate"><span class="pre">BACKENDS</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.skill_path"><code class="docutils literal notranslate"><span class="pre">skill_path()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.build_prompt"><code class="docutils literal notranslate"><span class="pre">build_prompt()</span></code></a></li>
 </ul>
 </li>
 </ul>

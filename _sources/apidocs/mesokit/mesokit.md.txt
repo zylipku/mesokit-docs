@@ -19,6 +19,7 @@ mesokit.utils
 mesokit.trainers
 mesokit.cli
 mesokit.models
+mesokit.skills
 mesokit.data
 ```
 

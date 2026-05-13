@@ -82,6 +82,35 @@ The full cache-file contract — required datasets, root attributes, and
 metadata groups — is documented in [Data Format](DATA_FORMAT.md), with
 end-to-end snippets in [Examples](data_format/examples.md).
 
+### Parsing An Arbitrary Dataset With An Agent
+
+If your data is in a format that does not already match the cache
+contract (xarray, raw numpy, torch tensors + JSON/YAML metadata, …), you
+can hand the conversion off to an LLM coding agent you already have
+installed. `mesokit data parse` points the agent at the cache-contract
+skill shipped with the package, plus your file, and (optionally) any
+extra hints; on success it validates the produced HDF5 and — when
+`--name` is given — registers it the same way `mesokit data register`
+would.
+
+```sh
+mesokit data parse --file path/to/raw_data.nc \
+  --hint "time dim is `t`, var is `u`" \
+  --agent claude \
+  --name from_agent
+```
+
+Flags:
+
+- `--agent`: which agent CLI to invoke (`claude`, `codex`); it must be
+  on your `PATH`.
+- `--backend`: `foreground` (default; streams the agent's output and
+  blocks) or `tmux` (detaches into a session you can attach to later).
+- `--hint`: free-form prompt fragment appended to the task.
+- `--output`: where to write the converted HDF5; defaults to
+  `data/parsed/<input_stem>.h5`.
+- `--name`: register the output under this name on success.
+
 ## Training Models
 
 Training is routed through trainer classes under `mesokit.trainers`. The

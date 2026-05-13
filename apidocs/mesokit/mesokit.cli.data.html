@@ -240,6 +240,7 @@
 </li>
 <li class="toctree-l2 current has-children"><a class="reference internal" href="mesokit.cli.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli</span></code></a><input aria-label="Toggle navigation of mesokit.cli" checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></a></li>
@@ -269,6 +270,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.models.dynamics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.dynamics_base</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="mesokit.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills</span></code></a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data</span></code></a><input aria-label="Toggle navigation of mesokit.data" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.kdv.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv</span></code></a><input aria-label="Toggle navigation of mesokit.data.kdv" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.kdv.kdv_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv.kdv_1d</span></code></a></li>
@@ -334,7 +336,7 @@
         <article role="main" id="furo-main-content">
           <section id="module-mesokit.cli.data">
 <span id="mesokit-cli-data"></span><h1><a class="reference internal" href="#module-mesokit.cli.data" title="mesokit.cli.data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a><a class="headerlink" href="#module-mesokit.cli.data" title="Link to this heading">¶</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">{list,</span> <span class="pre">avail,</span> <span class="pre">generate,</span> <span class="pre">register}</span></code> — produce or catalog trajectory datasets.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">{list,</span> <span class="pre">avail,</span> <span class="pre">generate,</span> <span class="pre">register,</span> <span class="pre">parse}</span></code> — produce or catalog trajectory datasets.</p>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
 <section id="functions">
@@ -362,6 +364,9 @@
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data._jsonable" title="mesokit.cli.data._jsonable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_jsonable</span></code></a></p></td>
 <td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data.parse" title="mesokit.cli.data.parse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse</span></code></a></p></td>
+<td><p>Hand off conversion of an arbitrary dataset to an LLM agent.</p></td>
 </tr>
 </tbody>
 </table>
@@ -439,6 +444,17 @@ with different parameters). Pass <code class="docutils literal notranslate"><spa
 <span class="sig-prename descclassname"><span class="pre">mesokit.cli.data.</span></span><span class="sig-name descname"><span class="pre">_jsonable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli.data._jsonable" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.data.parse">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.data.</span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">file:</span> <span class="pre">typing.Annotated[pathlib.Path,</span> <span class="pre">typer.Option('--file',</span> <span class="pre">help='Input</span> <span class="pre">dataset</span> <span class="pre">to</span> <span class="pre">convert</span> <span class="pre">(any</span> <span class="pre">format).')],</span> <span class="pre">output:</span> <span class="pre">typing.Annotated[pathlib.Path</span> <span class="pre">|</span> <span class="pre">None,</span> <span class="pre">typer.Option('--output',</span> <span class="pre">help='HDF5</span> <span class="pre">path</span> <span class="pre">to</span> <span class="pre">write.</span> <span class="pre">Defaults</span> <span class="pre">to</span> <span class="pre">data/parsed/&lt;stem&gt;.h5.')]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">hint:</span> <span class="pre">typing.Annotated[str</span> <span class="pre">|</span> <span class="pre">None,</span> <span class="pre">typer.Option('--hint',</span> <span class="pre">help=&quot;Extra</span> <span class="pre">instructions</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">agent</span> <span class="pre">(e.g.</span> <span class="pre">'time</span> <span class="pre">dim</span> <span class="pre">is</span> <span class="pre">t,</span> <span class="pre">var</span> <span class="pre">is</span> <span class="pre">u').&quot;)]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">agent:</span> <span class="pre">typing.Annotated[str,</span> <span class="pre">typer.Option('--agent',</span> <span class="pre">help=f&quot;Agent</span> <span class="pre">CLI</span> <span class="pre">to</span> <span class="pre">invoke.</span> <span class="pre">One</span> <span class="pre">of:</span> <span class="pre">{',</span> <span class="pre">'.join(sorted(_agent.AGENTS))}.&quot;)]</span> <span class="pre">=</span> <span class="pre">'claude',</span> <span class="pre">backend:</span> <span class="pre">typing.Annotated[str,</span> <span class="pre">typer.Option('--backend',</span> <span class="pre">help=f&quot;Workspace</span> <span class="pre">backend.</span> <span class="pre">One</span> <span class="pre">of:</span> <span class="pre">{',</span> <span class="pre">'.join(sorted(_agent.BACKENDS))}.&quot;)]</span> <span class="pre">=</span> <span class="pre">'foreground',</span> <span class="pre">name:</span> <span class="pre">typing.Annotated[str</span> <span class="pre">|</span> <span class="pre">None,</span> <span class="pre">typer.Option('--name',</span> <span class="pre">help='If</span> <span class="pre">given,</span> <span class="pre">register</span> <span class="pre">the</span> <span class="pre">produced</span> <span class="pre">HDF5</span> <span class="pre">under</span> <span class="pre">this</span> <span class="pre">name</span> <span class="pre">on</span> <span class="pre">success.')]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">force:</span> <span class="pre">typing.Annotated[bool,</span> <span class="pre">typer.Option('--force',</span> <span class="pre">help='Overwrite</span> <span class="pre">an</span> <span class="pre">existing</span> <span class="pre">registry</span> <span class="pre">entry.')]</span> <span class="pre">=</span> <span class="pre">False</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli.data.parse" title="Link to this definition">¶</a></dt>
+<dd><p>Hand off conversion of an arbitrary dataset to an LLM agent.</p>
+<p>The agent (<code class="docutils literal notranslate"><span class="pre">claude</span></code>, <code class="docutils literal notranslate"><span class="pre">codex</span></code>, …) is launched in the chosen backend
+(<code class="docutils literal notranslate"><span class="pre">foreground</span></code> blocks and streams; <code class="docutils literal notranslate"><span class="pre">tmux</span></code> detaches into a session) and
+pointed at the shipped data-ingest skill plus the user’s file. On
+return, the produced HDF5 is validated; with <code class="docutils literal notranslate"><span class="pre">--name</span></code> it is also
+registered, matching <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code>.</p>
+</dd></dl>
+
 </section>
 </section>
 </section>
@@ -511,6 +527,7 @@ with different parameters). Pass <code class="docutils literal notranslate"><spa
 <li><a class="reference internal" href="#mesokit.cli.data.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.data._register_file"><code class="docutils literal notranslate"><span class="pre">_register_file()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.data._jsonable"><code class="docutils literal notranslate"><span class="pre">_jsonable()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.data.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
 </ul>
 </li>
 </ul>

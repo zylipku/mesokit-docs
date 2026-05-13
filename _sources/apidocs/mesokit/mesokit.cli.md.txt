@@ -14,6 +14,7 @@
 :maxdepth: 1
 
 mesokit.cli.main
+mesokit.cli._agent
 mesokit.cli.interpret
 mesokit.cli._registry_store
 mesokit.cli.train
