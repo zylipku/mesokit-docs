@@ -1,14 +1,14 @@
 # mesokit
 
-A toolkit and tutorial for learning **mesoscopic dynamics** from data.
+A toolkit for learning **mesoscopic dynamics** from data.
 `mesokit` is a step-by-step companion: the tutorial and the library
 evolve together. The product framing is **interpretability** —
 predictive accuracy is a precondition, not the headline.
 
 Start with the [Quickstart](quickstart.md) for installation and the
 first end-to-end run. The [Tutorial](tutorial.md) walks through the
-same flow with figures and commentary, and [Data Format](DATA_FORMAT.md)
-is the reference for authoring or registering your own HDF5 files.
+same flow with figures and commentary, and [Data Processing](data_processing.md)
+is the guide for generating, validating, authoring, or registering datasets.
 
 ```{toctree}
 :maxdepth: 2
@@ -16,7 +16,7 @@ is the reference for authoring or registering your own HDF5 files.
 
 quickstart
 tutorial
-DATA_FORMAT
+data_processing
 ```
 
 ```{toctree}

@@ -18,19 +18,7 @@ mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6
 mesokit.models.spectral_onsagernet.potential.polynomial
 ```
 
-## Module Contents
-
-### Classes
-
-````{list-table}
-:class: autosummary longtable
-:align: left
-
-* - {py:obj}`PolynomialPotential <mesokit.models.spectral_onsagernet.potential.PolynomialPotential>`
-  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.PolynomialPotential
-    :summary:
-    ```
-````
+## Package Contents
 
 ### Data
 
@@ -45,71 +33,6 @@ mesokit.models.spectral_onsagernet.potential.polynomial
 ````
 
 ### API
-
-`````{py:class} PolynomialPotential(a_init: float = 1.0, b_init: float = -0.1)
-:canonical: mesokit.models.spectral_onsagernet.potential.PolynomialPotential
-
-Bases: {py:obj}`torch.nn.Module`
-
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.PolynomialPotential
-```
-
-```{rubric} Initialization
-```
-
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.PolynomialPotential.__init__
-```
-
-````{py:property} a
-:canonical: mesokit.models.spectral_onsagernet.potential.PolynomialPotential.a
-:type: torch.Tensor
-
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.PolynomialPotential.a
-```
-
-````
-
-````{py:method} V(u: torch.Tensor) -> torch.Tensor
-:canonical: mesokit.models.spectral_onsagernet.potential.PolynomialPotential.V
-
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.PolynomialPotential.V
-```
-
-````
-
-````{py:method} dVdu(u: torch.Tensor) -> torch.Tensor
-:canonical: mesokit.models.spectral_onsagernet.potential.PolynomialPotential.dVdu
-
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.PolynomialPotential.dVdu
-```
-
-````
-
-````{py:method} L_hat() -> torch.Tensor
-:canonical: mesokit.models.spectral_onsagernet.potential.PolynomialPotential.L_hat
-
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.PolynomialPotential.L_hat
-```
-
-````
-
-````{py:method} N_hat(u_hat: torch.Tensor, n: int) -> torch.Tensor
-:canonical: mesokit.models.spectral_onsagernet.potential.PolynomialPotential.N_hat
-
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.PolynomialPotential.N_hat
-```
-
-````
-
-````{py:method} dVdu_h(u_hat: torch.Tensor, n: int) -> torch.Tensor
-:canonical: mesokit.models.spectral_onsagernet.potential.PolynomialPotential.dVdu_h
-
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.PolynomialPotential.dVdu_h
-```
-
-````
-
-`````
 
 ````{py:data} __all__
 :canonical: mesokit.models.spectral_onsagernet.potential.__all__

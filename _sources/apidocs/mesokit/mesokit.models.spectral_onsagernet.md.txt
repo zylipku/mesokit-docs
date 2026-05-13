@@ -7,6 +7,15 @@
 :allowtitles:
 ```
 
+## Subpackages
+
+```{toctree}
+:titlesonly:
+:maxdepth: 3
+
+mesokit.models.spectral_onsagernet.potential
+```
+
 ## Submodules
 
 ```{toctree}
@@ -15,7 +24,6 @@
 
 mesokit.models.spectral_onsagernet.spectral_onsagernet_1d
 mesokit.models.spectral_onsagernet.artifacts
-mesokit.models.spectral_onsagernet.potential
 ```
 
 ## Package Contents

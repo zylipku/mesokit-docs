@@ -1,16 +1,20 @@
-# Data Format
+# Data Processing
 
 A `mesokit` dataset is an HDF5 file holding a bundle of trajectories on a
-shared time grid. The same on-disk contract is what `mesokit data generate`
-produces, what `mesokit data register` accepts from external sources, and
-what every model and interpretability extractor consumes. Keeping this one
-file format universal is what lets the rest of the toolkit treat
-simulator-generated and user-provided data interchangeably.
+shared time grid. This page is the user-facing entry point for generating
+built-in datasets, bringing your own data into `mesokit`, validating files,
+and understanding the shared on-disk contract.
 
-This section is the human-facing companion to the schema in code, which
-lives at {py:data}`mesokit.data.format.TRAJECTORY_CACHE_V1`. The current
-format version is **v1**; see [Versioning and Compatibility](data_format/versioning.md)
-for what v1 guarantees to readers and writers.
+The same data contract is what `mesokit data generate` produces, what
+`mesokit data register` accepts from external sources, and what every model
+and interpretability extractor consumes. Keeping this one file format
+universal is what lets the rest of the toolkit treat simulator-generated and
+user-provided data interchangeably.
+
+The schema in code lives at
+{py:data}`mesokit.data.format.TRAJECTORY_CACHE_V1`. The current format version
+is **v1**; see [Versioning and Compatibility](data_processing/versioning.md) for
+what v1 guarantees to readers and writers.
 
 ## File Layout At a Glance
 
@@ -32,27 +36,27 @@ for what v1 guarantees to readers and writers.
 Two top-level datasets carry the trajectories and the shared time grid; a
 small closed set of root attributes pins the schema identity; three
 open-content metadata groups partition everything else by meaning.
-[Data Structure](data_format/structure.md) is the reference for the exact
+[Data Structure](data_processing/structure.md) is the reference for the exact
 fields, dtypes, and validator checks.
 
 ## How to Use This Section
 
 Start with the page that matches your task:
 
-- **Reading the contract** — [Data Structure](data_format/structure.md) for
+- **Reading the contract** — [Data Structure](data_processing/structure.md) for
   the in-memory `TrajectoryDataset` fields, the on-disk layout, and the
   rendered schema tables.
 - **Generating with built-in simulators** —
-  [Predefined Datasets](data_format/predefined.md) for `mesokit data
+  [Predefined Datasets](data_processing/predefined.md) for `mesokit data
   generate`, the `simulate(name, **params)` Python entry point, and the
   catalog of currently shipped simulators.
 - **Bringing your own HDF5 file** —
-  [Custom Datasets](data_format/custom.md) for the minimal writer,
+  [Custom Datasets](data_processing/custom.md) for the minimal writer,
   `mesokit.data.validate(path)`, and `mesokit data register`.
-- **Copy-paste workflows** — [Examples](data_format/examples.md) for
+- **Copy-paste workflows** — [Examples](data_processing/examples.md) for
   end-to-end snippets that combine the above.
 - **What v1 guarantees** —
-  [Versioning and Compatibility](data_format/versioning.md) for the
+  [Versioning and Compatibility](data_processing/versioning.md) for the
   compatibility promise: which paths, shapes, and attributes a v1 file
   can rely on.
 
@@ -60,9 +64,9 @@ Start with the page that matches your task:
 :maxdepth: 1
 :hidden:
 
-data_format/structure
-data_format/predefined
-data_format/custom
-data_format/examples
-data_format/versioning
+data_processing/structure
+data_processing/predefined
+data_processing/custom
+data_processing/examples
+data_processing/versioning
 ```

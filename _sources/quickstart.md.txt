@@ -18,7 +18,7 @@ Requires a linux-64 platform with a CUDA-capable GPU (CUDA 12.6 or newer).
 
 All later commands in this page assume you are inside the project root
 with the environment installed. Prefix commands with `pixi run` (or open
-a `pixi shell`) if `mesokit` is not on your `PATH`.
+a pixi shell by running `pixi shell`) if `mesokit` is not on your `PATH`.
 
 ## Data Loading
 
@@ -54,10 +54,9 @@ mesokit data generate --dyn allen_cahn_1d --output data/scratch.h5 --no-registry
 
 `--name` and `--no-registry` are mutually exclusive.
 
-Each dynamics has its own config folder under
-[`configs/data/<dyn>/`](../configs/data/), with a `default.yaml` used when
-`--config` is not passed. To run a variant config, drop a sibling YAML next
-to `default.yaml` and select it by stem (no extension):
+Each dynamics has its own config folder under `configs/data/<dyn>/`, with a
+`default.yaml` used when `--config` is not passed. To run a variant config,
+drop a sibling YAML next to `default.yaml` and select it by stem (no extension):
 
 ```sh
 mesokit data generate --dyn allen_cahn_1d --config fdr    # reads configs/data/allen_cahn_1d/fdr.yaml
@@ -79,8 +78,8 @@ mesokit data register --name DATASET_NAME --file data/my_data.h5
 This runs a sanity check to verify the file is in the expected format and
 prints the inferred metadata (state shape, time step, …) for confirmation.
 The full cache-file contract — required datasets, root attributes, and
-metadata groups — is documented in [Data Format](DATA_FORMAT.md), with
-end-to-end snippets in [Examples](data_format/examples.md).
+metadata groups — is documented in [Data Processing](data_processing.md), with
+end-to-end snippets in [Examples](data_processing/examples.md).
 
 ### Parsing An Arbitrary Dataset With An Agent
 
@@ -128,9 +127,8 @@ mesokit train \
   --config default
 ```
 
-Training configs live under
-[`configs/train/<dyn>/<model>/`](../configs/train/). Each config selects
-the model constructor, the `TrajectoryDataset` wrapper (for example
+Training configs live under `configs/train/<dyn>/<model>/`. Each config
+selects the model constructor, the `TrajectoryDataset` wrapper (for example
 `SnapshotPairDataset`), dataloader options, and trainer hyperparameters.
 Convenience overrides are available for common knobs:
 
@@ -185,6 +183,6 @@ mesokit interpret extract --model MODEL_NAME --artifact ARTIFACT_NAME --output f
   walk through the same flow with figures and commentary — see
   [Tutorial](tutorial.md).
 - For the schema details when authoring or registering your own HDF5
-  files, see [Data Format](DATA_FORMAT.md) and the deeper pages under
-  [Data Structure](data_format/structure.md), [Custom Datasets](data_format/custom.md),
-  and [Examples](data_format/examples.md).
+  files, see [Data Processing](data_processing.md) and the deeper pages under
+  [Data Structure](data_processing/structure.md), [Custom Datasets](data_processing/custom.md),
+  and [Examples](data_processing/examples.md).
