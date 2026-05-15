@@ -59,6 +59,10 @@
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`SKILL_PACKAGE <mesokit.cli._agent.SKILL_PACKAGE>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.SKILL_PACKAGE
+    :summary:
+    ```
 * - {py:obj}`SKILL_RESOURCE <mesokit.cli._agent.SKILL_RESOURCE>`
   - ```{autodoc2-docstring} mesokit.cli._agent.SKILL_RESOURCE
     :summary:
@@ -75,10 +79,20 @@
 
 ### API
 
+````{py:data} SKILL_PACKAGE
+:canonical: mesokit.cli._agent.SKILL_PACKAGE
+:value: >
+   'mesokit.skills.mesokit_convert_data'
+
+```{autodoc2-docstring} mesokit.cli._agent.SKILL_PACKAGE
+```
+
+````
+
 ````{py:data} SKILL_RESOURCE
 :canonical: mesokit.cli._agent.SKILL_RESOURCE
 :value: >
-   'data_ingest.md'
+   'SKILL.md'
 
 ```{autodoc2-docstring} mesokit.cli._agent.SKILL_RESOURCE
 ```

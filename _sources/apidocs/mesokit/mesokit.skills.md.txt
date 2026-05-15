@@ -6,3 +6,12 @@
 ```{autodoc2-docstring} mesokit.skills
 :allowtitles:
 ```
+
+## Subpackages
+
+```{toctree}
+:titlesonly:
+:maxdepth: 3
+
+mesokit.skills.mesokit_convert_data
+```
