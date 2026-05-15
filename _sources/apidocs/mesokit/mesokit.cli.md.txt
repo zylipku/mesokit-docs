@@ -14,12 +14,12 @@
 :maxdepth: 1
 
 mesokit.cli.main
+mesokit.cli.model
+mesokit.cli._registry_store
 mesokit.cli._agent
 mesokit.cli.interpret
-mesokit.cli._registry_store
-mesokit.cli.train
-mesokit.cli.model
 mesokit.cli.data
+mesokit.cli.train
 ```
 
 ## Package Contents

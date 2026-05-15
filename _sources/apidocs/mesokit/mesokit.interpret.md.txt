@@ -13,8 +13,8 @@
 :titlesonly:
 :maxdepth: 1
 
-mesokit.interpret.base
 mesokit.interpret.compare
+mesokit.interpret.base
 mesokit.interpret.plotter
 ```
 

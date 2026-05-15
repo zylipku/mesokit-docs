@@ -13,14 +13,14 @@
 :titlesonly:
 :maxdepth: 3
 
-mesokit.interpret
-mesokit.tutorial
-mesokit.utils
-mesokit.trainers
 mesokit.cli
-mesokit.models
 mesokit.skills
+mesokit.tutorial
+mesokit.trainers
+mesokit.utils
+mesokit.interpret
 mesokit.data
+mesokit.models
 ```
 
 ## Package Contents
