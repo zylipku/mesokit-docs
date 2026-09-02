@@ -4,7 +4,7 @@ Holds a tensor of shape ``(n_traj, n_time, n_channel, *grid_shape)`` plus a
 shared time grid, a compulsory dynamics identifier, and three open-content
 metadata dicts grouped by meaning (``physical`` / ``numerical`` /
 ``provenance``). Every model and every interpretability extractor consumes
-this object — see ``docs-dev/ARCHITECTURE.md``.
+this object — see ``docs-contrib/ARCHITECTURE.md``.
 
 Geometry (``Lx``, ``Nx``, ``dx``, …) is no longer a dedicated tensor; it
 travels as scalar entries inside ``physical`` and ``numerical`` so the
