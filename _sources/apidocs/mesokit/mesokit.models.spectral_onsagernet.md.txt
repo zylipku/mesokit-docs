@@ -24,6 +24,9 @@ mesokit.models.spectral_onsagernet.potential
 
 mesokit.models.spectral_onsagernet.spectral_onsagernet_1d
 mesokit.models.spectral_onsagernet.artifacts
+mesokit.models.spectral_onsagernet.spectral_onsagernet
+mesokit.models.spectral_onsagernet.spectral_onsagernet_2d
+mesokit.models.spectral_onsagernet.spectral_onsagernet_3d
 ```
 
 ## Package Contents
@@ -45,7 +48,7 @@ mesokit.models.spectral_onsagernet.artifacts
 ````{py:data} __all__
 :canonical: mesokit.models.spectral_onsagernet.__all__
 :value: >
-   ['CoerciveAutogradPotentialV6', 'PotentialLandscape', 'PolynomialPotential', 'Potential', 'Reference...
+   ['AllenCahnPotential', 'CoerciveAutogradPotential', 'PolynomialPotential', 'Potential', 'PotentialLa...
 
 ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.__all__
 ```

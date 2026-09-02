@@ -19,6 +19,10 @@
   - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.Potential
     :summary:
     ```
+* - {py:obj}`SpectralPotential <mesokit.models.spectral_onsagernet.potential.base.SpectralPotential>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential
+    :summary:
+    ```
 ````
 
 ### API
@@ -52,6 +56,98 @@ Bases: {py:obj}`torch.nn.Module`, {py:obj}`abc.ABC`
 :canonical: mesokit.models.spectral_onsagernet.potential.base.Potential.N_hat
 
 ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.Potential.N_hat
+```
+
+````
+
+`````
+
+`````{py:class} SpectralPotential(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float])
+:canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential
+
+Bases: {py:obj}`mesokit.models.spectral_onsagernet.potential.base.Potential`
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.__init__
+```
+
+````{py:property} k_sq
+:canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.k_sq
+:type: torch.Tensor
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.k_sq
+```
+
+````
+
+````{py:property} ndim
+:canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.ndim
+:type: int
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.ndim
+```
+
+````
+
+````{py:property} grid_shape
+:canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.grid_shape
+:type: tuple[int, ...]
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.grid_shape
+```
+
+````
+
+````{py:property} domain
+:canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.domain
+:type: tuple[float, ...]
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.domain
+```
+
+````
+
+````{py:method} to_spectral(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.to_spectral
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.to_spectral
+```
+
+````
+
+````{py:method} to_physical(u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.to_physical
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.to_physical
+```
+
+````
+
+````{py:method} integrate(density: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.integrate
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.integrate
+```
+
+````
+
+````{py:method} gradient_energy_density(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.gradient_energy_density
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.gradient_energy_density
+```
+
+````
+
+````{py:method} dVdu(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.dVdu
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.dVdu
 ```
 
 ````

@@ -411,11 +411,13 @@ Two things to know:
 - The shipped `smoke.yaml` under `configs/train/allen_cahn_1d/spectral_onsagernet_1d/`
   is a test fixture with `Nx: 8`; it does not fit the 256-point datasets.
   For a quick real run use `--config default --epochs 1 --device cpu`.
-- The architectures shipped today (`fno1d`, `spectral_onsagernet_1d`) take
-  1D, single-channel input. The 2D and multi-channel predefined datasets
-  can be generated and registered, but training on them needs a model that
-  accepts them (see [Extending](extending.md)); custom models currently run
-  through the Python API rather than `mesokit train`.
+- Every shipped architecture is registered once per dimension — `fno1d` /
+  `fno2d` / `fno3d` and `spectral_onsagernet_1d` / `_2d` / `_3d` — and takes
+  single-channel input; pick the suffix that matches the dataset's grid. The
+  multi-channel datasets (`llg_lattice_2d`, `peridynamics_fracture_2d`)
+  train on one channel at a time through the `dataset.channel` key of the
+  recipe. Custom models currently run through the Python API rather than
+  `mesokit train`; see [Models](models.md) and [Extending](extending.md).
 
 Errors:
 
@@ -511,8 +513,8 @@ spectral_onsagernet_1d_v0:
   potential
 ```
 
-`fno1d` checkpoints list `spectrum`, which is declared but not implemented
-yet; extracting it raises `NotImplementedError`.
+FNO checkpoints list `spectrum`, which is declared but not implemented yet;
+extracting it raises `NotImplementedError`.
 
 ### `mesokit interpret extract`
 
@@ -606,14 +608,26 @@ mesokit data parse --file ~/runs/field.nc --hint "variable phi, dims (member, ti
 mesokit data list
 ```
 
-**Generate the 2D and microscopic datasets** (for the Python API or a model
-of your own; the shipped models are 1D):
+**Two-dimensional pipeline**, including the physics check that the model
+family reproduces the data-generating equation:
 
 ```sh
-mesokit data generate --dyn ising_2d
-mesokit data generate --dyn ising_2d --config kac
+mesokit data generate --dyn allen_cahn_2d --config fdr --name ac2d_fdr        # 4 x 101 x 32 x 32, seconds
+mesokit train --model spectral_onsagernet_2d --dyn allen_cahn_2d --data ac2d_fdr \
+  --config physics_check_smoke --name ac2d_check                              # Km = 1, Kw = 0, analytic potential
+mesokit train --model spectral_onsagernet_2d --dyn allen_cahn_2d --data ac2d_fdr --config smoke --name ac2d_son
+mesokit train --model fno2d --dyn allen_cahn_2d --data ac2d_fdr --config smoke --name ac2d_fno
+mesokit interpret extract --model ac2d_son --artifact potential --output figs/ac2d_son.png
+```
+
+The other 2D and microscopic datasets train the same way (`ising_2d` and
+`cahn_hilliard_2d` ship `fno2d` / `spectral_onsagernet_2d` recipes):
+
+```sh
+mesokit data generate --dyn ising_2d --config kac --name ising_kac
+mesokit train --model spectral_onsagernet_2d --dyn ising_2d --data ising_kac --epochs 20
 mesokit data generate --dyn cahn_hilliard_2d       # ~10 min, ~210 MB
-mesokit data generate --dyn llg_lattice_2d         # 3 channels
+mesokit data generate --dyn llg_lattice_2d         # 3 channels; train one channel via dataset.channel
 mesokit data generate --dyn peridynamics_fracture_2d --config fdr
 ```
 

@@ -23,10 +23,10 @@
 
 ### API
 
-`````{py:class} FNO1d(n_modes: int = 16, hidden_channels: int = 32, in_channels: int = 1, out_channels: int = 1, step_method: str = 'euler')
+`````{py:class} FNO1d(n_modes: int = 16, hidden_channels: int = 32, in_channels: int = 1, out_channels: int = 1, step_method: str = 'euler', **fno_kwargs: typing.Any)
 :canonical: mesokit.models.fno.fno1d.FNO1d
 
-Bases: {py:obj}`torch.nn.Module`
+Bases: {py:obj}`mesokit.models.fno.fno_dynamics.FNODynamics`
 
 ```{autodoc2-docstring} mesokit.models.fno.fno1d.FNO1d
 ```
@@ -37,42 +37,12 @@ Bases: {py:obj}`torch.nn.Module`
 ```{autodoc2-docstring} mesokit.models.fno.fno1d.FNO1d.__init__
 ```
 
-````{py:method} rhs(u: torch.Tensor) -> torch.Tensor
-:canonical: mesokit.models.fno.fno1d.FNO1d.rhs
+````{py:attribute} registry_name
+:canonical: mesokit.models.fno.fno1d.FNO1d.registry_name
+:value: >
+   'fno1d'
 
-```{autodoc2-docstring} mesokit.models.fno.fno1d.FNO1d.rhs
-```
-
-````
-
-````{py:method} forward(u: torch.Tensor, dt: float) -> torch.Tensor
-:canonical: mesokit.models.fno.fno1d.FNO1d.forward
-
-```{autodoc2-docstring} mesokit.models.fno.fno1d.FNO1d.forward
-```
-
-````
-
-````{py:method} rollout(u0: torch.Tensor, n_steps: int, dt: float) -> torch.Tensor
-:canonical: mesokit.models.fno.fno1d.FNO1d.rollout
-
-```{autodoc2-docstring} mesokit.models.fno.fno1d.FNO1d.rollout
-```
-
-````
-
-````{py:method} list_artifacts() -> list[str]
-:canonical: mesokit.models.fno.fno1d.FNO1d.list_artifacts
-
-```{autodoc2-docstring} mesokit.models.fno.fno1d.FNO1d.list_artifacts
-```
-
-````
-
-````{py:method} artifact(name: str) -> mesokit.interpret.InterpretabilityArtifact
-:canonical: mesokit.models.fno.fno1d.FNO1d.artifact
-
-```{autodoc2-docstring} mesokit.models.fno.fno1d.FNO1d.artifact
+```{autodoc2-docstring} mesokit.models.fno.fno1d.FNO1d.registry_name
 ```
 
 ````

@@ -116,8 +116,11 @@ A model is any `torch.nn.Module` that structurally satisfies
 `mesokit.models.DynamicsModel`: `forward(u, dt)` advances one step,
 `rollout(u0, n_steps, dt)` iterates it, `list_artifacts()` names at least
 one interpretability artifact, and `artifact(name)` builds it. Tensors carry
-a leading batch dimension; for single-channel 1-D data the stock training
-views feed `(B, Nx)`.
+a leading batch dimension; the stock training views slice one channel and
+feed `(B, *grid_shape)` — `(B, Nx)` for 1D data, `(B, Nx, Ny)` for 2D — so
+a model declares which grids it accepts through its constructor (the
+shipped families are registered once per dimension: `fno1d` / `fno2d` /
+`fno3d`, `spectral_onsagernet_1d` / `_2d` / `_3d`).
 
 Two implementation patterns cover the shipped families. The simplest is a
 right-hand side plus one of the shared explicit steppers:
@@ -166,9 +169,12 @@ class LinearDecay1d(nn.Module):
 ```
 
 Models that need an operator between time slices or an implicit / spectral
-scheme implement `forward` directly instead; `SpectralOnsagerNet1d` in the
-API reference is the shipped example. `mesokit.models.rk4_step` is the other
-stock stepper.
+scheme implement `forward` directly instead; `SpectralOnsagerNet` in the
+API reference is the shipped example, and
+`mesokit.models._spectral.SpectralGrid` gives you the wavenumbers,
+transforms and cell volume for any periodic box so the same code serves 1D,
+2D and 3D. `mesokit.models.rk4_step` is the other stock stepper. See
+[Models](models.md) for what the shipped families compute.
 
 ## Custom trainer
 

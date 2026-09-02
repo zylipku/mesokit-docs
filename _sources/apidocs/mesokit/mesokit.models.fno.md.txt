@@ -13,7 +13,10 @@
 :titlesonly:
 :maxdepth: 1
 
+mesokit.models.fno.fno3d
 mesokit.models.fno.fno1d
+mesokit.models.fno.fno_dynamics
+mesokit.models.fno.fno2d
 ```
 
 ## Package Contents
@@ -35,7 +38,7 @@ mesokit.models.fno.fno1d
 ````{py:data} __all__
 :canonical: mesokit.models.fno.__all__
 :value: >
-   ['FNO1d']
+   ['FNO1d', 'FNO2d', 'FNO3d', 'FNODynamics']
 
 ```{autodoc2-docstring} mesokit.models.fno.__all__
 ```

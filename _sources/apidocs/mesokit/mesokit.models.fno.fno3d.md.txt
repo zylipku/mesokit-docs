@@ -1,0 +1,50 @@
+# {py:mod}`mesokit.models.fno.fno3d`
+
+```{py:module} mesokit.models.fno.fno3d
+```
+
+```{autodoc2-docstring} mesokit.models.fno.fno3d
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`FNO3d <mesokit.models.fno.fno3d.FNO3d>`
+  - ```{autodoc2-docstring} mesokit.models.fno.fno3d.FNO3d
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} FNO3d(n_modes: int | collections.abc.Sequence[int] = 8, hidden_channels: int = 16, in_channels: int = 1, out_channels: int = 1, step_method: str = 'euler', **fno_kwargs: typing.Any)
+:canonical: mesokit.models.fno.fno3d.FNO3d
+
+Bases: {py:obj}`mesokit.models.fno.fno_dynamics.FNODynamics`
+
+```{autodoc2-docstring} mesokit.models.fno.fno3d.FNO3d
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.fno.fno3d.FNO3d.__init__
+```
+
+````{py:attribute} registry_name
+:canonical: mesokit.models.fno.fno3d.FNO3d.registry_name
+:value: >
+   'fno3d'
+
+```{autodoc2-docstring} mesokit.models.fno.fno3d.FNO3d.registry_name
+```
+
+````
+
+`````

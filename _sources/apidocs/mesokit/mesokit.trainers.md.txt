@@ -22,8 +22,8 @@ mesokit.trainers.lit_trainer
 :titlesonly:
 :maxdepth: 1
 
-mesokit.trainers.trainer_base
 mesokit.trainers.registry
+mesokit.trainers.trainer_base
 ```
 
 ## Package Contents

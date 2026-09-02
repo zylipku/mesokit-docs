@@ -13,6 +13,7 @@
 :titlesonly:
 :maxdepth: 1
 
+mesokit.data.allen_cahn.allen_cahn_2d
 mesokit.data.allen_cahn.allen_cahn_1d
 ```
 
@@ -35,7 +36,7 @@ mesokit.data.allen_cahn.allen_cahn_1d
 ````{py:data} __all__
 :canonical: mesokit.data.allen_cahn.__all__
 :value: >
-   ['simulate_allen_cahn_1d']
+   ['simulate_allen_cahn_1d', 'simulate_allen_cahn_2d']
 
 ```{autodoc2-docstring} mesokit.data.allen_cahn.__all__
 ```

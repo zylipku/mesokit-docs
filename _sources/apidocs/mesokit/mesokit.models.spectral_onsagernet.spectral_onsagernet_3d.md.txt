@@ -1,0 +1,50 @@
+# {py:mod}`mesokit.models.spectral_onsagernet.spectral_onsagernet_3d`
+
+```{py:module} mesokit.models.spectral_onsagernet.spectral_onsagernet_3d
+```
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_3d
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`SpectralOnsagerNet3d <mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.SpectralOnsagerNet3d>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.SpectralOnsagerNet3d
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} SpectralOnsagerNet3d(Nx: int = 32, Ny: int = 32, Nz: int = 32, Lx: float = 2.0 * math.pi, Ly: float = 2.0 * math.pi, Lz: float = 2.0 * math.pi, learn_M: bool = True, learn_W: bool = True, potential: mesokit.models.spectral_onsagernet.potential.Potential | None = None, step_method: str = 'sbdf1', identity_M: bool = False)
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.SpectralOnsagerNet3d
+
+Bases: {py:obj}`mesokit.models.spectral_onsagernet.spectral_onsagernet.SpectralOnsagerNet`
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.SpectralOnsagerNet3d
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.SpectralOnsagerNet3d.__init__
+```
+
+````{py:attribute} registry_name
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.SpectralOnsagerNet3d.registry_name
+:value: >
+   'spectral_onsagernet_3d'
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.SpectralOnsagerNet3d.registry_name
+```
+
+````
+
+`````

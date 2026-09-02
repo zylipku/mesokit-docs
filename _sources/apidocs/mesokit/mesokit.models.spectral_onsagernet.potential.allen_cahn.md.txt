@@ -1,0 +1,104 @@
+# {py:mod}`mesokit.models.spectral_onsagernet.potential.allen_cahn`
+
+```{py:module} mesokit.models.spectral_onsagernet.potential.allen_cahn
+```
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`AllenCahnPotential <mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} AllenCahnPotential(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float], eps: float = 0.1)
+:canonical: mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential
+
+Bases: {py:obj}`mesokit.models.spectral_onsagernet.potential.base.SpectralPotential`
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.__init__
+```
+
+````{py:method} W(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.W
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.W
+```
+
+````
+
+````{py:method} Wp(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.Wp
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.Wp
+```
+
+````
+
+````{py:method} _V0(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential._V0
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential._V0
+```
+
+````
+
+````{py:method} _V1(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential._V1
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential._V1
+```
+
+````
+
+````{py:method} V(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.V
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.V
+```
+
+````
+
+````{py:method} L_hat() -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.L_hat
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.L_hat
+```
+
+````
+
+````{py:method} N_hat(u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.N_hat
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.N_hat
+```
+
+````
+
+````{py:method} dVdu_h(u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.dVdu_h
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential.dVdu_h
+```
+
+````
+
+`````

@@ -1,0 +1,196 @@
+# {py:mod}`mesokit.models._spectral`
+
+```{py:module} mesokit.models._spectral
+```
+
+```{autodoc2-docstring} mesokit.models._spectral
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`SpectralGrid <mesokit.models._spectral.SpectralGrid>`
+  - ```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`axis_names <mesokit.models._spectral.axis_names>`
+  - ```{autodoc2-docstring} mesokit.models._spectral.axis_names
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} SpectralGrid
+:canonical: mesokit.models._spectral.SpectralGrid
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid
+```
+
+````{py:attribute} grid_shape
+:canonical: mesokit.models._spectral.SpectralGrid.grid_shape
+:type: tuple[int, ...]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.grid_shape
+```
+
+````
+
+````{py:attribute} domain
+:canonical: mesokit.models._spectral.SpectralGrid.domain
+:type: tuple[float, ...]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.domain
+```
+
+````
+
+````{py:method} __post_init__() -> None
+:canonical: mesokit.models._spectral.SpectralGrid.__post_init__
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.__post_init__
+```
+
+````
+
+````{py:property} ndim
+:canonical: mesokit.models._spectral.SpectralGrid.ndim
+:type: int
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.ndim
+```
+
+````
+
+````{py:property} axes
+:canonical: mesokit.models._spectral.SpectralGrid.axes
+:type: tuple[int, ...]
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.axes
+```
+
+````
+
+````{py:method} spacing() -> tuple[float, ...]
+:canonical: mesokit.models._spectral.SpectralGrid.spacing
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.spacing
+```
+
+````
+
+````{py:method} cell_volume() -> float
+:canonical: mesokit.models._spectral.SpectralGrid.cell_volume
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.cell_volume
+```
+
+````
+
+````{py:method} spectral_shape() -> tuple[int, ...]
+:canonical: mesokit.models._spectral.SpectralGrid.spectral_shape
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.spectral_shape
+```
+
+````
+
+````{py:property} n_modes
+:canonical: mesokit.models._spectral.SpectralGrid.n_modes
+:type: int
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.n_modes
+```
+
+````
+
+````{py:method} wavenumbers(*, device: torch.device | None = None, dtype: torch.dtype = torch.float32) -> list[torch.Tensor]
+:canonical: mesokit.models._spectral.SpectralGrid.wavenumbers
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.wavenumbers
+```
+
+````
+
+````{py:method} k_squared(*, device: torch.device | None = None, dtype: torch.dtype = torch.float32) -> torch.Tensor
+:canonical: mesokit.models._spectral.SpectralGrid.k_squared
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.k_squared
+```
+
+````
+
+````{py:method} rfft(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models._spectral.SpectralGrid.rfft
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.rfft
+```
+
+````
+
+````{py:method} irfft(u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models._spectral.SpectralGrid.irfft
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.irfft
+```
+
+````
+
+````{py:method} gradient(u: torch.Tensor) -> list[torch.Tensor]
+:canonical: mesokit.models._spectral.SpectralGrid.gradient
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.gradient
+```
+
+````
+
+````{py:method} truncate(u_hat: torch.Tensor, n_modes: int) -> torch.Tensor
+:canonical: mesokit.models._spectral.SpectralGrid.truncate
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.truncate
+```
+
+````
+
+````{py:method} integrate(density: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models._spectral.SpectralGrid.integrate
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.integrate
+```
+
+````
+
+````{py:method} as_kwargs() -> dict[str, tuple[int, ...] | tuple[float, ...]]
+:canonical: mesokit.models._spectral.SpectralGrid.as_kwargs
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.as_kwargs
+```
+
+````
+
+`````
+
+````{py:function} axis_names(ndim: int) -> tuple[str, ...]
+:canonical: mesokit.models._spectral.axis_names
+
+```{autodoc2-docstring} mesokit.models._spectral.axis_names
+```
+````

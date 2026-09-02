@@ -31,6 +31,10 @@
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`_leading_plane <mesokit.models.spectral_onsagernet.artifacts._leading_plane>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._leading_plane
+    :summary:
+    ```
 * - {py:obj}`_model_device <mesokit.models.spectral_onsagernet.artifacts._model_device>`
   - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._model_device
     :summary:
@@ -59,12 +63,12 @@
   - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._build_reference_scatter
     :summary:
     ```
-* - {py:obj}`_metadata_float <mesokit.models.spectral_onsagernet.artifacts._metadata_float>`
-  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._metadata_float
+* - {py:obj}`_dataset_eps <mesokit.models.spectral_onsagernet.artifacts._dataset_eps>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._dataset_eps
     :summary:
     ```
-* - {py:obj}`_flatten_1d_snapshots <mesokit.models.spectral_onsagernet.artifacts._flatten_1d_snapshots>`
-  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._flatten_1d_snapshots
+* - {py:obj}`_flatten_snapshots <mesokit.models.spectral_onsagernet.artifacts._flatten_snapshots>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._flatten_snapshots
     :summary:
     ```
 * - {py:obj}`_allen_cahn_reference_energy <mesokit.models.spectral_onsagernet.artifacts._allen_cahn_reference_energy>`
@@ -273,24 +277,24 @@
 
 ````
 
-````{py:attribute} Nx
-:canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Nx
-:type: int
+````{py:attribute} grid_shape
+:canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.grid_shape
+:type: tuple[int, ...]
 :value: >
    None
 
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Nx
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.grid_shape
 ```
 
 ````
 
-````{py:attribute} Lx
-:canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Lx
-:type: float
+````{py:attribute} domain
+:canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.domain
+:type: tuple[float, ...]
 :value: >
    None
 
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Lx
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.domain
 ```
 
 ````
@@ -328,7 +332,34 @@
 
 ````
 
-````{py:method} from_model(model: typing.Any, *, model_name: str = 'spectral_onsagernet_1d', dyn_name: str = 'unknown', artifact_name: str = 'potential', reference_dataset: typing.Any | None = None, u_min: float = -2.0, u_max: float = 2.0, n_grid: int = 201, max_snapshots: int = 5000) -> mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape
+````{py:property} ndim
+:canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.ndim
+:type: int
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.ndim
+```
+
+````
+
+````{py:property} Nx
+:canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Nx
+:type: int
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Nx
+```
+
+````
+
+````{py:property} Lx
+:canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Lx
+:type: float
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Lx
+```
+
+````
+
+````{py:method} from_model(model: typing.Any, *, model_name: str = 'spectral_onsagernet', dyn_name: str = 'unknown', artifact_name: str = 'potential', reference_dataset: typing.Any | None = None, u_min: float = -2.0, u_max: float = 2.0, n_grid: int = 201, max_snapshots: int = 5000) -> mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape
 :canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.from_model
 :classmethod:
 
@@ -385,15 +416,30 @@
 
 ````
 
-````{py:method} _plot_modes(ax: typing.Any) -> None
-:canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._plot_modes
+````{py:method} _plot_modes_1d(ax: typing.Any) -> None
+:canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._plot_modes_1d
 
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._plot_modes
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._plot_modes_1d
+```
+
+````
+
+````{py:method} _plot_modes_image(ax: typing.Any, values: numpy.ndarray, label: str) -> None
+:canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._plot_modes_image
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._plot_modes_image
 ```
 
 ````
 
 `````
+
+````{py:function} _leading_plane(values: numpy.ndarray) -> numpy.ndarray
+:canonical: mesokit.models.spectral_onsagernet.artifacts._leading_plane
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._leading_plane
+```
+````
 
 ````{py:function} _model_device(model: typing.Any) -> torch.device
 :canonical: mesokit.models.spectral_onsagernet.artifacts._model_device
@@ -409,14 +455,14 @@
 ```
 ````
 
-````{py:function} _evaluate_total_potential(potential: typing.Any, u: torch.Tensor, dx: float) -> torch.Tensor
+````{py:function} _evaluate_total_potential(potential: typing.Any, u: torch.Tensor, cell_volume: float) -> torch.Tensor
 :canonical: mesokit.models.spectral_onsagernet.artifacts._evaluate_total_potential
 
 ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._evaluate_total_potential
 ```
 ````
 
-````{py:function} _collapse_energy(values: torch.Tensor, *, batch: int, dx: float) -> torch.Tensor
+````{py:function} _collapse_energy(values: torch.Tensor, *, batch: int, cell_volume: float) -> torch.Tensor
 :canonical: mesokit.models.spectral_onsagernet.artifacts._collapse_energy
 
 ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._collapse_energy
@@ -430,35 +476,35 @@
 ```
 ````
 
-````{py:function} _evaluate_components(potential: typing.Any, fields: torch.Tensor, dx: float) -> dict[str, numpy.ndarray]
+````{py:function} _evaluate_components(potential: typing.Any, fields: torch.Tensor, cell_volume: float) -> dict[str, numpy.ndarray]
 :canonical: mesokit.models.spectral_onsagernet.artifacts._evaluate_components
 
 ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._evaluate_components
 ```
 ````
 
-````{py:function} _build_reference_scatter(*, model: typing.Any, potential: typing.Any, dataset: typing.Any | None, dyn_name: str, dx: float, max_snapshots: int) -> mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter | None
+````{py:function} _build_reference_scatter(*, model: typing.Any, potential: typing.Any, dataset: typing.Any | None, dyn_name: str, grid: mesokit.models._spectral.SpectralGrid, max_snapshots: int) -> mesokit.models.spectral_onsagernet.artifacts.ReferencePotentialScatter | None
 :canonical: mesokit.models.spectral_onsagernet.artifacts._build_reference_scatter
 
 ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._build_reference_scatter
 ```
 ````
 
-````{py:function} _metadata_float(metadata: dict[str, typing.Any], key: str) -> float | None
-:canonical: mesokit.models.spectral_onsagernet.artifacts._metadata_float
+````{py:function} _dataset_eps(dataset: typing.Any) -> float | None
+:canonical: mesokit.models.spectral_onsagernet.artifacts._dataset_eps
 
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._metadata_float
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._dataset_eps
 ```
 ````
 
-````{py:function} _flatten_1d_snapshots(data: torch.Tensor, *, nx: int) -> torch.Tensor | None
-:canonical: mesokit.models.spectral_onsagernet.artifacts._flatten_1d_snapshots
+````{py:function} _flatten_snapshots(data: torch.Tensor, *, grid_shape: tuple[int, ...]) -> torch.Tensor | None
+:canonical: mesokit.models.spectral_onsagernet.artifacts._flatten_snapshots
 
-```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._flatten_1d_snapshots
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._flatten_snapshots
 ```
 ````
 
-````{py:function} _allen_cahn_reference_energy(u: torch.Tensor, *, eps: float, dx: float) -> torch.Tensor
+````{py:function} _allen_cahn_reference_energy(u: torch.Tensor, *, eps: float, grid: mesokit.models._spectral.SpectralGrid) -> torch.Tensor
 :canonical: mesokit.models.spectral_onsagernet.artifacts._allen_cahn_reference_energy
 
 ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._allen_cahn_reference_energy

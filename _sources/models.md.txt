@@ -1,0 +1,167 @@
+# Models
+
+`mesokit` ships two model families. Both are written once for any number of
+spatial dimensions and registered under one name per dimension, so the
+same code trains on `allen_cahn_1d` and on `cahn_hilliard_2d`:
+
+| Registered names | Family | What is learned | Interpretability artifact |
+| --- | --- | --- | --- |
+| `fno1d`, `fno2d`, `fno3d` | Fourier Neural Operator | a black-box right-hand side $\partial_t u \approx \mathcal{G}_\theta(u)$ | `spectrum` (declared, not yet implemented) |
+| `spectral_onsagernet_1d`, `_2d`, `_3d` | Spectral OnsagerNet | a free energy $V_\theta[u]$, a mobility and a reactive operator | `potential` |
+
+Every model consumes a batch of **single-channel** fields
+$u \in \mathbb{R}^{B \times N_1 \times \cdots \times N_d}$ on a periodic box
+and exposes `forward(u, dt)` (one step), `rollout(u0, n_steps, dt)`,
+`list_artifacts()` and `artifact(name)` — the `DynamicsModel` protocol
+described in [Extending](extending.md). `mesokit train --model <name>`
+resolves the class, the trainer registered for it (`LitTrainer` for all of
+them) and the recipe under `configs/train/<dyn>/<name>/`.
+
+## Spectral OnsagerNet
+
+### Model
+
+The Onsager principle writes a dissipative dynamics as the flow of a free
+energy through a mobility. Spectral OnsagerNet takes this literally,
+
+$$
+\frac{\partial u}{\partial t} = -(M + W)\,\frac{\delta V_\theta}{\delta u},
+$$
+
+with $M \succeq 0$ symmetric (dissipative), $W$ antisymmetric (reversible)
+and $V_\theta$ a learnable potential, and assumes both operators are
+diagonal in Fourier space on the periodic box. With
+$\hat u_{\mathbf k}$ the `rfftn` coefficients this is one complex ODE per
+mode,
+
+$$
+\frac{d\hat u_{\mathbf k}}{dt} = -\bigl(K^m_{\mathbf k} + K^w_{\mathbf k}\bigr)\,
+\widehat{\frac{\delta V_\theta}{\delta u}}_{\mathbf k},
+\qquad
+K^m_{\mathbf k} = \mu_{\mathbf k}^2 \ge 0,\quad
+K^w_{\mathbf k} = i\,\omega_{\mathbf k} \in i\mathbb{R},
+$$
+
+where $\mu$ and $\omega$ are the learnable arrays `Km_params` / `Kw_params`
+of the spectral shape $(N_1, \ldots, N_{d-1}, N_d/2 + 1)$. The squared
+parameterisation keeps the mobility non-negative; the purely imaginary
+$K^w$ is what an antisymmetric operator looks like mode by mode. A learned
+$K^m$ that vanishes at $\mathbf k = 0$ is a conserved dynamics
+(Cahn–Hilliard type); a constant $K^m$ is a non-conserved one (Allen–Cahn
+type); a non-zero $K^w$ is a reversible, wave-like part.
+
+**Time stepping.** The potential supplies its spectral gradient split into
+a linear part and a remainder, $\widehat{\delta V/\delta u} = \hat L\,\hat u + \hat N(\hat u)$,
+and the default `sbdf1` stepper treats the linear part implicitly:
+
+$$
+\hat u^{n+1}_{\mathbf k} = \frac{\hat u^n_{\mathbf k} - \Delta t\,(K^m + K^w)_{\mathbf k}\,\hat N_{\mathbf k}(\hat u^n)}
+{1 + \Delta t\,(K^m + K^w)_{\mathbf k}\,\hat L_{\mathbf k}} .
+$$
+
+Explicit `euler`, `rk2`, `rk3` and `rk4` steppers on the same right-hand
+side are available through `step_method`. Steps are taken in Fourier space
+and transformed back, so the physical-space `rhs(u)` and `forward(u, dt)`
+are what training and rollout see.
+
+### Potentials
+
+| Class | $V_\theta[u]$ | Learnable | Use |
+| --- | --- | --- | --- |
+| `PolynomialPotential` (default) | $\int \tfrac{a}{4}u^4 + \tfrac{c}{3}u^3 + \tfrac{b}{2}u^2 + d\,u\,dx$, $a = a_{\sqrt{}}^2$ | $a, b, c, d$ | starter; contains the Allen–Cahn double well at $a = 1$, $b = -1/\varepsilon^2$ |
+| `AllenCahnPotential` | $\int \tfrac12 \lvert\nabla u\rvert^2 + \tfrac{u^4}{4\varepsilon^2} - \tfrac{u^2}{2\varepsilon^2}\,dx$ | nothing | physics check; reference law for the `potential` artifact |
+| `CoerciveAutogradPotential` | $\int \tfrac{a}{2}u^2 + F_\theta(u)\,dx + \int \tfrac{b}{2}\lvert\nabla u\rvert^2\,dx + \lvert v_\theta(\hat u_{\text{low}})\rvert$, $a, b \ge 0$ | $a, b$, pointwise MLP $F_\theta$, complex MLP $v_\theta$ on the lowest `v_truncate` modes per axis (`v_truncate`$^d$ inputs) | the headline interpretable choice: pointwise, local and nonlocal energy read off separately |
+
+All potentials share the `SpectralPotential` base, which owns the grid, the
+wavenumbers and $\lvert\mathbf k\rvert^2$, so each is written once for 1D, 2D
+and 3D; the gradients of the coercive potential are obtained by autograd
+(pointwise term in physical space, nonlocal term directly in Fourier space),
+the gradient-energy term in closed form. The three terms are exactly what
+the `potential` artifact plots as $V_0$, $V_1$, $V_2$.
+
+### Physics check
+
+Because the family contains the data-generating equation as a special case,
+its correctness can be checked without training. With `identity_M: true`
+($K^m \equiv 1$), `learn_W: false` ($K^w \equiv 0$) and `AllenCahnPotential`,
+the model *is* $u_t = \Delta u + (u - u^3)/\varepsilon^2$. On a resolved grid
+(128² with $\varepsilon = 0.1$) its RK4 rollout over one frame of
+`allen_cahn_2d` matches the Dedalus frames to a mean-squared error of
+$10^{-13}$, about $10^{-9}$ of the frame-to-frame change; the test suite
+asserts this. The recipe
+`configs/train/allen_cahn_2d/spectral_onsagernet_2d/physics_check.yaml`
+runs the same model through `mesokit train` at zero learning rate, so the
+reported loss is the one-step scheme error. On the 32² `fdr` grid the
+interface ($\varepsilon = 0.1$) is narrower than a cell and the residual is
+dominated by aliasing of $u^3$ — the potentials evaluate the nonlinearity
+on the native grid while the data are de-aliased — so treat that grid as a
+smoke test, not a benchmark.
+
+### The `potential` artifact
+
+`artifact("potential")` returns a `PotentialLandscape`: the potential on a
+constant-field slice $u \equiv c$ (with the $V_0 / V_1 / V_2$ components when
+the potential has them), the learned multipliers $K^m$ and
+$\operatorname{Im} K^w$ on the spectral grid, and — when the checkpoint was
+trained on an Allen–Cahn dataset — a scatter of the learned $V_\theta$
+against the analytic $V$ over real snapshots with its Pearson correlation
+and linear fit. In 1D the multipliers are plotted against the mode index;
+in 2D and 3D as images over $(k_x, k_y)$ (the $k_z = 0$ plane in 3D).
+
+### Recipes
+
+```text
+configs/train/allen_cahn_1d/spectral_onsagernet_1d/{default,coercive,smoke}.yaml
+configs/train/kdv_1d/spectral_onsagernet_1d/default.yaml
+configs/train/allen_cahn_2d/spectral_onsagernet_2d/{default,coercive,physics_check,smoke,physics_check_smoke}.yaml
+configs/train/cahn_hilliard_2d/spectral_onsagernet_2d/default.yaml
+configs/train/ising_2d/spectral_onsagernet_2d/default.yaml
+```
+
+A potential is selected by nesting it under `model.potential` in the recipe;
+`null` means the polynomial default, and the `coercive.yaml` recipes are the
+headline configuration (sine final activations, `v_truncate = 16`). The grid in the recipe (`Nx`, `Ny`,
+`Lx`, `Ly`) must match the dataset — `mesokit train` does not infer it —
+and the potential's `grid_shape` / `domain` must match the model's.
+
+## Fourier Neural Operator
+
+`FNODynamics` wraps `neuralop.models.FNO` as a right-hand side,
+$\partial_t u \approx \mathcal{G}_\theta(u)$, and steps it with explicit
+Euler (default) or RK4. `n_modes` is the number of retained Fourier modes
+per axis (an integer, or one entry per axis), `hidden_channels` the lifting
+width; `fno1d` / `fno2d` / `fno3d` differ only in the number of spatial axes
+handed to neuralop. It is the black-box baseline the interpretable family is
+compared against; its `spectrum` artifact (per-mode error and response
+diagnostics) is on the roadmap.
+
+```text
+configs/train/allen_cahn_1d/fno1d/default.yaml
+configs/train/kdv_1d/fno1d/default.yaml
+configs/train/allen_cahn_2d/fno2d/{default,smoke}.yaml
+configs/train/cahn_hilliard_2d/fno2d/default.yaml
+configs/train/ising_2d/fno2d/{default,smoke}.yaml
+```
+
+## Choosing a model
+
+| If you want to … | Use |
+| --- | --- |
+| A predictive baseline with no structural assumptions | `fno<n>d` |
+| A free energy you can plot, a mobility spectrum, and a reversible / dissipative split | `spectral_onsagernet_<n>d` with `CoerciveAutogradPotential` (`--config coercive`) |
+| A quick, few-parameter Onsager fit to look at the learned multipliers | `spectral_onsagernet_<n>d` with the default `PolynomialPotential` |
+| To verify the pipeline on data whose law you know | `spectral_onsagernet_<n>d` with `identity_M`, `learn_W: false`, `AllenCahnPotential` |
+
+Both families are single-channel. For the multi-channel datasets
+(`llg_lattice_2d`, `peridynamics_fracture_2d`) pick one channel through the
+`dataset.channel` key of the recipe; multi-channel models are on the roadmap.
+
+## References
+
+- Yu, Tian, E, Li, "OnsagerNet: Learning stable and interpretable dynamics
+  using a generalized Onsager principle", *Physical Review Fluids* **6**,
+  114402 (2021).
+- Li et al., "Fourier Neural Operator for Parametric Partial Differential
+  Equations", ICLR 2021.
+- Onsager, "Reciprocal relations in irreversible processes. I / II",
+  *Physical Review* **37**, 405 (1931); **38**, 2265 (1931).

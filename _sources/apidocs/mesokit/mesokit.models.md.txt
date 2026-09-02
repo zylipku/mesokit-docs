@@ -13,10 +13,10 @@
 :titlesonly:
 :maxdepth: 3
 
-mesokit.models.fno
-mesokit.models.sindy
 mesokit.models.deeponet
+mesokit.models.sindy
 mesokit.models.spectral_onsagernet
+mesokit.models.fno
 ```
 
 ## Submodules
@@ -25,8 +25,9 @@ mesokit.models.spectral_onsagernet
 :titlesonly:
 :maxdepth: 1
 
-mesokit.models.dynamics_base
+mesokit.models._spectral
 mesokit.models.registry
+mesokit.models.dynamics_base
 ```
 
 ## Package Contents
@@ -48,7 +49,7 @@ mesokit.models.registry
 ````{py:data} __all__
 :canonical: mesokit.models.__all__
 :value: >
-   ['CoerciveAutogradPotentialV6', 'DynamicsModel', 'FNO1d', 'PolynomialPotential', 'SpectralOnsagerNet...
+   ['AllenCahnPotential', 'CoerciveAutogradPotential', 'DynamicsModel', 'FNO1d', 'FNO2d', 'FNO3d', 'FNO...
 
 ```{autodoc2-docstring} mesokit.models.__all__
 ```
