@@ -1,0 +1,75 @@
+# {py:mod}`mesokit.data.cahn_hilliard.cahn_hilliard_2d`
+
+```{py:module} mesokit.data.cahn_hilliard.cahn_hilliard_2d
+```
+
+```{autodoc2-docstring} mesokit.data.cahn_hilliard.cahn_hilliard_2d
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`simulate_cahn_hilliard_2d <mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d>`
+  - ```{autodoc2-docstring} mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
+    :summary:
+    ```
+* - {py:obj}`_pad_spectrum <mesokit.data.cahn_hilliard.cahn_hilliard_2d._pad_spectrum>`
+  - ```{autodoc2-docstring} mesokit.data.cahn_hilliard.cahn_hilliard_2d._pad_spectrum
+    :summary:
+    ```
+* - {py:obj}`_truncate_spectrum <mesokit.data.cahn_hilliard.cahn_hilliard_2d._truncate_spectrum>`
+  - ```{autodoc2-docstring} mesokit.data.cahn_hilliard.cahn_hilliard_2d._truncate_spectrum
+    :summary:
+    ```
+* - {py:obj}`_rfft2 <mesokit.data.cahn_hilliard.cahn_hilliard_2d._rfft2>`
+  - ```{autodoc2-docstring} mesokit.data.cahn_hilliard.cahn_hilliard_2d._rfft2
+    :summary:
+    ```
+* - {py:obj}`_irfft2 <mesokit.data.cahn_hilliard.cahn_hilliard_2d._irfft2>`
+  - ```{autodoc2-docstring} mesokit.data.cahn_hilliard.cahn_hilliard_2d._irfft2
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} simulate_cahn_hilliard_2d(*, n_traj: int = 32, Nx: int = 128, Ny: int | None = None, Lx: float = 64.0, Ly: float | None = None, kappa: float = 1.0, T: float = 200.0, dt: float = 0.05, save_every: int = 40, u_mean: float = 0.0, ic_amplitude: float = 0.05, dealias: int = 2, seed: int = 0, verbose: bool = False) -> mesokit.data.trajectory.TrajectoryDataset
+:canonical: mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
+
+```{autodoc2-docstring} mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
+```
+````
+
+````{py:function} _pad_spectrum(u_hat: numpy.ndarray, Mx: int, My: int) -> numpy.ndarray
+:canonical: mesokit.data.cahn_hilliard.cahn_hilliard_2d._pad_spectrum
+
+```{autodoc2-docstring} mesokit.data.cahn_hilliard.cahn_hilliard_2d._pad_spectrum
+```
+````
+
+````{py:function} _truncate_spectrum(w_hat: numpy.ndarray, Nx: int, Ny: int) -> numpy.ndarray
+:canonical: mesokit.data.cahn_hilliard.cahn_hilliard_2d._truncate_spectrum
+
+```{autodoc2-docstring} mesokit.data.cahn_hilliard.cahn_hilliard_2d._truncate_spectrum
+```
+````
+
+````{py:function} _rfft2(a: numpy.ndarray, axes: tuple[int, int] = (-2, -1)) -> numpy.ndarray
+:canonical: mesokit.data.cahn_hilliard.cahn_hilliard_2d._rfft2
+
+```{autodoc2-docstring} mesokit.data.cahn_hilliard.cahn_hilliard_2d._rfft2
+```
+````
+
+````{py:function} _irfft2(a: numpy.ndarray, s: tuple[int, int], axes: tuple[int, int] = (-2, -1)) -> numpy.ndarray
+:canonical: mesokit.data.cahn_hilliard.cahn_hilliard_2d._irfft2
+
+```{autodoc2-docstring} mesokit.data.cahn_hilliard.cahn_hilliard_2d._irfft2
+```
+````

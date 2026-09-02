@@ -1,0 +1,43 @@
+# {py:mod}`mesokit.data.peridynamics`
+
+```{py:module} mesokit.data.peridynamics
+```
+
+```{autodoc2-docstring} mesokit.data.peridynamics
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.data.peridynamics.peridynamics_fracture_2d
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.data.peridynamics.__all__>`
+  - ```{autodoc2-docstring} mesokit.data.peridynamics.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.data.peridynamics.__all__
+:value: >
+   ['CHANNEL_NAMES', 'simulate_peridynamics_fracture_2d']
+
+```{autodoc2-docstring} mesokit.data.peridynamics.__all__
+```
+
+````

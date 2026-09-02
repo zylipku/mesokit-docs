@@ -45,7 +45,7 @@
 
 ````
 
-````{py:function} solver_progress(*, dyn: str, total: int, verbose: bool) -> collections.abc.Iterator[collections.abc.Callable[[int], None]]
+````{py:function} solver_progress(*, dyn: str, total: int, verbose: bool, unit: str = 'trajectories') -> collections.abc.Iterator[collections.abc.Callable[[int], None]]
 :canonical: mesokit.data._progress.solver_progress
 
 ```{autodoc2-docstring} mesokit.data._progress.solver_progress

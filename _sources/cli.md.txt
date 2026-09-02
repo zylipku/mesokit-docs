@@ -1,0 +1,698 @@
+# Command-Line Reference
+
+`mesokit` is the console script installed with the package. It mirrors the
+pipeline — **produce data → train → index the checkpoint → interpret** — as
+four command groups, and keeps two project-local registries so that anything
+you generate or train once can be referred to by name afterwards.
+
+```text
+mesokit data      avail | list | generate | register | parse
+mesokit train
+mesokit model     list | register
+mesokit interpret list | extract | explain
+```
+
+Every command and subcommand accepts `--help`. This page is the complete
+reference; the [Quickstart](quickstart.md) is the shortest path through it.
+
+## Conventions
+
+**Run from the repository root.** The CLI resolves three things relative to
+the current working directory:
+
+| What | Where | Used by |
+| --- | --- | --- |
+| Data recipes | `configs/data/<dyn>/<stem>.yaml` | `data generate` |
+| Training recipes | `configs/train/<dyn>/<model>/<stem>.yaml` (falls back to the copy inside the installed package) | `train` |
+| Registries | `.mesokit/datasets.json`, `.mesokit/checkpoints.json` | every command that takes a name |
+
+Outputs also land in the working directory: `data/<dyn>/` for generated
+HDF5 files, `checkpoints/<dyn>/<run>/` for training runs. All of these are
+gitignored.
+
+**Environment.** Prefix commands with `pixi run` (or run inside `pixi shell`)
+unless `mesokit` is already on your `PATH`:
+
+```sh
+pixi run mesokit data avail
+```
+
+**Names versus paths.** Wherever a command takes a dataset (`--data`) it
+accepts either a registered name or a path to an HDF5 file; wherever it takes
+a checkpoint (`--model` in `interpret`) it needs a registered name. Registries
+store **pointers**, never copies, so deleting a file leaves a dangling entry
+(`mesokit data list` flags it as `MISSING`).
+
+**Automatic versioned names.** When you do not pass `--name`, generated
+datasets are registered as `<dyn>_v0`, `<dyn>_v1`, … and trained checkpoints
+as `<model>_v0`, `<model>_v1`, … — always the next free slot, so repeated
+runs never overwrite each other. Passing an explicit `--name` that already
+exists is an error unless you add `--force`.
+
+**Quiet by default.** Simulators and trainers print a single overwriting
+progress line on stderr; `--verbose` (where offered) restores the underlying
+solver's full log.
+
+**Errors and exit codes.** Argument and lookup problems (unknown dynamics,
+missing file, name collision, failed validation) are reported as
+`Invalid value: …` and exit with status `2`; the offending file or name is
+never registered. Unexpected failures inside a simulator or trainer surface
+as a Python traceback with status `1`.
+
+**Shell completion.** `mesokit --install-completion` installs completion for
+the current shell; `mesokit --show-completion` prints it instead.
+
+## Pipeline at a Glance
+
+```text
+configs/data/<dyn>/default.yaml ──► mesokit data generate ──► data/<dyn>/<name>.h5 ──┐
+your_solver.h5 ──────────────────► mesokit data register ──────────────────────────────┤
+any_format.{npz,nc,pt,…} ────────► mesokit data parse ────► data/parsed/<stem>.h5 ─────┤
+                                                                                       ▼
+                                                                          .mesokit/datasets.json
+                                                                                       │
+configs/train/<dyn>/<model>/default.yaml ─────────────────► mesokit train ◄────────────┘
+                                                                  │
+                                              checkpoints/<dyn>/<run>/{model.pt, config.yaml, history.json}
+                                                                  │
+                                                      .mesokit/checkpoints.json ◄── mesokit model register
+                                                                  │
+                                                       mesokit interpret list / extract ──► figs/*.png
+```
+
+## `mesokit data`
+
+Produce or catalog trajectory datasets. The on-disk contract every
+subcommand reads or writes is the v1 HDF5 cache described in
+[Data Processing](data_processing.md).
+
+### `mesokit data avail`
+
+List the predefined simulator recipes compiled into the package (alias:
+`mesokit data available`). This is the catalog of what `data generate` can
+run, independent of what has been generated on this machine.
+
+```sh
+mesokit data avail
+```
+
+```text
+DYN                       SIMULATOR
+allen_cahn_1d             mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d
+cahn_hilliard_2d          mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
+ising_2d                  mesokit.data.ising.ising_2d.simulate_ising_2d
+kdv_1d                    mesokit.data.kdv.kdv_1d.simulate_kdv_1d
+llg_lattice_2d            mesokit.data.llg.llg_lattice_2d.simulate_llg_lattice_2d
+peridynamics_fracture_2d  mesokit.data.peridynamics.peridynamics_fracture_2d.simulate_peridynamics_fracture_2d
+```
+
+The `SIMULATOR` column is the Python callable each recipe dispatches to; the
+physics, numerical scheme and parameters of every entry are documented in
+[Predefined Datasets](data_processing/predefined.md).
+
+### `mesokit data list`
+
+List the datasets registered in `.mesokit/datasets.json`, grouped by
+dynamics. A dataset whose `dyn` attribute matches a predefined simulator is
+listed under that name; anything else lands in a trailing `custom:` group.
+The second column says whether the file still exists (`yes`) or the registry
+points at something that has been moved or deleted (`MISSING`).
+
+```sh
+mesokit data list
+```
+
+```text
+allen_cahn_1d:
+  allen_cahn_1d_v0  yes  /home/me/mesokit/data/allen_cahn_1d/allen_cahn_1d_v0.h5
+  ac_eps05          yes  /home/me/mesokit/data/allen_cahn_1d/ac_eps05.h5
+
+kdv_1d:
+  kdv_1d_v0         yes  /home/me/mesokit/data/kdv_1d/kdv_1d_v0.h5
+
+custom:
+  md_slab           MISSING  /scratch/md/slab_density.h5
+```
+
+With nothing registered it prints `(no datasets)`.
+
+### `mesokit data generate`
+
+Run a predefined simulator from a recipe, write the trajectories to HDF5,
+validate the file and register it.
+
+```sh
+mesokit data generate --dyn DYN [--config STEM] [--name NAME | --no-registry]
+                      [--output PATH] [--force] [--verbose]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--dyn DYN` | required | Predefined dynamics name (one of `mesokit data avail`). |
+| `--config STEM` | `default` | Recipe `configs/data/DYN/STEM.yaml`; the stem only, no path, no extension. |
+| `--name NAME` | `DYN_v<n>` | Registry name for the result. |
+| `--no-registry` | off | Write the file but do not register it. Mutually exclusive with `--name`. |
+| `--output PATH` | `data/DYN/<name>.h5` | Where to write the HDF5 file. Parent directories are created. |
+| `--force` | off | Replace an existing registry entry of the same name. |
+| `--verbose` | off | Show the solver's own per-step output instead of the progress line. |
+
+What happens, in order: the recipe is loaded with Hydra and instantiated
+(every key in the YAML is a keyword argument of the simulator, and
+`verbose` is forwarded); the returned `TrajectoryDataset` is saved; the
+saved file is run through the same validator as `data register`; on
+success the registry entry is written and the validation summary is
+printed.
+
+```sh
+mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_smoke
+```
+
+```text
+allen_cahn_1d: 10/10 trajectories
+wrote data/allen_cahn_1d/ac_smoke.h5: shape=(10, 101, 1, 256)
+registered 'ac_smoke' -> /home/me/mesokit/data/allen_cahn_1d/ac_smoke.h5
+dyn=allen_cahn_1d
+n_traj=10
+n_time=101
+n_channel=1
+grid_shape=(256,)
+data_dtype=float32
+dt=0.001
+channel_names=('u',)
+physical: {'Lx': 6.283185307179586, 'T': 0.1, 'eps': 0.1}
+numerical: {'Nk': 3, 'Nx': 256, 'T_save_steps': 25, 'dealias': 2, 'dt': 4e-05, 'dx': 0.02454369260617026, 'max_k': 10}
+provenance: {'seed': 0, 'u_bound': 10.0}
+```
+
+More examples:
+
+```sh
+# The reference dataset, auto-named allen_cahn_1d_v0 (then _v1, _v2, … on repeats).
+mesokit data generate --dyn allen_cahn_1d
+
+# A variant recipe: configs/data/ising_2d/kac.yaml (Kac interaction).
+mesokit data generate --dyn ising_2d --config kac --name ising_kac_T07
+
+# Write somewhere else and keep it out of the registry (scratch experiments).
+mesokit data generate --dyn cahn_hilliard_2d --config fdr --output /tmp/ch_test.h5 --no-registry
+
+# Re-run a recipe you changed and replace the previous entry of the same name.
+mesokit data generate --dyn kdv_1d --name kdv_long --force
+
+# Watch Dedalus's per-step log instead of the progress line.
+mesokit data generate --dyn kdv_1d --config fdr --verbose
+```
+
+To change parameters, add a sibling YAML under `configs/data/<dyn>/` (copy
+`default.yaml`, edit, pick it with `--config`). Every predefined recipe also
+ships `fdr.yaml`, a seconds-long "fast dev run" for trying the pipeline.
+Some recipes are heavy — the default `cahn_hilliard_2d` takes about ten
+minutes and `peridynamics_fracture_2d` about twenty-five; the per-dataset
+sections of [Predefined Datasets](data_processing/predefined.md) give sizes
+and timings.
+
+Errors you may see:
+
+```text
+Invalid value: config dir not found: /home/me/mesokit/configs/data/nope
+Invalid value: no config 'nope' under /home/me/mesokit/configs/data/allen_cahn_1d; available: default, fdr
+Invalid value: --name and --no-registry are mutually exclusive
+Invalid value: dataset 'ac_smoke' already registered; pass --force to overwrite
+```
+
+The first one also appears when you run from the wrong directory: recipes
+are looked up in `./configs/data/`, not inside the package.
+
+### `mesokit data register`
+
+Validate an HDF5 file you produced yourself against the v1 cache contract
+and register it under a name.
+
+```sh
+mesokit data register --name NAME --file FILE.h5 [--force]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--name NAME` | required | Registry name. |
+| `--file FILE` | required | Existing HDF5 file; the absolute path is stored. |
+| `--force` | off | Replace an existing entry of the same name. |
+
+The validator checks the closed set of root attributes, the `data` /
+`times` datasets and their shapes and dtypes, finiteness, monotone times,
+the three metadata groups and the optional `channel_names`. On success it
+prints the inferred summary shown above for `data generate`; on failure
+each failing check is printed and nothing is registered.
+
+```sh
+mesokit data register --name md_slab --file /scratch/md/slab_density.h5
+```
+
+```text
+registered 'md_slab' -> /scratch/md/slab_density.h5
+dyn=binary_lj_slab
+n_traj=3
+n_time=2001
+n_channel=1
+grid_shape=(50, 50, 200)
+data_dtype=float32
+dt=1
+channel_names=('x_A',)
+physical: {'T': 1.1, 'xA': 0.5, 'Lx': 9.52, 'Ly': 9.52, 'Lz': 38.1}
+numerical: {'dx': 0.19, 'sigma_kde': 1.5}
+provenance: {'source': 'lammps', 'seed': 42}
+```
+
+A file that is not a v1 cache fails like this:
+
+```text
+  cannot open /tmp/bad.h5 as HDF5: Unable to synchronously open file (file signature not found)
+Invalid value: sanity check failed for /tmp/bad.h5; not registered
+```
+
+Writing a conforming file is a few lines of `h5py`; see
+[Custom Datasets](data_processing/custom.md). To check a file without
+registering it, use the Python helper `mesokit.data.validate(path)`.
+
+### `mesokit data parse`
+
+Hand an arbitrary dataset to a coding agent installed on your machine, let
+it convert the file with the `mesokit-convert-data` skill shipped in the
+package, then validate (and optionally register) the result.
+
+```sh
+mesokit data parse --file FILE [--output PATH] [--hint TEXT]
+                   [--agent claude|codex] [--backend foreground|tmux]
+                   [--name NAME] [--force]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--file FILE` | required | Input in any format (`.npz`, `.npy`, `.nc`, `.pt`, non-conforming `.h5`, …). |
+| `--output PATH` | `data/parsed/<stem>.h5` | Where the agent must write the v1 file. |
+| `--hint TEXT` | none | Free-form instructions appended to the agent's prompt (axis names, units, which variable is the field, …). |
+| `--agent` | `claude` | Agent CLI: `claude` (runs `claude -p …`) or `codex` (runs `codex exec …`). The binary must be on `PATH`. |
+| `--backend` | `foreground` | `foreground` blocks and streams the agent's output; `tmux` detaches into a session. |
+| `--name NAME` | none | Register the produced file under this name on success. Without it the file is only validated. |
+| `--force` | off | Replace an existing registry entry. |
+
+The prompt tells the agent where the skill file is, which file to convert,
+where to write, and to self-verify by running the validator until it
+passes. In the foreground backend the command returns when the agent exits;
+a non-zero agent exit, or a missing output file, is an error.
+
+```sh
+mesokit data parse --file ~/runs/burgers.npz \
+  --hint "arrays u (traj, time, x) and t; domain is [0, 2π) periodic; call it burgers_1d" \
+  --name burgers_v0
+```
+
+```text
+launching agent 'claude' via backend 'foreground'
+  skill : /home/me/mesokit/src/mesokit/skills/mesokit_convert_data/SKILL.md
+  input : /home/me/runs/burgers.npz
+  output: /home/me/mesokit/data/parsed/burgers.h5
+… agent transcript …
+registered 'burgers_v0' -> /home/me/mesokit/data/parsed/burgers.h5
+dyn=burgers_1d
+…
+```
+
+With `--backend tmux` the command returns immediately and tells you how to
+follow up:
+
+```text
+agent launched detached (handle: mesokit-parse-1756800000)
+  attach: tmux attach -t mesokit-parse-1756800000
+when the agent finishes, validate / register with:
+  mesokit data register --name burgers_v0 --file /home/me/mesokit/data/parsed/burgers.h5
+```
+
+Errors: `agent 'claude' requires 'claude' on PATH`, `unknown agent 'x';
+available: claude, codex`, `backend 'tmux' requires the tmux binary on
+PATH`, `agent exited with code N`, `agent finished but <output> was not
+written`.
+
+## `mesokit train`
+
+Train a registered model architecture on a dataset through the trainer
+registered for that model, write a run directory, and index the checkpoint.
+
+```sh
+mesokit train --model ARCH --dyn DYN --data NAME_OR_PATH
+              [--config STEM] [--trainer NAME] [--name NAME | --no-registry] [--force]
+              [--epochs N] [--batch-size N] [--device auto|cpu|gpu]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--model ARCH` | required | Architecture name from the model registry (`fno1d`, `spectral_onsagernet_1d`, …). |
+| `--dyn DYN` | required | Dynamics name; selects the config tree `configs/train/DYN/ARCH/` and the run directory `checkpoints/DYN/`. |
+| `--data` | required | Registered dataset name **or** path to a v1 HDF5 file. |
+| `--config STEM` | `default` | Recipe `configs/train/DYN/ARCH/STEM.yaml`. Looked up in the working directory first, then in the installed package. |
+| `--trainer NAME` | `= --model` | Trainer registry name; every shipped model registers its own default. |
+| `--name NAME` | `ARCH_v<n>` | Checkpoint registry name; also the run directory name. |
+| `--no-registry` | off | Train and write the run directory but do not index it. |
+| `--force` | off | Replace an existing checkpoint entry of the same name. |
+| `--epochs N` | from config | Override `trainer.max_epochs`. |
+| `--batch-size N` | from config | Override `dataloader.batch_size`. |
+| `--device` | from config | Override `trainer.accelerator`: `auto`, `cpu` or `gpu`. |
+
+A training recipe has four sections — `model` (constructor kwargs),
+`dataset` (which `torch.utils.data.Dataset` view of the trajectories to
+train on, e.g. `SnapshotPairDataset` with a `stride`), `dataloader`, and
+`trainer` (epochs, optimiser, scheduler, accelerator, rollout steps, …).
+If the recipe leaves `trainer.dt` unset, the step is taken from the
+dataset's `numerical/dt` attribute, or else from the spacing of `times`.
+The name collision check runs **before** training starts, so a duplicate
+`--name` fails fast.
+
+```sh
+mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 \
+  --epochs 20 --device cpu
+```
+
+```text
+… Lightning progress …
+trained 'spectral_onsagernet_1d' with 'spectral_onsagernet_1d'
+  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/model.pt
+  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/config.yaml
+  registered: spectral_onsagernet_1d_v0
+```
+
+The run directory contains:
+
+| File | Contents |
+| --- | --- |
+| `model.pt` | Plain `state_dict` — loadable with `torch.load` + `model.load_state_dict`, no Lightning needed. The canonical artifact. |
+| `config.yaml` | The fully resolved recipe plus `model_name`, `trainer_name`, `dyn`, `data`, `dataset_name`, `checkpoint_name`, `train_config`. This is what `mesokit interpret` reads to rebuild the model. |
+| `history.json` | Per-epoch metric series, e.g. `{"train_loss": [...]}`. |
+| `last.ckpt`, `lit_epoch=NNN.ckpt` | Lightning checkpoints (optimizer state etc.) written by `LitTrainer`; not needed downstream. |
+
+More examples:
+
+```sh
+# Train on a file that was never registered (registry name stays empty in the record).
+mesokit train --model fno1d --dyn kdv_1d --data /tmp/kdv_scratch.h5 --config default --epochs 5
+
+# Give the run a meaningful name and overwrite a previous attempt.
+mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data ac_eps05 \
+  --name son_eps05_long --epochs 200 --force
+
+# A hyper-parameter variant: copy default.yaml to configs/train/allen_cahn_1d/spectral_onsagernet_1d/lr1e-4.yaml, then
+mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 --config lr1e-4
+
+# Throw-away run that must not pollute the checkpoint index.
+mesokit train --model fno1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 --epochs 1 --device cpu --no-registry
+```
+
+Two things to know:
+
+- The shipped `smoke.yaml` under `configs/train/allen_cahn_1d/spectral_onsagernet_1d/`
+  is a test fixture with `Nx: 8`; it does not fit the 256-point datasets.
+  For a quick real run use `--config default --epochs 1 --device cpu`.
+- The architectures shipped today (`fno1d`, `spectral_onsagernet_1d`) take
+  1D, single-channel input. The 2D and multi-channel predefined datasets
+  can be generated and registered, but training on them needs a model that
+  accepts them (see [Extending](extending.md)); custom models currently run
+  through the Python API rather than `mesokit train`.
+
+Errors:
+
+```text
+Invalid value: dataset 'nope' is not registered and is not an existing HDF5 path
+Invalid value: registered dataset 'old' points to missing file: /home/me/mesokit/data/allen_cahn_1d/old.h5
+Invalid value: no config 'nope' under /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d; available: default, smoke
+Invalid value: --device must be one of: auto, cpu, gpu
+Invalid value: checkpoint 'spectral_onsagernet_1d_v0' already registered; pass --force to overwrite
+```
+
+## `mesokit model`
+
+Manage the project-local index of **trained checkpoints**
+(`.mesokit/checkpoints.json`). This is not the registry of architectures —
+that one is populated by the package and inspected from Python with
+`mesokit.models.available()`.
+
+### `mesokit model list`
+
+```sh
+mesokit model list
+```
+
+```text
+son_eps05_long
+  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/son_eps05_long/model.pt
+  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/son_eps05_long/config.yaml
+spectral_onsagernet_1d_v0
+  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/model.pt
+  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/config.yaml
+```
+
+Entries are sorted by name; with nothing registered it prints
+`(no checkpoints registered)`.
+
+### `mesokit model register`
+
+Index a checkpoint that was trained elsewhere (a notebook, a cluster job,
+another machine). Only pointers are stored; nothing is copied.
+
+```sh
+mesokit model register --model NAME --file CKPT.pt --config CONFIG.yaml [--force]
+```
+
+| Option | Meaning |
+| --- | --- |
+| `--model NAME` | Registry name (required). |
+| `--file CKPT.pt` | Existing checkpoint file: a `state_dict`, or a dict with a `state_dict` key such as a Lightning checkpoint (required). |
+| `--config CONFIG.yaml` | The recipe used to train it; must contain a `model` section with a `_target_` so `interpret` can rebuild the architecture (required). |
+| `--force` | Replace an existing entry. |
+
+```sh
+mesokit model register --model son_cluster_run --file ~/jobs/1234/model.pt --config ~/jobs/1234/config.yaml
+```
+
+```text
+registered 'son_cluster_run'
+  checkpoint: /home/me/jobs/1234/model.pt
+  config:     /home/me/jobs/1234/config.yaml
+```
+
+The simplest way to obtain a valid pair is to train once with
+`mesokit train` (even with `--no-registry`) and copy its `config.yaml`
+alongside your own checkpoint. When loading, `interpret` strips a leading
+`model.` prefix and any `._orig_mod.` (from `torch.compile`) from the
+parameter names, so Lightning-style checkpoints load unchanged.
+
+## `mesokit interpret`
+
+Inspect the interpretability artifacts a trained checkpoint can produce.
+Every registered model implements `list_artifacts()` and `artifact(name)`;
+these commands are thin wrappers that rebuild the model from its registry
+record, load the weights, and call them.
+
+How a checkpoint is rebuilt: the registry record gives `config_path`; the
+`model` section of that YAML is instantiated; `model.pt` is loaded as a
+`state_dict` (strictly — every parameter must match); the model is put in
+`eval()` mode. For `extract`, the dataset the checkpoint was trained on is
+located too (by its registered name, else by the path recorded in the
+config) and handed to the model as reference data for artifacts that need
+snapshots (a learned potential is evaluated along real states, for
+instance).
+
+### `mesokit interpret list`
+
+```sh
+mesokit interpret list --model CKPT_NAME
+```
+
+```text
+spectral_onsagernet_1d_v0:
+  potential
+```
+
+`fno1d` checkpoints list `spectrum`, which is declared but not implemented
+yet; extracting it raises `NotImplementedError`.
+
+### `mesokit interpret extract`
+
+Build one artifact (or all of them), print its one-paragraph summary, and
+save its figure. `mesokit interpret explain` is an exact alias.
+
+```sh
+mesokit interpret extract --model CKPT_NAME --artifact NAME --output FILE.png [--max-snapshots N]
+mesokit interpret extract --model CKPT_NAME --artifact all  --output DIR/     [--max-snapshots N]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--model` | required | Registered checkpoint name. |
+| `--artifact` | required | An entry from `interpret list`, or `all` (also `*`). |
+| `--output` | required | Target file; the extension selects the matplotlib format (`.png`, `.pdf`, `.svg`, …). With `--artifact all` it must be a directory — a path with an extension is rejected — and one PNG per artifact, named `<model>_<artifact>.png`, is written inside it. |
+| `--max-snapshots N` | `5000` | Cap on the number of reference snapshots handed to data-backed artifacts. Lower it to speed up extraction on large datasets. |
+
+```sh
+mesokit interpret extract --model spectral_onsagernet_1d_v0 --artifact potential --output figs/potential.png
+```
+
+```text
+spectral_onsagernet_1d on allen_cahn_1d exposes a PolynomialPotential potential. The constant-field slice over u in [-2, 2] has V range [-0.0197, 23.4]. The largest learned mobility multiplier is 0.07; the largest reactive multiplier magnitude is 0.0293.
+saved: /home/me/mesokit/figs/potential.png
+```
+
+```sh
+# Everything the model offers, one file each, into a directory.
+mesokit interpret explain --model son_eps05_long --artifact all --output figs/son_eps05_long/
+
+# Vector output for a paper, fewer reference snapshots.
+mesokit interpret extract --model son_eps05_long --artifact potential --output figs/potential.pdf --max-snapshots 500
+```
+
+Errors:
+
+```text
+Invalid value: checkpoint 'nope' is not registered
+Invalid value: registered checkpoint path does not exist: /home/me/mesokit/checkpoints/allen_cahn_1d/old/model.pt
+Invalid value: --output must be a directory when --artifact all
+Invalid value: checkpoint 'x' has no model config and no model_name; register a config produced by `mesokit train`
+KeyError: "unknown artifact(s) ['x']; available: ['potential']"      # a traceback, exit status 1
+```
+
+## Recipes
+
+**Smallest end-to-end run** (seconds on a CPU):
+
+```sh
+mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_fdr
+mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data ac_fdr --epochs 1 --device cpu
+mesokit interpret extract --model spectral_onsagernet_1d_v0 --artifact potential --output figs/potential.png
+```
+
+**The reference experiment:**
+
+```sh
+mesokit data generate --dyn allen_cahn_1d                       # allen_cahn_1d_v0, 1000 trajectories
+mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0
+mesokit interpret extract --model spectral_onsagernet_1d_v0 --artifact all --output figs/son_v0/
+```
+
+**A parameter sweep with reproducible names:**
+
+```sh
+for eps in 0.05 0.1 0.2; do
+  sed "s/^eps: .*/eps: $eps/" configs/data/allen_cahn_1d/default.yaml > configs/data/allen_cahn_1d/eps$eps.yaml
+  mesokit data generate --dyn allen_cahn_1d --config eps$eps --name ac_eps$eps
+  mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data ac_eps$eps --name son_eps$eps
+done
+mesokit model list
+```
+
+**Your own solver's output:**
+
+```sh
+python my_export.py                                   # writes runs/my_data.h5 in the v1 layout
+mesokit data register --name my_v0 --file runs/my_data.h5
+mesokit train --model fno1d --dyn my_dynamics --data my_v0 --config default
+```
+
+The training recipe is looked up at `configs/train/my_dynamics/fno1d/default.yaml`,
+so create that folder (copy one of the shipped recipes) before training on a
+custom `dyn`.
+
+**Data in some other format, converted by an agent:**
+
+```sh
+mesokit data parse --file ~/runs/field.nc --hint "variable phi, dims (member, time, x)" --name phi_v0
+mesokit data list
+```
+
+**Generate the 2D and microscopic datasets** (for the Python API or a model
+of your own; the shipped models are 1D):
+
+```sh
+mesokit data generate --dyn ising_2d
+mesokit data generate --dyn ising_2d --config kac
+mesokit data generate --dyn cahn_hilliard_2d       # ~10 min, ~210 MB
+mesokit data generate --dyn llg_lattice_2d         # 3 channels
+mesokit data generate --dyn peridynamics_fracture_2d --config fdr
+```
+
+**Index a checkpoint trained in a notebook and inspect it:**
+
+```sh
+mesokit model register --model nb_run --file checkpoints/nb/model.pt --config checkpoints/nb/config.yaml
+mesokit interpret list --model nb_run
+```
+
+## Files the CLI Reads and Writes
+
+| Path | Written by | Read by | Notes |
+| --- | --- | --- | --- |
+| `configs/data/<dyn>/*.yaml` | you | `data generate` | Hydra recipe; keys are simulator kwargs. |
+| `configs/train/<dyn>/<model>/*.yaml` | you | `train` | Sections `model`, `dataset`, `dataloader`, `trainer`. |
+| `data/<dyn>/<name>.h5` | `data generate` | `train`, `interpret` | v1 trajectory cache. |
+| `data/parsed/<stem>.h5` | `data parse` (via the agent) | `train`, `interpret` | Same layout. |
+| `.mesokit/datasets.json` | `data generate`, `data register`, `data parse` | `data list`, `train`, `interpret` | `name → {path, metadata}`; metadata holds shape, dtype, `dt`, the three groups. |
+| `checkpoints/<dyn>/<run>/` | `train` | `interpret` | `model.pt`, `config.yaml`, `history.json`, Lightning `.ckpt`. |
+| `.mesokit/checkpoints.json` | `train`, `model register` | `model list`, `interpret` | `name → {path, config_path, model_name, trainer_name, dyn, dataset_name, data, run_id, training_config_hash, metadata}`. |
+
+Both registries are plain JSON with atomic writes; you can inspect or hand-edit
+them, and delete an entry by removing its key. Nothing under `data/`,
+`checkpoints/` or `.mesokit/` should be committed.
+
+A registry entry, for reference:
+
+```json
+{
+  "schema_version": 1,
+  "entries": {
+    "ac_fdr": {
+      "path": "/home/me/mesokit/data/allen_cahn_1d/ac_fdr.h5",
+      "metadata": {
+        "dyn": "allen_cahn_1d",
+        "shape": [10, 101, 1, 256],
+        "data_dtype": "float32",
+        "channel_names": ["u"],
+        "dt": 0.001,
+        "physical": {"Lx": 6.283185307179586, "T": 0.1, "eps": 0.1},
+        "numerical": {"Nx": 256, "dx": 0.02454369260617026, "dt": 4e-05, "T_save_steps": 25, "Nk": 3, "max_k": 10, "dealias": 2},
+        "provenance": {"seed": 0, "u_bound": 10.0}
+      }
+    }
+  }
+}
+```
+
+## Troubleshooting
+
+| Message | Cause | Fix |
+| --- | --- | --- |
+| `config dir not found: …/configs/data/<dyn>` | Not running from the repository root, or `<dyn>` has no recipe folder. | `cd` to the root; check `mesokit data avail`; create `configs/data/<dyn>/default.yaml` for a custom simulator. |
+| `no config 'x' under …; available: default, fdr` | `--config` takes a stem, not a filename or path. | Drop the `.yaml` and any directory. |
+| `--name and --no-registry are mutually exclusive` | Both flags given. | Pick one. |
+| `dataset 'x' already registered; pass --force to overwrite` | Name collision. | Choose another `--name`, or add `--force`. |
+| `sanity check failed for …; not registered` | The file violates the v1 contract; the specific checks are printed above the message. | Fix the writer — see [Data Structure](data_processing/structure.md) — or run `mesokit.data.validate(path)` in Python for the full report. |
+| `dataset 'x' is not registered and is not an existing HDF5 path` | `--data` matched neither a name nor a file. | `mesokit data list`, or pass the path. |
+| `registered dataset 'x' points to missing file` | The file was moved or deleted after registration. | Re-register with the new path and `--force`, or regenerate. |
+| `checkpoint 'x' is not registered` | `interpret` needs a name from `mesokit model list`. | Train, or `mesokit model register`. |
+| `--output must be a directory when --artifact all` | An extension was given with `--artifact all`. | Pass a directory path. |
+| `agent 'claude' requires 'claude' on PATH` | The agent CLI is not installed or not on `PATH`. | Install it, or `--agent codex`. |
+| A tensor size mismatch inside the model during `train` | The recipe's `model.Nx` does not match the dataset grid (e.g. the 8-point `smoke.yaml` fixture on 256-point data). | Use `--config default` or fix `Nx`. |
+| Training is slow or out of memory | Default recipes assume a GPU. | `--device cpu --batch-size 8 --epochs 1` for a smoke run. |
+
+## Python Equivalents
+
+Everything the CLI does is available from Python; the CLI only adds the
+registries and the config lookup.
+
+| CLI | Python |
+| --- | --- |
+| `mesokit data avail` | `mesokit.data.available()` |
+| `mesokit data generate --dyn X` | `ds = mesokit.data.simulate("X", **kwargs); ds.save_hdf5(path)` |
+| `mesokit data register --file F` | `report = mesokit.data.validate(F)` (no registry write) |
+| `mesokit train` | `TrajectoryDataset.load_hdf5(path)` → a `mesokit.data.datasets` adapter → `DataLoader` → `mesokit.trainers.get_trainer(name)(...).fit(model, loader)` |
+| `mesokit model list` | read `.mesokit/checkpoints.json` |
+| `mesokit interpret list` / `extract` | `model.load_state_dict(torch.load("model.pt"))`; `model.list_artifacts()`; `model.artifact(name).save(path)` |
+
+See [Extending](extending.md) for the full Python surface and for registering
+your own simulators, models, trainers and artifacts.

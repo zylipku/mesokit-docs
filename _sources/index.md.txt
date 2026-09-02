@@ -6,15 +6,18 @@ evolve together. The product framing is **interpretability** —
 predictive accuracy is a precondition, not the headline.
 
 Start with the [Quickstart](quickstart.md) for installation and the
-first end-to-end run. The [Tutorial](tutorial.md) walks through the
-same flow with figures and commentary, and [Data Processing](data_processing.md)
-is the guide for generating, validating, authoring, or registering datasets.
+first end-to-end run. The [Command-Line Reference](cli.md) documents every
+`mesokit` command with examples; the [Tutorial](tutorial.md) walks through
+the same flow with figures and commentary, and
+[Data Processing](data_processing.md) is the guide for generating,
+validating, authoring, or registering datasets.
 
 ```{toctree}
 :maxdepth: 2
 :caption: User Guide
 
 quickstart
+cli
 tutorial
 data_processing
 extending

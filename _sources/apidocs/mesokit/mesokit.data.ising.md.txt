@@ -1,0 +1,43 @@
+# {py:mod}`mesokit.data.ising`
+
+```{py:module} mesokit.data.ising
+```
+
+```{autodoc2-docstring} mesokit.data.ising
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.data.ising.ising_2d
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.data.ising.__all__>`
+  - ```{autodoc2-docstring} mesokit.data.ising.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.data.ising.__all__
+:value: >
+   ['ONSAGER_TC', 'simulate_ising_2d']
+
+```{autodoc2-docstring} mesokit.data.ising.__all__
+```
+
+````

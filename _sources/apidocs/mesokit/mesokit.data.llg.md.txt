@@ -1,0 +1,43 @@
+# {py:mod}`mesokit.data.llg`
+
+```{py:module} mesokit.data.llg
+```
+
+```{autodoc2-docstring} mesokit.data.llg
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.data.llg.llg_lattice_2d
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.data.llg.__all__>`
+  - ```{autodoc2-docstring} mesokit.data.llg.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.data.llg.__all__
+:value: >
+   ['simulate_llg_lattice_2d']
+
+```{autodoc2-docstring} mesokit.data.llg.__all__
+```
+
+````

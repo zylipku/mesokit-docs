@@ -13,9 +13,13 @@
 :titlesonly:
 :maxdepth: 3
 
+mesokit.data.peridynamics
 mesokit.data.allen_cahn
 mesokit.data.kdv
 mesokit.data.datasets
+mesokit.data.cahn_hilliard
+mesokit.data.ising
+mesokit.data.llg
 ```
 
 ## Submodules

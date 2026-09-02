@@ -1,0 +1,1366 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Tutorial" href="tutorial.html"><link rel="prev" title="Quickstart" href="quickstart.html">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>Command-Line Reference - mesokit</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mesokit</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <span class="sidebar-brand-text">mesokit</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Command-Line Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="data_processing.html">Data Processing</a><input aria-label="Toggle navigation of Data Processing" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="data_processing/structure.html">Data Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_processing/predefined.html">Predefined Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_processing/custom.html">Custom Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_processing/examples.html">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_processing/versioning.html">Versioning and Compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending mesokit</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit</span></code></a><input aria-label="Toggle navigation of mesokit" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models</span></code></a><input aria-label="Toggle navigation of mesokit.models" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno</span></code></a><input aria-label="Toggle navigation of mesokit.models.fno" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.fno1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.sindy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.sindy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.deeponet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.deeponet</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet.potential" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.polynomial</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.base</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.coercive_autograd_v6</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.artifacts</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.dynamics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.dynamics_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data</span></code></a><input aria-label="Toggle navigation of mesokit.data" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.peridynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics</span></code></a><input aria-label="Toggle navigation of mesokit.data.peridynamics" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.peridynamics.peridynamics_fracture_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics.peridynamics_fracture_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn</span></code></a><input aria-label="Toggle navigation of mesokit.data.allen_cahn" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.allen_cahn.allen_cahn_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn.allen_cahn_1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.kdv.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv</span></code></a><input aria-label="Toggle navigation of mesokit.data.kdv" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.kdv.kdv_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv.kdv_1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.cahn_hilliard.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard</span></code></a><input aria-label="Toggle navigation of mesokit.data.cahn_hilliard" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.cahn_hilliard.cahn_hilliard_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard.cahn_hilliard_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.ising.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising</span></code></a><input aria-label="Toggle navigation of mesokit.data.ising" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.ising.ising_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising.ising_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.llg.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg</span></code></a><input aria-label="Toggle navigation of mesokit.data.llg" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.llg.llg_lattice_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg.llg_lattice_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.format.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.format</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.validate.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.validate</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers</span></code></a><input aria-label="Toggle navigation of mesokit.trainers" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer</span></code></a><input aria-label="Toggle navigation of mesokit.trainers.lit_trainer" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer._lit_module</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer.lit_trainer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.trainer_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.trainer_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.training.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.training" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.training.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training.train</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.viz.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.viz" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.viz.plots.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz.plots</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret</span></code></a><input aria-label="Toggle navigation of mesokit.interpret" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.plotter.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.plotter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.compare.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.compare</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils</span></code></a><input aria-label="Toggle navigation of mesokit.utils" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.activation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.activation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.mlp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.mlp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills</span></code></a><input aria-label="Toggle navigation of mesokit.skills" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_convert_data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_convert_data</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli</span></code></a><input aria-label="Toggle navigation of mesokit.cli" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._agent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/cli.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="command-line-reference">
+<h1>Command-Line Reference<a class="headerlink" href="#command-line-reference" title="Link to this heading">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is the console script installed with the package. It mirrors the
+pipeline — <strong>produce data → train → index the checkpoint → interpret</strong> — as
+four command groups, and keeps two project-local registries so that anything
+you generate or train once can be referred to by name afterwards.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>mesokit data      avail | list | generate | register | parse
+mesokit train
+mesokit model     list | register
+mesokit interpret list | extract | explain
+</pre></div>
+</div>
+<p>Every command and subcommand accepts <code class="docutils literal notranslate"><span class="pre">--help</span></code>. This page is the complete
+reference; the <a class="reference internal" href="quickstart.html"><span class="std std-doc">Quickstart</span></a> is the shortest path through it.</p>
+<section id="conventions">
+<h2>Conventions<a class="headerlink" href="#conventions" title="Link to this heading">¶</a></h2>
+<p><strong>Run from the repository root.</strong> The CLI resolves three things relative to
+the current working directory:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>What</p></th>
+<th class="head"><p>Where</p></th>
+<th class="head"><p>Used by</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Data recipes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/&lt;stem&gt;.yaml</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Training recipes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;model&gt;/&lt;stem&gt;.yaml</span></code> (falls back to the copy inside the installed package)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">train</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Registries</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.mesokit/datasets.json</span></code>, <code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code></p></td>
+<td><p>every command that takes a name</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Outputs also land in the working directory: <code class="docutils literal notranslate"><span class="pre">data/&lt;dyn&gt;/</span></code> for generated
+HDF5 files, <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;run&gt;/</span></code> for training runs. All of these are
+gitignored.</p>
+<p><strong>Environment.</strong> Prefix commands with <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">run</span></code> (or run inside <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">shell</span></code>)
+unless <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is already on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>run<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
+</pre></div>
+</div>
+<p><strong>Names versus paths.</strong> Wherever a command takes a dataset (<code class="docutils literal notranslate"><span class="pre">--data</span></code>) it
+accepts either a registered name or a path to an HDF5 file; wherever it takes
+a checkpoint (<code class="docutils literal notranslate"><span class="pre">--model</span></code> in <code class="docutils literal notranslate"><span class="pre">interpret</span></code>) it needs a registered name. Registries
+store <strong>pointers</strong>, never copies, so deleting a file leaves a dangling entry
+(<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">list</span></code> flags it as <code class="docutils literal notranslate"><span class="pre">MISSING</span></code>).</p>
+<p><strong>Automatic versioned names.</strong> When you do not pass <code class="docutils literal notranslate"><span class="pre">--name</span></code>, generated
+datasets are registered as <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v0</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v1</span></code>, … and trained checkpoints
+as <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v0</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v1</span></code>, … — always the next free slot, so repeated
+runs never overwrite each other. Passing an explicit <code class="docutils literal notranslate"><span class="pre">--name</span></code> that already
+exists is an error unless you add <code class="docutils literal notranslate"><span class="pre">--force</span></code>.</p>
+<p><strong>Quiet by default.</strong> Simulators and trainers print a single overwriting
+progress line on stderr; <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> (where offered) restores the underlying
+solver’s full log.</p>
+<p><strong>Errors and exit codes.</strong> Argument and lookup problems (unknown dynamics,
+missing file, name collision, failed validation) are reported as
+<code class="docutils literal notranslate"><span class="pre">Invalid</span> <span class="pre">value:</span> <span class="pre">…</span></code> and exit with status <code class="docutils literal notranslate"><span class="pre">2</span></code>; the offending file or name is
+never registered. Unexpected failures inside a simulator or trainer surface
+as a Python traceback with status <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<p><strong>Shell completion.</strong> <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">--install-completion</span></code> installs completion for
+the current shell; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">--show-completion</span></code> prints it instead.</p>
+</section>
+<section id="pipeline-at-a-glance">
+<h2>Pipeline at a Glance<a class="headerlink" href="#pipeline-at-a-glance" title="Link to this heading">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>configs/data/&lt;dyn&gt;/default.yaml ──► mesokit data generate ──► data/&lt;dyn&gt;/&lt;name&gt;.h5 ──┐
+your_solver.h5 ──────────────────► mesokit data register ──────────────────────────────┤
+any_format.{npz,nc,pt,…} ────────► mesokit data parse ────► data/parsed/&lt;stem&gt;.h5 ─────┤
+                                                                                       ▼
+                                                                          .mesokit/datasets.json
+                                                                                       │
+configs/train/&lt;dyn&gt;/&lt;model&gt;/default.yaml ─────────────────► mesokit train ◄────────────┘
+                                                                  │
+                                              checkpoints/&lt;dyn&gt;/&lt;run&gt;/{model.pt, config.yaml, history.json}
+                                                                  │
+                                                      .mesokit/checkpoints.json ◄── mesokit model register
+                                                                  │
+                                                       mesokit interpret list / extract ──► figs/*.png
+</pre></div>
+</div>
+</section>
+<section id="mesokit-data">
+<h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span></code><a class="headerlink" href="#mesokit-data" title="Link to this heading">¶</a></h2>
+<p>Produce or catalog trajectory datasets. The on-disk contract every
+subcommand reads or writes is the v1 HDF5 cache described in
+<a class="reference internal" href="data_processing.html"><span class="std std-doc">Data Processing</span></a>.</p>
+<section id="mesokit-data-avail">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">avail</span></code><a class="headerlink" href="#mesokit-data-avail" title="Link to this heading">¶</a></h3>
+<p>List the predefined simulator recipes compiled into the package (alias:
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">available</span></code>). This is the catalog of what <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> can
+run, independent of what has been generated on this machine.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>DYN                       SIMULATOR
+allen_cahn_1d             mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d
+cahn_hilliard_2d          mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
+ising_2d                  mesokit.data.ising.ising_2d.simulate_ising_2d
+kdv_1d                    mesokit.data.kdv.kdv_1d.simulate_kdv_1d
+llg_lattice_2d            mesokit.data.llg.llg_lattice_2d.simulate_llg_lattice_2d
+peridynamics_fracture_2d  mesokit.data.peridynamics.peridynamics_fracture_2d.simulate_peridynamics_fracture_2d
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">SIMULATOR</span></code> column is the Python callable each recipe dispatches to; the
+physics, numerical scheme and parameters of every entry are documented in
+<a class="reference internal" href="data_processing/predefined.html"><span class="std std-doc">Predefined Datasets</span></a>.</p>
+</section>
+<section id="mesokit-data-list">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">list</span></code><a class="headerlink" href="#mesokit-data-list" title="Link to this heading">¶</a></h3>
+<p>List the datasets registered in <code class="docutils literal notranslate"><span class="pre">.mesokit/datasets.json</span></code>, grouped by
+dynamics. A dataset whose <code class="docutils literal notranslate"><span class="pre">dyn</span></code> attribute matches a predefined simulator is
+listed under that name; anything else lands in a trailing <code class="docutils literal notranslate"><span class="pre">custom:</span></code> group.
+The second column says whether the file still exists (<code class="docutils literal notranslate"><span class="pre">yes</span></code>) or the registry
+points at something that has been moved or deleted (<code class="docutils literal notranslate"><span class="pre">MISSING</span></code>).</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>list
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>allen_cahn_1d:
+  allen_cahn_1d_v0  yes  /home/me/mesokit/data/allen_cahn_1d/allen_cahn_1d_v0.h5
+  ac_eps05          yes  /home/me/mesokit/data/allen_cahn_1d/ac_eps05.h5
+
+kdv_1d:
+  kdv_1d_v0         yes  /home/me/mesokit/data/kdv_1d/kdv_1d_v0.h5
+
+custom:
+  md_slab           MISSING  /scratch/md/slab_density.h5
+</pre></div>
+</div>
+<p>With nothing registered it prints <code class="docutils literal notranslate"><span class="pre">(no</span> <span class="pre">datasets)</span></code>.</p>
+</section>
+<section id="mesokit-data-generate">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code><a class="headerlink" href="#mesokit-data-generate" title="Link to this heading">¶</a></h3>
+<p>Run a predefined simulator from a recipe, write the trajectories to HDF5,
+validate the file and register it.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>DYN<span class="w"> </span><span class="o">[</span>--config<span class="w"> </span>STEM<span class="o">]</span><span class="w"> </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="w"> </span><span class="p">|</span><span class="w"> </span>--no-registry<span class="o">]</span>
+<span class="w">                      </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="o">[</span>--verbose<span class="o">]</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dyn</span> <span class="pre">DYN</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Predefined dynamics name (one of <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">avail</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">STEM</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">default</span></code></p></td>
+<td><p>Recipe <code class="docutils literal notranslate"><span class="pre">configs/data/DYN/STEM.yaml</span></code>; the stem only, no path, no extension.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">NAME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DYN_v&lt;n&gt;</span></code></p></td>
+<td><p>Registry name for the result.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--no-registry</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Write the file but do not register it. Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">--name</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">PATH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data/DYN/&lt;name&gt;.h5</span></code></p></td>
+<td><p>Where to write the HDF5 file. Parent directories are created.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Replace an existing registry entry of the same name.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Show the solver’s own per-step output instead of the progress line.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>What happens, in order: the recipe is loaded with Hydra and instantiated
+(every key in the YAML is a keyword argument of the simulator, and
+<code class="docutils literal notranslate"><span class="pre">verbose</span></code> is forwarded); the returned <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code> is saved; the
+saved file is run through the same validator as <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">register</span></code>; on
+success the registry entry is written and the validation summary is
+printed.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_smoke
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>allen_cahn_1d: 10/10 trajectories
+wrote data/allen_cahn_1d/ac_smoke.h5: shape=(10, 101, 1, 256)
+registered &#39;ac_smoke&#39; -&gt; /home/me/mesokit/data/allen_cahn_1d/ac_smoke.h5
+dyn=allen_cahn_1d
+n_traj=10
+n_time=101
+n_channel=1
+grid_shape=(256,)
+data_dtype=float32
+dt=0.001
+channel_names=(&#39;u&#39;,)
+physical: {&#39;Lx&#39;: 6.283185307179586, &#39;T&#39;: 0.1, &#39;eps&#39;: 0.1}
+numerical: {&#39;Nk&#39;: 3, &#39;Nx&#39;: 256, &#39;T_save_steps&#39;: 25, &#39;dealias&#39;: 2, &#39;dt&#39;: 4e-05, &#39;dx&#39;: 0.02454369260617026, &#39;max_k&#39;: 10}
+provenance: {&#39;seed&#39;: 0, &#39;u_bound&#39;: 10.0}
+</pre></div>
+</div>
+<p>More examples:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># The reference dataset, auto-named allen_cahn_1d_v0 (then _v1, _v2, … on repeats).</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d
+
+<span class="c1"># A variant recipe: configs/data/ising_2d/kac.yaml (Kac interaction).</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--config<span class="w"> </span>kac<span class="w"> </span>--name<span class="w"> </span>ising_kac_T07
+
+<span class="c1"># Write somewhere else and keep it out of the registry (scratch experiments).</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>cahn_hilliard_2d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--output<span class="w"> </span>/tmp/ch_test.h5<span class="w"> </span>--no-registry
+
+<span class="c1"># Re-run a recipe you changed and replace the previous entry of the same name.</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span>--name<span class="w"> </span>kdv_long<span class="w"> </span>--force
+
+<span class="c1"># Watch Dedalus&#39;s per-step log instead of the progress line.</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--verbose
+</pre></div>
+</div>
+<p>To change parameters, add a sibling YAML under <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/</span></code> (copy
+<code class="docutils literal notranslate"><span class="pre">default.yaml</span></code>, edit, pick it with <code class="docutils literal notranslate"><span class="pre">--config</span></code>). Every predefined recipe also
+ships <code class="docutils literal notranslate"><span class="pre">fdr.yaml</span></code>, a seconds-long “fast dev run” for trying the pipeline.
+Some recipes are heavy — the default <code class="docutils literal notranslate"><span class="pre">cahn_hilliard_2d</span></code> takes about ten
+minutes and <code class="docutils literal notranslate"><span class="pre">peridynamics_fracture_2d</span></code> about twenty-five; the per-dataset
+sections of <a class="reference internal" href="data_processing/predefined.html"><span class="std std-doc">Predefined Datasets</span></a> give sizes
+and timings.</p>
+<p>Errors you may see:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invalid value: config dir not found: /home/me/mesokit/configs/data/nope
+Invalid value: no config &#39;nope&#39; under /home/me/mesokit/configs/data/allen_cahn_1d; available: default, fdr
+Invalid value: --name and --no-registry are mutually exclusive
+Invalid value: dataset &#39;ac_smoke&#39; already registered; pass --force to overwrite
+</pre></div>
+</div>
+<p>The first one also appears when you run from the wrong directory: recipes
+are looked up in <code class="docutils literal notranslate"><span class="pre">./configs/data/</span></code>, not inside the package.</p>
+</section>
+<section id="mesokit-data-register">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code><a class="headerlink" href="#mesokit-data-register" title="Link to this heading">¶</a></h3>
+<p>Validate an HDF5 file you produced yourself against the v1 cache contract
+and register it under a name.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>NAME<span class="w"> </span>--file<span class="w"> </span>FILE.h5<span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">NAME</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Registry name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--file</span> <span class="pre">FILE</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Existing HDF5 file; the absolute path is stored.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Replace an existing entry of the same name.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The validator checks the closed set of root attributes, the <code class="docutils literal notranslate"><span class="pre">data</span></code> /
+<code class="docutils literal notranslate"><span class="pre">times</span></code> datasets and their shapes and dtypes, finiteness, monotone times,
+the three metadata groups and the optional <code class="docutils literal notranslate"><span class="pre">channel_names</span></code>. On success it
+prints the inferred summary shown above for <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code>; on failure
+each failing check is printed and nothing is registered.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>md_slab<span class="w"> </span>--file<span class="w"> </span>/scratch/md/slab_density.h5
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;md_slab&#39; -&gt; /scratch/md/slab_density.h5
+dyn=binary_lj_slab
+n_traj=3
+n_time=2001
+n_channel=1
+grid_shape=(50, 50, 200)
+data_dtype=float32
+dt=1
+channel_names=(&#39;x_A&#39;,)
+physical: {&#39;T&#39;: 1.1, &#39;xA&#39;: 0.5, &#39;Lx&#39;: 9.52, &#39;Ly&#39;: 9.52, &#39;Lz&#39;: 38.1}
+numerical: {&#39;dx&#39;: 0.19, &#39;sigma_kde&#39;: 1.5}
+provenance: {&#39;source&#39;: &#39;lammps&#39;, &#39;seed&#39;: 42}
+</pre></div>
+</div>
+<p>A file that is not a v1 cache fails like this:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>  cannot open /tmp/bad.h5 as HDF5: Unable to synchronously open file (file signature not found)
+Invalid value: sanity check failed for /tmp/bad.h5; not registered
+</pre></div>
+</div>
+<p>Writing a conforming file is a few lines of <code class="docutils literal notranslate"><span class="pre">h5py</span></code>; see
+<a class="reference internal" href="data_processing/custom.html"><span class="std std-doc">Custom Datasets</span></a>. To check a file without
+registering it, use the Python helper <code class="docutils literal notranslate"><span class="pre">mesokit.data.validate(path)</span></code>.</p>
+</section>
+<section id="mesokit-data-parse">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code><a class="headerlink" href="#mesokit-data-parse" title="Link to this heading">¶</a></h3>
+<p>Hand an arbitrary dataset to a coding agent installed on your machine, let
+it convert the file with the <code class="docutils literal notranslate"><span class="pre">mesokit-convert-data</span></code> skill shipped in the
+package, then validate (and optionally register) the result.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>FILE<span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--hint<span class="w"> </span>TEXT<span class="o">]</span>
+<span class="w">                   </span><span class="o">[</span>--agent<span class="w"> </span>claude<span class="p">|</span>codex<span class="o">]</span><span class="w"> </span><span class="o">[</span>--backend<span class="w"> </span>foreground<span class="p">|</span>tmux<span class="o">]</span>
+<span class="w">                   </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--file</span> <span class="pre">FILE</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Input in any format (<code class="docutils literal notranslate"><span class="pre">.npz</span></code>, <code class="docutils literal notranslate"><span class="pre">.npy</span></code>, <code class="docutils literal notranslate"><span class="pre">.nc</span></code>, <code class="docutils literal notranslate"><span class="pre">.pt</span></code>, non-conforming <code class="docutils literal notranslate"><span class="pre">.h5</span></code>, …).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">PATH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data/parsed/&lt;stem&gt;.h5</span></code></p></td>
+<td><p>Where the agent must write the v1 file.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--hint</span> <span class="pre">TEXT</span></code></p></td>
+<td><p>none</p></td>
+<td><p>Free-form instructions appended to the agent’s prompt (axis names, units, which variable is the field, …).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--agent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">claude</span></code></p></td>
+<td><p>Agent CLI: <code class="docutils literal notranslate"><span class="pre">claude</span></code> (runs <code class="docutils literal notranslate"><span class="pre">claude</span> <span class="pre">-p</span> <span class="pre">…</span></code>) or <code class="docutils literal notranslate"><span class="pre">codex</span></code> (runs <code class="docutils literal notranslate"><span class="pre">codex</span> <span class="pre">exec</span> <span class="pre">…</span></code>). The binary must be on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--backend</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">foreground</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">foreground</span></code> blocks and streams the agent’s output; <code class="docutils literal notranslate"><span class="pre">tmux</span></code> detaches into a session.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">NAME</span></code></p></td>
+<td><p>none</p></td>
+<td><p>Register the produced file under this name on success. Without it the file is only validated.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Replace an existing registry entry.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The prompt tells the agent where the skill file is, which file to convert,
+where to write, and to self-verify by running the validator until it
+passes. In the foreground backend the command returns when the agent exits;
+a non-zero agent exit, or a missing output file, is an error.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>~/runs/burgers.npz<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--hint<span class="w"> </span><span class="s2">&quot;arrays u (traj, time, x) and t; domain is [0, 2π) periodic; call it burgers_1d&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>burgers_v0
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>launching agent &#39;claude&#39; via backend &#39;foreground&#39;
+  skill : /home/me/mesokit/src/mesokit/skills/mesokit_convert_data/SKILL.md
+  input : /home/me/runs/burgers.npz
+  output: /home/me/mesokit/data/parsed/burgers.h5
+… agent transcript …
+registered &#39;burgers_v0&#39; -&gt; /home/me/mesokit/data/parsed/burgers.h5
+dyn=burgers_1d
+…
+</pre></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">--backend</span> <span class="pre">tmux</span></code> the command returns immediately and tells you how to
+follow up:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agent launched detached (handle: mesokit-parse-1756800000)
+  attach: tmux attach -t mesokit-parse-1756800000
+when the agent finishes, validate / register with:
+  mesokit data register --name burgers_v0 --file /home/me/mesokit/data/parsed/burgers.h5
+</pre></div>
+</div>
+<p>Errors: <code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">'claude'</span> <span class="pre">requires</span> <span class="pre">'claude'</span> <span class="pre">on</span> <span class="pre">PATH</span></code>, <code class="docutils literal notranslate"><span class="pre">unknown</span> <span class="pre">agent</span> <span class="pre">'x';</span> <span class="pre">available:</span> <span class="pre">claude,</span> <span class="pre">codex</span></code>, <code class="docutils literal notranslate"><span class="pre">backend</span> <span class="pre">'tmux'</span> <span class="pre">requires</span> <span class="pre">the</span> <span class="pre">tmux</span> <span class="pre">binary</span> <span class="pre">on</span> <span class="pre">PATH</span></code>, <code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">exited</span> <span class="pre">with</span> <span class="pre">code</span> <span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">finished</span> <span class="pre">but</span> <span class="pre">&lt;output&gt;</span> <span class="pre">was</span> <span class="pre">not</span> <span class="pre">written</span></code>.</p>
+</section>
+</section>
+<section id="mesokit-train">
+<h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code><a class="headerlink" href="#mesokit-train" title="Link to this heading">¶</a></h2>
+<p>Train a registered model architecture on a dataset through the trainer
+registered for that model, write a run directory, and index the checkpoint.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>ARCH<span class="w"> </span>--dyn<span class="w"> </span>DYN<span class="w"> </span>--data<span class="w"> </span>NAME_OR_PATH
+<span class="w">              </span><span class="o">[</span>--config<span class="w"> </span>STEM<span class="o">]</span><span class="w"> </span><span class="o">[</span>--trainer<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="w"> </span><span class="p">|</span><span class="w"> </span>--no-registry<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
+<span class="w">              </span><span class="o">[</span>--epochs<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="o">[</span>--batch-size<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="o">[</span>--device<span class="w"> </span>auto<span class="p">|</span>cpu<span class="p">|</span>gpu<span class="o">]</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--model</span> <span class="pre">ARCH</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Architecture name from the model registry (<code class="docutils literal notranslate"><span class="pre">fno1d</span></code>, <code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d</span></code>, …).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--dyn</span> <span class="pre">DYN</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Dynamics name; selects the config tree <code class="docutils literal notranslate"><span class="pre">configs/train/DYN/ARCH/</span></code> and the run directory <code class="docutils literal notranslate"><span class="pre">checkpoints/DYN/</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--data</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Registered dataset name <strong>or</strong> path to a v1 HDF5 file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">STEM</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">default</span></code></p></td>
+<td><p>Recipe <code class="docutils literal notranslate"><span class="pre">configs/train/DYN/ARCH/STEM.yaml</span></code>. Looked up in the working directory first, then in the installed package.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--trainer</span> <span class="pre">NAME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">--model</span></code></p></td>
+<td><p>Trainer registry name; every shipped model registers its own default.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">NAME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ARCH_v&lt;n&gt;</span></code></p></td>
+<td><p>Checkpoint registry name; also the run directory name.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--no-registry</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Train and write the run directory but do not index it.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Replace an existing checkpoint entry of the same name.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--epochs</span> <span class="pre">N</span></code></p></td>
+<td><p>from config</p></td>
+<td><p>Override <code class="docutils literal notranslate"><span class="pre">trainer.max_epochs</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--batch-size</span> <span class="pre">N</span></code></p></td>
+<td><p>from config</p></td>
+<td><p>Override <code class="docutils literal notranslate"><span class="pre">dataloader.batch_size</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--device</span></code></p></td>
+<td><p>from config</p></td>
+<td><p>Override <code class="docutils literal notranslate"><span class="pre">trainer.accelerator</span></code>: <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">cpu</span></code> or <code class="docutils literal notranslate"><span class="pre">gpu</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A training recipe has four sections — <code class="docutils literal notranslate"><span class="pre">model</span></code> (constructor kwargs),
+<code class="docutils literal notranslate"><span class="pre">dataset</span></code> (which <code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code> view of the trajectories to
+train on, e.g. <code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset</span></code> with a <code class="docutils literal notranslate"><span class="pre">stride</span></code>), <code class="docutils literal notranslate"><span class="pre">dataloader</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">trainer</span></code> (epochs, optimiser, scheduler, accelerator, rollout steps, …).
+If the recipe leaves <code class="docutils literal notranslate"><span class="pre">trainer.dt</span></code> unset, the step is taken from the
+dataset’s <code class="docutils literal notranslate"><span class="pre">numerical/dt</span></code> attribute, or else from the spacing of <code class="docutils literal notranslate"><span class="pre">times</span></code>.
+The name collision check runs <strong>before</strong> training starts, so a duplicate
+<code class="docutils literal notranslate"><span class="pre">--name</span></code> fails fast.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">20</span><span class="w"> </span>--device<span class="w"> </span>cpu
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>… Lightning progress …
+trained &#39;spectral_onsagernet_1d&#39; with &#39;spectral_onsagernet_1d&#39;
+  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/model.pt
+  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/config.yaml
+  registered: spectral_onsagernet_1d_v0
+</pre></div>
+</div>
+<p>The run directory contains:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>Contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">model.pt</span></code></p></td>
+<td><p>Plain <code class="docutils literal notranslate"><span class="pre">state_dict</span></code> — loadable with <code class="docutils literal notranslate"><span class="pre">torch.load</span></code> + <code class="docutils literal notranslate"><span class="pre">model.load_state_dict</span></code>, no Lightning needed. The canonical artifact.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config.yaml</span></code></p></td>
+<td><p>The fully resolved recipe plus <code class="docutils literal notranslate"><span class="pre">model_name</span></code>, <code class="docutils literal notranslate"><span class="pre">trainer_name</span></code>, <code class="docutils literal notranslate"><span class="pre">dyn</span></code>, <code class="docutils literal notranslate"><span class="pre">data</span></code>, <code class="docutils literal notranslate"><span class="pre">dataset_name</span></code>, <code class="docutils literal notranslate"><span class="pre">checkpoint_name</span></code>, <code class="docutils literal notranslate"><span class="pre">train_config</span></code>. This is what <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code> reads to rebuild the model.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">history.json</span></code></p></td>
+<td><p>Per-epoch metric series, e.g. <code class="docutils literal notranslate"><span class="pre">{&quot;train_loss&quot;:</span> <span class="pre">[...]}</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">last.ckpt</span></code>, <code class="docutils literal notranslate"><span class="pre">lit_epoch=NNN.ckpt</span></code></p></td>
+<td><p>Lightning checkpoints (optimizer state etc.) written by <code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code>; not needed downstream.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>More examples:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Train on a file that was never registered (registry name stays empty in the record).</span>
+mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>fno1d<span class="w"> </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span>--data<span class="w"> </span>/tmp/kdv_scratch.h5<span class="w"> </span>--config<span class="w"> </span>default<span class="w"> </span>--epochs<span class="w"> </span><span class="m">5</span>
+
+<span class="c1"># Give the run a meaningful name and overwrite a previous attempt.</span>
+mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>ac_eps05<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>son_eps05_long<span class="w"> </span>--epochs<span class="w"> </span><span class="m">200</span><span class="w"> </span>--force
+
+<span class="c1"># A hyper-parameter variant: copy default.yaml to configs/train/allen_cahn_1d/spectral_onsagernet_1d/lr1e-4.yaml, then</span>
+mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--config<span class="w"> </span>lr1e-4
+
+<span class="c1"># Throw-away run that must not pollute the checkpoint index.</span>
+mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>fno1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--epochs<span class="w"> </span><span class="m">1</span><span class="w"> </span>--device<span class="w"> </span>cpu<span class="w"> </span>--no-registry
+</pre></div>
+</div>
+<p>Two things to know:</p>
+<ul class="simple">
+<li><p>The shipped <code class="docutils literal notranslate"><span class="pre">smoke.yaml</span></code> under <code class="docutils literal notranslate"><span class="pre">configs/train/allen_cahn_1d/spectral_onsagernet_1d/</span></code>
+is a test fixture with <code class="docutils literal notranslate"><span class="pre">Nx:</span> <span class="pre">8</span></code>; it does not fit the 256-point datasets.
+For a quick real run use <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">default</span> <span class="pre">--epochs</span> <span class="pre">1</span> <span class="pre">--device</span> <span class="pre">cpu</span></code>.</p></li>
+<li><p>The architectures shipped today (<code class="docutils literal notranslate"><span class="pre">fno1d</span></code>, <code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d</span></code>) take
+1D, single-channel input. The 2D and multi-channel predefined datasets
+can be generated and registered, but training on them needs a model that
+accepts them (see <a class="reference internal" href="extending.html"><span class="std std-doc">Extending</span></a>); custom models currently run
+through the Python API rather than <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code>.</p></li>
+</ul>
+<p>Errors:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invalid value: dataset &#39;nope&#39; is not registered and is not an existing HDF5 path
+Invalid value: registered dataset &#39;old&#39; points to missing file: /home/me/mesokit/data/allen_cahn_1d/old.h5
+Invalid value: no config &#39;nope&#39; under /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d; available: default, smoke
+Invalid value: --device must be one of: auto, cpu, gpu
+Invalid value: checkpoint &#39;spectral_onsagernet_1d_v0&#39; already registered; pass --force to overwrite
+</pre></div>
+</div>
+</section>
+<section id="mesokit-model">
+<h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span></code><a class="headerlink" href="#mesokit-model" title="Link to this heading">¶</a></h2>
+<p>Manage the project-local index of <strong>trained checkpoints</strong>
+(<code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code>). This is not the registry of architectures —
+that one is populated by the package and inspected from Python with
+<code class="docutils literal notranslate"><span class="pre">mesokit.models.available()</span></code>.</p>
+<section id="mesokit-model-list">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code><a class="headerlink" href="#mesokit-model-list" title="Link to this heading">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>list
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>son_eps05_long
+  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/son_eps05_long/model.pt
+  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/son_eps05_long/config.yaml
+spectral_onsagernet_1d_v0
+  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/model.pt
+  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/config.yaml
+</pre></div>
+</div>
+<p>Entries are sorted by name; with nothing registered it prints
+<code class="docutils literal notranslate"><span class="pre">(no</span> <span class="pre">checkpoints</span> <span class="pre">registered)</span></code>.</p>
+</section>
+<section id="mesokit-model-register">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">register</span></code><a class="headerlink" href="#mesokit-model-register" title="Link to this heading">¶</a></h3>
+<p>Index a checkpoint that was trained elsewhere (a notebook, a cluster job,
+another machine). Only pointers are stored; nothing is copied.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span>--model<span class="w"> </span>NAME<span class="w"> </span>--file<span class="w"> </span>CKPT.pt<span class="w"> </span>--config<span class="w"> </span>CONFIG.yaml<span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--model</span> <span class="pre">NAME</span></code></p></td>
+<td><p>Registry name (required).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--file</span> <span class="pre">CKPT.pt</span></code></p></td>
+<td><p>Existing checkpoint file: a <code class="docutils literal notranslate"><span class="pre">state_dict</span></code>, or a dict with a <code class="docutils literal notranslate"><span class="pre">state_dict</span></code> key such as a Lightning checkpoint (required).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">CONFIG.yaml</span></code></p></td>
+<td><p>The recipe used to train it; must contain a <code class="docutils literal notranslate"><span class="pre">model</span></code> section with a <code class="docutils literal notranslate"><span class="pre">_target_</span></code> so <code class="docutils literal notranslate"><span class="pre">interpret</span></code> can rebuild the architecture (required).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
+<td><p>Replace an existing entry.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span>--model<span class="w"> </span>son_cluster_run<span class="w"> </span>--file<span class="w"> </span>~/jobs/1234/model.pt<span class="w"> </span>--config<span class="w"> </span>~/jobs/1234/config.yaml
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;son_cluster_run&#39;
+  checkpoint: /home/me/jobs/1234/model.pt
+  config:     /home/me/jobs/1234/config.yaml
+</pre></div>
+</div>
+<p>The simplest way to obtain a valid pair is to train once with
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> (even with <code class="docutils literal notranslate"><span class="pre">--no-registry</span></code>) and copy its <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>
+alongside your own checkpoint. When loading, <code class="docutils literal notranslate"><span class="pre">interpret</span></code> strips a leading
+<code class="docutils literal notranslate"><span class="pre">model.</span></code> prefix and any <code class="docutils literal notranslate"><span class="pre">._orig_mod.</span></code> (from <code class="docutils literal notranslate"><span class="pre">torch.compile</span></code>) from the
+parameter names, so Lightning-style checkpoints load unchanged.</p>
+</section>
+</section>
+<section id="mesokit-interpret">
+<h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code><a class="headerlink" href="#mesokit-interpret" title="Link to this heading">¶</a></h2>
+<p>Inspect the interpretability artifacts a trained checkpoint can produce.
+Every registered model implements <code class="docutils literal notranslate"><span class="pre">list_artifacts()</span></code> and <code class="docutils literal notranslate"><span class="pre">artifact(name)</span></code>;
+these commands are thin wrappers that rebuild the model from its registry
+record, load the weights, and call them.</p>
+<p>How a checkpoint is rebuilt: the registry record gives <code class="docutils literal notranslate"><span class="pre">config_path</span></code>; the
+<code class="docutils literal notranslate"><span class="pre">model</span></code> section of that YAML is instantiated; <code class="docutils literal notranslate"><span class="pre">model.pt</span></code> is loaded as a
+<code class="docutils literal notranslate"><span class="pre">state_dict</span></code> (strictly — every parameter must match); the model is put in
+<code class="docutils literal notranslate"><span class="pre">eval()</span></code> mode. For <code class="docutils literal notranslate"><span class="pre">extract</span></code>, the dataset the checkpoint was trained on is
+located too (by its registered name, else by the path recorded in the
+config) and handed to the model as reference data for artifacts that need
+snapshots (a learned potential is evaluated along real states, for
+instance).</p>
+<section id="mesokit-interpret-list">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">list</span></code><a class="headerlink" href="#mesokit-interpret-list" title="Link to this heading">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>CKPT_NAME
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>spectral_onsagernet_1d_v0:
+  potential
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">fno1d</span></code> checkpoints list <code class="docutils literal notranslate"><span class="pre">spectrum</span></code>, which is declared but not implemented
+yet; extracting it raises <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>.</p>
+</section>
+<section id="mesokit-interpret-extract">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">extract</span></code><a class="headerlink" href="#mesokit-interpret-extract" title="Link to this heading">¶</a></h3>
+<p>Build one artifact (or all of them), print its one-paragraph summary, and
+save its figure. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">explain</span></code> is an exact alias.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>CKPT_NAME<span class="w"> </span>--artifact<span class="w"> </span>NAME<span class="w"> </span>--output<span class="w"> </span>FILE.png<span class="w"> </span><span class="o">[</span>--max-snapshots<span class="w"> </span>N<span class="o">]</span>
+mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>CKPT_NAME<span class="w"> </span>--artifact<span class="w"> </span>all<span class="w">  </span>--output<span class="w"> </span>DIR/<span class="w">     </span><span class="o">[</span>--max-snapshots<span class="w"> </span>N<span class="o">]</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--model</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Registered checkpoint name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--artifact</span></code></p></td>
+<td><p>required</p></td>
+<td><p>An entry from <code class="docutils literal notranslate"><span class="pre">interpret</span> <span class="pre">list</span></code>, or <code class="docutils literal notranslate"><span class="pre">all</span></code> (also <code class="docutils literal notranslate"><span class="pre">*</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--output</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Target file; the extension selects the matplotlib format (<code class="docutils literal notranslate"><span class="pre">.png</span></code>, <code class="docutils literal notranslate"><span class="pre">.pdf</span></code>, <code class="docutils literal notranslate"><span class="pre">.svg</span></code>, …). With <code class="docutils literal notranslate"><span class="pre">--artifact</span> <span class="pre">all</span></code> it must be a directory — a path with an extension is rejected — and one PNG per artifact, named <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_&lt;artifact&gt;.png</span></code>, is written inside it.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--max-snapshots</span> <span class="pre">N</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5000</span></code></p></td>
+<td><p>Cap on the number of reference snapshots handed to data-backed artifacts. Lower it to speed up extraction on large datasets.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d_v0<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/potential.png
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>spectral_onsagernet_1d on allen_cahn_1d exposes a PolynomialPotential potential. The constant-field slice over u in [-2, 2] has V range [-0.0197, 23.4]. The largest learned mobility multiplier is 0.07; the largest reactive multiplier magnitude is 0.0293.
+saved: /home/me/mesokit/figs/potential.png
+</pre></div>
+</div>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Everything the model offers, one file each, into a directory.</span>
+mesokit<span class="w"> </span>interpret<span class="w"> </span>explain<span class="w"> </span>--model<span class="w"> </span>son_eps05_long<span class="w"> </span>--artifact<span class="w"> </span>all<span class="w"> </span>--output<span class="w"> </span>figs/son_eps05_long/
+
+<span class="c1"># Vector output for a paper, fewer reference snapshots.</span>
+mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>son_eps05_long<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/potential.pdf<span class="w"> </span>--max-snapshots<span class="w"> </span><span class="m">500</span>
+</pre></div>
+</div>
+<p>Errors:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invalid value: checkpoint &#39;nope&#39; is not registered
+Invalid value: registered checkpoint path does not exist: /home/me/mesokit/checkpoints/allen_cahn_1d/old/model.pt
+Invalid value: --output must be a directory when --artifact all
+Invalid value: checkpoint &#39;x&#39; has no model config and no model_name; register a config produced by `mesokit train`
+KeyError: &quot;unknown artifact(s) [&#39;x&#39;]; available: [&#39;potential&#39;]&quot;      # a traceback, exit status 1
+</pre></div>
+</div>
+</section>
+</section>
+<section id="recipes">
+<h2>Recipes<a class="headerlink" href="#recipes" title="Link to this heading">¶</a></h2>
+<p><strong>Smallest end-to-end run</strong> (seconds on a CPU):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_fdr
+mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>ac_fdr<span class="w"> </span>--epochs<span class="w"> </span><span class="m">1</span><span class="w"> </span>--device<span class="w"> </span>cpu
+mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d_v0<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/potential.png
+</pre></div>
+</div>
+<p><strong>The reference experiment:</strong></p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w">                       </span><span class="c1"># allen_cahn_1d_v0, 1000 trajectories</span>
+mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0
+mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d_v0<span class="w"> </span>--artifact<span class="w"> </span>all<span class="w"> </span>--output<span class="w"> </span>figs/son_v0/
+</pre></div>
+</div>
+<p><strong>A parameter sweep with reproducible names:</strong></p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span>eps<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.05<span class="w"> </span><span class="m">0</span>.1<span class="w"> </span><span class="m">0</span>.2<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>sed<span class="w"> </span><span class="s2">&quot;s/^eps: .*/eps: </span><span class="nv">$eps</span><span class="s2">/&quot;</span><span class="w"> </span>configs/data/allen_cahn_1d/default.yaml<span class="w"> </span>&gt;<span class="w"> </span>configs/data/allen_cahn_1d/eps<span class="nv">$eps</span>.yaml
+<span class="w">  </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>eps<span class="nv">$eps</span><span class="w"> </span>--name<span class="w"> </span>ac_eps<span class="nv">$eps</span>
+<span class="w">  </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>ac_eps<span class="nv">$eps</span><span class="w"> </span>--name<span class="w"> </span>son_eps<span class="nv">$eps</span>
+<span class="k">done</span>
+mesokit<span class="w"> </span>model<span class="w"> </span>list
+</pre></div>
+</div>
+<p><strong>Your own solver’s output:</strong></p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>my_export.py<span class="w">                                   </span><span class="c1"># writes runs/my_data.h5 in the v1 layout</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>my_v0<span class="w"> </span>--file<span class="w"> </span>runs/my_data.h5
+mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>fno1d<span class="w"> </span>--dyn<span class="w"> </span>my_dynamics<span class="w"> </span>--data<span class="w"> </span>my_v0<span class="w"> </span>--config<span class="w"> </span>default
+</pre></div>
+</div>
+<p>The training recipe is looked up at <code class="docutils literal notranslate"><span class="pre">configs/train/my_dynamics/fno1d/default.yaml</span></code>,
+so create that folder (copy one of the shipped recipes) before training on a
+custom <code class="docutils literal notranslate"><span class="pre">dyn</span></code>.</p>
+<p><strong>Data in some other format, converted by an agent:</strong></p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>~/runs/field.nc<span class="w"> </span>--hint<span class="w"> </span><span class="s2">&quot;variable phi, dims (member, time, x)&quot;</span><span class="w"> </span>--name<span class="w"> </span>phi_v0
+mesokit<span class="w"> </span>data<span class="w"> </span>list
+</pre></div>
+</div>
+<p><strong>Generate the 2D and microscopic datasets</strong> (for the Python API or a model
+of your own; the shipped models are 1D):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>ising_2d
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--config<span class="w"> </span>kac
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>cahn_hilliard_2d<span class="w">       </span><span class="c1"># ~10 min, ~210 MB</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>llg_lattice_2d<span class="w">         </span><span class="c1"># 3 channels</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>peridynamics_fracture_2d<span class="w"> </span>--config<span class="w"> </span>fdr
+</pre></div>
+</div>
+<p><strong>Index a checkpoint trained in a notebook and inspect it:</strong></p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span>--model<span class="w"> </span>nb_run<span class="w"> </span>--file<span class="w"> </span>checkpoints/nb/model.pt<span class="w"> </span>--config<span class="w"> </span>checkpoints/nb/config.yaml
+mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>nb_run
+</pre></div>
+</div>
+</section>
+<section id="files-the-cli-reads-and-writes">
+<h2>Files the CLI Reads and Writes<a class="headerlink" href="#files-the-cli-reads-and-writes" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Path</p></th>
+<th class="head"><p>Written by</p></th>
+<th class="head"><p>Read by</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/*.yaml</span></code></p></td>
+<td><p>you</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code></p></td>
+<td><p>Hydra recipe; keys are simulator kwargs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;model&gt;/*.yaml</span></code></p></td>
+<td><p>you</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">train</span></code></p></td>
+<td><p>Sections <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">dataset</span></code>, <code class="docutils literal notranslate"><span class="pre">dataloader</span></code>, <code class="docutils literal notranslate"><span class="pre">trainer</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data/&lt;dyn&gt;/&lt;name&gt;.h5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">interpret</span></code></p></td>
+<td><p>v1 trajectory cache.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">data/parsed/&lt;stem&gt;.h5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">parse</span></code> (via the agent)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">interpret</span></code></p></td>
+<td><p>Same layout.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.mesokit/datasets.json</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code>, <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">register</span></code>, <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">parse</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">interpret</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">→</span> <span class="pre">{path,</span> <span class="pre">metadata}</span></code>; metadata holds shape, dtype, <code class="docutils literal notranslate"><span class="pre">dt</span></code>, the three groups.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;run&gt;/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">train</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">interpret</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">model.pt</span></code>, <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">history.json</span></code>, Lightning <code class="docutils literal notranslate"><span class="pre">.ckpt</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">register</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">interpret</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">→</span> <span class="pre">{path,</span> <span class="pre">config_path,</span> <span class="pre">model_name,</span> <span class="pre">trainer_name,</span> <span class="pre">dyn,</span> <span class="pre">dataset_name,</span> <span class="pre">data,</span> <span class="pre">run_id,</span> <span class="pre">training_config_hash,</span> <span class="pre">metadata}</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Both registries are plain JSON with atomic writes; you can inspect or hand-edit
+them, and delete an entry by removing its key. Nothing under <code class="docutils literal notranslate"><span class="pre">data/</span></code>,
+<code class="docutils literal notranslate"><span class="pre">checkpoints/</span></code> or <code class="docutils literal notranslate"><span class="pre">.mesokit/</span></code> should be committed.</p>
+<p>A registry entry, for reference:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;schema_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;entries&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;ac_fdr&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/home/me/mesokit/data/allen_cahn_1d/ac_fdr.h5&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;metadata&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;dyn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;allen_cahn_1d&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;shape&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">101</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">256</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;data_dtype&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;float32&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;channel_names&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;dt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;physical&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;Lx&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">6.283185307179586</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;T&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;eps&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;numerical&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;Nx&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">256</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;dx&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.02454369260617026</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;dt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">4e-05</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;T_save_steps&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;Nk&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;max_k&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;dealias&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;provenance&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;seed&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;u_bound&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">10.0</span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Message</p></th>
+<th class="head"><p>Cause</p></th>
+<th class="head"><p>Fix</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config</span> <span class="pre">dir</span> <span class="pre">not</span> <span class="pre">found:</span> <span class="pre">…/configs/data/&lt;dyn&gt;</span></code></p></td>
+<td><p>Not running from the repository root, or <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;</span></code> has no recipe folder.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cd</span></code> to the root; check <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">avail</span></code>; create <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/default.yaml</span></code> for a custom simulator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">config</span> <span class="pre">'x'</span> <span class="pre">under</span> <span class="pre">…;</span> <span class="pre">available:</span> <span class="pre">default,</span> <span class="pre">fdr</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--config</span></code> takes a stem, not a filename or path.</p></td>
+<td><p>Drop the <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> and any directory.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">and</span> <span class="pre">--no-registry</span> <span class="pre">are</span> <span class="pre">mutually</span> <span class="pre">exclusive</span></code></p></td>
+<td><p>Both flags given.</p></td>
+<td><p>Pick one.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dataset</span> <span class="pre">'x'</span> <span class="pre">already</span> <span class="pre">registered;</span> <span class="pre">pass</span> <span class="pre">--force</span> <span class="pre">to</span> <span class="pre">overwrite</span></code></p></td>
+<td><p>Name collision.</p></td>
+<td><p>Choose another <code class="docutils literal notranslate"><span class="pre">--name</span></code>, or add <code class="docutils literal notranslate"><span class="pre">--force</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sanity</span> <span class="pre">check</span> <span class="pre">failed</span> <span class="pre">for</span> <span class="pre">…;</span> <span class="pre">not</span> <span class="pre">registered</span></code></p></td>
+<td><p>The file violates the v1 contract; the specific checks are printed above the message.</p></td>
+<td><p>Fix the writer — see <a class="reference internal" href="data_processing/structure.html"><span class="std std-doc">Data Structure</span></a> — or run <code class="docutils literal notranslate"><span class="pre">mesokit.data.validate(path)</span></code> in Python for the full report.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dataset</span> <span class="pre">'x'</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">registered</span> <span class="pre">and</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">an</span> <span class="pre">existing</span> <span class="pre">HDF5</span> <span class="pre">path</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--data</span></code> matched neither a name nor a file.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">list</span></code>, or pass the path.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">registered</span> <span class="pre">dataset</span> <span class="pre">'x'</span> <span class="pre">points</span> <span class="pre">to</span> <span class="pre">missing</span> <span class="pre">file</span></code></p></td>
+<td><p>The file was moved or deleted after registration.</p></td>
+<td><p>Re-register with the new path and <code class="docutils literal notranslate"><span class="pre">--force</span></code>, or regenerate.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">checkpoint</span> <span class="pre">'x'</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">registered</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">interpret</span></code> needs a name from <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code>.</p></td>
+<td><p>Train, or <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">register</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">a</span> <span class="pre">directory</span> <span class="pre">when</span> <span class="pre">--artifact</span> <span class="pre">all</span></code></p></td>
+<td><p>An extension was given with <code class="docutils literal notranslate"><span class="pre">--artifact</span> <span class="pre">all</span></code>.</p></td>
+<td><p>Pass a directory path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">'claude'</span> <span class="pre">requires</span> <span class="pre">'claude'</span> <span class="pre">on</span> <span class="pre">PATH</span></code></p></td>
+<td><p>The agent CLI is not installed or not on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p></td>
+<td><p>Install it, or <code class="docutils literal notranslate"><span class="pre">--agent</span> <span class="pre">codex</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>A tensor size mismatch inside the model during <code class="docutils literal notranslate"><span class="pre">train</span></code></p></td>
+<td><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">model.Nx</span></code> does not match the dataset grid (e.g. the 8-point <code class="docutils literal notranslate"><span class="pre">smoke.yaml</span></code> fixture on 256-point data).</p></td>
+<td><p>Use <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">default</span></code> or fix <code class="docutils literal notranslate"><span class="pre">Nx</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Training is slow or out of memory</p></td>
+<td><p>Default recipes assume a GPU.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--device</span> <span class="pre">cpu</span> <span class="pre">--batch-size</span> <span class="pre">8</span> <span class="pre">--epochs</span> <span class="pre">1</span></code> for a smoke run.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="python-equivalents">
+<h2>Python Equivalents<a class="headerlink" href="#python-equivalents" title="Link to this heading">¶</a></h2>
+<p>Everything the CLI does is available from Python; the CLI only adds the
+registries and the config lookup.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>CLI</p></th>
+<th class="head"><p>Python</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">avail</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mesokit.data.available()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--dyn</span> <span class="pre">X</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ds</span> <span class="pre">=</span> <span class="pre">mesokit.data.simulate(&quot;X&quot;,</span> <span class="pre">**kwargs);</span> <span class="pre">ds.save_hdf5(path)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span> <span class="pre">--file</span> <span class="pre">F</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">report</span> <span class="pre">=</span> <span class="pre">mesokit.data.validate(F)</span></code> (no registry write)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.load_hdf5(path)</span></code> → a <code class="docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code> adapter → <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> → <code class="docutils literal notranslate"><span class="pre">mesokit.trainers.get_trainer(name)(...).fit(model,</span> <span class="pre">loader)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code></p></td>
+<td><p>read <code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">list</span></code> / <code class="docutils literal notranslate"><span class="pre">extract</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">model.load_state_dict(torch.load(&quot;model.pt&quot;))</span></code>; <code class="docutils literal notranslate"><span class="pre">model.list_artifacts()</span></code>; <code class="docutils literal notranslate"><span class="pre">model.artifact(name).save(path)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>See <a class="reference internal" href="extending.html"><span class="std std-doc">Extending</span></a> for the full Python surface and for registering
+your own simulators, models, trainers and artifacts.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="tutorial.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Tutorial</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="quickstart.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Quickstart</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Zhuoyuan Li
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Command-Line Reference</a><ul>
+<li><a class="reference internal" href="#conventions">Conventions</a></li>
+<li><a class="reference internal" href="#pipeline-at-a-glance">Pipeline at a Glance</a></li>
+<li><a class="reference internal" href="#mesokit-data"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit-data-avail"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">avail</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-data-list"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">list</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-data-generate"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-data-register"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-data-parse"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mesokit-train"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-model"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit-model-list"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-model-register"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">register</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mesokit-interpret"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit-interpret-list"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">list</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-interpret-extract"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">extract</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recipes">Recipes</a></li>
+<li><a class="reference internal" href="#files-the-cli-reads-and-writes">Files the CLI Reads and Writes</a></li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li><a class="reference internal" href="#python-equivalents">Python Equivalents</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

@@ -19,6 +19,8 @@ Requires a linux-64 platform with a CUDA-capable GPU (CUDA 12.6 or newer).
 All later commands in this page assume you are inside the project root
 with the environment installed. Prefix commands with `pixi run` (or open
 a pixi shell by running `pixi shell`) if `mesokit` is not on your `PATH`.
+This page shows the happy path; every option, output file, error message
+and more examples are in the [Command-Line Reference](cli.md).
 
 ## Data Loading
 

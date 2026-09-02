@@ -1,0 +1,42 @@
+# {py:mod}`mesokit.data.llg.llg_lattice_2d`
+
+```{py:module} mesokit.data.llg.llg_lattice_2d
+```
+
+```{autodoc2-docstring} mesokit.data.llg.llg_lattice_2d
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`simulate_llg_lattice_2d <mesokit.data.llg.llg_lattice_2d.simulate_llg_lattice_2d>`
+  - ```{autodoc2-docstring} mesokit.data.llg.llg_lattice_2d.simulate_llg_lattice_2d
+    :summary:
+    ```
+* - {py:obj}`_normalise <mesokit.data.llg.llg_lattice_2d._normalise>`
+  - ```{autodoc2-docstring} mesokit.data.llg.llg_lattice_2d._normalise
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} simulate_llg_lattice_2d(*, n_traj: int = 64, Nx: int = 32, Ny: int | None = None, J: float = 1.0, K: float = 0.1, h: float = 0.0, alpha: float = 0.1, gamma: float = 1.0, T: float = 50.0, dt: float = 0.01, save_every: int = 50, ic: str = 'random', ic_tilt: float = 0.3, seed: int = 0, verbose: bool = False) -> mesokit.data.trajectory.TrajectoryDataset
+:canonical: mesokit.data.llg.llg_lattice_2d.simulate_llg_lattice_2d
+
+```{autodoc2-docstring} mesokit.data.llg.llg_lattice_2d.simulate_llg_lattice_2d
+```
+````
+
+````{py:function} _normalise(m: numpy.ndarray) -> numpy.ndarray
+:canonical: mesokit.data.llg.llg_lattice_2d._normalise
+
+```{autodoc2-docstring} mesokit.data.llg.llg_lattice_2d._normalise
+```
+````

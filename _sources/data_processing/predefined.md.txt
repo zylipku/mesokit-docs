@@ -1,13 +1,32 @@
 # Predefined Datasets
 
-`mesokit` ships a small catalog of pre-defined simulators that produce
-conforming trajectory cache files out of the box. They are the fastest way
-to obtain a dataset that downstream models, trainers, and interpretability
-extractors can immediately consume — no schema bookkeeping required.
+`mesokit` ships a catalog of pre-defined simulators that produce conforming
+trajectory cache files out of the box. They are the fastest way to obtain a
+dataset that downstream models, trainers, and interpretability extractors
+can immediately consume — no schema bookkeeping required — and they span
+the three kinds of data the toolkit is built for: **phase-field PDEs**
+(Allen–Cahn, Cahn–Hilliard), **dispersive waves** (KdV), and
+**microscopic / particle-level dynamics coarse-grained to a field** (Ising
+Monte Carlo, Landau–Lifshitz–Gilbert spin lattices, peridynamic fracture).
 
 The catalog is registered automatically when `mesokit.data` is imported, and
 the same simulator can be called from the CLI, from a notebook, or from a
 training script through the universal `simulate(name, **params)` surface.
+
+| `dyn` | System | Dynamics class | Output `(n_traj, n_time, n_channel, *grid)` with defaults | Solver dependency |
+| --- | --- | --- | --- | --- |
+| [`allen_cahn_1d`](#allen-cahn-1d) | Allen–Cahn phase field | non-conserved gradient flow | `(1000, 101, 1, 256)` | Dedalus |
+| [`kdv_1d`](#kdv-1d) | Korteweg–de Vries | dispersive, Hamiltonian | `(1000, 101, 1, 256)` | Dedalus |
+| [`cahn_hilliard_2d`](#cahn-hilliard-2d) | Cahn–Hilliard phase field | conserved gradient flow | `(32, 101, 1, 128, 128)` | NumPy / SciPy FFT |
+| [`ising_2d`](#ising-2d) | Ising model, nearest-neighbour or Kac | stochastic, coarse-grained from spins | `(100, 101, 1, 16, 16)` | NumPy |
+| [`llg_lattice_2d`](#llg-lattice-2d) | Landau–Lifshitz–Gilbert spin lattice | reversible precession + dissipation | `(64, 101, 3, 32, 32)` | NumPy |
+| [`peridynamics_fracture_2d`](#peridynamics-fracture-2d) | Bond-based peridynamics, notched plate under mode-I load | particle mechanics with irreversible bond breaking, coarse-grained to displacement / damage / force fields | `(4, 101, 6, 40, 30)` | LAMMPS + SciPy |
+
+The Dedalus- and LAMMPS-backed simulators need the `sim` Pixi feature. The
+three NumPy/SciPy ones have no solver dependency of their own, but
+`mesokit.data` currently imports the 1D Dedalus simulators at module level,
+so importing the package still requires Dedalus (every Pixi environment
+except `lint` and `docs` has it).
 
 ## Listing What's Available
 
@@ -17,15 +36,13 @@ From the CLI:
 mesokit data avail
 ```
 
-prints the list of registered simulators (currently `allen_cahn_1d` and
-`kdv_1d`) along with the Python target each one dispatches to.
-
-Programmatically:
+prints the registered simulators along with the Python target each one
+dispatches to. Programmatically:
 
 ```python
 from mesokit.data import available, get
 
-print(available())           # ['allen_cahn_1d', 'kdv_1d']
+print(available())           # ['allen_cahn_1d', 'cahn_hilliard_2d', 'ising_2d', 'kdv_1d', 'llg_lattice_2d', 'peridynamics_fracture_2d']
 sim = get("allen_cahn_1d")   # the simulator callable
 ```
 
@@ -45,6 +62,15 @@ This runs the registered simulator with the parameters from
 `configs/data/allen_cahn_1d/default.yaml`, writes the resulting HDF5 file
 under `data/allen_cahn_1d/<auto-name>.h5`, and registers the file under
 that auto-generated name (`<dyn>_v<n>` — the next free `v0`, `v1`, …).
+
+Every simulator ships a `default.yaml` (the reference dataset) and an
+`fdr.yaml` ("fast dev run": a few trajectories, seconds of compute) under
+`configs/data/<dyn>/`; some ship further variants (for example
+`configs/data/ising_2d/kac.yaml`). Select one by stem:
+
+```sh
+mesokit data generate --dyn ising_2d --config kac
+```
 
 Useful flags:
 
@@ -96,7 +122,7 @@ physical/
 
 numerical/
   Nx             256
-  dx             0.024543692606170173
+  dx             0.02454369260617026
   dt             4e-05
   T_save_steps   25
   Nk             3
@@ -108,9 +134,880 @@ provenance/
   u_bound  10.0
 ```
 
-`kdv_1d` produces an analogous file without the equation-specific `eps`
-entry. Every value is read from the simulator's call signature — see
-[`allen_cahn_1d.py`](../../src/mesokit/data/allen_cahn/allen_cahn_1d.py) and
-[`kdv_1d.py`](../../src/mesokit/data/kdv/kdv_1d.py) for the exact
-defaults — and the on-disk file is bit-for-bit the same as one produced by
-the minimal external-writer snippet in [Custom Datasets](custom.md).
+Every value is either a keyword argument of the simulator or derived from
+one (`dx = Lx / Nx`, `T = n_steps · dt`, particle counts, scheme labels) —
+the per-simulator sections below list them — and the on-disk file has the
+same v1 layout as one produced by the minimal external-writer snippet in
+[Custom Datasets](custom.md).
+
+## Simulator Catalog
+
+Each entry gives the model, what the trajectories represent, the complete
+numerical scheme (discretisation, time stepping, de-aliasing, stability
+limits, what is conserved exactly and what is not), the initial-condition
+distribution, the parameters exposed through `configs/data/<dyn>/*.yaml`
+(which are exactly the keyword arguments of the Python simulator), and
+references. The scheme descriptions are written so that the file could be
+regenerated from them without reading the source. Throughout, `T` in a config is the
+*final simulated time* for PDE solvers and the *temperature* for the
+stochastic Ising sampler; the tables say which.
+
+(allen-cahn-1d)=
+### `allen_cahn_1d` — Allen–Cahn equation
+
+**Model.** The Allen–Cahn equation is the $L^2$ gradient flow of the
+Ginzburg–Landau free energy with a double-well potential,
+
+$$
+\partial_t u = \partial_{xx} u + \frac{u - u^3}{\varepsilon^2},
+\qquad x \in [0, L_x) \text{ periodic},
+$$
+
+i.e. $\partial_t u = -\delta F/\delta u$ with
+$F[u] = \int \bigl[\tfrac12 |\partial_x u|^2 + \tfrac{1}{4\varepsilon^2}(1 - u^2)^2\bigr]\,dx$.
+The order parameter $u$ relaxes toward the two minima $u = \pm 1$ and forms
+diffuse interfaces of width $O(\varepsilon)$ between them; the total mass
+$\int u\,dx$ is **not** conserved. In one dimension interfaces attract and
+annihilate on exponentially slow time scales, so the trajectories in this
+dataset capture the fast relaxation from a smooth random field to a
+piecewise-constant profile plus the early interface motion.
+
+**Numerical scheme** (Dedalus v3, Fourier–Galerkin in space, SBDF2 in time).
+
+1. *Spatial discretisation.* $u$ is expanded in a real Fourier basis on
+   `Nx` equispaced points of $[0, L_x)$,
+   $u(x) = \sum_{|k| \le N_x/2 - 1} \hat u_k\, e^{ikx}$ with
+   $k \in (2\pi/L_x)\,\mathbb{Z}$ (Dedalus's `RealFourier` drops the
+   Nyquist mode, so $k_{\max} = N_x/2 - 1 = 127$), and $\partial_x \mapsto ik$
+   exactly. The nonlinear term is evaluated pointwise on a grid of
+   `dealias` $\times$ `Nx` $= 512$ points and projected back onto the
+   retained modes (Dedalus `dealias=2`): a factor $2$ is alias-free for a
+   cubic product, since the largest triad sum $3(N_x/2 - 1) = 381$ aliases on
+   the $2N_x$ grid to $381 - 512 = -131$, outside $|k| \le 127$.
+2. *Implicit/explicit split.* The equation is posed as
+   $\partial_t u - \partial_{xx}u = \mathcal{F}(u)$ with
+   $\mathcal{F}(u) = (u - u^3)/\varepsilon^2$: the diffusion operator is the
+   implicit linear part $\mathcal{L} = -\partial_{xx} \mapsto k^2$, and the
+   *whole* reaction term, including its linear piece $u/\varepsilon^2$, is
+   explicit.
+3. *Time stepping.* With $\Delta t =$ `timestep` the SBDF2 update is, mode by
+   mode,
+
+   $$
+   \frac{3\hat u^{n+1}_k - 4\hat u^n_k + \hat u^{n-1}_k}{2\Delta t} + k^2 \hat u^{n+1}_k
+   = 2\hat{\mathcal F}^n_k - \hat{\mathcal F}^{n-1}_k
+   \quad\Longrightarrow\quad
+   \hat u^{n+1}_k = \frac{4\hat u^n_k - \hat u^{n-1}_k + 2\Delta t\,(2\hat{\mathcal F}^n_k - \hat{\mathcal F}^{n-1}_k)}{3 + 2\Delta t\, k^2},
+   $$
+
+   second-order accurate in $\Delta t$; the first step is the first-order
+   SBDF1 (backward Euler on $\mathcal L$, forward Euler on $\mathcal F$), as
+   Dedalus does for the SBDF family. The stiff diffusion term places no
+   restriction on $\Delta t$; the explicit reaction term requires
+   $\Delta t \max|\mathcal F'(u)| = 2\Delta t/\varepsilon^2 \lesssim 1$, i.e.
+   $\Delta t \lesssim \varepsilon^2/2 = 5\times10^{-3}$ at the default
+   $\varepsilon = 0.1$. The default $\Delta t = 4\times10^{-5}$ is two orders
+   of magnitude inside that bound, so the step is set by accuracy of the
+   interface motion, not stability.
+4. *Output cadence.* The solver runs with fixed step until `T`. Frame $0$ is
+   the initial condition and frame $j \ge 1$ is the grid field after
+   iteration $j \cdot$ `T_save_steps`, so
+   `times` $= (0, \Delta t\,\texttt{T\_save\_steps}, 2\Delta t\,\texttt{T\_save\_steps}, \ldots)$:
+   $101$ frames spaced $10^{-3}$ apart with the defaults. Fields are read on
+   the un-padded `Nx` grid.
+5. *Rejection.* A finished trajectory is discarded, and a fresh initial
+   condition drawn, if it contains non-finite values or $\max|u| >$
+   `u_bound`. The random draws are consumed in a fixed order, so `seed`
+   determines the accepted set.
+
+Nothing is conserved by Allen–Cahn, and the scheme does not enforce a
+discrete energy law; $F[u]$ decreases monotonically in practice at the
+default step.
+
+**Initial conditions.** A random sum of sines built as follows: `Nk`
+mode indices are drawn without replacement from
+$\{1, \dots, \texttt{max\_k}\}$; an amplitude $a_j \sim \mathrm{Uniform}(0,1)$
+and a phase $\phi_j \sim \mathrm{Uniform}(0, 2\pi)$ are drawn for *every*
+$j = 1, \dots, \texttt{max\_k}$; the field is
+$\sum_j a_j \sin(\omega_j x + \phi_j)$ with $\omega_j = 2\pi j / \ell$ for
+the selected indices and $\omega_j = 0$ for the others — so each unselected
+index contributes the constant $a_j \sin\phi_j$. The period is
+$\ell = x_{N_x - 1} - x_0 = L_x(1 - 1/N_x)$, the span of the grid rather
+than $L_x$, so the sines are not exactly Fourier modes of the domain. The
+field is normalised to unit standard deviation and then affinely rescaled
+to the range $[-1, 1]$, which removes the constant offset. Trajectories
+whose $|u|$ ever exceeds `u_bound` are rejected and redrawn, so every file
+holds exactly `n_traj` accepted trajectories.
+
+**Parameters** (`configs/data/allen_cahn_1d/default.yaml`):
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `eps` | `0.1` | Interface-width parameter $\varepsilon$. |
+| `n_traj` | `1000` | Accepted trajectories. |
+| `Nx`, `Lx` | `256`, `2π` | Grid points and domain length. |
+| `T` | `0.1` | Final simulated time. |
+| `timestep` | `4e-5` | Solver step. |
+| `T_save_steps` | `25` | Iterations between saved frames. |
+| `Nk`, `max_k` | `3`, `10` | Random-IC mode selection. |
+| `u_bound` | `10.0` | Rejection threshold. |
+| `dealias` | `2` | Dedalus dealiasing factor. |
+| `seed` | `0` | RNG seed (`-1` for non-deterministic). |
+
+**Output.** `(n_traj, 101, 1, Nx)`, `channel_names = ("u",)`, `times` in
+simulation units; `physical = {Lx, T, eps}`,
+`numerical = {Nx, dx, dt, T_save_steps, Nk, max_k, dealias}`,
+`provenance = {seed, u_bound}`.
+
+**References.**
+
+- S. M. Allen and J. W. Cahn, "A microscopic theory for antiphase boundary
+  motion and its application to antiphase domain coarsening",
+  *Acta Metallurgica* **27**, 1085–1095 (1979).
+- K. J. Burns, G. M. Vasil, J. S. Oishi, D. Lecoanet, and B. P. Brown,
+  "Dedalus: A flexible framework for numerical simulations with spectral
+  methods", *Physical Review Research* **2**, 023068 (2020).
+- U. M. Ascher, S. J. Ruuth, and B. T. R. Wetton, "Implicit-explicit methods
+  for time-dependent partial differential equations",
+  *SIAM Journal on Numerical Analysis* **32**, 797–823 (1995) — the SBDF
+  family.
+
+(kdv-1d)=
+### `kdv_1d` — Korteweg–de Vries equation
+
+**Model.** The KdV equation
+
+$$
+\partial_t u + 6\, u\, \partial_x u + \partial_{xxx} u = 0,
+\qquad x \in [0, L_x) \text{ periodic},
+$$
+
+balances nonlinear steepening against third-order dispersion. It is a
+completely integrable Hamiltonian system with infinitely many conserved
+quantities (mass $\int u$, momentum $\int u^2$, energy
+$\int [\tfrac12 u_x^2 - u^3]$, …) and soliton solutions that pass through one
+another unchanged. Unlike the two phase-field equations it is not a
+gradient flow, so this dataset is the toolkit's example of *reversible*
+dynamics — a model that learns a dissipative structure should find nothing
+to dissipate here.
+
+**Numerical scheme** (Dedalus v3, Fourier–Galerkin in space, SBDF2 in time).
+
+1. *Spatial discretisation.* As for Allen–Cahn: real Fourier basis on `Nx`
+   points, $\partial_x \mapsto ik$, nonlinear products evaluated on the
+   `dealias` $\times$ `Nx` grid. The KdV nonlinearity is quadratic, for
+   which a padding factor $3/2$ would already be alias-free; the factor $2$
+   is kept for uniformity with Allen–Cahn.
+2. *Implicit/explicit split.* The equation is posed as
+   $\partial_t u + \partial_{xxx} u = \mathcal{F}(u)$ with
+   $\mathcal{F}(u) = -3\,\partial_x(u^2)$ (identical to $-6u\,\partial_x u$):
+   the dispersive operator $\mathcal{L} = \partial_{xxx} \mapsto (ik)^3 = -ik^3$
+   is implicit, the convective flux explicit and evaluated as
+   $\hat{\mathcal F}_k = -3ik\,\widehat{u^2}_k$.
+3. *Time stepping.* SBDF2 with the purely imaginary implicit symbol,
+
+   $$
+   \hat u^{n+1}_k = \frac{4\hat u^n_k - \hat u^{n-1}_k + 2\Delta t\,(2\hat{\mathcal F}^n_k - \hat{\mathcal F}^{n-1}_k)}{3 - 2i\,\Delta t\, k^3},
+   $$
+
+   bootstrapped by SBDF1. The implicit treatment removes the
+   $\Delta t \lesssim (\Delta x)^3$ restriction an explicit method would face
+   for $\partial_{xxx}$; the explicit convective term, whose advection speed
+   is $6u$, needs $6\,\Delta t\, k_{\max} \max|u| \lesssim 1$, which with
+   $k_{\max} = N_x/2 - 1 = 127$, $|u| \lesssim 3.3$ and
+   $\Delta t = 4\times10^{-5}$ evaluates to about $0.1$.
+4. *Conservation.* The $k = 0$ mode satisfies $\hat u_0^{n+1} = (4\hat u_0^n - \hat u_0^{n-1})/3$
+   with $\hat u_0^1 = \hat u_0^0$, so mass $\int u\,dx$ is exact. The
+   quadratic invariant $\int u^2\,dx$ and the energy are **not** exactly
+   preserved: BDF2 has $|R(i\theta)| < 1$ for $\theta \ne 0$, so dispersive
+   modes are weakly damped, by $1 - |R(i\theta)| \approx \theta^4/4$ per
+   step with $\theta = \Delta t\, k^3$ (about $4\times10^{-4}$ per step at
+   $\theta = 0.2$). A model trained on this data should see reversible
+   dynamics up to that small numerical dissipation.
+5. *Output cadence and rejection.* As for Allen–Cahn (frames every
+   `T_save_steps` iterations, `u_bound` filter).
+
+**Initial conditions.** The same sum-of-sines construction as Allen–Cahn
+(with `max_k = 6` by default) normalised to unit standard deviation, but
+**not** rescaled to $[-1, 1]$ — KdV has no preferred amplitude. As a
+consequence the constant contributions of the unselected indices survive:
+the mean $\bar u$ is random and typically of order one (about $0.85$ in
+magnitude on average, up to $\approx 4$), and it is conserved exactly by the
+scheme. A nonzero mean is a Galilean boost for KdV (frame speed $6\bar u$),
+so trajectories travel at different speeds. The `u_bound` rejection filter
+applies.
+
+**Parameters** (`configs/data/kdv_1d/default.yaml`): as for
+`allen_cahn_1d` without `eps`, and with `max_k = 6`.
+
+**Output.** `(n_traj, 101, 1, Nx)`, `channel_names = ("u",)`;
+`physical = {Lx, T}`, `numerical` and `provenance` as for Allen–Cahn.
+
+**References.**
+
+- D. J. Korteweg and G. de Vries, "On the change of form of long waves
+  advancing in a rectangular canal, and on a new type of long stationary
+  waves", *Philosophical Magazine* **39**, 422–443 (1895).
+- N. J. Zabusky and M. D. Kruskal, "Interaction of 'solitons' in a
+  collisionless plasma and the recurrence of initial states",
+  *Physical Review Letters* **15**, 240–243 (1965).
+
+(cahn-hilliard-2d)=
+### `cahn_hilliard_2d` — Cahn–Hilliard equation
+
+**Model.** The Cahn–Hilliard equation is the *conserved* ($H^{-1}$)
+gradient flow of the same Ginzburg–Landau free energy,
+
+$$
+\partial_t u = \Delta \mu, \qquad
+\mu = \frac{\delta F}{\delta u} = u^3 - u - \kappa\, \Delta u, \qquad
+F[u] = \int \Bigl[ \tfrac14 (u^2 - 1)^2 + \tfrac{\kappa}{2} |\nabla u|^2 \Bigr]\, d\mathbf{x},
+$$
+
+on the periodic rectangle $[0, L_x) \times [0, L_y)$. Because the flux is
+the gradient of a chemical potential, $\int u\, d\mathbf{x}$ is exactly
+conserved and $F$ decreases monotonically. A homogeneous mixture with
+$|\bar u| < 1/\sqrt{3}$ (inside the spinodal, where $f''(\bar u) = 3\bar u^2 - 1 < 0$)
+is linearly unstable to perturbations with
+$|\mathbf{k}|^2 < (1 - 3\bar u^2)/\kappa$ — for $\bar u = 0$, $|\mathbf k| < 1/\sqrt\kappa$
+with the fastest-growing mode at $|\mathbf{k}| = 1/\sqrt{2\kappa}$: this is
+**spinodal decomposition**. The resulting bicontinuous domain pattern then
+coarsens by Lifshitz–Slyozov–Wagner evaporation–condensation with
+characteristic length $L(t) \sim t^{1/3}$. The trajectories cover the
+quench, the decomposition, and the onset of coarsening.
+
+This is the two-dimensional, single-species prototype for the conserved
+mesoscopic models one obtains by coarse-graining diffusive molecular
+dynamics (binary mixtures, alloys) to a composition field, so it is the
+natural synthetic stand-in while a physical dataset of that kind is being
+prepared.
+
+**Numerical scheme** (NumPy/SciPy, Fourier pseudo-spectral in space, SBDF2 in time).
+
+1. *Spatial discretisation.* The field lives on the `Nx` $\times$ `Ny`
+   equispaced grid $x_i = i\,L_x/N_x$, $y_j = j\,L_y/N_y$ and is represented
+   by its real 2D FFT $\hat u_{\mathbf k}$, $\mathbf k = (k_x, k_y)$ with
+   $k_x \in (2\pi/L_x)\{-N_x/2, \ldots, N_x/2 - 1\}$ and
+   $k_y \in (2\pi/L_y)\{0, \ldots, N_y/2\}$ (the negative $k_y$ half follows
+   from reality). Every derivative is a multiplication:
+   $\Delta \mapsto -|\mathbf k|^2$, $\Delta^2 \mapsto |\mathbf k|^4$.
+2. *Semi-discrete system.* Transforming
+   $\partial_t u = \Delta(u^3) - \Delta u - \kappa \Delta^2 u$ gives, per mode,
+
+   $$
+   \frac{d\hat u_{\mathbf k}}{dt} = \Lambda(\mathbf k)\,\hat u_{\mathbf k} - |\mathbf k|^2\, \widehat{u^3}_{\mathbf k},
+   \qquad
+   \Lambda(\mathbf k) = |\mathbf k|^2 - \kappa |\mathbf k|^4 ,
+   $$
+
+   where $\Lambda$ is the full linear symbol (the anti-diffusive $-\Delta u$
+   and the stabilising $-\kappa\Delta^2 u$ together) and the cubic term is
+   the only nonlinearity.
+3. *De-aliasing of the cubic term.* $\widehat{u^3}$ is computed by zero-padding
+   $\hat u$ to a grid `dealias` $\times$ (`Nx`, `Ny`), transforming to physical
+   space, cubing pointwise, transforming back and truncating to the original
+   band. In this product the Nyquist modes $k_x = -N_x/2$ and $k_y = N_y/2$
+   are dropped so the band is symmetric (they remain in $\hat u$ itself and
+   evolve under the linear symbol). With `dealias = 2` (the default) this is
+   exact:
+   the largest triad sum is $3(N_x/2 - 1)$, which on the $2N_x$ grid aliases
+   to $3(N_x/2-1) - 2N_x < -(N_x/2 - 1)$, outside the retained band. The
+   $2/3$ rule would *not* suffice — it is exact only for quadratic products.
+   `dealias = 1` disables padding (aliasing errors feed the highest modes).
+4. *Time stepping.* Let $\hat N^n = \widehat{(u^n)^3}$ and $\Delta t =$ `dt`.
+   The first step is SBDF1,
+
+   $$
+   \frac{\hat u^1 - \hat u^0}{\Delta t} = \Lambda\, \hat u^1 - |\mathbf k|^2 \hat N^0
+   \quad\Longrightarrow\quad
+   \hat u^1 = \frac{\hat u^0 - \Delta t\,|\mathbf k|^2 \hat N^0}{1 - \Delta t\,\Lambda},
+   $$
+
+   and every later step is SBDF2 with the linear term implicit and the cubic
+   term extrapolated to second order,
+
+   $$
+   \frac{3\hat u^{n+1} - 4\hat u^n + \hat u^{n-1}}{2\Delta t}
+   = \Lambda\, \hat u^{n+1} - |\mathbf k|^2 \bigl(2\hat N^n - \hat N^{n-1}\bigr)
+   \quad\Longrightarrow\quad
+   \hat u^{n+1} = \frac{4\hat u^n - \hat u^{n-1} - 2\Delta t\,|\mathbf k|^2 (2\hat N^n - \hat N^{n-1})}{3 - 2\Delta t\,\Lambda}.
+   $$
+
+   The maximum of $\Lambda$ is $1/(4\kappa)$ (at $|\mathbf k|^2 = 1/(2\kappa)$),
+   so the SBDF1 denominator $1 - \Delta t\Lambda$ is positive for every mode
+   iff $\Delta t < 4\kappa$ and the SBDF2 denominator $3 - 2\Delta t\Lambda$
+   iff $\Delta t < 6\kappa$; the simulator enforces the tighter
+   $\Delta t < 4\kappa$. The stiff $\kappa|\mathbf k|^4$ term being
+   implicit, the practical step limit comes from the explicit cubic term on
+   the interface scale; the default $\Delta t = 0.05$ with $\Delta x = 0.5$,
+   $\kappa = 1$ ran the full $4000$-step default without blow-up or visible
+   oscillation (observed, not asserted by a test). All `n_traj` trajectories
+   are advanced as one batch array `(n_traj, Nx, Ny)`.
+5. *Exact mass conservation.* At $\mathbf k = 0$ both $|\mathbf k|^2$ and
+   $\Lambda$ vanish, so $\hat u_0^1 = \hat u_0^0$ and
+   $\hat u_0^{n+1} = (4\hat u_0^n - \hat u_0^{n-1})/3$, whence
+   $\hat u_0^n = \hat u_0^0$ for all $n$: the mean $\bar u$ is exact in the
+   float64 solver ($\sim 10^{-10}$ drift over the default run) and
+   $\sim 10^{-7}$ as read back from the float32 file. The free energy is not
+   discretely monotone by construction (no stabilisation term is added); a
+   monotone decrease was observed at the default step but is not asserted
+   by a test.
+6. *Output cadence.* Frame $0$ is the initial condition; frame $j$ is the
+   field after $j \cdot$ `save_every` steps, so
+   `times` $= (0, \Delta t\,\texttt{save\_every}, \ldots)$ — $101$ frames
+   $2.0$ time units apart with the defaults. Fields are stored on the
+   un-padded grid in float32.
+
+The default configuration takes about ten minutes on one CPU core and
+writes a ~210 MB file (32 × 101 × 128² float32); `fdr.yaml` runs in
+under a second.
+
+**Initial conditions.** $u(\mathbf{x}, 0) = \bar u + \sigma\, \xi(\mathbf{x})$
+with $\xi$ i.i.d. standard normal at every grid point, i.e. an instantaneous
+quench of a homogeneous mixture of mean composition `u_mean` with thermal
+noise of amplitude `ic_amplitude`. With `u_mean = 0` the two phases occupy
+equal area; off-critical values give droplet morphologies.
+
+**Parameters** (`configs/data/cahn_hilliard_2d/default.yaml`):
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `n_traj` | `32` | Trajectories (independent noise draws). |
+| `Nx`, `Ny` | `128`, `= Nx` | Grid points; must be even. |
+| `Lx`, `Ly` | `64.0`, `= Lx` | Domain size (`dx = 0.5`). |
+| `kappa` | `1.0` | Gradient-energy coefficient; interface width $\sim \sqrt{2\kappa}$. |
+| `T` | `200.0` | Final simulated time. |
+| `dt` | `0.05` | Time step (must satisfy $dt < 4\kappa$; accuracy needs much less). |
+| `save_every` | `40` | Steps between frames (defaults: 4000 steps → 101 frames). |
+| `u_mean` | `0.0` | Mean composition (conserved). |
+| `ic_amplitude` | `0.05` | Initial noise standard deviation. |
+| `dealias` | `2` | Padding factor for the cubic term (`2` is alias-free; `1` disables). |
+| `seed` | `0` | RNG seed (`-1` for non-deterministic). |
+
+**Output.** `(n_traj, n_frames, 1, Nx, Ny)`, `channel_names = ("u",)`,
+`times` in simulation units; `physical = {Lx, Ly, T, kappa}`,
+`numerical = {Nx, Ny, dx, dy, dt, save_every, scheme, dealias}`,
+`provenance = {seed, u_mean, ic_amplitude, generator}`.
+
+**References.**
+
+- J. W. Cahn and J. E. Hilliard, "Free energy of a nonuniform system. I.
+  Interfacial free energy", *Journal of Chemical Physics* **28**, 258–267
+  (1958).
+- J. W. Cahn, "On spinodal decomposition", *Acta Metallurgica* **9**,
+  795–801 (1961).
+- I. M. Lifshitz and V. V. Slyozov, "The kinetics of precipitation from
+  supersaturated solid solutions", *Journal of Physics and Chemistry of
+  Solids* **19**, 35–50 (1961).
+- A. J. Bray, "Theory of phase-ordering kinetics", *Advances in Physics*
+  **43**, 357–459 (1994) — review of coarsening laws.
+- S. A. Orszag, "On the elimination of aliasing in finite-difference schemes
+  by filtering high-wavenumber components", *Journal of the Atmospheric
+  Sciences* **28**, 1074 (1971) — the 2/3 rule.
+
+(ising-2d)=
+### `ising_2d` — Ising model with block-spin coarse-graining
+
+**Model.** Spins $s_i \in \{-1, +1\}$ on an $L \times L$ periodic square
+lattice with Hamiltonian (in units $k_B = 1$)
+
+$$
+H(s) = -\tfrac12 \sum_{i \neq j} J(i - j)\, s_i s_j .
+$$
+
+Two couplings are available:
+
+- `interaction: nn` — nearest-neighbour $J = 1$. Onsager's exact solution
+  places the ferromagnetic transition at
+  $T_c = 2 / \ln(1 + \sqrt 2) \approx 2.269$ with spontaneous magnetisation
+  $m(T) = \bigl(1 - \sinh^{-4}(2/T)\bigr)^{1/8}$ below it.
+- `interaction: kac` — a Kac potential of range $\gamma^{-1}$,
+  $J_\gamma(\mathbf{r}) \propto \exp\!\bigl(-\tfrac12 \gamma^2 |\mathbf{r}|^2\bigr)$,
+  truncated at Chebyshev radius `kac_cutoff` and normalised so that
+  $\sum_j J_\gamma(j) = 1$. In this normalisation the mean-field critical
+  temperature is $T_c^{\mathrm{MF}} = 1$, approached from below as
+  $\gamma \to 0$ (Lebowitz–Penrose).
+
+The spins evolve by single-spin-flip dynamics with either Glauber
+(heat-bath) or Metropolis acceptance,
+
+$$
+w_{\text{Glauber}}(\Delta E) = \frac{1}{1 + e^{\Delta E / T}}, \qquad
+w_{\text{Metropolis}}(\Delta E) = \min\bigl(1, e^{-\Delta E / T}\bigr), \qquad
+\Delta E = 2 s_i h_i,\; h_i = \sum_j J(i - j)\, s_j,
+$$
+
+both of which satisfy detailed balance with respect to the Boltzmann weight
+$e^{-H/T}$. Time is measured in Monte Carlo sweeps (one attempted flip per
+site).
+
+**What the data are.** This is the toolkit's microscopic, agent-level
+source: the state is a spin configuration, not a field. The recorded
+observable is the **Kadanoff block spin**
+$m_B = b^{-2} \sum_{i \in B} s_i \in [-1, 1]$ on non-overlapping
+$b \times b$ blocks (`block`), giving a magnetisation field on an
+$(L/b) \times (L/b)$ grid. With the default `T = 2.0 < T_c` and a random
+(infinite-temperature) initial state, the trajectories show domain
+nucleation and curvature-driven coarsening ($L(t) \sim t^{1/2}$, the
+non-conserved Allen–Cahn class); with `ic: ordered` and $T > T_c$ they show
+the decay of magnetisation into the paramagnetic state.
+
+The Kac variant is the case with a *known* mesoscopic limit: for Glauber
+rates and $\gamma \to 0$, on the spatial scale $\gamma^{-1}$ the block
+magnetisation converges to the solution of the nonlocal Allen–Cahn
+equation
+
+$$
+\partial_t m = -m + \tanh\bigl(\beta\, (J_\gamma \ast m)\bigr), \qquad \beta = 1/T,
+$$
+
+(De Masi, Orlandi, Presutti, Triolo). A learned mesoscopic model can
+therefore be checked against a closed-form answer — the free energy
+$\beta^{-1}\bigl[\tfrac{1+m}{2}\ln\tfrac{1+m}{2} + \tfrac{1-m}{2}\ln\tfrac{1-m}{2}\bigr] - \tfrac12 m\,(J_\gamma \ast m)$
+and the interaction kernel $J_\gamma$ itself.
+
+**Numerical scheme** (vectorised single-spin-flip Monte Carlo with exact
+colour-class updates).
+
+1. *State and coupling kernel.* All `n_traj` replicas are one
+   `(n_traj, L, L)` `int8` array. The coupling is stored as a kernel
+   $J(\Delta i, \Delta j)$ on the $L \times L$ torus: for `nn`, $J = 1$ at
+   the four offsets $(\pm1, 0), (0, \pm1)$; for `kac`,
+   $J(\mathbf r) = w(\mathbf r)/\sum_{\mathbf r' \ne 0} w(\mathbf r')$ with
+   $w(\mathbf r) = \exp(-\tfrac12\gamma^2|\mathbf r|^2)$ on the Chebyshev
+   square $\max(|\Delta i|, |\Delta j|) \le$ `kac_cutoff`, $w(\mathbf 0) = 0$.
+   The normalisation $\sum_{\mathbf r} J = 1$ makes the mean-field critical
+   temperature exactly $1$.
+2. *Local field by FFT.* The field on every site of every replica is the
+   circular convolution $h = J \star s$, computed as
+   $h = \mathcal F^{-1}\bigl[\hat J\,\hat s\bigr]$ with a batched real 2D FFT
+   — $O(L^2 \log L)$ per replica regardless of the interaction range, which
+   is what makes the long-range Kac kernel affordable.
+3. *Colour classes.* The lattice is partitioned into classes of mutually
+   non-interacting sites: for `nn` the two checkerboard parities
+   $(i + j) \bmod 2$ (nearest neighbours always have opposite parity); for
+   `kac` the $p^2$ residue classes $(i \bmod p,\ j \bmod p)$ with
+   $p =$ `kac_cutoff` $+ 1$ — two distinct sites of one class differ by a
+   multiple of $p > $ `kac_cutoff` in at least one coordinate, also across
+   the periodic wrap because `L` is required to be a multiple of $p$.
+4. *One sweep.* For each class in a fixed order: recompute $h$ (step 2);
+   for every site $i$ of the class compute $\Delta E_i = 2 s_i h_i$, the
+   energy change of flipping it; draw $r_i \sim \mathrm{Uniform}(0,1)$ and
+   flip iff $r_i < w(\Delta E_i)$ with the Glauber or Metropolis rate
+   given above; write the flipped class back. One sweep visits every site
+   exactly once and is the unit of `times`.
+5. *Why this is exact.* Within a class no site's field depends on another
+   member of the class, so updating them simultaneously produces the same
+   distribution as updating them one after another; sequential single-spin
+   flips with a rate satisfying detailed balance leave the Boltzmann
+   distribution $\propto e^{-H/T}$ invariant, hence so does the sweep. The
+   fixed class order (rather than random site selection) is the standard
+   checkerboard variant: same equilibrium, slightly different short-time
+   relaxation. With random sequential updates one sweep corresponds to one
+   unit of Glauber's continuous time with unit attempt rate per spin.
+6. *Coarse-graining and output.* After every `save_every` sweeps the
+   block-spin field $m_B = b^{-2}\sum_{i \in B} s_i$ is computed by reshaping
+   the lattice into $b \times b$ cells and averaging, and stored in float32.
+   Frame $0$ is the initial configuration.
+7. *Randomness.* All draws (initial spins and flip decisions) come from one
+   `numpy.random.default_rng(seed)` stream, so a run is reproducible for a
+   given `(seed, L, n_traj, …)`.
+
+Requirements: `L` divisible by `block`; `L` even for `nn`; for `kac`, `L`
+divisible by `kac_cutoff + 1` and at least $2\,\texttt{kac\_cutoff} + 1$ so
+the kernel does not wrap onto itself. The default `nn` configuration takes
+a few seconds; `kac` about a minute and a half (64 colour classes, each
+needing an FFT of the whole batch); both write ~10 MB.
+
+**Initial conditions.** `ic: random` — every spin $\pm 1$ with probability
+$\tfrac12$ (infinite temperature); `ic: ordered` — all spins $+1$.
+
+**Parameters** (`configs/data/ising_2d/default.yaml`; `kac.yaml` switches
+the interaction, `fdr.yaml` is the smoke run):
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `L` | `64` | Lattice side. |
+| `T` | `2.0` (`0.7` in `kac.yaml`) | Temperature in units of $J/k_B$. |
+| `n_traj` | `100` | Independent replicas. |
+| `n_sweeps` | `200` | Monte Carlo sweeps. |
+| `save_every` | `2` | Sweeps between frames (defaults: 101 frames). |
+| `block` | `4` | Block-spin side; output grid `L/block`. |
+| `dynamics` | `glauber` | `glauber` or `metropolis`. |
+| `interaction` | `nn` | `nn` or `kac`. |
+| `gamma` | `0.5` | Kac inverse range (`kac` only). |
+| `kac_cutoff` | `7` | Kac kernel truncation radius in lattice units (`kac` only). |
+| `ic` | `random` | `random` or `ordered`. |
+| `seed` | `0` | RNG seed (`-1` for non-deterministic). |
+
+**Output.** `(n_traj, n_frames, 1, L/block, L/block)`,
+`channel_names = ("m",)`, `times` in sweeps;
+`physical = {T, interaction, J, L, Lx, T_c_reference[, gamma]}`
+(`J` is the coupling for `nn` and the kernel sum $=1$ for `kac`;
+`T_c_reference` is Onsager's $T_c$ or the mean-field value $1$),
+`numerical = {block, Nx, dx, n_sweeps, save_every, dynamics, n_colour_classes[, kac_cutoff]}`,
+`provenance = {seed, ic, generator}`.
+
+**References.**
+
+- E. Ising, "Beitrag zur Theorie des Ferromagnetismus", *Zeitschrift für
+  Physik* **31**, 253–258 (1925).
+- L. Onsager, "Crystal statistics. I. A two-dimensional model with an
+  order-disorder transition", *Physical Review* **65**, 117–149 (1944).
+- R. J. Glauber, "Time-dependent statistics of the Ising model", *Journal
+  of Mathematical Physics* **4**, 294–307 (1963).
+- N. Metropolis, A. W. Rosenbluth, M. N. Rosenbluth, A. H. Teller, and
+  E. Teller, "Equation of state calculations by fast computing machines",
+  *Journal of Chemical Physics* **21**, 1087–1092 (1953).
+- L. P. Kadanoff, "Scaling laws for Ising models near $T_c$", *Physics
+  Physique Fizika* **2**, 263–272 (1966) — block spins.
+- M. Kac, G. E. Uhlenbeck, and P. C. Hemmer, "On the van der Waals theory
+  of the vapor–liquid equilibrium. I. Discussion of a one-dimensional
+  model", *Journal of Mathematical Physics* **4**, 216–228 (1963).
+- J. L. Lebowitz and O. Penrose, "Rigorous treatment of the Van der
+  Waals–Maxwell theory of the liquid–vapor transition", *Journal of
+  Mathematical Physics* **7**, 98–113 (1966).
+- A. De Masi, E. Orlandi, E. Presutti, and L. Triolo, "Glauber evolution
+  with Kac potentials: I. Mesoscopic and macroscopic limits, interface
+  dynamics", *Nonlinearity* **7**, 633–696 (1994).
+- M. E. J. Newman and G. T. Barkema, *Monte Carlo Methods in Statistical
+  Physics* (Oxford University Press, 1999) — checkerboard updates and
+  detailed balance.
+
+(llg-lattice-2d)=
+### `llg_lattice_2d` — Landau–Lifshitz–Gilbert spin lattice
+
+**Model.** Classical unit spins $\mathbf{m}_i \in S^2$ on an
+$N_x \times N_y$ periodic square lattice with Heisenberg energy
+
+$$
+E(\mathbf{m}) = -J \sum_{\langle ij \rangle} \mathbf{m}_i \cdot \mathbf{m}_j
+- K \sum_i (\mathbf{m}_i \cdot \mathbf{e}_z)^2 - h \sum_i \mathbf{m}_i \cdot \mathbf{e}_z ,
+$$
+
+so that the effective field is
+$\mathbf{H}_i = -\partial E / \partial \mathbf{m}_i = J \sum_{j \in \mathrm{nn}(i)} \mathbf{m}_j + 2K\, m_i^z\, \mathbf{e}_z + h\, \mathbf{e}_z$.
+Each spin obeys the Landau–Lifshitz form of the Gilbert equation
+
+$$
+\frac{d\mathbf{m}_i}{dt}
+= -\gamma'\, \mathbf{m}_i \times \mathbf{H}_i
+  \;-\; \gamma' \alpha\, \mathbf{m}_i \times (\mathbf{m}_i \times \mathbf{H}_i),
+\qquad \gamma' = \frac{\gamma}{1 + \alpha^2},
+$$
+
+whose first term is the **reversible** Larmor precession about the local
+field and whose second is the **dissipative** Gilbert damping that drags the
+spin toward the field. Two identities hold exactly for the continuous
+dynamics: $|\mathbf{m}_i| = 1$ for all time, and
+$dE/dt = -\gamma' \alpha \sum_i |\mathbf{m}_i \times \mathbf{H}_i|^2 \le 0$,
+with equality only when $\alpha = 0$ or at an equilibrium
+($\mathbf m_i \parallel \mathbf H_i$ everywhere). The model is at zero
+temperature — no stochastic thermal field — so every trajectory is a
+deterministic relaxation toward the easy axis. Within the recorded window
+(`T = 50`) the lattice is still a multi-domain state with live domain
+walls and spin waves; the uniform ground states
+$\mathbf{m}_i \equiv \pm \mathbf{e}_z$ are reached only much later.
+
+**What the data are.** The toolkit's first multi-channel dataset
+(`n_channel = 3`) and its example of dynamics with a built-in split into a
+skew-symmetric (conservative) and a symmetric positive (dissipative) part —
+precisely the structure $-(M + W)\nabla V$ that Onsager-type mesoscopic
+models assume. It is the lattice-level prototype of atomistic spin dynamics
+and the natural test bed for learning a free energy $E$, a mobility
+$\propto \alpha$, and a reactive coupling $\propto 1$ from data. Coarse-graining
+to a magnetisation field can be done downstream by block averaging the three
+channels.
+
+**Numerical scheme** (classical RK4 with projection onto the sphere).
+
+1. *State and effective field.* All trajectories are one
+   `(n_traj, 3, Nx, Ny)` float64 array. The exchange sum over the four
+   nearest neighbours is formed with periodic shifts of the array
+   (`np.roll` by $\pm1$ along each lattice axis), so
+
+   $$
+   \mathbf H_{ij} = J\,(\mathbf m_{i+1,j} + \mathbf m_{i-1,j} + \mathbf m_{i,j+1} + \mathbf m_{i,j-1})
+   + \bigl(2K\, m^z_{ij} + h\bigr)\,\mathbf e_z .
+   $$
+
+2. *Right-hand side.* With $\gamma' = \gamma/(1+\alpha^2)$,
+   $\mathbf R(\mathbf m) = -\gamma'\,\mathbf m \times \mathbf H - \gamma'\alpha\,\mathbf m \times (\mathbf m \times \mathbf H)$,
+   the cross products taken site-wise over the channel axis.
+3. *Time stepping.* One step of size $\Delta t =$ `dt` is
+
+   $$
+   \begin{aligned}
+   \mathbf k_1 &= \mathbf R(\mathbf m^n), &
+   \mathbf k_2 &= \mathbf R(\mathbf m^n + \tfrac{\Delta t}{2}\mathbf k_1), \\
+   \mathbf k_3 &= \mathbf R(\mathbf m^n + \tfrac{\Delta t}{2}\mathbf k_2), &
+   \mathbf k_4 &= \mathbf R(\mathbf m^n + \Delta t\,\mathbf k_3), \\
+   \tilde{\mathbf m} &= \mathbf m^n + \tfrac{\Delta t}{6}(\mathbf k_1 + 2\mathbf k_2 + 2\mathbf k_3 + \mathbf k_4), &
+   \mathbf m^{n+1}_{ij} &= \tilde{\mathbf m}_{ij} / |\tilde{\mathbf m}_{ij}| .
+   \end{aligned}
+   $$
+
+   RK4 is fourth-order accurate but not norm-preserving; the final
+   projection restores $|\mathbf m_{ij}| = 1$ exactly (to round-off) at
+   every step. The scheme is therefore not a geometric integrator and the
+   energy law $dE/dt \le 0$ is not enforced structurally. It held
+   monotonically frame by frame in a run of the default configuration; the
+   test suite asserts it on a short run with $\alpha = 0.2$, $h = 0.05$ and
+   the same $\Delta t$.
+4. *Step size.* The fastest motion is precession at angular frequency
+   $\gamma' |\mathbf H| \le \gamma'(4J + 2K + |h|) = 4.2$ with the defaults.
+   RK4's stability interval on the imaginary axis is $|\omega \Delta t| < 2\sqrt2$,
+   so $\Delta t = 0.01$ ($\omega\Delta t = 0.042$) is far inside it; the step
+   is chosen for accuracy of the spin-wave phases, not stability.
+5. *Output cadence.* Frame $0$ is the initial configuration; frame $j$ is
+   the state after $j \cdot$ `save_every` steps
+   (`times` $= (0, \Delta t\,\texttt{save\_every}, \ldots)$, $101$ frames
+   $0.5$ apart with the defaults), stored in float32.
+
+The default configuration takes about two minutes on one CPU core and
+writes a ~80 MB file.
+
+**Initial conditions.** `ic: random` — every spin uniformly distributed on
+the sphere (independent Gaussian components, normalised);
+`ic: tilted` — $\mathbf{e}_z$ plus Gaussian noise of scale `ic_tilt`,
+normalised, i.e. a small perturbation of the ground state that excites spin
+waves.
+
+**Parameters** (`configs/data/llg_lattice_2d/default.yaml`):
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `n_traj` | `64` | Trajectories (independent initial spins). |
+| `Nx`, `Ny` | `32`, `= Nx` | Lattice size. |
+| `J` | `1.0` | Exchange coupling (`> 0` ferromagnetic). |
+| `K` | `0.1` | Uniaxial anisotropy along $\mathbf{e}_z$. |
+| `h` | `0.0` | External field along $\mathbf{e}_z$. |
+| `alpha` | `0.1` | Gilbert damping. |
+| `gamma` | `1.0` | Gyromagnetic ratio. |
+| `T` | `50.0` | Final simulated time. |
+| `dt` | `0.01` | RK4 step. |
+| `save_every` | `50` | Steps between frames (defaults: 5000 steps → 101 frames). |
+| `ic`, `ic_tilt` | `random`, `0.3` | Initial-condition family and tilt scale. |
+| `seed` | `0` | RNG seed (`-1` for non-deterministic). |
+
+**Output.** `(n_traj, n_frames, 3, Nx, Ny)`,
+`channel_names = ("mx", "my", "mz")`, `times` in simulation units;
+`physical = {J, K, h, alpha, gamma, T, Lx, Ly}`,
+`numerical = {Nx, Ny, dx, dt, save_every, scheme}`,
+`provenance = {seed, ic, ic_tilt, generator}`.
+
+**References.**
+
+- L. D. Landau and E. M. Lifshitz, "On the theory of the dispersion of
+  magnetic permeability in ferromagnetic bodies", *Physikalische Zeitschrift
+  der Sowjetunion* **8**, 153–169 (1935).
+- T. L. Gilbert, "A phenomenological theory of damping in ferromagnetic
+  materials", *IEEE Transactions on Magnetics* **40**, 3443–3449 (2004);
+  original abstract in *Physical Review* **100**, 1243 (1955).
+- M. Lakshmanan, "The fascinating world of the Landau–Lifshitz–Gilbert
+  equation: an overview", *Philosophical Transactions of the Royal Society A*
+  **369**, 1280–1300 (2011).
+- R. F. L. Evans, W. J. Fan, P. Chureemart, T. A. Ostler, M. O. A. Ellis,
+  and R. W. Chantrell, "Atomistic spin model simulations of magnetic
+  nanomaterials", *Journal of Physics: Condensed Matter* **26**, 103202
+  (2014) — the atomistic-spin-dynamics setting this lattice model
+  abstracts.
+
+(peridynamics-fracture-2d)=
+### `peridynamics_fracture_2d` — Bond-based peridynamic fracture
+
+**Model.** A two-dimensional plate $[0, L_x] \times [0, L_y]$ is discretised
+as a unit square lattice of peridynamic particles, with a triangular notch
+of depth `notch_len` and mouth width `notch_th` cut into the middle of the
+left edge. Particles interact through the *prototype microelastic brittle*
+(PMB) bond model of Silling and Askari: for a bond with reference vector
+$\boldsymbol{\xi} = \mathbf{x}_j - \mathbf{x}_i$ and relative displacement
+$\boldsymbol{\eta} = \mathbf{u}_j - \mathbf{u}_i$, the pairwise force density is
+
+$$
+\mathbf{f}(\boldsymbol{\eta}, \boldsymbol{\xi}) = c\, s\, \mu(t, \boldsymbol{\xi})\,
+\frac{\boldsymbol{\xi} + \boldsymbol{\eta}}{|\boldsymbol{\xi} + \boldsymbol{\eta}|},
+\qquad
+s = \frac{|\boldsymbol{\xi} + \boldsymbol{\eta}| - |\boldsymbol{\xi}|}{|\boldsymbol{\xi}|},
+$$
+
+for $|\boldsymbol{\xi}| \le \delta$ (the *horizon*), with micromodulus $c$ and
+bond stretch $s$. The history variable $\mu \in \{0, 1\}$ switches
+irreversibly to $0$ once $s$ exceeds the critical stretch
+$s_0 = s_{00} - \alpha\, s_{\min}$, where $s_{\min}$ is the most compressive
+stretch currently seen by the particle. Every particle carries unit density
+and volume; the equation of motion is Newton's second law with the bond
+forces summed over the horizon and integrated by velocity Verlet. Mode-I
+loading is applied as equal and opposite body forces on strips of thickness
+`grip` along the top and bottom edges, ramped linearly from $0$ to
+$F_{\max}$ over `ramp_steps` and then held. The damage of a particle is
+
+$$
+d_i = 1 - \frac{\sum_j \mu_{ij} V_j}{\sum_j V_j},
+$$
+
+the fraction of its bonds that have broken; a crack is a band where $d$
+approaches $1$.
+
+**What the data are.** Particle-level solid mechanics with an irreversible
+internal variable, coarse-grained to fields on a regular mesh — the setting
+of phase-field fracture, where the mesoscopic unknowns are a displacement
+field and a damage field $d(\mathbf{x}) \in [0, 1]$ coupled through an
+energy of Francfort–Marigo / Ambrosio–Tortorelli type. Each trajectory is
+one **loading case**: the values in `F_max` are run one after another and
+stored, in order, as the array `physical["F_max_per_traj"]`, which is the
+toolkit's convention for a parameter that varies from trajectory to
+trajectory. The recorded channels are
+
+| Channel | Meaning |
+| --- | --- |
+| `ux`, `uy` | Kernel-averaged displacement relative to the reference lattice. |
+| `d` | Kernel-averaged damage. |
+| `fx`, `fy` | Kernel-averaged net force per particle (including the applied grip force). |
+| `mask` | $1$ on cells whose kernel support contains at least one particle, $0$ inside the notch. Constant in time. |
+
+**Numerical scheme** (LAMMPS PERI package driven in-process, then kernel
+averaging).
+
+1. *Particle discretisation.* LAMMPS is set up with `units lj`,
+   `dimension 2`, `boundary s s p` (shrink-wrapped in the plane, periodic in
+   the unused $z$), `atom_style peri` and a unit square lattice, so one
+   particle sits at every integer point of $[0, L_x] \times [0, L_y]$ with
+   density and volume $1$. The triangular notch is the intersection of four
+   half-planes — $0 \le x \le$ `notch_len` and between the lines
+   $y = \tfrac{L_y}{2} \mp \bigl(\tfrac{\texttt{notch\_th}}{2} - \sigma x\bigr)$
+   with slope $\sigma = \texttt{notch\_th}/(2\,\texttt{notch\_len})$ — and the
+   particles inside it are deleted ($18\,640$ remain of $161 \times 121$ with
+   the defaults). The strips $y \le$ `grip` and $y \ge L_y -$ `grip` are the
+   `lower` and `upper` groups.
+2. *Bond model.* `pair_style peri/pmb` with `pair_coeff * * c δ s00 alpha`,
+   where $c = c_0 (\delta_0/\delta)^3$. At the first `run` LAMMPS records
+   the *bond family* of every particle: all partners within the horizon
+   $\delta$ in the reference configuration. Thereafter each intact bond
+   exerts the PMB force $c\,s\,(\boldsymbol\xi + \boldsymbol\eta)/|\boldsymbol\xi + \boldsymbol\eta|$
+   times the partner volume (scaled down linearly for partners whose cell
+   straddles the horizon), and is removed for good once $s$ exceeds the
+   smaller of the two endpoints' critical stretches
+   $s_0 = s_{00} - \alpha\, s_{\min}$, where $s_{\min}$ is the most negative
+   stretch currently in that particle's family. A repulsive-only short-range
+   contact force between particles closer than the lattice spacing is part
+   of the style. Damage $d_i$ is `compute damage/atom`, the volume-weighted
+   fraction of broken bonds.
+3. *Time integration.* `fix nve` is velocity Verlet with step $\Delta t =$ `dt`:
+
+   $$
+   \mathbf v^{n+1/2} = \mathbf v^n + \tfrac{\Delta t}{2}\,\mathbf a^n, \qquad
+   \mathbf x^{n+1} = \mathbf x^n + \Delta t\,\mathbf v^{n+1/2}, \qquad
+   \mathbf v^{n+1} = \mathbf v^{n+1/2} + \tfrac{\Delta t}{2}\,\mathbf a^{n+1},
+   $$
+
+   with $\mathbf a = (\mathbf f_{\text{bond}} + \mathbf f_{\text{grip}})/m$,
+   $m = 1$. Particles start at rest on the reference lattice. No damping or
+   thermostat is applied, so elastic waves launched by the loading persist.
+4. *Load ramp.* The grip force is a LAMMPS variable evaluated every step,
+   $F(n) = F_{\max} \min(n/\texttt{ramp\_steps},\, 1)$, applied through
+   `fix addforce` as $+F(n)\,\mathbf e_y$ per particle in `upper` and
+   $-F(n)\,\mathbf e_y$ in `lower`. Ramping avoids the impulsive transient a
+   step load would cause.
+5. *Sampling from the live instance.* The run is advanced in chunks of
+   `save_every` steps; after each chunk positions $\mathbf x_i$, forces
+   $\mathbf f_i$ and damage $d_i$ are read from LAMMPS memory through the
+   Python API, sorted by particle id so they align with the reference
+   lattice. No dump files are written. Frame $0$ is the reference state.
+6. *Coarse-graining.* Cell centres $\mathbf x_a = ((i+\tfrac12)\Delta, (j+\tfrac12)\Delta)$
+   with $\Delta =$ `grid_spacing` tile the plate ($40 \times 30$ cells with
+   the defaults). With the Wendland C2 kernel
+   $K(r) = (1 - r/h)_+^4\,(1 + 4r/h)$, $h =$ `kernel_h`, the averaging
+   matrix is the row-normalised (Shepard) form
+
+   $$
+   W_{ai} = \frac{K(|\mathbf x_a - \mathbf X_i|)}{\sum_j K(|\mathbf x_a - \mathbf X_j|)},
+   \qquad
+   \mathbf u_a = \sum_i W_{ai}\,(\mathbf x_i - \mathbf X_i), \quad
+   d_a = \sum_i W_{ai}\, d_i, \quad
+   \mathbf f_a = \sum_i W_{ai}\, \mathbf f_i ,
+   $$
+
+   built once from the reference positions $\mathbf X_i$ (a KD-tree finds
+   the particles within $h$ of each cell) and reused for every frame, so the
+   averaging is a fixed linear map from particle to grid fields. Cells whose
+   denominator is zero — those inside the notch — get `mask` $= 0$ and zeros
+   in the field channels, because the v1 cache does not admit `NaN`;
+   downstream code should multiply by `mask` or index with it. A notch
+   narrower than about $2h + \Delta$ is not resolved in the mask at all.
+
+The default configuration (four load levels, $18\,640$ particles,
+$16\,000$ steps each) takes roughly $25$ minutes on one CPU core and writes
+~12 MB. In a reference run of the defaults the crack started during the
+ramp and the maximum cell damage reached $\approx 0.87$ by the end at
+$F_{\max} = 0.05$ and $\approx 0.75$ at $0.03$ (observed; the test suite
+only exercises the `fdr.yaml` geometry). `fdr.yaml` runs in under a
+second.
+
+**Initial conditions.** The reference lattice at rest, no thermal
+velocities. The dynamics are deterministic; `seed` is recorded for
+provenance only.
+
+**Parameters** (`configs/data/peridynamics_fracture_2d/default.yaml`):
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `F_max` | `[0.02, 0.03, 0.04, 0.05]` | Peak grip body force; one trajectory per entry. |
+| `Lx`, `Ly` | `160`, `120` | Plate size in particle spacings. |
+| `notch_len`, `notch_th` | `40.0`, `40.0` | Notch depth along $+x$ and mouth width. |
+| `grip` | `5.1` | Thickness of the loaded strips. |
+| `horizon` | `3.015` | Peridynamic horizon $\delta$. |
+| `c0`, `delta0` | `16.0`, `3.01` | Reference micromodulus and horizon; $c = c_0 (\delta_0/\delta)^3$. |
+| `s00`, `alpha` | `0.007`, `0.1` | PMB critical-stretch parameters. |
+| `dt` | `0.004` | Time step. |
+| `n_steps`, `ramp_steps` | `16000`, `4000` | Total steps and load-ramp length. |
+| `save_every` | `160` | Steps between frames (defaults: 101 frames). |
+| `grid_spacing` | `4.0` | Coarse-grid cell size. |
+| `kernel_h` | `2.5` | Wendland kernel radius. |
+| `seed` | `0` | Recorded only. |
+
+**Output.** `(n_traj, n_frames, 6, Lx/grid_spacing, Ly/grid_spacing)`,
+`channel_names = ("ux", "uy", "d", "fx", "fy", "mask")`, `times` in
+simulation units;
+`physical = {Lx, Ly, T, F_max_per_traj, notch_len, notch_th, grip, horizon, c, s00, alpha, ramp_time}`,
+`numerical = {Nx, Ny, dx, dy, dt, save_every, n_steps, ramp_steps, kernel, kernel_h, particle_spacing, n_particles}`,
+`provenance = {seed, generator, engine}`.
+
+**References.**
+
+- S. A. Silling, "Reformulation of elasticity theory for discontinuities and
+  long-range forces", *Journal of the Mechanics and Physics of Solids*
+  **48**, 175–209 (2000).
+- S. A. Silling and E. Askari, "A meshfree method based on the peridynamic
+  model of solid mechanics", *Computers & Structures* **83**, 1526–1535
+  (2005) — the PMB material and the damage definition.
+- M. L. Parks, R. B. Lehoucq, S. J. Plimpton, and S. A. Silling,
+  "Implementing peridynamics within a molecular dynamics code", *Computer
+  Physics Communications* **179**, 777–783 (2008) — the LAMMPS PERI package.
+- H. Wendland, "Piecewise polynomial, positive definite and compactly
+  supported radial functions of minimal degree", *Advances in Computational
+  Mathematics* **4**, 389–396 (1995) — the averaging kernel.
+- G. A. Francfort and J.-J. Marigo, "Revisiting brittle fracture as an
+  energy minimization problem", *Journal of the Mechanics and Physics of
+  Solids* **46**, 1319–1342 (1998); B. Bourdin, G. A. Francfort, and
+  J.-J. Marigo, "Numerical experiments in revisited brittle fracture",
+  *ibid.* **48**, 797–826 (2000) — the phase-field fracture models a
+  mesoscopic description of these data targets.
+
+## Choosing a Dataset
+
+| If you want to … | Start with |
+| --- | --- |
+| Reproduce the quickstart and train `spectral_onsagernet_1d` / `fno1d` | `allen_cahn_1d` — the built-in models are 1D, single channel. |
+| Test that a learned model does *not* invent dissipation | `kdv_1d` (reversible). |
+| Learn a conserved dynamics with a free energy and a mobility | `cahn_hilliard_2d`. |
+| Start from a genuinely microscopic, stochastic system and check the learned mesoscopic law against a known limit | `ising_2d --config kac`. |
+| Learn a reversible + dissipative (Onsager) structure from multi-channel data | `llg_lattice_2d`. |
+| Learn a damage / phase-field fracture model from particle mechanics | `peridynamics_fracture_2d` (needs the `sim` feature for LAMMPS). |
+
+The 2D and multi-channel datasets are produced by `mesokit data generate`
+and load through `TrajectoryDataset` like any other file, but the models
+shipped today consume 1D single-channel input; see
+[Extending](../extending.md) for registering a model that accepts them, and
+{ref}`the stock adapters <dataset-adapters>` for selecting a single channel
+of a multi-channel file.

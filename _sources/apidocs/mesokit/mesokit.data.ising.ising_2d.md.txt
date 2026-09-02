@@ -1,0 +1,97 @@
+# {py:mod}`mesokit.data.ising.ising_2d`
+
+```{py:module} mesokit.data.ising.ising_2d
+```
+
+```{autodoc2-docstring} mesokit.data.ising.ising_2d
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`simulate_ising_2d <mesokit.data.ising.ising_2d.simulate_ising_2d>`
+  - ```{autodoc2-docstring} mesokit.data.ising.ising_2d.simulate_ising_2d
+    :summary:
+    ```
+* - {py:obj}`_kernel_and_classes <mesokit.data.ising.ising_2d._kernel_and_classes>`
+  - ```{autodoc2-docstring} mesokit.data.ising.ising_2d._kernel_and_classes
+    :summary:
+    ```
+* - {py:obj}`_local_field <mesokit.data.ising.ising_2d._local_field>`
+  - ```{autodoc2-docstring} mesokit.data.ising.ising_2d._local_field
+    :summary:
+    ```
+* - {py:obj}`_flip_probability <mesokit.data.ising.ising_2d._flip_probability>`
+  - ```{autodoc2-docstring} mesokit.data.ising.ising_2d._flip_probability
+    :summary:
+    ```
+* - {py:obj}`_block_average <mesokit.data.ising.ising_2d._block_average>`
+  - ```{autodoc2-docstring} mesokit.data.ising.ising_2d._block_average
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`ONSAGER_TC <mesokit.data.ising.ising_2d.ONSAGER_TC>`
+  - ```{autodoc2-docstring} mesokit.data.ising.ising_2d.ONSAGER_TC
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} ONSAGER_TC
+:canonical: mesokit.data.ising.ising_2d.ONSAGER_TC
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.ising.ising_2d.ONSAGER_TC
+```
+
+````
+
+````{py:function} simulate_ising_2d(*, L: int = 64, T: float = 2.0, n_traj: int = 100, n_sweeps: int = 200, save_every: int = 2, block: int = 4, dynamics: str = 'glauber', interaction: str = 'nn', gamma: float = 0.5, kac_cutoff: int = 7, ic: str = 'random', seed: int = 0, verbose: bool = False) -> mesokit.data.trajectory.TrajectoryDataset
+:canonical: mesokit.data.ising.ising_2d.simulate_ising_2d
+
+```{autodoc2-docstring} mesokit.data.ising.ising_2d.simulate_ising_2d
+```
+````
+
+````{py:function} _kernel_and_classes(L: int, *, interaction: str, gamma: float, kac_cutoff: int) -> tuple[numpy.ndarray, list[numpy.ndarray]]
+:canonical: mesokit.data.ising.ising_2d._kernel_and_classes
+
+```{autodoc2-docstring} mesokit.data.ising.ising_2d._kernel_and_classes
+```
+````
+
+````{py:function} _local_field(spins: numpy.ndarray, kernel_hat: numpy.ndarray) -> numpy.ndarray
+:canonical: mesokit.data.ising.ising_2d._local_field
+
+```{autodoc2-docstring} mesokit.data.ising.ising_2d._local_field
+```
+````
+
+````{py:function} _flip_probability(beta_delta_e: numpy.ndarray, dynamics: str) -> numpy.ndarray
+:canonical: mesokit.data.ising.ising_2d._flip_probability
+
+```{autodoc2-docstring} mesokit.data.ising.ising_2d._flip_probability
+```
+````
+
+````{py:function} _block_average(spins: numpy.ndarray, block: int) -> numpy.ndarray
+:canonical: mesokit.data.ising.ising_2d._block_average
+
+```{autodoc2-docstring} mesokit.data.ising.ising_2d._block_average
+```
+````

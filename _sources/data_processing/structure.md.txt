@@ -158,6 +158,7 @@ The dataclass enforces the cache-file invariants at construction time
 type-checks is guaranteed to round-trip through `save_hdf5` /
 `load_hdf5` without losing information.
 
+(dataset-adapters)=
 ## Training Views (`torch.utils.data.Dataset` adapters)
 
 A `TrajectoryDataset` is not directly iterable by a

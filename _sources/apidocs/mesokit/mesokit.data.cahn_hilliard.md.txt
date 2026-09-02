@@ -1,0 +1,43 @@
+# {py:mod}`mesokit.data.cahn_hilliard`
+
+```{py:module} mesokit.data.cahn_hilliard
+```
+
+```{autodoc2-docstring} mesokit.data.cahn_hilliard
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.data.cahn_hilliard.cahn_hilliard_2d
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.data.cahn_hilliard.__all__>`
+  - ```{autodoc2-docstring} mesokit.data.cahn_hilliard.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.data.cahn_hilliard.__all__
+:value: >
+   ['simulate_cahn_hilliard_2d']
+
+```{autodoc2-docstring} mesokit.data.cahn_hilliard.__all__
+```
+
+````

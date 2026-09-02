@@ -1,0 +1,108 @@
+# {py:mod}`mesokit.data.peridynamics.peridynamics_fracture_2d`
+
+```{py:module} mesokit.data.peridynamics.peridynamics_fracture_2d
+```
+
+```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`simulate_peridynamics_fracture_2d <mesokit.data.peridynamics.peridynamics_fracture_2d.simulate_peridynamics_fracture_2d>`
+  - ```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d.simulate_peridynamics_fracture_2d
+    :summary:
+    ```
+* - {py:obj}`_snapshot <mesokit.data.peridynamics.peridynamics_fracture_2d._snapshot>`
+  - ```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d._snapshot
+    :summary:
+    ```
+* - {py:obj}`_setup_commands <mesokit.data.peridynamics.peridynamics_fracture_2d._setup_commands>`
+  - ```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d._setup_commands
+    :summary:
+    ```
+* - {py:obj}`_cell_centres <mesokit.data.peridynamics.peridynamics_fracture_2d._cell_centres>`
+  - ```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d._cell_centres
+    :summary:
+    ```
+* - {py:obj}`_wendland_c2 <mesokit.data.peridynamics.peridynamics_fracture_2d._wendland_c2>`
+  - ```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d._wendland_c2
+    :summary:
+    ```
+* - {py:obj}`_node_weights <mesokit.data.peridynamics.peridynamics_fracture_2d._node_weights>`
+  - ```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d._node_weights
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`CHANNEL_NAMES <mesokit.data.peridynamics.peridynamics_fracture_2d.CHANNEL_NAMES>`
+  - ```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d.CHANNEL_NAMES
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} CHANNEL_NAMES
+:canonical: mesokit.data.peridynamics.peridynamics_fracture_2d.CHANNEL_NAMES
+:value: >
+   ('ux', 'uy', 'd', 'fx', 'fy', 'mask')
+
+```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d.CHANNEL_NAMES
+```
+
+````
+
+````{py:function} simulate_peridynamics_fracture_2d(*, F_max: collections.abc.Sequence[float] | float = (0.02, 0.03, 0.04, 0.05), Lx: int = 160, Ly: int = 120, notch_len: float = 40.0, notch_th: float = 40.0, grip: float = 5.1, horizon: float = 3.015, c0: float = 16.0, delta0: float = 3.01, s00: float = 0.007, alpha: float = 0.1, dt: float = 0.004, n_steps: int = 16000, ramp_steps: int = 4000, save_every: int = 160, grid_spacing: float = 4.0, kernel_h: float = 2.5, seed: int = 0, verbose: bool = False) -> mesokit.data.trajectory.TrajectoryDataset
+:canonical: mesokit.data.peridynamics.peridynamics_fracture_2d.simulate_peridynamics_fracture_2d
+
+```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d.simulate_peridynamics_fracture_2d
+```
+````
+
+````{py:function} _snapshot(lmp: object, x_ref: numpy.ndarray, weights: numpy.ndarray) -> numpy.ndarray
+:canonical: mesokit.data.peridynamics.peridynamics_fracture_2d._snapshot
+
+```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d._snapshot
+```
+````
+
+````{py:function} _setup_commands(*, Lx: int, Ly: int, notch_len: float, notch_th: float, grip: float, horizon: float, c: float, s00: float, alpha: float, dt: float, f_max: float, ramp_steps: int) -> list[str]
+:canonical: mesokit.data.peridynamics.peridynamics_fracture_2d._setup_commands
+
+```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d._setup_commands
+```
+````
+
+````{py:function} _cell_centres(nx: int, ny: int, spacing: float) -> numpy.ndarray
+:canonical: mesokit.data.peridynamics.peridynamics_fracture_2d._cell_centres
+
+```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d._cell_centres
+```
+````
+
+````{py:function} _wendland_c2(r: numpy.ndarray, h: float) -> numpy.ndarray
+:canonical: mesokit.data.peridynamics.peridynamics_fracture_2d._wendland_c2
+
+```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d._wendland_c2
+```
+````
+
+````{py:function} _node_weights(nodes: numpy.ndarray, particles: numpy.ndarray, h: float) -> tuple[numpy.ndarray, numpy.ndarray]
+:canonical: mesokit.data.peridynamics.peridynamics_fracture_2d._node_weights
+
+```{autodoc2-docstring} mesokit.data.peridynamics.peridynamics_fracture_2d._node_weights
+```
+````
