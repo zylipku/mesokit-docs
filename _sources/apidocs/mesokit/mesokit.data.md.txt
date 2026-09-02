@@ -13,9 +13,9 @@
 :titlesonly:
 :maxdepth: 3
 
+mesokit.data.allen_cahn
 mesokit.data.kdv
 mesokit.data.datasets
-mesokit.data.allen_cahn
 ```
 
 ## Submodules
@@ -24,13 +24,13 @@ mesokit.data.allen_cahn
 :titlesonly:
 :maxdepth: 1
 
+mesokit.data.format
+mesokit.data._progress
+mesokit.data._hdf5
+mesokit.data.simulator_base
+mesokit.data.trajectory
 mesokit.data.registry
 mesokit.data.validate
-mesokit.data.format
-mesokit.data._hdf5
-mesokit.data.trajectory
-mesokit.data.simulator_base
-mesokit.data._progress
 ```
 
 ## Package Contents

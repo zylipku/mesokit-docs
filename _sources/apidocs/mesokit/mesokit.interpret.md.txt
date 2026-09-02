@@ -13,9 +13,9 @@
 :titlesonly:
 :maxdepth: 1
 
+mesokit.interpret.plotter
 mesokit.interpret.compare
 mesokit.interpret.base
-mesokit.interpret.plotter
 ```
 
 ## Package Contents

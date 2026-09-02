@@ -13,6 +13,6 @@
 :titlesonly:
 :maxdepth: 3
 
-mesokit.tutorial.viz
 mesokit.tutorial.training
+mesokit.tutorial.viz
 ```
