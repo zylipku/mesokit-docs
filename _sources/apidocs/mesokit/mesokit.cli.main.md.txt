@@ -15,6 +15,10 @@
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`_load_project_plugins <mesokit.cli.main._load_project_plugins>`
+  - ```{autodoc2-docstring} mesokit.cli.main._load_project_plugins
+    :summary:
+    ```
 * - {py:obj}`main <mesokit.cli.main.main>`
   - ```{autodoc2-docstring} mesokit.cli.main.main
     :summary:
@@ -43,6 +47,13 @@
 ```{autodoc2-docstring} mesokit.cli.main.app
 ```
 
+````
+
+````{py:function} _load_project_plugins() -> None
+:canonical: mesokit.cli.main._load_project_plugins
+
+```{autodoc2-docstring} mesokit.cli.main._load_project_plugins
+```
 ````
 
 ````{py:function} main() -> None

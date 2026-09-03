@@ -50,7 +50,7 @@ your own equation / solver / generator ─────────────�
 | --- | --- | --- |
 | `mesokit-convert-data` | bring an existing file into mesokit | inspect the file, ask once if the axis layout is unclear, write a `mesokit-trajectory` HDF5 v1 file with the metadata groups filled in, run the validator until it passes, register the dataset if you gave a name |
 | `mesokit-add-simulator` | generate datasets from your own equation or code | wrap it as a registered simulator with the metadata `mesokit train` needs (`dt`, box, grid), wire a `configs/data/<dyn>/` recipe, generate a small dataset, validate it and run a physical sanity check |
-| `mesokit-train` | fit a model and read what it learned | read the dataset's grid and `dt`, choose the family and potential for your goal, write or adapt the recipe with the grid checked against the data, run a one-epoch CPU smoke pass, train, then extract and interpret the `potential` artifact (custom models: the same from Python) |
+| `mesokit-train` | fit a model and read what it learned | read the dataset's grid and `dt`, choose the family and potential for your goal, write or adapt the recipe with the grid checked against the data, run a one-epoch CPU smoke pass, train, then extract and interpret the `potential` artifact (custom models from `plugins/` the same way) |
 | `mesokit-add-model` | a model mesokit does not ship | prefer a new potential or operator block for a shipped family when that suffices; otherwise write a `DynamicsModel` in your module, run the structural smoke test (protocol, shapes, gradients, wrong-grid error), train two epochs |
 | `mesokit-add-trainer` | a different loss, schedule or loop | check whether `LitTrainer`'s options already cover it; if not, write a plain-PyTorch `fit()` registered under your model, and smoke it against the persistence baseline |
 | `mesokit-add-artifact` | a plot or number read off a trained model | build an artifact class with `summary` / `plot` / `save`, wire it into your model or compute it post hoc from a checkpoint, and place it beside the shipped `potential` artifact with `compare` |
@@ -166,7 +166,7 @@ The agent wraps the solver as `simulate_heat_1d(*, n_traj, Nx, Lx, T,
 n_time, kappa, seed, verbose)` registered as `heat_1d`, stores `dt`, `Lx`
 and `kappa` in the metadata groups, writes
 `configs/data/heat_1d/default.yaml`, generates a small dataset with
-`PYTHONPATH=. mesokit data generate --dyn heat_1d`, and checks that the
+`mesokit data generate --dyn heat_1d` with the wrapper in `plugins/`, and checks that the
 mean of `u` is conserved along one trajectory before handing over to
 training.
 

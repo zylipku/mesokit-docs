@@ -1,22 +1,23 @@
 # Custom Models
 
 You extend `mesokit` from **your own module**, never by editing
-`src/mesokit/`. A model is registered by name through
-`mesokit.models.register`, and the registry is populated by *import*: put
-your code in a module the process can import (a package installed into the
-environment, or a directory on `PYTHONPATH`) and import it before calling
-anything by name.
+`src/mesokit/`. Put the module in `plugins/` in the directory you run
+`mesokit` from (the checkout for extension work — the folder is gitignored —
+or any project directory): every `mesokit` command imports what it finds
+there, so a model registered by name through `mesokit.models.register`
+is available to `--model` like a shipped one, and a recipe can name the
+class by `_target_`. From Python, import the module yourself before
+calling anything by name.
 
-A custom model reaches the CLI the same way a custom simulator does: the
-recipe names the class. `mesokit train --model <name>` uses the registry to
-fill in `model._target_` for the shipped families; for any other name it
-requires the recipe to set `model._target_` to your importable class, which
-Hydra imports by its dotted path, and `mesokit interpret` rebuilds the
-checkpoint from the saved recipe the same way. Registration is still what
-the Python API's `get(name)` uses, and the name you pass to `--model` is
-what the recipe directory and the checkpoint are called. The end-to-end
-flow is at the bottom of this page; the same works from Python as shown
-in [Training](../training.md).
+With the module in `plugins/`, `mesokit train --model <registered name>`
+works exactly as for a shipped family: the registry supplies the class,
+the grid is filled from the dataset, and the shipped `LitTrainer` trains
+it unless you register or name a trainer of your own. No recipe is needed;
+`--set` adjusts the constructor arguments. A recipe may instead name the
+class by `model._target_` (then registration is optional), and `mesokit
+interpret` rebuilds the checkpoint from the saved recipe either way. The
+end-to-end flow is at the bottom of this page; the same works from Python
+as shown in [Training](../training.md).
 
 ## Reuse Before Writing
 
@@ -54,7 +55,7 @@ Two implementation patterns cover the shipped families. The simplest is a
 right-hand side plus one of the shared explicit steppers:
 
 ```python
-# my_models.py
+# plugins/my_models.py
 import torch
 from torch import Tensor, nn
 from torch.nn import functional as F
@@ -147,9 +148,18 @@ assert model.rollout(u, 3, 1e-2).shape == (4, 4, 64)
 
 ## Training It Through the CLI
 
-Write a recipe under `configs/train/<dyn>/<model name>/default.yaml` whose
-`model` section names the class, and run the usual command with the module
-importable:
+With `plugins/my_models.py` in place, the registered name is enough:
+
+```sh
+mesokit train --model linear_decay_1d --data decay_1d_v0 --set trainer.max_epochs=50
+mesokit interpret extract --model linear_decay_1d_v0 --artifact rate --output figs/rate.png
+```
+
+`Nx` is filled from the dataset, `LitTrainer` is the trainer, and `--set`
+changes anything else. To keep a configuration, or to use a class without
+registering it, write a recipe under
+`configs/train/<dyn>/<model name>/default.yaml` whose `model` section names
+the class:
 
 ```yaml
 # configs/train/decay_1d/linear_decay_1d/default.yaml
@@ -174,12 +184,12 @@ trainer:
 ```
 
 ```sh
-PYTHONPATH=. mesokit train --model linear_decay_1d --dyn decay_1d --data decay_1d_v0
-PYTHONPATH=. mesokit interpret extract --model linear_decay_1d_v0 --artifact rate --output figs/rate.png
+mesokit train --model linear_decay_1d --data decay_1d_v0
 ```
 
 The shipped `LitTrainer` trains any `DynamicsModel`; a trainer of your own
-goes into `trainer._target_` the same way ([Custom Trainers](../training/custom_trainer.md)).
-Without `PYTHONPATH` (or an installed package) Hydra cannot import the
-class and the command fails naming the module. The same model trains from
-Python as shown in [Training](../training.md).
+goes into `trainer._target_` the same way, or is registered under the model
+name ([Custom Trainers](../training/custom_trainer.md)). If the module is
+not under `plugins/` (nor installed), Hydra cannot import the class and the
+command fails naming the module. The same model trains from Python as
+shown in [Training](../training.md).

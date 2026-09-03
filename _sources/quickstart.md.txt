@@ -22,19 +22,23 @@ mesokit data avail
 ```
 
 **Extend the toolkit.** Your own simulators, models, trainers or
-artifacts are Python that `mesokit` must be able to import. For that, work
-from a checkout, whose [pixi](https://pixi.sh) environment provides an
-editable install and the `configs/` tree beside your code:
+artifacts are Python. Work from a checkout, whose [pixi](https://pixi.sh)
+environment provides an editable install, and put your code in its
+`plugins/` folder — gitignored, imported by every `mesokit` command, so a
+model registered there is used by name like a shipped one:
 
 ```bash
 git clone <this-repo> mesokit
 cd mesokit
 pixi install
+cp ~/my_models.py plugins/          # @register("my_model_1d") inside
+pixi run mesokit train --model my_model_1d --data <dataset>
 ```
 
 Prefix commands with `pixi run` (or open a pixi shell by running `pixi
 shell`) if `mesokit` is not on your `PATH`. The *Custom* pages of this
-guide assume this layout.
+guide assume this layout; a `plugins/` folder in any project directory
+works the same way.
 
 Both need a linux-64 platform with a CUDA-capable GPU (CUDA 12.6 or newer).
 This page shows the happy path; every option, output file, error message

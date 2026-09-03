@@ -9,10 +9,14 @@ instead, see [Custom Datasets](custom.md).
 
 ## Where Extensions Live
 
-- Put your code in a module the `mesokit` process can import: a package
-  installed into the pixi environment, or a directory on `PYTHONPATH`.
-- Registries are populated by *import*. Import your module (or run it as a
-  script) before calling anything by name.
+- Put your code in `plugins/` in the directory you run `mesokit` from — the
+  mesokit checkout for extension work (the folder is gitignored, so your code
+  never collides with upstream), or any project directory. Every `mesokit`
+  command imports `plugins/<name>.py` and `plugins/<name>/` packages before
+  running, so registered names and `_target_` paths resolve. A package
+  installed into the environment works too.
+- Registries are populated by *import*: the CLI imports `plugins/` for you;
+  from Python, import your module before calling anything by name.
 - Config entries for your own dynamics (`configs/data/<dyn>/`,
   `configs/train/<dyn>/<model>/`) sit beside the shipped ones; see
   [Training Recipes](../training/recipes.md) for the training side.
@@ -34,7 +38,7 @@ box lengths in `physical` and the stored frame spacing `dt` in `numerical`:
 require a periodic box with an even number of points per axis.
 
 ```python
-# my_sims.py
+# plugins/my_sims.py
 import numpy as np
 import torch
 
@@ -90,8 +94,8 @@ data/decay_1d/decay_1d_v0.h5`, which also runs the validator.
 
 ## From the CLI
 
-Point a Hydra config at your callable and make sure your module is
-importable in the `mesokit` process:
+Point a Hydra config at your callable; with the module under `plugins/`
+nothing else is needed:
 
 ```yaml
 # configs/data/decay_1d/default.yaml
@@ -105,12 +109,12 @@ seed: 0
 ```
 
 ```sh
-PYTHONPATH=. mesokit data generate --dyn decay_1d      # writes + registers decay_1d_v0
+mesokit data generate --dyn decay_1d      # writes + registers decay_1d_v0
 ```
 
 Sibling files under `configs/data/decay_1d/` are variants selected by stem
 with `--config <stem>`. `mesokit data list` shows the dataset under
-`custom:` because the CLI process never imported `my_sims`; everything
+`custom:` when the simulator is not one of the shipped ones; everything
 downstream works regardless. Validation and registration of files you
 wrote some other way are covered in [Custom Datasets](custom.md).
 

@@ -85,8 +85,8 @@ trainer:                  # LitTrainer kwargs (or the registered trainer's)
 ```
 
 - **`model`** — keyword arguments of the model constructor. `_target_`
-  defaults to the class registered under `--model` and is required when
-  `--model` is not a registered name (a model of your own; see
+  defaults to the class registered under `--model` (shipped, or your own
+  from `plugins/`) and is required only for an unregistered name (see
   [Custom Models](../models/custom_model.md)). Nested components (a
   potential, an operator block) are Hydra objects with their own `_target_`.
 - **`dataset`** — the `TrajectoryDataset` wrapper; `mesokit train` calls it
@@ -95,8 +95,9 @@ trainer:                  # LitTrainer kwargs (or the registered trainer's)
 - **`dataloader`** — merged over `{batch_size: 32, shuffle: true,
   num_workers: 0}`; `--batch-size` overrides `batch_size`.
 - **`trainer`** — hyperparameters of the trainer registered for the model
-  (`--trainer` overrides the name; an unregistered name needs
-  `trainer._target_`); `dt: null` means "infer from the data". `--epochs`
+  (`--trainer` overrides the name; a model with no trainer of its own gets
+  `LitTrainer`; any class can be named by `trainer._target_`); `dt: null`
+  means "infer from the data". `--epochs`
   overrides `max_epochs`, `--device` overrides `accelerator`. The full
   option list is on [LitTrainer](lit_trainer.md).
 

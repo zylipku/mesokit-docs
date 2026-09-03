@@ -73,8 +73,8 @@ model.eval()
 ```
 
 `mesokit interpret` does exactly this with the saved recipe, so a custom
-model whose recipe names its class works there too, as long as the module
-is importable (`PYTHONPATH=.`); from Python, import the module first.
+model works there too as long as its module is under `plugins/` (imported
+by every command) or installed; from Python, import the module first.
 
 ## Comparing Artifacts
 

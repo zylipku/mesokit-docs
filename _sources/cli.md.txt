@@ -19,6 +19,12 @@ reference; the [Quickstart](quickstart.md) is the shortest path through it.
 
 ## Conventions
 
+**Plugins.** Every command first imports `./plugins/` — each
+`plugins/<name>.py` and `plugins/<name>/` package, names starting with `_`
+skipped — so a project's own simulators, models, trainers and artifacts
+register themselves and recipes can name their classes. A plugin that fails
+to import stops the command with the module and the error.
+
 **Run from the repository root.** The CLI resolves three things relative to
 the current working directory:
 
@@ -443,9 +449,11 @@ Two things to know:
   single-channel input; pick the suffix that matches the dataset's grid. The
   multi-channel datasets (`llg_lattice_2d`, `peridynamics_fracture_2d`)
   train on one channel at a time through the `dataset.channel` key of the
-  recipe. A model (or trainer) of your own is trained by naming its class in
-  the recipe's `model._target_` (`trainer._target_`) and making the module
-  importable; see [Custom Models](models/custom_model.md).
+  recipe. A model (or trainer) of your own under `./plugins/` is imported
+  before every command, so its registered name works like a shipped one
+  (a model without a trainer of its own trains with `LitTrainer`); a recipe
+  may also name any class by `model._target_` / `trainer._target_`. See
+  [Custom Models](models/custom_model.md).
 
 Errors:
 

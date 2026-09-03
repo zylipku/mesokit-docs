@@ -1,0 +1,106 @@
+# {py:mod}`mesokit.cli._plugins`
+
+```{py:module} mesokit.cli._plugins
+```
+
+```{autodoc2-docstring} mesokit.cli._plugins
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`LoadedPlugins <mesokit.cli._plugins.LoadedPlugins>`
+  - ```{autodoc2-docstring} mesokit.cli._plugins.LoadedPlugins
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`plugin_modules <mesokit.cli._plugins.plugin_modules>`
+  - ```{autodoc2-docstring} mesokit.cli._plugins.plugin_modules
+    :summary:
+    ```
+* - {py:obj}`load_plugins <mesokit.cli._plugins.load_plugins>`
+  - ```{autodoc2-docstring} mesokit.cli._plugins.load_plugins
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`PLUGINS_DIR <mesokit.cli._plugins.PLUGINS_DIR>`
+  - ```{autodoc2-docstring} mesokit.cli._plugins.PLUGINS_DIR
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} PLUGINS_DIR
+:canonical: mesokit.cli._plugins.PLUGINS_DIR
+:value: >
+   'plugins'
+
+```{autodoc2-docstring} mesokit.cli._plugins.PLUGINS_DIR
+```
+
+````
+
+`````{py:class} LoadedPlugins
+:canonical: mesokit.cli._plugins.LoadedPlugins
+
+```{autodoc2-docstring} mesokit.cli._plugins.LoadedPlugins
+```
+
+````{py:attribute} directory
+:canonical: mesokit.cli._plugins.LoadedPlugins.directory
+:type: pathlib.Path | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._plugins.LoadedPlugins.directory
+```
+
+````
+
+````{py:attribute} modules
+:canonical: mesokit.cli._plugins.LoadedPlugins.modules
+:type: tuple[str, ...]
+:value: >
+   'field(...)'
+
+```{autodoc2-docstring} mesokit.cli._plugins.LoadedPlugins.modules
+```
+
+````
+
+`````
+
+````{py:function} plugin_modules(directory: pathlib.Path) -> list[str]
+:canonical: mesokit.cli._plugins.plugin_modules
+
+```{autodoc2-docstring} mesokit.cli._plugins.plugin_modules
+```
+````
+
+````{py:function} load_plugins(root: pathlib.Path | None = None) -> mesokit.cli._plugins.LoadedPlugins
+:canonical: mesokit.cli._plugins.load_plugins
+
+```{autodoc2-docstring} mesokit.cli._plugins.load_plugins
+```
+````

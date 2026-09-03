@@ -37,9 +37,9 @@ is filled from the dataset, `--set key=value` changes any recipe key for
 one run, and a dataset / model pair with no recipe at all trains with
 built-in defaults — so nothing has to be written by hand to train a
 shipped model on any registered dataset. `--epochs`, `--batch-size` and
-`--device` override the common knobs. A model or trainer of your own is
-named by `_target_` in the recipe instead of the registry
-([Custom Models](models/custom_model.md)). Every option is in the
+`--device` override the common knobs. A model or trainer of your own, placed
+under `plugins/`, is used by its registered name like a shipped one, or
+named by `_target_` in the recipe ([Custom Models](models/custom_model.md)). Every option is in the
 [Command-Line Reference](cli.md); the recipe format and lookup order are on
 [Training Recipes](training/recipes.md).
 

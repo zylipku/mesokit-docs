@@ -260,7 +260,7 @@
 ```
 ````
 
-````{py:function} _trainer_config(trainer_name: str, cfg: omegaconf.DictConfig, traj: mesokit.data.TrajectoryDataset, *, epochs: int | None, device: str | None) -> omegaconf.DictConfig
+````{py:function} _trainer_config(trainer_name: str, cfg: omegaconf.DictConfig, traj: mesokit.data.TrajectoryDataset, *, epochs: int | None, device: str | None, explicit: bool = False) -> omegaconf.DictConfig
 :canonical: mesokit.cli.train._trainer_config
 
 ```{autodoc2-docstring} mesokit.cli.train._trainer_config
