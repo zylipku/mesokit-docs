@@ -72,8 +72,9 @@ model.load_state_dict(torch.load("checkpoints/allen_cahn_1d/son_v0/model.pt", ma
 model.eval()
 ```
 
-For a custom model, import your module first; `mesokit interpret` cannot
-do that yet, so custom artifacts are built this way.
+`mesokit interpret` does exactly this with the saved recipe, so a custom
+model whose recipe names its class works there too, as long as the module
+is importable (`PYTHONPATH=.`); from Python, import the module first.
 
 ## Comparing Artifacts
 

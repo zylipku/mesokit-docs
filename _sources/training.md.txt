@@ -33,20 +33,21 @@ and the recipe `configs/train/<dyn>/<model>/<stem>.yaml` (`--config
 <stem>`, default `default`), then loads the dataset, builds the training
 view and the `DataLoader`, calls `fit`, and registers the checkpoint.
 `--epochs`, `--batch-size` and `--device` override the recipe for one run.
-Every option is in the [Command-Line Reference](cli.md); the recipe
-format is on [Training Recipes](training/recipes.md).
+A model or trainer of your own is named by `_target_` in the recipe instead
+of the registry ([Custom Models](models/custom_model.md)). Every option is
+in the [Command-Line Reference](cli.md); the recipe format is on
+[Training Recipes](training/recipes.md).
 
 **The grid.** `mesokit sweep --dyn <dyn> --model <name> --param eps=0.05,0.1,0.2`
 runs `data generate` and `train` once per point of a parameter grid (several
 `--param` axes form the Cartesian product), names each dataset and checkpoint
 after its parameter values, and writes a summary table to
 `checkpoints/<dyn>/sweeps/<timestamp>.json`; see
-[`mesokit sweep`](cli.md#mesokit-sweep). The same loop is
+`mesokit sweep` in the [Command-Line Reference](cli.md). The same loop is
 `mesokit.cli.sweep.run_sweep(...)` from Python.
 
-**The Python API.** The same pieces, called directly. This is the only
-path for custom models and trainers today, and the natural one in a
-notebook:
+**The Python API.** The same pieces, called directly — the natural path in
+a notebook, and the only one when the data or the loop do not fit a recipe:
 
 ```python
 # train_from_python.py

@@ -408,9 +408,10 @@ harness (<code class="docutils literal notranslate"><span class="pre">mesokit.in
 <code class="docutils literal notranslate"><span class="pre">mesokit.interpret.InterpretabilityArtifact</span></code> surface: three labels,
 <code class="docutils literal notranslate"><span class="pre">summary()</span></code>, <code class="docutils literal notranslate"><span class="pre">plot(ax=None)</span></code>, and <code class="docutils literal notranslate"><span class="pre">save(path)</span></code>. Anything else (a sympy
 expression, a potential on a grid, a spectrum) is yours to add. Keep the
-artifact class next to the model that builds it. Like custom models,
-custom artifacts are built from Python: <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code> cannot import
-your module yet.</p>
+artifact class next to the model that builds it. An artifact returned by
+a custom model’s <code class="docutils literal notranslate"><span class="pre">artifact(name)</span></code> is extracted by <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code> like
+any other once the model’s recipe names the class and the module is
+importable; post-hoc artifacts are built from Python.</p>
 <section id="the-minimal-class">
 <h2>The Minimal Class<a class="headerlink" href="#the-minimal-class" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_artifacts.py</span>

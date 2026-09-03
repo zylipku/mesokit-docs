@@ -434,18 +434,19 @@ resolves the model class from the registry, the trainer registered for it,
 and the recipe <code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;model&gt;/&lt;stem&gt;.yaml</span></code> (<code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;stem&gt;</span></code>, default <code class="docutils literal notranslate"><span class="pre">default</span></code>), then loads the dataset, builds the training
 view and the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code>, calls <code class="docutils literal notranslate"><span class="pre">fit</span></code>, and registers the checkpoint.
 <code class="docutils literal notranslate"><span class="pre">--epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">--batch-size</span></code> and <code class="docutils literal notranslate"><span class="pre">--device</span></code> override the recipe for one run.
-Every option is in the <a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a>; the recipe
-format is on <a class="reference internal" href="training/recipes.html"><span class="std std-doc">Training Recipes</span></a>.</p>
+A model or trainer of your own is named by <code class="docutils literal notranslate"><span class="pre">_target_</span></code> in the recipe instead
+of the registry (<a class="reference internal" href="models/custom_model.html"><span class="std std-doc">Custom Models</span></a>). Every option is
+in the <a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a>; the recipe format is on
+<a class="reference internal" href="training/recipes.html"><span class="std std-doc">Training Recipes</span></a>.</p>
 <p><strong>The grid.</strong> <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span> <span class="pre">--dyn</span> <span class="pre">&lt;dyn&gt;</span> <span class="pre">--model</span> <span class="pre">&lt;name&gt;</span> <span class="pre">--param</span> <span class="pre">eps=0.05,0.1,0.2</span></code>
 runs <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> and <code class="docutils literal notranslate"><span class="pre">train</span></code> once per point of a parameter grid (several
 <code class="docutils literal notranslate"><span class="pre">--param</span></code> axes form the Cartesian product), names each dataset and checkpoint
 after its parameter values, and writes a summary table to
 <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/sweeps/&lt;timestamp&gt;.json</span></code>; see
-<a class="reference internal" href="cli.html#mesokit-sweep"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code></span></a>. The same loop is
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code> in the <a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a>. The same loop is
 <code class="docutils literal notranslate"><span class="pre">mesokit.cli.sweep.run_sweep(...)</span></code> from Python.</p>
-<p><strong>The Python API.</strong> The same pieces, called directly. This is the only
-path for custom models and trainers today, and the natural one in a
-notebook:</p>
+<p><strong>The Python API.</strong> The same pieces, called directly — the natural path in
+a notebook, and the only one when the data or the loop do not fit a recipe:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># train_from_python.py</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
 

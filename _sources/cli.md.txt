@@ -433,8 +433,9 @@ Two things to know:
   single-channel input; pick the suffix that matches the dataset's grid. The
   multi-channel datasets (`llg_lattice_2d`, `peridynamics_fracture_2d`)
   train on one channel at a time through the `dataset.channel` key of the
-  recipe. Custom models currently run through the Python API rather than
-  `mesokit train`; see [Models](models.md) and [Custom Models](models/custom_model.md).
+  recipe. A model (or trainer) of your own is trained by naming its class in
+  the recipe's `model._target_` (`trainer._target_`) and making the module
+  importable; see [Custom Models](models/custom_model.md).
 
 Errors:
 

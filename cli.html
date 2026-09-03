@@ -940,8 +940,9 @@ For a quick real run use <code class="docutils literal notranslate"><span class=
 single-channel input; pick the suffix that matches the dataset’s grid. The
 multi-channel datasets (<code class="docutils literal notranslate"><span class="pre">llg_lattice_2d</span></code>, <code class="docutils literal notranslate"><span class="pre">peridynamics_fracture_2d</span></code>)
 train on one channel at a time through the <code class="docutils literal notranslate"><span class="pre">dataset.channel</span></code> key of the
-recipe. Custom models currently run through the Python API rather than
-<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code>; see <a class="reference internal" href="models.html"><span class="std std-doc">Models</span></a> and <a class="reference internal" href="models/custom_model.html"><span class="std std-doc">Custom Models</span></a>.</p></li>
+recipe. A model (or trainer) of your own is trained by naming its class in
+the recipe’s <code class="docutils literal notranslate"><span class="pre">model._target_</span></code> (<code class="docutils literal notranslate"><span class="pre">trainer._target_</span></code>) and making the module
+importable; see <a class="reference internal" href="models/custom_model.html"><span class="std std-doc">Custom Models</span></a>.</p></li>
 </ul>
 <p>Errors:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invalid value: dataset &#39;nope&#39; is not registered and is not an existing HDF5 path

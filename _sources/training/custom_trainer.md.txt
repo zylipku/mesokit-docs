@@ -5,8 +5,8 @@ TrainResult`. It owns the training loop and writes the canonical
 Lightning-free `model.pt` state-dict; registry bookkeeping is done by the
 CLI, so `fit` is safe to call from a notebook. Register it with
 `mesokit.trainers.register_trainer` under the model name it is the default
-for. Like custom models, custom trainers run through the Python API today:
-`mesokit train` resolves only the shipped registration.
+for. It reaches `mesokit train` through the recipe: set `trainer._target_`
+to its importable class (see "Using It" below).
 
 Before writing one, check whether [LitTrainer](lit_trainer.md) already
 covers the need: multi-step rollout losses (`rollout_steps`), optimiser and
@@ -110,3 +110,28 @@ artifact.save("figs/decay_rate.png")
 dt=...)` to get Lightning's checkpointing and `history.json` for free; the
 `fit` call is identical. Register the checkpoint afterwards with `mesokit
 model register` so the CLI can list it.
+
+## Through the CLI
+
+`mesokit train` instantiates the recipe's `trainer` section and passes
+`checkpoint_root=checkpoints/<dyn>` and `run_id=<checkpoint name>` as
+keywords, sets `dt` when the recipe leaves it `null`, and applies
+`--epochs` / `--device` as `max_epochs` / `accelerator`. A trainer used
+this way therefore accepts `checkpoint_root`, `run_id` and `dt`, plus
+`max_epochs` and `accelerator` if you want those overrides to work
+(`PlainTorchTrainer` above accepts the first three). Name it in the recipe:
+
+```yaml
+trainer:
+  _target_: my_trainer.PlainTorchTrainer
+  epochs: 200
+  lr: 5.0e-2
+  dt: null
+```
+
+```sh
+PYTHONPATH=. mesokit train --model linear_decay_1d --dyn decay_1d --data decay_1d_v0
+```
+
+The checkpoint is registered like any other, and `history.json` comes from
+the `history` your `fit` returns.

@@ -408,12 +408,16 @@
 your code in a module the process can import (a package installed into the
 environment, or a directory on <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>) and import it before calling
 anything by name.</p>
-<p>What reaches the CLI today: custom models run through the Python API.
-<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> and <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code> resolve only the architectures the
-installed package registered; loading user modules from the CLI is on the
-roadmap. Train custom models from Python as shown in
-<a class="reference internal" href="../training.html"><span class="std std-doc">Training</span></a>, and build their artifacts from Python as
-shown in <a class="reference internal" href="../interpretability.html"><span class="std std-doc">Interpretability</span></a>.</p>
+<p>A custom model reaches the CLI the same way a custom simulator does: the
+recipe names the class. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--model</span> <span class="pre">&lt;name&gt;</span></code> uses the registry to
+fill in <code class="docutils literal notranslate"><span class="pre">model._target_</span></code> for the shipped families; for any other name it
+requires the recipe to set <code class="docutils literal notranslate"><span class="pre">model._target_</span></code> to your importable class, which
+Hydra imports by its dotted path, and <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code> rebuilds the
+checkpoint from the saved recipe the same way. Registration is still what
+the Python API’s <code class="docutils literal notranslate"><span class="pre">get(name)</span></code> uses, and the name you pass to <code class="docutils literal notranslate"><span class="pre">--model</span></code> is
+what the recipe directory and the checkpoint are called. The end-to-end
+flow is at the bottom of this page; the same works from Python as shown
+in <a class="reference internal" href="../training.html"><span class="std std-doc">Training</span></a>.</p>
 <section id="reuse-before-writing">
 <h2>Reuse Before Writing<a class="headerlink" href="#reuse-before-writing" title="Link to this heading">¶</a></h2>
 <p>Most “new model” needs are a new <strong>component</strong> of a shipped family, which
@@ -555,8 +559,43 @@ loops that run under inference mode still work.</p>
 <span class="k">assert</span> <span class="n">model</span><span class="o">.</span><span class="n">rollout</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Then train it from Python with <code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code> or your own trainer; see
-<a class="reference internal" href="../training.html"><span class="std std-doc">Training</span></a> and <a class="reference internal" href="../training/custom_trainer.html"><span class="std std-doc">Custom Trainers</span></a>.</p>
+</section>
+<section id="training-it-through-the-cli">
+<h2>Training It Through the CLI<a class="headerlink" href="#training-it-through-the-cli" title="Link to this heading">¶</a></h2>
+<p>Write a recipe under <code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;model</span> <span class="pre">name&gt;/default.yaml</span></code> whose
+<code class="docutils literal notranslate"><span class="pre">model</span></code> section names the class, and run the usual command with the module
+importable:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># configs/train/decay_1d/linear_decay_1d/default.yaml</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_models.LinearDecay1d</span>
+<span class="w">  </span><span class="nt">Nx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+
+<span class="nt">dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset</span>
+<span class="w">  </span><span class="nt">stride</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">dataloader</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+<span class="w">  </span><span class="nt">shuffle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">num_workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+
+<span class="nt">trainer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mesokit.trainers.lit_trainer.lit_trainer.LitTrainer</span>
+<span class="w">  </span><span class="nt">max_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
+<span class="w">  </span><span class="nt">lr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0e-2</span>
+<span class="w">  </span><span class="nt">dt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">  </span><span class="nt">accelerator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpu</span>
+</pre></div>
+</div>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">PYTHONPATH</span><span class="o">=</span>.<span class="w"> </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>linear_decay_1d<span class="w"> </span>--dyn<span class="w"> </span>decay_1d<span class="w"> </span>--data<span class="w"> </span>decay_1d_v0
+<span class="nv">PYTHONPATH</span><span class="o">=</span>.<span class="w"> </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>linear_decay_1d_v0<span class="w"> </span>--artifact<span class="w"> </span>rate<span class="w"> </span>--output<span class="w"> </span>figs/rate.png
+</pre></div>
+</div>
+<p>The shipped <code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code> trains any <code class="docutils literal notranslate"><span class="pre">DynamicsModel</span></code>; a trainer of your own
+goes into <code class="docutils literal notranslate"><span class="pre">trainer._target_</span></code> the same way (<a class="reference internal" href="../training/custom_trainer.html"><span class="std std-doc">Custom Trainers</span></a>).
+Without <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> (or an installed package) Hydra cannot import the
+class and the command fails naming the module. The same model trains from
+Python as shown in <a class="reference internal" href="../training.html"><span class="std std-doc">Training</span></a>.</p>
 </section>
 </section>
 
@@ -620,6 +659,7 @@ loops that run under inference mode still work.</p>
 <li><a class="reference internal" href="#the-dynamicsmodel-protocol">The <code class="docutils literal notranslate"><span class="pre">DynamicsModel</span></code> Protocol</a></li>
 <li><a class="reference internal" href="#writing-once-for-1d-2d-and-3d">Writing Once for 1D, 2D and 3D</a></li>
 <li><a class="reference internal" href="#checking-before-training">Checking Before Training</a></li>
+<li><a class="reference internal" href="#training-it-through-the-cli">Training It Through the CLI</a></li>
 </ul>
 </li>
 </ul>

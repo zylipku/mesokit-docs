@@ -447,18 +447,20 @@ may be any importable callable that satisfies the simulator contract
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">model</span></code></strong> — keyword arguments of the model constructor. <code class="docutils literal notranslate"><span class="pre">_target_</span></code> is
-optional and defaults to the class registered under <code class="docutils literal notranslate"><span class="pre">--model</span></code>. Nested
-components (a potential, an operator block) are Hydra objects with their
-own <code class="docutils literal notranslate"><span class="pre">_target_</span></code>.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">model</span></code></strong> — keyword arguments of the model constructor. <code class="docutils literal notranslate"><span class="pre">_target_</span></code>
+defaults to the class registered under <code class="docutils literal notranslate"><span class="pre">--model</span></code> and is required when
+<code class="docutils literal notranslate"><span class="pre">--model</span></code> is not a registered name (a model of your own; see
+<a class="reference internal" href="../models/custom_model.html"><span class="std std-doc">Custom Models</span></a>). Nested components (a
+potential, an operator block) are Hydra objects with their own <code class="docutils literal notranslate"><span class="pre">_target_</span></code>.</p></li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">dataset</span></code></strong> — the <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code> wrapper; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> calls it
 with <code class="docutils literal notranslate"><span class="pre">traj=&lt;the</span> <span class="pre">loaded</span> <span class="pre">dataset&gt;</span></code> plus these keys. See
 <a class="reference internal" href="training_views.html"><span class="std std-doc">Training Views</span></a>.</p></li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">dataloader</span></code></strong> — merged over <code class="docutils literal notranslate"><span class="pre">{batch_size:</span> <span class="pre">32,</span> <span class="pre">shuffle:</span> <span class="pre">true,</span> <span class="pre">num_workers:</span> <span class="pre">0}</span></code>; <code class="docutils literal notranslate"><span class="pre">--batch-size</span></code> overrides <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>.</p></li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">trainer</span></code></strong> — hyperparameters of the trainer registered for the model
-(<code class="docutils literal notranslate"><span class="pre">--trainer</span></code> overrides the name); <code class="docutils literal notranslate"><span class="pre">dt:</span> <span class="pre">null</span></code> means “infer from the data”.
-<code class="docutils literal notranslate"><span class="pre">--epochs</span></code> overrides <code class="docutils literal notranslate"><span class="pre">max_epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">--device</span></code> overrides <code class="docutils literal notranslate"><span class="pre">accelerator</span></code>.
-The full option list is on <a class="reference internal" href="lit_trainer.html"><span class="std std-doc">LitTrainer</span></a>.</p></li>
+(<code class="docutils literal notranslate"><span class="pre">--trainer</span></code> overrides the name; an unregistered name needs
+<code class="docutils literal notranslate"><span class="pre">trainer._target_</span></code>); <code class="docutils literal notranslate"><span class="pre">dt:</span> <span class="pre">null</span></code> means “infer from the data”. <code class="docutils literal notranslate"><span class="pre">--epochs</span></code>
+overrides <code class="docutils literal notranslate"><span class="pre">max_epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">--device</span></code> overrides <code class="docutils literal notranslate"><span class="pre">accelerator</span></code>. The full
+option list is on <a class="reference internal" href="lit_trainer.html"><span class="std std-doc">LitTrainer</span></a>.</p></li>
 </ul>
 </section>
 <section id="rules-that-are-checked-late">

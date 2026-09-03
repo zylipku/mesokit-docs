@@ -429,7 +429,7 @@
 <td><p>Core of <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code>, shared with <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code> and callable from Python.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._instantiate_model" title="mesokit.cli.train._instantiate_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_model</span></code></a></p></td>
-<td></td>
+<td><p>Build the model from the recipe’s <code class="docutils literal notranslate"><span class="pre">model</span></code> section.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._instantiate_dataset" title="mesokit.cli.train._instantiate_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_dataset</span></code></a></p></td>
 <td></td>
@@ -523,7 +523,11 @@ checkpoint under <code class="docutils literal notranslate"><span class="pre">na
 <dl class="py function">
 <dt class="sig sig-object py" id="mesokit.cli.train._instantiate_model">
 <span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_instantiate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="headerlink" href="#mesokit.cli.train._instantiate_model" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Build the model from the recipe’s <code class="docutils literal notranslate"><span class="pre">model</span></code> section.</p>
+<p>A registered <code class="docutils literal notranslate"><span class="pre">--model</span></code> name supplies the default <code class="docutils literal notranslate"><span class="pre">_target_</span></code>; an
+unregistered name (a user’s own model) is accepted when the recipe names
+the class itself, which Hydra imports by its dotted path.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mesokit.cli.train._instantiate_dataset">

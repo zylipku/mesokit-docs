@@ -6,9 +6,10 @@ harness (`mesokit.interpret.compare`) relies only on the
 `mesokit.interpret.InterpretabilityArtifact` surface: three labels,
 `summary()`, `plot(ax=None)`, and `save(path)`. Anything else (a sympy
 expression, a potential on a grid, a spectrum) is yours to add. Keep the
-artifact class next to the model that builds it. Like custom models,
-custom artifacts are built from Python: `mesokit interpret` cannot import
-your module yet.
+artifact class next to the model that builds it. An artifact returned by
+a custom model's `artifact(name)` is extracted by `mesokit interpret` like
+any other once the model's recipe names the class and the module is
+importable; post-hoc artifacts are built from Python.
 
 ## The Minimal Class
 

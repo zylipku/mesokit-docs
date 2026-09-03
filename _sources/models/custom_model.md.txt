@@ -7,12 +7,16 @@ your code in a module the process can import (a package installed into the
 environment, or a directory on `PYTHONPATH`) and import it before calling
 anything by name.
 
-What reaches the CLI today: custom models run through the Python API.
-`mesokit train` and `mesokit interpret` resolve only the architectures the
-installed package registered; loading user modules from the CLI is on the
-roadmap. Train custom models from Python as shown in
-[Training](../training.md), and build their artifacts from Python as
-shown in [Interpretability](../interpretability.md).
+A custom model reaches the CLI the same way a custom simulator does: the
+recipe names the class. `mesokit train --model <name>` uses the registry to
+fill in `model._target_` for the shipped families; for any other name it
+requires the recipe to set `model._target_` to your importable class, which
+Hydra imports by its dotted path, and `mesokit interpret` rebuilds the
+checkpoint from the saved recipe the same way. Registration is still what
+the Python API's `get(name)` uses, and the name you pass to `--model` is
+what the recipe directory and the checkpoint are called. The end-to-end
+flow is at the bottom of this page; the same works from Python as shown
+in [Training](../training.md).
 
 ## Reuse Before Writing
 
@@ -141,5 +145,42 @@ assert model(u, 1e-2).shape == u.shape
 assert model.rollout(u, 3, 1e-2).shape == (4, 4, 64)
 ```
 
-Then train it from Python with `LitTrainer` or your own trainer; see
-[Training](../training.md) and [Custom Trainers](../training/custom_trainer.md).
+## Training It Through the CLI
+
+Write a recipe under `configs/train/<dyn>/<model name>/default.yaml` whose
+`model` section names the class, and run the usual command with the module
+importable:
+
+```yaml
+# configs/train/decay_1d/linear_decay_1d/default.yaml
+model:
+  _target_: my_models.LinearDecay1d
+  Nx: 64
+
+dataset:
+  _target_: mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset
+  stride: 1
+
+dataloader:
+  batch_size: 32
+  shuffle: true
+  num_workers: 0
+
+trainer:
+  _target_: mesokit.trainers.lit_trainer.lit_trainer.LitTrainer
+  max_epochs: 50
+  lr: 1.0e-2
+  dt: null
+  accelerator: cpu
+```
+
+```sh
+PYTHONPATH=. mesokit train --model linear_decay_1d --dyn decay_1d --data decay_1d_v0
+PYTHONPATH=. mesokit interpret extract --model linear_decay_1d_v0 --artifact rate --output figs/rate.png
+```
+
+The shipped `LitTrainer` trains any `DynamicsModel`; a trainer of your own
+goes into `trainer._target_` the same way ([Custom Trainers](../training/custom_trainer.md)).
+Without `PYTHONPATH` (or an installed package) Hydra cannot import the
+class and the command fails naming the module. The same model trains from
+Python as shown in [Training](../training.md).

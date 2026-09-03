@@ -19,8 +19,9 @@ instead, see [Custom Datasets](custom.md).
 
 Custom simulators reach the CLI end to end: `mesokit data generate --dyn
 <dyn>` runs any importable callable named by the Hydra `_target_` in
-`configs/data/<dyn>/default.yaml`. (Custom models, trainers and artifacts
-run through the Python API; see [Custom Models](../models/custom_model.md).)
+`configs/data/<dyn>/default.yaml`. Custom models and trainers use the same
+mechanism through `_target_` in a training recipe; see
+[Custom Models](../models/custom_model.md).
 
 ## The Contract
 

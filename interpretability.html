@@ -500,8 +500,9 @@ run’s <code class="docutils literal notranslate"><span class="pre">config.yaml
 <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>For a custom model, import your module first; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code> cannot
-do that yet, so custom artifacts are built this way.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code> does exactly this with the saved recipe, so a custom
+model whose recipe names its class works there too, as long as the module
+is importable (<code class="docutils literal notranslate"><span class="pre">PYTHONPATH=.</span></code>); from Python, import the module first.</p>
 </section>
 <section id="comparing-artifacts">
 <h2>Comparing Artifacts<a class="headerlink" href="#comparing-artifacts" title="Link to this heading">¶</a></h2>

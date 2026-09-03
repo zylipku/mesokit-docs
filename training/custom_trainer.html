@@ -406,8 +406,8 @@
 Lightning-free <code class="docutils literal notranslate"><span class="pre">model.pt</span></code> state-dict; registry bookkeeping is done by the
 CLI, so <code class="docutils literal notranslate"><span class="pre">fit</span></code> is safe to call from a notebook. Register it with
 <code class="docutils literal notranslate"><span class="pre">mesokit.trainers.register_trainer</span></code> under the model name it is the default
-for. Like custom models, custom trainers run through the Python API today:
-<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> resolves only the shipped registration.</p>
+for. It reaches <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> through the recipe: set <code class="docutils literal notranslate"><span class="pre">trainer._target_</span></code>
+to its importable class (see “Using It” below).</p>
 <p>Before writing one, check whether <a class="reference internal" href="lit_trainer.html"><span class="std std-doc">LitTrainer</span></a> already
 covers the need: multi-step rollout losses (<code class="docutils literal notranslate"><span class="pre">rollout_steps</span></code>), optimiser and
 schedule (<code class="docutils literal notranslate"><span class="pre">optimizer</span></code>, <code class="docutils literal notranslate"><span class="pre">scheduler</span></code>, <code class="docutils literal notranslate"><span class="pre">lr</span></code>, <code class="docutils literal notranslate"><span class="pre">weight_decay</span></code>), gradient
@@ -505,6 +505,28 @@ compares.</p>
 <code class="docutils literal notranslate"><span class="pre">PlainTorchTrainer</span></code> for <code class="docutils literal notranslate"><span class="pre">mesokit.trainers.LitTrainer(max_epochs=...,</span> <span class="pre">dt=...)</span></code> to get Lightning’s checkpointing and <code class="docutils literal notranslate"><span class="pre">history.json</span></code> for free; the
 <code class="docutils literal notranslate"><span class="pre">fit</span></code> call is identical. Register the checkpoint afterwards with <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">register</span></code> so the CLI can list it.</p>
 </section>
+<section id="through-the-cli">
+<h2>Through the CLI<a class="headerlink" href="#through-the-cli" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> instantiates the recipe’s <code class="docutils literal notranslate"><span class="pre">trainer</span></code> section and passes
+<code class="docutils literal notranslate"><span class="pre">checkpoint_root=checkpoints/&lt;dyn&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">run_id=&lt;checkpoint</span> <span class="pre">name&gt;</span></code> as
+keywords, sets <code class="docutils literal notranslate"><span class="pre">dt</span></code> when the recipe leaves it <code class="docutils literal notranslate"><span class="pre">null</span></code>, and applies
+<code class="docutils literal notranslate"><span class="pre">--epochs</span></code> / <code class="docutils literal notranslate"><span class="pre">--device</span></code> as <code class="docutils literal notranslate"><span class="pre">max_epochs</span></code> / <code class="docutils literal notranslate"><span class="pre">accelerator</span></code>. A trainer used
+this way therefore accepts <code class="docutils literal notranslate"><span class="pre">checkpoint_root</span></code>, <code class="docutils literal notranslate"><span class="pre">run_id</span></code> and <code class="docutils literal notranslate"><span class="pre">dt</span></code>, plus
+<code class="docutils literal notranslate"><span class="pre">max_epochs</span></code> and <code class="docutils literal notranslate"><span class="pre">accelerator</span></code> if you want those overrides to work
+(<code class="docutils literal notranslate"><span class="pre">PlainTorchTrainer</span></code> above accepts the first three). Name it in the recipe:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">trainer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_trainer.PlainTorchTrainer</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200</span>
+<span class="w">  </span><span class="nt">lr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0e-2</span>
+<span class="w">  </span><span class="nt">dt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+</pre></div>
+</div>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">PYTHONPATH</span><span class="o">=</span>.<span class="w"> </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>linear_decay_1d<span class="w"> </span>--dyn<span class="w"> </span>decay_1d<span class="w"> </span>--data<span class="w"> </span>decay_1d_v0
+</pre></div>
+</div>
+<p>The checkpoint is registered like any other, and <code class="docutils literal notranslate"><span class="pre">history.json</span></code> comes from
+the <code class="docutils literal notranslate"><span class="pre">history</span></code> your <code class="docutils literal notranslate"><span class="pre">fit</span></code> returns.</p>
+</section>
 </section>
 
         </article>
@@ -565,6 +587,7 @@ compares.</p>
 <li><a class="reference internal" href="#">Custom Trainers</a><ul>
 <li><a class="reference internal" href="#the-contract">The Contract</a></li>
 <li><a class="reference internal" href="#using-it">Using It</a></li>
+<li><a class="reference internal" href="#through-the-cli">Through the CLI</a></li>
 </ul>
 </li>
 </ul>

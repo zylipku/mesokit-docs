@@ -48,19 +48,21 @@ trainer:                  # LitTrainer kwargs (or the registered trainer's)
   rollout_steps: 1
 ```
 
-- **`model`** — keyword arguments of the model constructor. `_target_` is
-  optional and defaults to the class registered under `--model`. Nested
-  components (a potential, an operator block) are Hydra objects with their
-  own `_target_`.
+- **`model`** — keyword arguments of the model constructor. `_target_`
+  defaults to the class registered under `--model` and is required when
+  `--model` is not a registered name (a model of your own; see
+  [Custom Models](../models/custom_model.md)). Nested components (a
+  potential, an operator block) are Hydra objects with their own `_target_`.
 - **`dataset`** — the `TrajectoryDataset` wrapper; `mesokit train` calls it
   with `traj=<the loaded dataset>` plus these keys. See
   [Training Views](training_views.md).
 - **`dataloader`** — merged over `{batch_size: 32, shuffle: true,
   num_workers: 0}`; `--batch-size` overrides `batch_size`.
 - **`trainer`** — hyperparameters of the trainer registered for the model
-  (`--trainer` overrides the name); `dt: null` means "infer from the data".
-  `--epochs` overrides `max_epochs`, `--device` overrides `accelerator`.
-  The full option list is on [LitTrainer](lit_trainer.md).
+  (`--trainer` overrides the name; an unregistered name needs
+  `trainer._target_`); `dt: null` means "infer from the data". `--epochs`
+  overrides `max_epochs`, `--device` overrides `accelerator`. The full
+  option list is on [LitTrainer](lit_trainer.md).
 
 ## Rules That Are Checked Late
 

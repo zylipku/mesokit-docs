@@ -420,8 +420,9 @@ script) before calling anything by name.</p></li>
 <a class="reference internal" href="../training/recipes.html"><span class="std std-doc">Training Recipes</span></a> for the training side.</p></li>
 </ul>
 <p>Custom simulators reach the CLI end to end: <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--dyn</span> <span class="pre">&lt;dyn&gt;</span></code> runs any importable callable named by the Hydra <code class="docutils literal notranslate"><span class="pre">_target_</span></code> in
-<code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/default.yaml</span></code>. (Custom models, trainers and artifacts
-run through the Python API; see <a class="reference internal" href="../models/custom_model.html"><span class="std std-doc">Custom Models</span></a>.)</p>
+<code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/default.yaml</span></code>. Custom models and trainers use the same
+mechanism through <code class="docutils literal notranslate"><span class="pre">_target_</span></code> in a training recipe; see
+<a class="reference internal" href="../models/custom_model.html"><span class="std std-doc">Custom Models</span></a>.</p>
 </section>
 <section id="the-contract">
 <h2>The Contract<a class="headerlink" href="#the-contract" title="Link to this heading">¶</a></h2>
