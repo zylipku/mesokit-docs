@@ -13,11 +13,11 @@
 :titlesonly:
 :maxdepth: 1
 
+mesokit.models.fno.fno3d
 mesokit.models.fno.fno1d
 mesokit.models.fno.fno_dynamics
-mesokit.models.fno.fno2d
 mesokit.models.fno.artifacts
-mesokit.models.fno.fno3d
+mesokit.models.fno.fno2d
 ```
 
 ## Package Contents

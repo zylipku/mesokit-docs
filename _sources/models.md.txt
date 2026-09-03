@@ -46,11 +46,10 @@ described in [Custom Models](models/custom_model.md). `mesokit train
 --model <name>` resolves the class, the trainer registered for it
 (`LitTrainer` for all of them) and the recipe under
 `configs/train/<dyn>/<name>/`; the step size `dt` is read from the
-dataset's time grid unless the recipe sets it. The grid in the recipe
-(`Nx`, `Ny`, `Lx`, `Ly`, and for the classical family the `in_dim` /
-`grid_shape` of its blocks) must match the dataset — `mesokit train` does
-not infer it. See [Training](training.md) for the recipe layout and the
-Python path.
+dataset's time grid unless the recipe sets it, and the grid (`Nx`, `Ny`,
+`Lx`, `Ly`, and for the classical family the `in_dim` / `grid_shape` of
+its blocks) is filled from the dataset unless the recipe sets it. See
+[Training](training.md) for the recipe layout and the Python path.
 
 All families are single-channel. For the multi-channel datasets
 (`llg_lattice_2d`, `peridynamics_fracture_2d`) pick one channel through the

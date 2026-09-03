@@ -153,7 +153,7 @@ mesokit data generate --dyn DYN [--config STEM] [--name NAME | --no-registry]
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `--dyn DYN` | required | Predefined dynamics name (one of `mesokit data avail`). |
-| `--config STEM` | `default` | Recipe `configs/data/DYN/STEM.yaml`; the stem only, no path, no extension. |
+| `--config STEM\|PATH` | `default` | Recipe `configs/data/DYN/STEM.yaml` (working directory, then the installed package), or a path to any YAML file. |
 | `--name NAME` | `DYN_v<n>` | Registry name for the result. |
 | `--no-registry` | off | Write the file but do not register it. Mutually exclusive with `--name`. |
 | `--output PATH` | `data/DYN/<name>.h5` | Where to write the HDF5 file. Parent directories are created. |
@@ -355,21 +355,31 @@ Train a registered model architecture on a dataset through the trainer
 registered for that model, write a run directory, and index the checkpoint.
 
 ```sh
-mesokit train --model ARCH --dyn DYN --data NAME_OR_PATH
-              [--config STEM] [--trainer NAME] [--name NAME | --no-registry] [--force]
+mesokit train --model ARCH --data NAME_OR_PATH [--dyn DYN]
+              [--config STEM|PATH] [--set KEY=VALUE ...] [--trainer NAME]
+              [--name NAME | --no-registry] [--force]
               [--epochs N] [--batch-size N] [--device auto|cpu|gpu]
 ```
 
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `--model ARCH` | required | Architecture name from the model registry (`fno1d`, `spectral_onsagernet_1d`, …). |
-| `--dyn DYN` | required | Dynamics name; selects the config tree `configs/train/DYN/ARCH/` and the run directory `checkpoints/DYN/`. |
 | `--data` | required | Registered dataset name **or** path to a v1 HDF5 file. |
-| `--config STEM` | `default` | Recipe `configs/train/DYN/ARCH/STEM.yaml`. Looked up in the working directory first, then in the installed package. |
+| `--dyn DYN` | the dataset's `dyn` | Dynamics name; selects the recipe tree `configs/train/DYN/ARCH/` and the run directory `checkpoints/DYN/`. |
+| `--config STEM\|PATH` | `default` | Recipe `configs/train/DYN/ARCH/STEM.yaml`, looked up in the working directory first, then in the installed package (then a checkout); or a path to any YAML file. With no recipe directory at all, built-in defaults are used. |
+| `--set KEY=VALUE` | none | Change one recipe key for this run (`trainer.lr=1e-4`, `model.potential.eps=0.05`, `dataset.stride=2`); repeatable. Values are parsed as YAML. |
 | `--trainer NAME` | `= --model` | Trainer registry name; every shipped model registers its own default. |
 | `--name NAME` | `ARCH_v<n>` | Checkpoint registry name; also the run directory name. |
 | `--no-registry` | off | Train and write the run directory but do not index it. |
 | `--force` | off | Replace an existing checkpoint entry of the same name. |
+
+The model's grid is read from the dataset: any of `Nx` / `Ny` / `Nz`,
+`Lx` / `Ly` / `Lz`, `grid_shape`, `domain` and `in_dim` that the model (or
+a nested potential / block) accepts and the recipe leaves out is filled
+from the dataset's `grid_shape` and `physical` box lengths (`2π` when
+absent). Values written in the recipe or passed with `--set` win, so a
+hard-coded grid that does not match the data still fails. The saved
+`config.yaml` records the completed configuration.
 | `--epochs N` | from config | Override `trainer.max_epochs`. |
 | `--batch-size N` | from config | Override `dataloader.batch_size`. |
 | `--device` | from config | Override `trainer.accelerator`: `auto`, `cpu` or `gpu`. |

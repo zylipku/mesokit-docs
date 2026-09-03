@@ -13,15 +13,16 @@
 :titlesonly:
 :maxdepth: 1
 
-mesokit.cli.main
+mesokit.cli.train
 mesokit.cli._agent
 mesokit.cli.interpret
-mesokit.cli._registry_store
 mesokit.cli.skills
-mesokit.cli.data
 mesokit.cli.model
-mesokit.cli.train
+mesokit.cli._recipes
+mesokit.cli.data
 mesokit.cli.sweep
+mesokit.cli._registry_store
+mesokit.cli.main
 ```
 
 ## Package Contents

@@ -1,9 +1,45 @@
 # Training Recipes
 
-`mesokit train` is driven by Hydra YAML recipes. The CLI reads them from
-the current working directory, so run commands from the repository root
-(or your project root). Recipes for the shipped datasets and families are
-listed on each [model page](../models.md); this page is the format.
+`mesokit train` is driven by Hydra YAML recipes, but you rarely have to
+write one: the shipped recipes come with the package, any key can be
+changed for a run with `--set`, the model's grid is read from the dataset,
+and a dataset / model pair with no recipe trains with built-in defaults.
+Recipes for the shipped datasets and families are listed on each
+[model page](../models.md); this page is where they are found, their
+format, and when to write your own.
+
+## Where Recipes Are Found
+
+`configs/<kind>/<parts>/<stem>.yaml` is looked up in order:
+
+1. `./configs/` in the working directory — your project's own recipes,
+   which shadow the shipped ones of the same name;
+2. `mesokit/configs/` inside the installed package — the shipped recipes
+   (this is what a `pip install` user gets);
+3. `configs/` at the repository root — the same files in an editable
+   install from a checkout.
+
+`--config` may also be a path to any YAML file, which bypasses the lookup.
+`mesokit data generate` uses the same rule for `configs/data/<dyn>/`.
+
+## Recipes Are Optional
+
+With no recipe directory for a dataset / model pair, `mesokit train`
+synthesises one: the model's constructor defaults plus the dataset's grid,
+`SnapshotPairDataset` with `stride: 1`, dataloader defaults, and the
+registered trainer's defaults. `--set key.path=value` (repeatable, values
+parsed as YAML) changes any key on top of a recipe or of those defaults:
+
+```sh
+mesokit train --model spectral_onsagernet_1d --data my_data --set trainer.lr=1e-4 --set model.potential.eps=0.05
+```
+
+The completed configuration is written to
+`checkpoints/<dyn>/<run>/config.yaml`; it is itself a valid recipe, so
+`--config checkpoints/<dyn>/<run>/config.yaml` reproduces a run, and
+copying it into `configs/train/<dyn>/<model>/<stem>.yaml` turns it into a
+named variant. Write a recipe by hand when a configuration is worth naming
+and sharing; otherwise `--set` is enough.
 
 ## Layout
 
@@ -64,32 +100,33 @@ trainer:                  # LitTrainer kwargs (or the registered trainer's)
   overrides `max_epochs`, `--device` overrides `accelerator`. The full
   option list is on [LitTrainer](lit_trainer.md).
 
-## Rules That Are Checked Late
+## The Grid Comes From the Dataset
 
-The grid in the recipe must match the dataset; `mesokit train` does not
-infer it, and a mismatch surfaces at the first batch (or, for `Lx` alone,
-as silently wrong wavenumbers):
-
-1. `model.Nx` (`Ny`, `Nz`) equal the dataset's `grid_shape`; `Lx` (`Ly`,
-   `Lz`) equal the box lengths in its `physical` group.
-2. A nested `model.potential` of the spectral family repeats the grid:
-   `grid_shape` and `domain` equal to the model's.
-3. The classical family's blocks carry `in_dim` equal to `Nx * Ny * …`
-   (circulant blocks: `grid_shape` equal to the model's); this is checked
-   at construction.
-4. Multi-channel datasets need `dataset.channel`; the shipped models are
-   single-channel.
+Grid keywords a constructor accepts but the recipe leaves out are filled
+from the dataset, recursively for nested components: `Nx` / `Ny` / `Nz`
+from `grid_shape`; `Lx` / `Ly` / `Lz` from the `physical` group (`2π` when
+`Lx` is absent, a missing later axis repeating the first); `grid_shape`
+and `domain` of a nested potential; `in_dim` (the number of grid points)
+and `grid_shape` of the classical OnsagerNet's blocks. Written values are
+never overridden, so a recipe that hard-codes a grid different from the
+data still fails at the first batch — leave the grid out of recipes you
+want to reuse across datasets. Two things are not inferred: multi-channel
+datasets need `dataset.channel` (the shipped models are single-channel),
+and a potential's `eps` or a block's rank are modelling choices, not
+grid facts.
 
 ## A Recipe for Your Own Dynamics
 
-A built-in model on your own dynamics needs its own recipe. Copy the
-closest shipped one for the same family and dimension, for example
+A built-in model on your own dynamics needs no recipe: the defaults plus
+the dataset's grid apply, and `--set` adjusts them. To keep a
+configuration, copy the closest shipped recipe for the same family and
+dimension, for example
 `configs/train/allen_cahn_1d/spectral_onsagernet_1d/default.yaml` to
-`configs/train/decay_1d/spectral_onsagernet_1d/default.yaml`, set `Nx` /
-`Lx` to your grid, then:
+`configs/train/decay_1d/spectral_onsagernet_1d/default.yaml`, drop or
+adjust the grid keys, then:
 
 ```sh
-mesokit train --model spectral_onsagernet_1d --dyn decay_1d --data decay_1d_v0 --epochs 5 --device cpu
+mesokit train --model spectral_onsagernet_1d --data decay_1d_v0 --epochs 5 --device cpu
 ```
 
 The saved `checkpoints/<dyn>/<run>/config.yaml` is the resolved recipe

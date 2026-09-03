@@ -35,8 +35,16 @@
   - ```{autodoc2-docstring} mesokit.cli.train.run_train
     :summary:
     ```
-* - {py:obj}`_instantiate_model <mesokit.cli.train._instantiate_model>`
-  - ```{autodoc2-docstring} mesokit.cli.train._instantiate_model
+* - {py:obj}`_complete_model_config <mesokit.cli.train._complete_model_config>`
+  - ```{autodoc2-docstring} mesokit.cli.train._complete_model_config
+    :summary:
+    ```
+* - {py:obj}`_dataset_domain <mesokit.cli.train._dataset_domain>`
+  - ```{autodoc2-docstring} mesokit.cli.train._dataset_domain
+    :summary:
+    ```
+* - {py:obj}`_fill_grid_keywords <mesokit.cli.train._fill_grid_keywords>`
+  - ```{autodoc2-docstring} mesokit.cli.train._fill_grid_keywords
     :summary:
     ```
 * - {py:obj}`_instantiate_dataset <mesokit.cli.train._instantiate_dataset>`
@@ -55,8 +63,8 @@
   - ```{autodoc2-docstring} mesokit.cli.train._load_train_config
     :summary:
     ```
-* - {py:obj}`_train_config_dir <mesokit.cli.train._train_config_dir>`
-  - ```{autodoc2-docstring} mesokit.cli.train._train_config_dir
+* - {py:obj}`_default_train_config <mesokit.cli.train._default_train_config>`
+  - ```{autodoc2-docstring} mesokit.cli.train._default_train_config
     :summary:
     ```
 * - {py:obj}`_load_trajectory <mesokit.cli.train._load_trajectory>`
@@ -81,9 +89,35 @@
     ```
 ````
 
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`DEFAULT_TRAINING_VIEW <mesokit.cli.train.DEFAULT_TRAINING_VIEW>`
+  - ```{autodoc2-docstring} mesokit.cli.train.DEFAULT_TRAINING_VIEW
+    :summary:
+    ```
+* - {py:obj}`_AXES <mesokit.cli.train._AXES>`
+  - ```{autodoc2-docstring} mesokit.cli.train._AXES
+    :summary:
+    ```
+````
+
 ### API
 
-````{py:function} train_command(model: typing.Annotated[str, typer.Option('--model', help='Registered model architecture name.')], dyn: typing.Annotated[str, typer.Option('--dyn', help='Dynamics name, e.g. allen_cahn_1d.')], data: typing.Annotated[str, typer.Option('--data', help='Registered dataset name or HDF5 path.')], trainer: typing.Annotated[str | None, typer.Option('--trainer', help='Trainer name. Defaults to the model name.')] = None, config: typing.Annotated[str, typer.Option('--config', help='Config stem under configs/train/<dyn>/<model>/.')] = 'default', name: typing.Annotated[str | None, typer.Option('--name', help='Checkpoint registry name. Defaults to <model>_v<n>.')] = None, no_registry: typing.Annotated[bool, typer.Option('--no-registry', help='Skip checkpoint registration.')] = False, force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing checkpoint registry entry.')] = False, epochs: typing.Annotated[int | None, typer.Option('--epochs', help='Override trainer.max_epochs.')] = None, batch_size: typing.Annotated[int | None, typer.Option('--batch-size', help='Override dataloader.batch_size.')] = None, device: typing.Annotated[str | None, typer.Option('--device', help='Override accelerator: auto, cpu, gpu.')] = None) -> None
+````{py:data} DEFAULT_TRAINING_VIEW
+:canonical: mesokit.cli.train.DEFAULT_TRAINING_VIEW
+:value: >
+   'mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset'
+
+```{autodoc2-docstring} mesokit.cli.train.DEFAULT_TRAINING_VIEW
+```
+
+````
+
+````{py:function} train_command(model: typing.Annotated[str, typer.Option('--model', help='Registered model architecture name.')], data: typing.Annotated[str, typer.Option('--data', help='Registered dataset name or HDF5 path.')], dyn: typing.Annotated[str | None, typer.Option('--dyn', help="Dynamics name, e.g. allen_cahn_1d. Defaults to the dataset's own `dyn`.")] = None, trainer: typing.Annotated[str | None, typer.Option('--trainer', help='Trainer name. Defaults to the model name.')] = None, config: typing.Annotated[str, typer.Option('--config', help='Recipe stem under configs/train/<dyn>/<model>/ (working directory, then the installed package), or a path to a YAML file. Without any recipe, built-in defaults are used.')] = 'default', set_: typing.Annotated[list[str] | None, typer.Option('--set', metavar='KEY=VALUE', help='Override one recipe key for this run, e.g. trainer.lr=1e-4 or model.potential.eps=0.05; repeatable.')] = None, name: typing.Annotated[str | None, typer.Option('--name', help='Checkpoint registry name. Defaults to <model>_v<n>.')] = None, no_registry: typing.Annotated[bool, typer.Option('--no-registry', help='Skip checkpoint registration.')] = False, force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing checkpoint registry entry.')] = False, epochs: typing.Annotated[int | None, typer.Option('--epochs', help='Override trainer.max_epochs.')] = None, batch_size: typing.Annotated[int | None, typer.Option('--batch-size', help='Override dataloader.batch_size.')] = None, device: typing.Annotated[str | None, typer.Option('--device', help='Override accelerator: auto, cpu, gpu.')] = None) -> None
 :canonical: mesokit.cli.train.train_command
 
 ```{autodoc2-docstring} mesokit.cli.train.train_command
@@ -151,19 +185,64 @@
 
 ````
 
+````{py:attribute} dyn
+:canonical: mesokit.cli.train.TrainRun.dyn
+:type: str
+:value: <Multiline-String>
+
+```{autodoc2-docstring} mesokit.cli.train.TrainRun.dyn
+```
+
+````
+
+````{py:attribute} recipe_source
+:canonical: mesokit.cli.train.TrainRun.recipe_source
+:type: str
+:value: >
+   'recipe'
+
+```{autodoc2-docstring} mesokit.cli.train.TrainRun.recipe_source
+```
+
+````
+
 `````
 
-````{py:function} run_train(*, model: str, dyn: str, data: str, trainer: str | None = None, config: str = 'default', name: str | None = None, register: bool = True, force: bool = False, epochs: int | None = None, batch_size: int | None = None, device: str | None = None) -> mesokit.cli.train.TrainRun
+````{py:function} run_train(*, model: str, data: str, dyn: str | None = None, trainer: str | None = None, config: str = 'default', name: str | None = None, register: bool = True, force: bool = False, epochs: int | None = None, batch_size: int | None = None, device: str | None = None, overrides: collections.abc.Sequence[str] | None = None) -> mesokit.cli.train.TrainRun
 :canonical: mesokit.cli.train.run_train
 
 ```{autodoc2-docstring} mesokit.cli.train.run_train
 ```
 ````
 
-````{py:function} _instantiate_model(model: str, cfg: omegaconf.DictConfig) -> object
-:canonical: mesokit.cli.train._instantiate_model
+````{py:function} _complete_model_config(model: str, cfg: omegaconf.DictConfig, traj: mesokit.data.TrajectoryDataset) -> omegaconf.DictConfig
+:canonical: mesokit.cli.train._complete_model_config
 
-```{autodoc2-docstring} mesokit.cli.train._instantiate_model
+```{autodoc2-docstring} mesokit.cli.train._complete_model_config
+```
+````
+
+````{py:data} _AXES
+:canonical: mesokit.cli.train._AXES
+:value: >
+   'xyz'
+
+```{autodoc2-docstring} mesokit.cli.train._AXES
+```
+
+````
+
+````{py:function} _dataset_domain(traj: mesokit.data.TrajectoryDataset) -> tuple[float, ...]
+:canonical: mesokit.cli.train._dataset_domain
+
+```{autodoc2-docstring} mesokit.cli.train._dataset_domain
+```
+````
+
+````{py:function} _fill_grid_keywords(section: omegaconf.DictConfig, *, grid_shape: tuple[int, ...], domain: tuple[float, ...], depth: int) -> None
+:canonical: mesokit.cli.train._fill_grid_keywords
+
+```{autodoc2-docstring} mesokit.cli.train._fill_grid_keywords
 ```
 ````
 
@@ -188,17 +267,17 @@
 ```
 ````
 
-````{py:function} _load_train_config(*, dyn: str, model: str, stem: str) -> omegaconf.DictConfig
+````{py:function} _load_train_config(*, dyn: str, model: str, stem: str) -> tuple[omegaconf.DictConfig, str]
 :canonical: mesokit.cli.train._load_train_config
 
 ```{autodoc2-docstring} mesokit.cli.train._load_train_config
 ```
 ````
 
-````{py:function} _train_config_dir(dyn: str, model: str) -> pathlib.Path
-:canonical: mesokit.cli.train._train_config_dir
+````{py:function} _default_train_config() -> omegaconf.DictConfig
+:canonical: mesokit.cli.train._default_train_config
 
-```{autodoc2-docstring} mesokit.cli.train._train_config_dir
+```{autodoc2-docstring} mesokit.cli.train._default_train_config
 ```
 ````
 

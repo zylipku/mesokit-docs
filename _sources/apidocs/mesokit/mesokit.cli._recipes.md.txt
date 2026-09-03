@@ -1,0 +1,108 @@
+# {py:mod}`mesokit.cli._recipes`
+
+```{py:module} mesokit.cli._recipes
+```
+
+```{autodoc2-docstring} mesokit.cli._recipes
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`recipe_roots <mesokit.cli._recipes.recipe_roots>`
+  - ```{autodoc2-docstring} mesokit.cli._recipes.recipe_roots
+    :summary:
+    ```
+* - {py:obj}`find_recipe_dir <mesokit.cli._recipes.find_recipe_dir>`
+  - ```{autodoc2-docstring} mesokit.cli._recipes.find_recipe_dir
+    :summary:
+    ```
+* - {py:obj}`available_stems <mesokit.cli._recipes.available_stems>`
+  - ```{autodoc2-docstring} mesokit.cli._recipes.available_stems
+    :summary:
+    ```
+* - {py:obj}`is_recipe_path <mesokit.cli._recipes.is_recipe_path>`
+  - ```{autodoc2-docstring} mesokit.cli._recipes.is_recipe_path
+    :summary:
+    ```
+* - {py:obj}`load_recipe <mesokit.cli._recipes.load_recipe>`
+  - ```{autodoc2-docstring} mesokit.cli._recipes.load_recipe
+    :summary:
+    ```
+* - {py:obj}`dotlist_overrides <mesokit.cli._recipes.dotlist_overrides>`
+  - ```{autodoc2-docstring} mesokit.cli._recipes.dotlist_overrides
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_YAML_SUFFIXES <mesokit.cli._recipes._YAML_SUFFIXES>`
+  - ```{autodoc2-docstring} mesokit.cli._recipes._YAML_SUFFIXES
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} _YAML_SUFFIXES
+:canonical: mesokit.cli._recipes._YAML_SUFFIXES
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._recipes._YAML_SUFFIXES
+```
+
+````
+
+````{py:function} recipe_roots() -> list[pathlib.Path]
+:canonical: mesokit.cli._recipes.recipe_roots
+
+```{autodoc2-docstring} mesokit.cli._recipes.recipe_roots
+```
+````
+
+````{py:function} find_recipe_dir(kind: str, parts: collections.abc.Sequence[str]) -> pathlib.Path | None
+:canonical: mesokit.cli._recipes.find_recipe_dir
+
+```{autodoc2-docstring} mesokit.cli._recipes.find_recipe_dir
+```
+````
+
+````{py:function} available_stems(kind: str, parts: collections.abc.Sequence[str]) -> list[str]
+:canonical: mesokit.cli._recipes.available_stems
+
+```{autodoc2-docstring} mesokit.cli._recipes.available_stems
+```
+````
+
+````{py:function} is_recipe_path(spec: str) -> bool
+:canonical: mesokit.cli._recipes.is_recipe_path
+
+```{autodoc2-docstring} mesokit.cli._recipes.is_recipe_path
+```
+````
+
+````{py:function} load_recipe(kind: str, parts: collections.abc.Sequence[str], spec: str) -> omegaconf.DictConfig
+:canonical: mesokit.cli._recipes.load_recipe
+
+```{autodoc2-docstring} mesokit.cli._recipes.load_recipe
+```
+````
+
+````{py:function} dotlist_overrides(specs: collections.abc.Iterable[str] | None) -> omegaconf.DictConfig
+:canonical: mesokit.cli._recipes.dotlist_overrides
+
+```{autodoc2-docstring} mesokit.cli._recipes.dotlist_overrides
+```
+````

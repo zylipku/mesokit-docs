@@ -13,11 +13,11 @@
 :titlesonly:
 :maxdepth: 1
 
-mesokit.models.onsagernet.onsagernet
 mesokit.models.onsagernet.onsagernet_2d
-mesokit.models.onsagernet.components
-mesokit.models.onsagernet.onsagernet_3d
 mesokit.models.onsagernet.onsagernet_1d
+mesokit.models.onsagernet.onsagernet
+mesokit.models.onsagernet.onsagernet_3d
+mesokit.models.onsagernet.components
 ```
 
 ## Package Contents

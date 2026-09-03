@@ -1,12 +1,30 @@
 # Quickstart
 
 Install `mesokit`, generate a dataset, train a model, and extract an
-interpretability artifact — end to end. The commands below run from the
-repository root.
+interpretability artifact — end to end. Every command runs from a
+**project directory**: the folder where `mesokit` keeps the datasets it
+generates (`data/`), the checkpoints, the figures and its `.mesokit/`
+registries. Any directory works; nothing has to be written by hand there.
 
 ## Installation
 
-Environments are managed by [pixi](https://pixi.sh):
+There are two ways to install, for two kinds of use.
+
+**Use the toolkit as a package.** Built-in simulators, the three model
+families, training and interpretation are all reachable from the `mesokit`
+command; the shipped recipes travel with the package, and the grid of a
+model is read from the dataset, so no configuration file needs writing:
+
+```bash
+pip install .                 # from a clone of the repository (a PyPI release is planned)
+mkdir my-project && cd my-project
+mesokit data avail
+```
+
+**Extend the toolkit.** Your own simulators, models, trainers or
+artifacts are Python that `mesokit` must be able to import. For that, work
+from a checkout, whose [pixi](https://pixi.sh) environment provides an
+editable install and the `configs/` tree beside your code:
 
 ```bash
 git clone <this-repo> mesokit
@@ -14,11 +32,11 @@ cd mesokit
 pixi install
 ```
 
-Requires a linux-64 platform with a CUDA-capable GPU (CUDA 12.6 or newer).
+Prefix commands with `pixi run` (or open a pixi shell by running `pixi
+shell`) if `mesokit` is not on your `PATH`. The *Custom* pages of this
+guide assume this layout.
 
-All later commands in this page assume you are inside the project root
-with the environment installed. Prefix commands with `pixi run` (or open
-a pixi shell by running `pixi shell`) if `mesokit` is not on your `PATH`.
+Both need a linux-64 platform with a CUDA-capable GPU (CUDA 12.6 or newer).
 This page shows the happy path; every option, output file, error message
 and more examples are in the [Command-Line Reference](cli.md).
 
@@ -142,14 +160,18 @@ mesokit train \
   --config default
 ```
 
-Training configs live under `configs/train/<dyn>/<model>/`. Each config
+`--dyn` can be omitted (it is read from the dataset), and so can the grid:
+`Nx`, `Lx` and friends are filled from the dataset's metadata. The shipped
+recipes under `configs/train/<dyn>/<model>/` come with the package; each
 selects the model constructor, the `TrajectoryDataset` wrapper (for example
-`SnapshotPairDataset`), dataloader options, and trainer hyperparameters.
-Convenience overrides are available for common knobs:
+`SnapshotPairDataset`), dataloader options, and trainer hyperparameters,
+and any key can be changed for one run with `--set`. Without a recipe for
+a dataset / model pair, built-in defaults are used. Convenience overrides
+are available for common knobs:
 
 ```sh
-mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 \
-  --epochs 5 --batch-size 8 --device cpu
+mesokit train --model spectral_onsagernet_1d --data allen_cahn_1d_v0 \
+  --epochs 5 --batch-size 8 --device cpu --set trainer.lr=1e-4
 ```
 
 The trainer writes a run directory at `checkpoints/<dyn>/<run_id>/`
