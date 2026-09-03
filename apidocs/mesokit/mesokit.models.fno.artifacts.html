@@ -1,0 +1,909 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="mesokit.models.fno.fno2d" href="mesokit.models.fno.fno2d.html"><link rel="prev" title="mesokit.models.fno.fno_dynamics" href="mesokit.models.fno.fno_dynamics.html">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>mesokit.models.fno.artifacts - mesokit</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">mesokit</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">mesokit</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../data_processing.html">Data Processing</a><input aria-label="Toggle navigation of Data Processing" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../data_processing/structure.html">Data Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../data_processing/predefined.html">Predefined Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../data_processing/custom.html">Custom Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../data_processing/custom_simulator.html">Custom Simulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../data_processing/examples.html">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../data_processing/versioning.html">Versioning and Compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../models.html">Models</a><input aria-label="Toggle navigation of Models" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../models/spectral_onsagernet.html">Spectral OnsagerNet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../models/onsagernet.html">OnsagerNet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../models/fno.html">Fourier Neural Operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../models/custom_model.html">Custom Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../training.html">Training</a><input aria-label="Toggle navigation of Training" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../training/recipes.html">Training Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../training/training_views.html">Training Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../training/lit_trainer.html">LitTrainer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../training/custom_trainer.html">Custom Trainers</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../interpretability.html">Interpretability</a><input aria-label="Toggle navigation of Interpretability" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../interpretability/potential.html">The Potential Artifact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../interpretability/custom_artifact.html">Custom Artifacts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">Command-Line Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../skills.html">Agent Skills</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="mesokit.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit</span></code></a><input aria-label="Toggle navigation of mesokit" checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills</span></code></a><input aria-label="Toggle navigation of mesokit.skills" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_add_simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_simulator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_convert_data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_convert_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_add_artifact.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_artifact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_train</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_add_model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_add_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_trainer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.trainers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers</span></code></a><input aria-label="Toggle navigation of mesokit.trainers" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.trainers.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer</span></code></a><input aria-label="Toggle navigation of mesokit.trainers.lit_trainer" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.trainers.lit_trainer.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer.lit_trainer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.trainers.lit_trainer._lit_module.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer._lit_module</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.trainers.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.trainers.trainer_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.trainer_base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data</span></code></a><input aria-label="Toggle navigation of mesokit.data" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.peridynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics</span></code></a><input aria-label="Toggle navigation of mesokit.data.peridynamics" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.peridynamics.peridynamics_fracture_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics.peridynamics_fracture_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.llg.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg</span></code></a><input aria-label="Toggle navigation of mesokit.data.llg" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.llg.llg_lattice_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg.llg_lattice_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.kdv.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv</span></code></a><input aria-label="Toggle navigation of mesokit.data.kdv" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.kdv.kdv_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv.kdv_1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn</span></code></a><input aria-label="Toggle navigation of mesokit.data.allen_cahn" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.allen_cahn.allen_cahn_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn.allen_cahn_2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.allen_cahn.allen_cahn_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn.allen_cahn_1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.cahn_hilliard.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard</span></code></a><input aria-label="Toggle navigation of mesokit.data.cahn_hilliard" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.cahn_hilliard.cahn_hilliard_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard.cahn_hilliard_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.ising.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising</span></code></a><input aria-label="Toggle navigation of mesokit.data.ising" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.ising.ising_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising.ising_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.validate.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.validate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.format.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.format</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils</span></code></a><input aria-label="Toggle navigation of mesokit.utils" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.utils.mlp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.mlp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.utils.activation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.activation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.tutorial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.tutorial.training.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.training" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.tutorial.training.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training.train</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.tutorial.viz.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.viz" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.tutorial.viz.plots.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz.plots</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret</span></code></a><input aria-label="Toggle navigation of mesokit.interpret" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.interpret.plotter.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.plotter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.interpret.compare.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.compare</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.interpret.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="mesokit.models.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models</span></code></a><input aria-label="Toggle navigation of mesokit.models" checked="" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="mesokit.models.deeponet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.deeponet</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.models.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.onsagernet" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_3d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.components.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.components</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.models.sindy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.sindy</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.models.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4 has-children"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet.potential" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.polynomial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.polynomial</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.coercive_autograd.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.coercive_autograd</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.allen_cahn</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.artifacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.artifacts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_3d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="mesokit.models.fno.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno</span></code></a><input aria-label="Toggle navigation of mesokit.models.fno" checked="" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno3d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno_dynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno_dynamics</span></code></a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.artifacts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.models._spectral.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models._spectral</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.models.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.models.dynamics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.dynamics_base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.cli.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli</span></code></a><input aria-label="Toggle navigation of mesokit.cli" class="toctree-checkbox" id="toctree-checkbox-27" name="toctree-checkbox-27" role="switch" type="checkbox"/><label for="toctree-checkbox-27"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._agent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.skills</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/apidocs/mesokit/mesokit.models.fno.artifacts.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="module-mesokit.models.fno.artifacts">
+<span id="mesokit-models-fno-artifacts"></span><h1><a class="reference internal" href="#module-mesokit.models.fno.artifacts" title="mesokit.models.fno.artifacts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.artifacts</span></code></a><a class="headerlink" href="#module-mesokit.models.fno.artifacts" title="Link to this heading">¶</a></h1>
+<p>Operator diagnostics for the FNO family.</p>
+<p><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics</span></code> is the concrete model-family artifact returned by
+<code class="docutils literal notranslate"><span class="pre">FNODynamics.artifact(&quot;spectrum&quot;)</span></code> in any dimension. A neural operator has
+no potential or mobility to read off, so the artifact characterises the
+learned right-hand side the way one would characterise a black-box linear
+filter, mode by mode:</p>
+<ul class="simple">
+<li><p>a <strong>response spectrum</strong> — the operator is probed with single-mode fields
+<code class="docutils literal notranslate"><span class="pre">ε</span> <span class="pre">cos(k·x)</span></code> and, per radial mode number, the artifact records the
+linear response gain at the probed mode and the fraction of the response
+energy that leaked into other modes (a nonlinearity / aliasing indicator);</p></li>
+<li><p>a <strong>one-step error spectrum</strong> — when the checkpoint loader attaches the
+training dataset, the mean squared one-step prediction error per radial
+mode number, next to the persistence error <code class="docutils literal notranslate"><span class="pre">|û_{t+1}</span> <span class="pre">−</span> <span class="pre">û_t|²</span></code> that a
+do-nothing predictor would make;</p></li>
+<li><p>a <strong>conservation residual</strong> — the fraction of the predicted increment
+that shifts the spatial mean, <code class="docutils literal notranslate"><span class="pre">0</span></code> for a mass-conserving operator.</p></li>
+</ul>
+<p>Everything is binned by the integer radial mode number <code class="docutils literal notranslate"><span class="pre">|n|</span></code> (<code class="docutils literal notranslate"><span class="pre">n_i</span></code> the
+mode index along axis <code class="docutils literal notranslate"><span class="pre">i</span></code>), up to the Nyquist index of the shortest axis;
+in 1D that is one entry per Fourier mode. The Fourier bookkeeping comes from</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">class<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">mesokit.models._spectral.SpectralGrid</span></code>.</p>
+</dd>
+</dl>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics" title="mesokit.models.fno.artifacts.OperatorDiagnostics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OperatorDiagnostics</span></code></a></p></td>
+<td><p>Per-mode response, one-step error, and conservation diagnostics of a learned operator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._SpectralLayout" title="mesokit.models.fno.artifacts._SpectralLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SpectralLayout</span></code></a></p></td>
+<td><p>Integer mode indices, Parseval weights and radial bins of a <code class="docutils literal notranslate"><span class="pre">SpectralGrid</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._resolve_grid" title="mesokit.models.fno.artifacts._resolve_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_resolve_grid</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._dataset_domain" title="mesokit.models.fno.artifacts._dataset_domain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dataset_domain</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(Lx,</span> <span class="pre">Ly,</span> <span class="pre">Lz)[:ndim]</span></code> from the dataset’s <code class="docutils literal notranslate"><span class="pre">physical</span></code> group when every axis is present.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._probe_fields" title="mesokit.models.fno.artifacts._probe_fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_probe_fields</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ε</span> <span class="pre">cos(2π</span> <span class="pre">n</span> <span class="pre">x_i</span> <span class="pre">/</span> <span class="pre">L_i)</span></code> for every axis <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">=</span> <span class="pre">0</span> <span class="pre">…</span> <span class="pre">min(N)</span> <span class="pre">//</span> <span class="pre">2</span></code>, shape <code class="docutils literal notranslate"><span class="pre">(ndim</span> <span class="pre">·</span> <span class="pre">n_bins,</span> <span class="pre">*grid)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._chunked" title="mesokit.models.fno.artifacts._chunked"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_chunked</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._snapshot_pairs" title="mesokit.models.fno.artifacts._snapshot_pairs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_snapshot_pairs</span></code></a></p></td>
+<td><p>Up to <code class="docutils literal notranslate"><span class="pre">max_snapshots</span></code> evenly spaced <code class="docutils literal notranslate"><span class="pre">(u_t,</span> <span class="pre">u_{t+1})</span></code> pairs, each <code class="docutils literal notranslate"><span class="pre">(n,</span> <span class="pre">*grid_shape)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._infer_dt" title="mesokit.models.fno.artifacts._infer_dt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_infer_dt</span></code></a></p></td>
+<td><p>The step training used: <code class="docutils literal notranslate"><span class="pre">numerical[&quot;dt&quot;]</span></code> when present, else the spacing of <code class="docutils literal notranslate"><span class="pre">times</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._conservation_residual" title="mesokit.models.fno.artifacts._conservation_residual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_conservation_residual</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mean</span> <span class="pre">|⟨Δu⟩|</span> <span class="pre">/</span> <span class="pre">mean</span> <span class="pre">rms(Δu)</span></code> over a batch of increments <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">*grid_shape)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._model_device" title="mesokit.models.fno.artifacts._model_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_model_device</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._model_dtype" title="mesokit.models.fno.artifacts._model_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_model_dtype</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._pyplot" title="mesokit.models.fno.artifacts._pyplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_pyplot</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts.DEFAULT_DOMAIN_LENGTH" title="mesokit.models.fno.artifacts.DEFAULT_DOMAIN_LENGTH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_DOMAIN_LENGTH</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.fno.artifacts._CHUNK" title="mesokit.models.fno.artifacts._CHUNK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_CHUNK</span></code></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.DEFAULT_DOMAIN_LENGTH">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_DOMAIN_LENGTH</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.DEFAULT_DOMAIN_LENGTH" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._CHUNK">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_CHUNK</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._CHUNK" title="Link to this definition">¶</a></dt>
+<dd><p>32</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">OperatorDiagnostics</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics" title="Link to this definition">¶</a></dt>
+<dd><p>Per-mode response, one-step error, and conservation diagnostics of a learned operator.</p>
+<p>Attributes:
+mode_numbers: radial mode numbers <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">…</span> <span class="pre">min(grid_shape)</span> <span class="pre">//</span> <span class="pre">2</span></code>; the
+index of every per-mode array below.
+response_gain: <code class="docutils literal notranslate"><span class="pre">|response</span> <span class="pre">at</span> <span class="pre">the</span> <span class="pre">probed</span> <span class="pre">mode|</span> <span class="pre">/</span> <span class="pre">|probe|</span></code> for the
+probe <code class="docutils literal notranslate"><span class="pre">ε</span> <span class="pre">cos(k·x)</span></code>, averaged over the probe directions (one per
+axis). <code class="docutils literal notranslate"><span class="pre">1</span></code> at every mode for <code class="docutils literal notranslate"><span class="pre">rhs(u)</span> <span class="pre">=</span> <span class="pre">-u</span></code>.
+response_leakage: fraction of the response energy that landed in
+modes other than the probed one, in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>; <code class="docutils literal notranslate"><span class="pre">0</span></code> for a
+linear translation-invariant operator.
+error_spectrum, persistence_spectrum: mean squared one-step error of
+<code class="docutils literal notranslate"><span class="pre">model.forward(u_t,</span> <span class="pre">dt)</span></code> against <code class="docutils literal notranslate"><span class="pre">u_{t+1}</span></code> and of the
+persistence predictor <code class="docutils literal notranslate"><span class="pre">u_t</span></code>, per radial mode number, averaged
+over the reference pairs. Normalised so that the sum over modes is
+the spatial mean squared error. <code class="docutils literal notranslate"><span class="pre">None</span></code> without a reference
+dataset.
+conservation_residual: <code class="docutils literal notranslate"><span class="pre">mean</span> <span class="pre">|⟨Δu⟩|</span> <span class="pre">/</span> <span class="pre">mean</span> <span class="pre">rms(Δu)</span></code> — how much of the
+predicted increment goes into the spatial mean. Over the one-step
+predictions when a dataset is present, over <code class="docutils literal notranslate"><span class="pre">rhs</span></code> of the probe
+fields otherwise.
+grid_shape, domain: the periodic box the diagnostics were computed on.
+dt: the step used for the one-step predictions (<code class="docutils literal notranslate"><span class="pre">None</span></code> without a dataset).
+n_snapshots: number of reference pairs used.
+eps: probe amplitude.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.model_name">
+<span class="sig-name descname"><span class="pre">model_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.model_name" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.dyn_name">
+<span class="sig-name descname"><span class="pre">dyn_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.dyn_name" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.artifact_name">
+<span class="sig-name descname"><span class="pre">artifact_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.artifact_name" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.grid_shape">
+<span class="sig-name descname"><span class="pre">grid_shape</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.grid_shape" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.domain">
+<span class="sig-name descname"><span class="pre">domain</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.domain" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.eps">
+<span class="sig-name descname"><span class="pre">eps</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.eps" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.mode_numbers">
+<span class="sig-name descname"><span class="pre">mode_numbers</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.mode_numbers" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.response_gain">
+<span class="sig-name descname"><span class="pre">response_gain</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.response_gain" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.response_leakage">
+<span class="sig-name descname"><span class="pre">response_leakage</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.response_leakage" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.error_spectrum">
+<span class="sig-name descname"><span class="pre">error_spectrum</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.error_spectrum" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.persistence_spectrum">
+<span class="sig-name descname"><span class="pre">persistence_spectrum</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.persistence_spectrum" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.conservation_residual">
+<span class="sig-name descname"><span class="pre">conservation_residual</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.conservation_residual" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.dt">
+<span class="sig-name descname"><span class="pre">dt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.dt" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.n_snapshots">
+<span class="sig-name descname"><span class="pre">n_snapshots</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.n_snapshots" title="Link to this definition">¶</a></dt>
+<dd><p>0</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.ndim">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ndim</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.ndim" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.from_model">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fno'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dyn_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'unknown'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artifact_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'spectrum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_snapshots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics" title="mesokit.models.fno.artifacts.OperatorDiagnostics"><span class="pre">mesokit.models.fno.artifacts.OperatorDiagnostics</span></a></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.from_model" title="Link to this definition">¶</a></dt>
+<dd><p>Build the artifact from a trained <code class="docutils literal notranslate"><span class="pre">FNODynamics</span></code> instance.</p>
+<p>The grid comes from <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> when given, else from the reference
+dataset, else from the model’s own <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> attribute (set at
+construction); <code class="docutils literal notranslate"><span class="pre">domain</span></code> follows the same order and falls back to
+<code class="docutils literal notranslate"><span class="pre">2π</span></code> per axis, which only affects the reported box since every
+diagnostic is indexed by integer mode number.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.summary">
+<span class="sig-name descname"><span class="pre">summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.summary" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.plot" title="Link to this definition">¶</a></dt>
+<dd><p>Render the artifact to matplotlib.</p>
+<p>With a supplied axis, the one-step error spectrum against persistence
+is drawn there when present, else the response gain. Without an axis,
+a multi-panel figure is returned: response gain, leakage, and — when a
+reference dataset was attached — the error spectrum against persistence
+on a log scale.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">180</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">close</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pathlib.Path</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.save" title="Link to this definition">¶</a></dt>
+<dd><p>Save the artifact visualization and return the resolved output path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics._repr_html_">
+<span class="sig-name descname"><span class="pre">_repr_html_</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics._repr_html_" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics._plot_gain">
+<span class="sig-name descname"><span class="pre">_plot_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics._plot_gain" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics._plot_leakage">
+<span class="sig-name descname"><span class="pre">_plot_leakage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics._plot_leakage" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts.OperatorDiagnostics._plot_error">
+<span class="sig-name descname"><span class="pre">_plot_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts.OperatorDiagnostics._plot_error" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._SpectralLayout">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_SpectralLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mesokit.models._spectral.html#mesokit.models._spectral.SpectralGrid" title="mesokit.models._spectral.SpectralGrid"><span class="pre">mesokit.models._spectral.SpectralGrid</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.device</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mesokit.models.fno.artifacts._SpectralLayout" title="Link to this definition">¶</a></dt>
+<dd><p>Integer mode indices, Parseval weights and radial bins of a <code class="docutils literal notranslate"><span class="pre">SpectralGrid</span></code>.</p>
+<p class="rubric">Initialization</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._SpectralLayout.power">
+<span class="sig-name descname"><span class="pre">power</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._SpectralLayout.power" title="Link to this definition">¶</a></dt>
+<dd><p>Parseval-weighted power <code class="docutils literal notranslate"><span class="pre">w</span> <span class="pre">|û</span> <span class="pre">/</span> <span class="pre">N|²</span></code> on the spectral grid; sums to the spatial mean of <code class="docutils literal notranslate"><span class="pre">u²</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._SpectralLayout.bin">
+<span class="sig-name descname"><span class="pre">bin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._SpectralLayout.bin" title="Link to this definition">¶</a></dt>
+<dd><p>Sum <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">*spectral_shape)</span></code> power into <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">n_bins)</span></code> radial bins.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._SpectralLayout.mean_power_spectrum">
+<span class="sig-name descname"><span class="pre">mean_power_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._SpectralLayout.mean_power_spectrum" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._SpectralLayout.probe_masks">
+<span class="sig-name descname"><span class="pre">probe_masks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._SpectralLayout.probe_masks" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(ndim</span> <span class="pre">·</span> <span class="pre">n_bins,</span> <span class="pre">*spectral_shape)</span></code> masks selecting <code class="docutils literal notranslate"><span class="pre">±k</span></code> of each probe, ordered like <code class="docutils literal notranslate"><span class="pre">_probe_fields</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._SpectralLayout.probe_response">
+<span class="sig-name descname"><span class="pre">probe_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._SpectralLayout.probe_response" title="Link to this definition">¶</a></dt>
+<dd><p>Gain at the probed mode and energy leakage elsewhere, averaged over the probe directions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._resolve_grid">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_resolve_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="mesokit.models._spectral.html#mesokit.models._spectral.SpectralGrid" title="mesokit.models._spectral.SpectralGrid"><span class="pre">mesokit.models._spectral.SpectralGrid</span></a></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._resolve_grid" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._dataset_domain">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_dataset_domain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._dataset_domain" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(Lx,</span> <span class="pre">Ly,</span> <span class="pre">Lz)[:ndim]</span></code> from the dataset’s <code class="docutils literal notranslate"><span class="pre">physical</span></code> group when every axis is present.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._probe_fields">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_probe_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mesokit.models._spectral.html#mesokit.models._spectral.SpectralGrid" title="mesokit.models._spectral.SpectralGrid"><span class="pre">mesokit.models._spectral.SpectralGrid</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.dtype</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._probe_fields" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">ε</span> <span class="pre">cos(2π</span> <span class="pre">n</span> <span class="pre">x_i</span> <span class="pre">/</span> <span class="pre">L_i)</span></code> for every axis <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">=</span> <span class="pre">0</span> <span class="pre">…</span> <span class="pre">min(N)</span> <span class="pre">//</span> <span class="pre">2</span></code>, shape <code class="docutils literal notranslate"><span class="pre">(ndim</span> <span class="pre">·</span> <span class="pre">n_bins,</span> <span class="pre">*grid)</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._chunked">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_chunked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_CHUNK</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._chunked" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._snapshot_pairs">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_snapshot_pairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_snapshots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._snapshot_pairs" title="Link to this definition">¶</a></dt>
+<dd><p>Up to <code class="docutils literal notranslate"><span class="pre">max_snapshots</span></code> evenly spaced <code class="docutils literal notranslate"><span class="pre">(u_t,</span> <span class="pre">u_{t+1})</span></code> pairs, each <code class="docutils literal notranslate"><span class="pre">(n,</span> <span class="pre">*grid_shape)</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._infer_dt">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_infer_dt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._infer_dt" title="Link to this definition">¶</a></dt>
+<dd><p>The step training used: <code class="docutils literal notranslate"><span class="pre">numerical[&quot;dt&quot;]</span></code> when present, else the spacing of <code class="docutils literal notranslate"><span class="pre">times</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._conservation_residual">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_conservation_residual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">increments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._conservation_residual" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">mean</span> <span class="pre">|⟨Δu⟩|</span> <span class="pre">/</span> <span class="pre">mean</span> <span class="pre">rms(Δu)</span></code> over a batch of increments <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">*grid_shape)</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._model_device">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_model_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.device</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._model_device" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._model_dtype">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_model_dtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.dtype</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._model_dtype" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.fno.artifacts._pyplot">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.fno.artifacts.</span></span><span class="sig-name descname"><span class="pre">_pyplot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#mesokit.models.fno.artifacts._pyplot" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="mesokit.models.fno.fno2d.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno2d</span></code></div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="mesokit.models.fno.fno_dynamics.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno_dynamics</span></code></div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Zhuoyuan Li
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.artifacts</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#data">Data</a></li>
+<li><a class="reference internal" href="#api">API</a><ul>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.DEFAULT_DOMAIN_LENGTH"><code class="docutils literal notranslate"><span class="pre">DEFAULT_DOMAIN_LENGTH</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._CHUNK"><code class="docutils literal notranslate"><span class="pre">_CHUNK</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.model_name"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.model_name</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.dyn_name"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.dyn_name</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.artifact_name"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.artifact_name</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.grid_shape"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.grid_shape</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.domain"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.domain</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.eps"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.eps</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.mode_numbers"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.mode_numbers</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.response_gain"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.response_gain</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.response_leakage"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.response_leakage</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.error_spectrum"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.error_spectrum</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.persistence_spectrum"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.persistence_spectrum</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.conservation_residual"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.conservation_residual</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.dt"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.dt</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.n_snapshots"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.n_snapshots</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.ndim"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.ndim</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.from_model"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.from_model()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.summary"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.summary()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.plot"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.plot()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics.save"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics.save()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics._repr_html_"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics._repr_html_()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics._plot_gain"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics._plot_gain()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics._plot_leakage"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics._plot_leakage()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts.OperatorDiagnostics._plot_error"><code class="docutils literal notranslate"><span class="pre">OperatorDiagnostics._plot_error()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._SpectralLayout"><code class="docutils literal notranslate"><span class="pre">_SpectralLayout</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._SpectralLayout.power"><code class="docutils literal notranslate"><span class="pre">_SpectralLayout.power()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._SpectralLayout.bin"><code class="docutils literal notranslate"><span class="pre">_SpectralLayout.bin()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._SpectralLayout.mean_power_spectrum"><code class="docutils literal notranslate"><span class="pre">_SpectralLayout.mean_power_spectrum()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._SpectralLayout.probe_masks"><code class="docutils literal notranslate"><span class="pre">_SpectralLayout.probe_masks()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._SpectralLayout.probe_response"><code class="docutils literal notranslate"><span class="pre">_SpectralLayout.probe_response()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._resolve_grid"><code class="docutils literal notranslate"><span class="pre">_resolve_grid()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._dataset_domain"><code class="docutils literal notranslate"><span class="pre">_dataset_domain()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._probe_fields"><code class="docutils literal notranslate"><span class="pre">_probe_fields()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._chunked"><code class="docutils literal notranslate"><span class="pre">_chunked()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._snapshot_pairs"><code class="docutils literal notranslate"><span class="pre">_snapshot_pairs()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._infer_dt"><code class="docutils literal notranslate"><span class="pre">_infer_dt()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._conservation_residual"><code class="docutils literal notranslate"><span class="pre">_conservation_residual()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._model_device"><code class="docutils literal notranslate"><span class="pre">_model_device()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._model_dtype"><code class="docutils literal notranslate"><span class="pre">_model_dtype()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.fno.artifacts._pyplot"><code class="docutils literal notranslate"><span class="pre">_pyplot()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    </body>
+</html>

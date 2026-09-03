@@ -23,7 +23,7 @@
 
 ### API
 
-`````{py:class} FNO1d(n_modes: int = 16, hidden_channels: int = 32, in_channels: int = 1, out_channels: int = 1, step_method: str = 'euler', **fno_kwargs: typing.Any)
+`````{py:class} FNO1d(n_modes: int = 16, hidden_channels: int = 32, in_channels: int = 1, out_channels: int = 1, step_method: str = 'euler', grid_shape: collections.abc.Sequence[int] | None = None, domain: collections.abc.Sequence[float] | None = None, **fno_kwargs: typing.Any)
 :canonical: mesokit.models.fno.fno1d.FNO1d
 
 Bases: {py:obj}`mesokit.models.fno.fno_dynamics.FNODynamics`

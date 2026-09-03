@@ -21,6 +21,18 @@
     ```
 ````
 
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_box <mesokit.models.fno.fno_dynamics._box>`
+  - ```{autodoc2-docstring} mesokit.models.fno.fno_dynamics._box
+    :summary:
+    ```
+````
+
 ### Data
 
 ````{list-table}
@@ -45,7 +57,7 @@
 
 ````
 
-`````{py:class} FNODynamics(ndim: int, n_modes: int | collections.abc.Sequence[int] = 16, hidden_channels: int = 32, in_channels: int = 1, out_channels: int = 1, step_method: str = 'euler', **fno_kwargs: typing.Any)
+`````{py:class} FNODynamics(ndim: int, n_modes: int | collections.abc.Sequence[int] = 16, hidden_channels: int = 32, in_channels: int = 1, out_channels: int = 1, step_method: str = 'euler', grid_shape: collections.abc.Sequence[int] | None = None, domain: collections.abc.Sequence[float] | None = None, **fno_kwargs: typing.Any)
 :canonical: mesokit.models.fno.fno_dynamics.FNODynamics
 
 Bases: {py:obj}`torch.nn.Module`
@@ -111,3 +123,10 @@ Bases: {py:obj}`torch.nn.Module`
 ````
 
 `````
+
+````{py:function} _box(values: collections.abc.Sequence[typing.Any] | None, *, ndim: int, label: str, cast: typing.Any) -> tuple[typing.Any, ...] | None
+:canonical: mesokit.models.fno.fno_dynamics._box
+
+```{autodoc2-docstring} mesokit.models.fno.fno_dynamics._box
+```
+````

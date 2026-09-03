@@ -17,11 +17,52 @@ black-box baseline the interpretable families are compared against.
 
 ## The `spectrum` Artifact
 
-Declared, not yet implemented: per-mode error and response diagnostics are
-on the roadmap, and `artifact("spectrum")` raises `NotImplementedError`
-until then. `mesokit interpret list` still shows the name. To read
-something off a trained FNO today, build a post-hoc artifact from its
-`rhs(u)` as described in [Custom Artifacts](../interpretability/custom_artifact.md).
+`artifact("spectrum")` returns an `OperatorDiagnostics`
+(`mesokit.models.fno.artifacts`). A neural operator has no potential or
+mobility to read off, so the artifact characterises the learned right-hand
+side the way one characterises a black-box filter: mode by mode. Every
+quantity is indexed by the integer radial mode number
+$|\mathbf n| = \sqrt{\sum_i n_i^2}$ (rounded; $n_i$ the mode index along
+axis $i$), from $0$ to the Nyquist index of the shortest axis — in 1D that
+is one entry per Fourier mode.
+
+| Field | Content | Present when |
+| --- | --- | --- |
+| `mode_numbers` | the radial mode numbers $0 \dots \min_i N_i / 2$ | always |
+| `response_gain` | the operator is probed with $\varepsilon\cos(\mathbf k\cdot\mathbf x)$ along each axis; the gain is $\lvert\widehat{\delta f}_{\mathbf k}\rvert / \lvert\hat u_{\mathbf k}\rvert$ where $\delta f = \mathcal G_\theta(u) - \mathcal G_\theta(0)$, averaged over the probe directions | always |
+| `response_leakage` | the fraction of $\delta f$'s energy that landed in modes other than the probed one, in $[0, 1]$ — zero for a linear translation-invariant operator, so it measures nonlinearity and aliasing | always |
+| `error_spectrum`, `persistence_spectrum` | the mean squared one-step error of `forward(u_t, dt)` against $u_{t+1}$ and of the do-nothing predictor $u_t$, per radial mode, averaged over up to `max_snapshots` consecutive pairs; the sum over modes is the spatial mean squared error | the checkpoint's dataset is attached (the CLI does it; from Python pass `reference_dataset=` to `OperatorDiagnostics.from_model`) |
+| `conservation_residual` | $\overline{\lvert\langle\Delta u\rangle\rvert} / \overline{\mathrm{rms}(\Delta u)}$: the fraction of the predicted increment that shifts the spatial mean, over the one-step predictions (or over `rhs` of the probes without a dataset) | always |
+| `grid_shape`, `domain`, `dt`, `n_snapshots`, `eps` | the box the diagnostics were computed on, the step, the number of pairs, the probe amplitude (`0.1`) | always |
+
+The FNO is resolution-agnostic and owns no grid, so the artifact takes it
+from `grid_shape=` when given, else from the reference dataset, else from
+the optional `grid_shape=` / `domain=` the model was constructed with; with
+none of these it raises `ValueError`. `domain` only labels the box.
+
+`summary()` states the grid, the mode with the largest response gain and
+the mean leakage, the error summed over modes against the persistence error
+(and their ratio), and the conservation residual. `plot()` draws the gain
+and the leakage against mode number and, when a dataset was attached, the
+error spectrum against persistence on a log scale.
+
+What to look for:
+
+- **Gain against mode.** The dispersion relation the operator learned: a
+  flat gain is a pointwise reaction, growth like $|\mathbf k|^2$ is
+  diffusion. Above `n_modes` only the pointwise path responds, so the gain
+  is flat there whatever the data did.
+- **Leakage.** Near zero at every mode means the operator acts linearly at
+  the probe amplitude; large values single out the scales where the
+  nonlinearity (or aliasing of an under-resolved one) is strongest.
+- **Error against persistence.** Modes where the model curve sits below
+  the dashed persistence curve are the scales it actually predicts; a
+  ratio near or above one summed over modes means the model does no better
+  than freezing the field at that `dt`.
+- **Conservation residual.** Close to zero on Cahn–Hilliard data (a
+  conserved order parameter) and of order one on Allen–Cahn or Glauber
+  Ising data is the expected pattern; a large value on conserved data is a
+  modelling error.
 
 ## Recipes
 

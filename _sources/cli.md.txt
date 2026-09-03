@@ -517,8 +517,9 @@ spectral_onsagernet_1d_v0:
   potential
 ```
 
-FNO checkpoints list `spectrum`, which is declared but not implemented yet;
-extracting it raises `NotImplementedError`.
+FNO checkpoints list `spectrum`, the per-mode response / one-step error
+diagnostics described in [Fourier Neural Operator](models/fno.md);
+it needs the checkpoint's dataset for the grid and the error spectrum.
 
 ### `mesokit interpret extract`
 

@@ -1,0 +1,472 @@
+# {py:mod}`mesokit.models.fno.artifacts`
+
+```{py:module} mesokit.models.fno.artifacts
+```
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`OperatorDiagnostics <mesokit.models.fno.artifacts.OperatorDiagnostics>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics
+    :summary:
+    ```
+* - {py:obj}`_SpectralLayout <mesokit.models.fno.artifacts._SpectralLayout>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._SpectralLayout
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_resolve_grid <mesokit.models.fno.artifacts._resolve_grid>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._resolve_grid
+    :summary:
+    ```
+* - {py:obj}`_dataset_domain <mesokit.models.fno.artifacts._dataset_domain>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._dataset_domain
+    :summary:
+    ```
+* - {py:obj}`_probe_fields <mesokit.models.fno.artifacts._probe_fields>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._probe_fields
+    :summary:
+    ```
+* - {py:obj}`_chunked <mesokit.models.fno.artifacts._chunked>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._chunked
+    :summary:
+    ```
+* - {py:obj}`_snapshot_pairs <mesokit.models.fno.artifacts._snapshot_pairs>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._snapshot_pairs
+    :summary:
+    ```
+* - {py:obj}`_infer_dt <mesokit.models.fno.artifacts._infer_dt>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._infer_dt
+    :summary:
+    ```
+* - {py:obj}`_conservation_residual <mesokit.models.fno.artifacts._conservation_residual>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._conservation_residual
+    :summary:
+    ```
+* - {py:obj}`_model_device <mesokit.models.fno.artifacts._model_device>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._model_device
+    :summary:
+    ```
+* - {py:obj}`_model_dtype <mesokit.models.fno.artifacts._model_dtype>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._model_dtype
+    :summary:
+    ```
+* - {py:obj}`_pyplot <mesokit.models.fno.artifacts._pyplot>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._pyplot
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`DEFAULT_DOMAIN_LENGTH <mesokit.models.fno.artifacts.DEFAULT_DOMAIN_LENGTH>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts.DEFAULT_DOMAIN_LENGTH
+    :summary:
+    ```
+* - {py:obj}`_CHUNK <mesokit.models.fno.artifacts._CHUNK>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._CHUNK
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} DEFAULT_DOMAIN_LENGTH
+:canonical: mesokit.models.fno.artifacts.DEFAULT_DOMAIN_LENGTH
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.DEFAULT_DOMAIN_LENGTH
+```
+
+````
+
+````{py:data} _CHUNK
+:canonical: mesokit.models.fno.artifacts._CHUNK
+:value: >
+   32
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._CHUNK
+```
+
+````
+
+`````{py:class} OperatorDiagnostics
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics
+```
+
+````{py:attribute} model_name
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.model_name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.model_name
+```
+
+````
+
+````{py:attribute} dyn_name
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.dyn_name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.dyn_name
+```
+
+````
+
+````{py:attribute} artifact_name
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.artifact_name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.artifact_name
+```
+
+````
+
+````{py:attribute} grid_shape
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.grid_shape
+:type: tuple[int, ...]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.grid_shape
+```
+
+````
+
+````{py:attribute} domain
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.domain
+:type: tuple[float, ...]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.domain
+```
+
+````
+
+````{py:attribute} eps
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.eps
+:type: float
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.eps
+```
+
+````
+
+````{py:attribute} mode_numbers
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.mode_numbers
+:type: numpy.ndarray
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.mode_numbers
+```
+
+````
+
+````{py:attribute} response_gain
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.response_gain
+:type: numpy.ndarray
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.response_gain
+```
+
+````
+
+````{py:attribute} response_leakage
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.response_leakage
+:type: numpy.ndarray
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.response_leakage
+```
+
+````
+
+````{py:attribute} error_spectrum
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.error_spectrum
+:type: numpy.ndarray | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.error_spectrum
+```
+
+````
+
+````{py:attribute} persistence_spectrum
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.persistence_spectrum
+:type: numpy.ndarray | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.persistence_spectrum
+```
+
+````
+
+````{py:attribute} conservation_residual
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.conservation_residual
+:type: float | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.conservation_residual
+```
+
+````
+
+````{py:attribute} dt
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.dt
+:type: float | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.dt
+```
+
+````
+
+````{py:attribute} n_snapshots
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.n_snapshots
+:type: int
+:value: >
+   0
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.n_snapshots
+```
+
+````
+
+````{py:property} ndim
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.ndim
+:type: int
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.ndim
+```
+
+````
+
+````{py:method} from_model(model: typing.Any, *, model_name: str = 'fno', dyn_name: str = 'unknown', artifact_name: str = 'spectrum', reference_dataset: typing.Any | None = None, max_snapshots: int = 5000, grid_shape: collections.abc.Sequence[int] | None = None, domain: collections.abc.Sequence[float] | None = None, eps: float = 0.1) -> mesokit.models.fno.artifacts.OperatorDiagnostics
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.from_model
+:classmethod:
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.from_model
+```
+
+````
+
+````{py:method} summary() -> str
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.summary
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.summary
+```
+
+````
+
+````{py:method} plot(ax: typing.Any | None = None) -> typing.Any
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.plot
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.plot
+```
+
+````
+
+````{py:method} save(path: str | pathlib.Path, *, dpi: int = 180, close: bool = True) -> pathlib.Path
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics.save
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics.save
+```
+
+````
+
+````{py:method} _repr_html_() -> str
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics._repr_html_
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics._repr_html_
+```
+
+````
+
+````{py:method} _plot_gain(ax: typing.Any) -> None
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics._plot_gain
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics._plot_gain
+```
+
+````
+
+````{py:method} _plot_leakage(ax: typing.Any) -> None
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics._plot_leakage
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics._plot_leakage
+```
+
+````
+
+````{py:method} _plot_error(ax: typing.Any) -> None
+:canonical: mesokit.models.fno.artifacts.OperatorDiagnostics._plot_error
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts.OperatorDiagnostics._plot_error
+```
+
+````
+
+`````
+
+`````{py:class} _SpectralLayout(grid: mesokit.models._spectral.SpectralGrid, *, device: torch.device)
+:canonical: mesokit.models.fno.artifacts._SpectralLayout
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._SpectralLayout
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._SpectralLayout.__init__
+```
+
+````{py:method} power(fields: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.fno.artifacts._SpectralLayout.power
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._SpectralLayout.power
+```
+
+````
+
+````{py:method} bin(power: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.fno.artifacts._SpectralLayout.bin
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._SpectralLayout.bin
+```
+
+````
+
+````{py:method} mean_power_spectrum(fields: torch.Tensor) -> numpy.ndarray
+:canonical: mesokit.models.fno.artifacts._SpectralLayout.mean_power_spectrum
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._SpectralLayout.mean_power_spectrum
+```
+
+````
+
+````{py:method} probe_masks() -> torch.Tensor
+:canonical: mesokit.models.fno.artifacts._SpectralLayout.probe_masks
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._SpectralLayout.probe_masks
+```
+
+````
+
+````{py:method} probe_response(probes: torch.Tensor, response: torch.Tensor) -> tuple[numpy.ndarray, numpy.ndarray]
+:canonical: mesokit.models.fno.artifacts._SpectralLayout.probe_response
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._SpectralLayout.probe_response
+```
+
+````
+
+`````
+
+````{py:function} _resolve_grid(model: typing.Any, *, ndim: int, dataset: typing.Any | None, grid_shape: collections.abc.Sequence[int] | None, domain: collections.abc.Sequence[float] | None) -> mesokit.models._spectral.SpectralGrid
+:canonical: mesokit.models.fno.artifacts._resolve_grid
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._resolve_grid
+```
+````
+
+````{py:function} _dataset_domain(dataset: typing.Any | None, *, ndim: int) -> tuple[float, ...] | None
+:canonical: mesokit.models.fno.artifacts._dataset_domain
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._dataset_domain
+```
+````
+
+````{py:function} _probe_fields(grid: mesokit.models._spectral.SpectralGrid, *, eps: float, device: torch.device, dtype: torch.dtype) -> torch.Tensor
+:canonical: mesokit.models.fno.artifacts._probe_fields
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._probe_fields
+```
+````
+
+````{py:function} _chunked(fn: typing.Any, fields: torch.Tensor, chunk: int = _CHUNK) -> torch.Tensor
+:canonical: mesokit.models.fno.artifacts._chunked
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._chunked
+```
+````
+
+````{py:function} _snapshot_pairs(dataset: typing.Any | None, *, grid_shape: tuple[int, ...], max_snapshots: int) -> tuple[torch.Tensor, torch.Tensor] | None
+:canonical: mesokit.models.fno.artifacts._snapshot_pairs
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._snapshot_pairs
+```
+````
+
+````{py:function} _infer_dt(dataset: typing.Any) -> float
+:canonical: mesokit.models.fno.artifacts._infer_dt
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._infer_dt
+```
+````
+
+````{py:function} _conservation_residual(increments: torch.Tensor) -> float
+:canonical: mesokit.models.fno.artifacts._conservation_residual
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._conservation_residual
+```
+````
+
+````{py:function} _model_device(model: typing.Any) -> torch.device
+:canonical: mesokit.models.fno.artifacts._model_device
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._model_device
+```
+````
+
+````{py:function} _model_dtype(model: typing.Any) -> torch.dtype
+:canonical: mesokit.models.fno.artifacts._model_dtype
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._model_dtype
+```
+````
+
+````{py:function} _pyplot() -> typing.Any
+:canonical: mesokit.models.fno.artifacts._pyplot
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._pyplot
+```
+````

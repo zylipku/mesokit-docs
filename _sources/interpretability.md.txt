@@ -30,7 +30,7 @@ with `artifact(name)`. What the shipped families provide:
 | Family | Artifact | Content |
 | --- | --- | --- |
 | Spectral OnsagerNet, OnsagerNet | `potential` | the learned free energy on a constant-field slice, the Onsager mode multipliers, and on Allen–Cahn data a scatter against the analytic law — [The Potential Artifact](interpretability/potential.md) |
-| FNO | `spectrum` | declared, not yet implemented (raises `NotImplementedError`) |
+| FNO | `spectrum` | the linear response gain and leakage of the learned operator per radial mode, the one-step error spectrum against persistence on the training data, and a conservation residual — [Fourier Neural Operator](models/fno.md) |
 
 ## From the Command Line
 

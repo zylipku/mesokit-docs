@@ -14,7 +14,7 @@ to add a model of your own.
 | --- | --- | --- | --- | --- |
 | `spectral_onsagernet_1d`, `_2d`, `_3d` | [Spectral OnsagerNet](models/spectral_onsagernet.md) | Onsager principle, $M$ and $W$ diagonal in Fourier space | a free energy $V_\theta[u]$, a mobility spectrum $K^m_{\mathbf k}$ and a reactive spectrum $K^w_{\mathbf k}$ | `potential` |
 | `onsagernet_1d`, `_2d`, `_3d` | [OnsagerNet (classical)](models/onsagernet.md) | Onsager principle on the flattened field, $M(\mathbf x)$ SPD and $W(\mathbf x)$ antisymmetric, possibly state-dependent | a coercive free energy $V_\theta(\mathbf x)$, the operators $M_\theta$, $W_\theta$ | `potential` |
-| `fno1d`, `fno2d`, `fno3d` | [Fourier Neural Operator](models/fno.md) | none | a black-box right-hand side $\partial_t u \approx \mathcal{G}_\theta(u)$ | `spectrum` (declared, not yet implemented) |
+| `fno1d`, `fno2d`, `fno3d` | [Fourier Neural Operator](models/fno.md) | none | a black-box right-hand side $\partial_t u \approx \mathcal{G}_\theta(u)$ | `spectrum` — response gain and leakage per mode, one-step error against persistence, conservation residual |
 
 Both Onsager families write a dissipative dynamics as the flow of a free
 energy through a mobility,

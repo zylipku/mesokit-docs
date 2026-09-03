@@ -13,12 +13,12 @@
 :titlesonly:
 :maxdepth: 3
 
-mesokit.skills.mesokit_add_trainer
 mesokit.skills.mesokit_add_simulator
-mesokit.skills.mesokit_train
 mesokit.skills.mesokit_convert_data
-mesokit.skills.mesokit_add_model
 mesokit.skills.mesokit_add_artifact
+mesokit.skills.mesokit_train
+mesokit.skills.mesokit_add_model
+mesokit.skills.mesokit_add_trainer
 ```
 
 ## Package Contents
