@@ -2,12 +2,14 @@
 
 `mesokit` is the console script installed with the package. It mirrors the
 pipeline — **produce data → train → index the checkpoint → interpret** — as
-four command groups, and keeps two project-local registries so that anything
-you generate or train once can be referred to by name afterwards.
+four command groups plus `sweep`, which runs the first two stages over a
+parameter grid, and keeps two project-local registries so that anything you
+generate or train once can be referred to by name afterwards.
 
 ```text
 mesokit data      avail | list | generate | register | parse
 mesokit train
+mesokit sweep
 mesokit model     list | register
 mesokit interpret list | extract | explain
 ```
@@ -78,6 +80,8 @@ configs/train/<dyn>/<model>/default.yaml ─────────────
                                                       .mesokit/checkpoints.json ◄── mesokit model register
                                                                   │
                                                        mesokit interpret list / extract ──► figs/*.png
+
+mesokit sweep --param KEY=V1,V2,… = data generate + train per grid point ──► checkpoints/<dyn>/sweeps/<stamp>.json
 ```
 
 ## `mesokit data`
@@ -143,7 +147,7 @@ validate the file and register it.
 
 ```sh
 mesokit data generate --dyn DYN [--config STEM] [--name NAME | --no-registry]
-                      [--output PATH] [--force] [--verbose]
+                      [--output PATH] [--force] [--verbose] [--set KEY=VALUE ...]
 ```
 
 | Option | Default | Meaning |
@@ -155,13 +159,15 @@ mesokit data generate --dyn DYN [--config STEM] [--name NAME | --no-registry]
 | `--output PATH` | `data/DYN/<name>.h5` | Where to write the HDF5 file. Parent directories are created. |
 | `--force` | off | Replace an existing registry entry of the same name. |
 | `--verbose` | off | Show the solver's own per-step output instead of the progress line. |
+| `--set KEY=VALUE` | none | Override one recipe key for this run; repeatable. `KEY` must be a keyword argument of the simulator; `VALUE` is read as int, float, bool (`true` / `false`) or string, in that order. |
 
-What happens, in order: the recipe is loaded with Hydra and instantiated
-(every key in the YAML is a keyword argument of the simulator, and
-`verbose` is forwarded); the returned `TrajectoryDataset` is saved; the
-saved file is run through the same validator as `data register`; on
-success the registry entry is written and the validation summary is
-printed.
+What happens, in order: the recipe is loaded with Hydra, the `--set`
+overrides are merged on top (an unknown key is rejected before anything
+runs), and the result is instantiated (every key in the YAML is a keyword
+argument of the simulator, and `verbose` is forwarded); the returned
+`TrajectoryDataset` is saved; the saved file is run through the same
+validator as `data register`; on success the registry entry is written and
+the validation summary is printed.
 
 ```sh
 mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_smoke
@@ -201,11 +207,16 @@ mesokit data generate --dyn kdv_1d --name kdv_long --force
 
 # Watch Dedalus's per-step log instead of the progress line.
 mesokit data generate --dyn kdv_1d --config fdr --verbose
+
+# One-off parameter change without a new recipe file.
+mesokit data generate --dyn allen_cahn_1d --set eps=0.05 --set seed=1 --name ac_eps0.05_s1
 ```
 
-To change parameters, add a sibling YAML under `configs/data/<dyn>/` (copy
-`default.yaml`, edit, pick it with `--config`). Every predefined recipe also
-ships `fdr.yaml`, a seconds-long "fast dev run" for trying the pipeline.
+To change parameters for good, add a sibling YAML under `configs/data/<dyn>/`
+(copy `default.yaml`, edit, pick it with `--config`); for a one-off run use
+`--set`, and for a whole grid of values use [`mesokit sweep`](#mesokit-sweep).
+Every predefined recipe also ships `fdr.yaml`, a seconds-long "fast dev run"
+for trying the pipeline.
 Some recipes are heavy — the default `cahn_hilliard_2d` takes about ten
 minutes and `peridynamics_fracture_2d` about twenty-five; the per-dataset
 sections of [Predefined Datasets](data_processing/predefined.md) give sizes
@@ -218,6 +229,8 @@ Invalid value: config dir not found: /home/me/mesokit/configs/data/nope
 Invalid value: no config 'nope' under /home/me/mesokit/configs/data/allen_cahn_1d; available: default, fdr
 Invalid value: --name and --no-registry are mutually exclusive
 Invalid value: dataset 'ac_smoke' already registered; pass --force to overwrite
+Invalid value: expected KEY=VALUE, got 'eps'
+Invalid value: unknown parameter 'epsilon' for simulator mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d; accepted: eps, n_traj, Nx, Lx, T, T_save_steps, timestep, Nk, max_k, u_bound, dealias, seed, verbose
 ```
 
 The first one also appears when you run from the wrong directory: recipes
@@ -433,6 +446,120 @@ Invalid value: --device must be one of: auto, cpu, gpu
 Invalid value: checkpoint 'spectral_onsagernet_1d_v0' already registered; pass --force to overwrite
 ```
 
+(mesokit-sweep)=
+
+## `mesokit sweep`
+
+Run `data generate` and `train` once per point of a grid of physical
+parameters, name every dataset and checkpoint after its parameter values,
+and summarise the runs in a table and a JSON file. This is the built-in
+form of the "for eps in …" shell loop.
+
+```sh
+mesokit sweep --dyn DYN --model ARCH --param KEY=V1,V2,... [--param KEY=V1,V2,... ...]
+              [--data-config STEM] [--config STEM] [--trainer NAME] [--name-prefix PREFIX]
+              [--epochs N] [--batch-size N] [--device auto|cpu|gpu]
+              [--reuse-data] [--force] [--dry-run]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--dyn DYN` | required | Dynamics name; selects `configs/data/DYN/` and `configs/train/DYN/ARCH/`. |
+| `--model ARCH` | required | Architecture name from the model registry. |
+| `--param KEY=V1,V2,...` | required, repeatable | One grid axis. `KEY` is a keyword argument of the simulator (as for `data generate --set`); each value is read as int, float, bool or string. Several `--param` flags form the Cartesian product, in the order given. |
+| `--data-config STEM` | `default` | Data recipe `configs/data/DYN/STEM.yaml` the overrides are applied to. |
+| `--config STEM` | `default` | Training recipe `configs/train/DYN/ARCH/STEM.yaml`. |
+| `--trainer NAME` | `= --model` | Trainer registry name. |
+| `--name-prefix PREFIX` | `DYN` | Prefix of every generated name (see below). |
+| `--epochs N`, `--batch-size N`, `--device` | from config | Forwarded to every training run, as for `train`. |
+| `--reuse-data` | off | Skip generation for a point whose dataset name is already registered and whose file exists; train on it instead. |
+| `--force` | off | Replace existing dataset and checkpoint entries of the same names. |
+| `--dry-run` | off | Print the plan — names and overrides per point — and exit without running anything. |
+
+**Names.** A point `eps=0.05, T=0.5` gives the dataset
+`<prefix>_eps0.05_T0.5` and the checkpoint `<prefix>_<model>_eps0.05_T0.5`
+(floats are written compactly: `1.0` becomes `1`, `2e-5` becomes `2e-05`).
+The names are deterministic, so re-running the same sweep with
+`--reuse-data --force` retrains on the existing data.
+
+**Failures.** Every point runs to the end of the grid: a point whose
+simulator or trainer raises is marked `FAILED` in the table with the error
+message, the remaining points still run, and the command exits with status
+`1` at the end. Problems that would break every point — a missing recipe, a
+parameter the simulator does not accept — are reported before anything runs.
+
+```sh
+mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d --param eps=0.05,0.1,0.2 \
+  --data-config fdr --epochs 2 --device cpu
+```
+
+```text
+[1/3] eps=0.05
+  generating dataset 'allen_cahn_1d_eps0.05'
+  training checkpoint 'allen_cahn_1d_spectral_onsagernet_1d_eps0.05'
+… Lightning progress …
+[2/3] eps=0.1
+…
+[3/3] eps=0.2
+…
+PARAMS    DATASET                CHECKPOINT                                    TRAIN_LOSS  TIME   STATUS
+eps=0.05  allen_cahn_1d_eps0.05  allen_cahn_1d_spectral_onsagernet_1d_eps0.05  0.0004203   10.1s  ok
+eps=0.1   allen_cahn_1d_eps0.1   allen_cahn_1d_spectral_onsagernet_1d_eps0.1   0.000112    3.8s   ok
+eps=0.2   allen_cahn_1d_eps0.2   allen_cahn_1d_spectral_onsagernet_1d_eps0.2   5.324e-05   3.8s   ok
+wrote /home/me/mesokit/checkpoints/allen_cahn_1d/sweeps/20260903-192502.json
+```
+
+`TRAIN_LOSS` is the last `train_loss` entry of the trainer's history (`-`
+when the trainer logs none); `TIME` is the wall time of generation plus
+training. The JSON file holds the same rows with a few more fields — the
+parameter dict, `data_status` (`generated` or `reused`), `error`,
+`dataset_path`, `checkpoint_path` — under `"rows"`, plus `"dyn"`,
+`"model"` and the `"params"` axes, so a notebook can load it directly:
+
+```python
+import json, pandas as pd
+rows = json.load(open("checkpoints/allen_cahn_1d/sweeps/20260903-192502.json"))["rows"]
+pd.DataFrame(rows)[["params", "checkpoint", "train_loss", "status"]]
+```
+
+The same loop is available from Python as
+`mesokit.cli.sweep.run_sweep(dyn, model, {"eps": [0.05, 0.1, 0.2]}, epochs=2, device="cpu")`,
+which returns the list of row dicts.
+
+More examples:
+
+```sh
+# Two axes -> four points; see the names before committing to the runs.
+mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d \
+  --param eps=0.05,0.1 --param T=0.05,0.1 --dry-run
+
+# Retrain a grid whose datasets already exist, replacing the old checkpoints.
+mesokit sweep --dyn allen_cahn_1d --model fno1d --param eps=0.05,0.1,0.2 \
+  --reuse-data --force --epochs 50
+
+# Custom prefix, variant training recipe.
+mesokit sweep --dyn ising_2d --model spectral_onsagernet_2d --param T=1.5,2.0,2.5 \
+  --data-config kac --name-prefix ising_kac --config default --epochs 20
+```
+
+Errors:
+
+```text
+Invalid value: expected KEY=V1,V2,..., got 'eps'
+Invalid value: parameter 'eps' given more than once
+Invalid value: unknown parameter 'epsilon' for simulator mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d; accepted: eps, n_traj, …
+Invalid value: no config 'nope' under /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d; available: default, smoke
+```
+
+A per-point failure looks like this in the table (the dataset of a point
+that failed during generation is not registered):
+
+```text
+PARAMS    DATASET                CHECKPOINT                                    TRAIN_LOSS  TIME  STATUS
+eps=0     allen_cahn_1d_eps0     allen_cahn_1d_spectral_onsagernet_1d_eps0     -           0.0s  FAILED: ZeroDivisionError: float division by zero
+eps=0.1   allen_cahn_1d_eps0.1   allen_cahn_1d_spectral_onsagernet_1d_eps0.1   0.000112    3.8s  ok
+```
+
 ## `mesokit model`
 
 Manage the project-local index of **trained checkpoints**
@@ -639,15 +766,21 @@ mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_ca
 mesokit interpret extract --model spectral_onsagernet_1d_v0 --artifact all --output figs/son_v0/
 ```
 
-**A parameter sweep with reproducible names:**
+**A parameter sweep with reproducible names** (one dataset and one
+checkpoint per value, summarised in `checkpoints/allen_cahn_1d/sweeps/`):
+
+```sh
+mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d --param eps=0.05,0.1,0.2
+mesokit model list
+```
+
+The same thing by hand, if you need a step in between:
 
 ```sh
 for eps in 0.05 0.1 0.2; do
-  sed "s/^eps: .*/eps: $eps/" configs/data/allen_cahn_1d/default.yaml > configs/data/allen_cahn_1d/eps$eps.yaml
-  mesokit data generate --dyn allen_cahn_1d --config eps$eps --name ac_eps$eps
+  mesokit data generate --dyn allen_cahn_1d --set eps=$eps --name ac_eps$eps
   mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data ac_eps$eps --name son_eps$eps
 done
-mesokit model list
 ```
 
 **Your own solver's output:**
@@ -721,7 +854,8 @@ mesokit interpret list --model nb_run
 | `data/parsed/<stem>.h5` | `data parse` (via the agent) | `train`, `interpret` | Same layout. |
 | `.mesokit/datasets.json` | `data generate`, `data register`, `data parse` | `data list`, `train`, `interpret` | `name → {path, metadata}`; metadata holds shape, dtype, `dt`, the three groups. |
 | `checkpoints/<dyn>/<run>/` | `train` | `interpret` | `model.pt`, `config.yaml`, `history.json`, Lightning `.ckpt`. |
-| `.mesokit/checkpoints.json` | `train`, `model register` | `model list`, `interpret` | `name → {path, config_path, model_name, trainer_name, dyn, dataset_name, data, run_id, training_config_hash, metadata}`. |
+| `.mesokit/checkpoints.json` | `train`, `sweep`, `model register` | `model list`, `interpret` | `name → {path, config_path, model_name, trainer_name, dyn, dataset_name, data, run_id, training_config_hash, metadata}`. |
+| `checkpoints/<dyn>/sweeps/<timestamp>.json` | `sweep` | you (notebooks) | `{dyn, model, params, created, rows}`; one row per grid point with the parameters, names, paths, `train_loss`, `wall_time_s`, `status`, `error`. |
 
 Both registries are plain JSON with atomic writes; you can inspect or hand-edit
 them, and delete an entry by removing its key. Nothing under `data/`,
@@ -757,7 +891,8 @@ A registry entry, for reference:
 | `config dir not found: …/configs/data/<dyn>` | Not running from the repository root, or `<dyn>` has no recipe folder. | `cd` to the root; check `mesokit data avail`; create `configs/data/<dyn>/default.yaml` for a custom simulator. |
 | `no config 'x' under …; available: default, fdr` | `--config` takes a stem, not a filename or path. | Drop the `.yaml` and any directory. |
 | `--name and --no-registry are mutually exclusive` | Both flags given. | Pick one. |
-| `dataset 'x' already registered; pass --force to overwrite` | Name collision. | Choose another `--name`, or add `--force`. |
+| `dataset 'x' already registered; pass --force to overwrite` | Name collision. | Choose another `--name`, or add `--force`. In a `sweep`, `--reuse-data` trains on the existing dataset instead. |
+| `unknown parameter 'x' for simulator …; accepted: …` | A `--set` / `--param` key is not a keyword argument of the simulator. | Pick a key from the `accepted` list (they are the keys of the data recipe). |
 | `sanity check failed for …; not registered` | The file violates the v1 contract; the specific checks are printed above the message. | Fix the writer — see [Data Structure](data_processing/structure.md) — or run `mesokit.data.validate(path)` in Python for the full report. |
 | `dataset 'x' is not registered and is not an existing HDF5 path` | `--data` matched neither a name nor a file. | `mesokit data list`, or pass the path. |
 | `registered dataset 'x' points to missing file` | The file was moved or deleted after registration. | Re-register with the new path and `--force`, or regenerate. |
@@ -778,6 +913,7 @@ registries and the config lookup.
 | `mesokit data generate --dyn X` | `ds = mesokit.data.simulate("X", **kwargs); ds.save_hdf5(path)` |
 | `mesokit data register --file F` | `report = mesokit.data.validate(F)` (no registry write) |
 | `mesokit train` | `TrajectoryDataset.load_hdf5(path)` → a `mesokit.data.datasets` adapter → `DataLoader` → `mesokit.trainers.get_trainer(name)(...).fit(model, loader)` |
+| `mesokit sweep` | `mesokit.cli.sweep.run_sweep("X", "arch", {"eps": [0.05, 0.1]})` — the registries and naming included; returns the table rows |
 | `mesokit model list` | read `.mesokit/checkpoints.json` |
 | `mesokit interpret list` / `extract` | `model.load_state_dict(torch.load("model.pt"))`; `model.list_artifacts()`; `model.artifact(name).save(path)` |
 

@@ -9,6 +9,18 @@
 
 ## Module Contents
 
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`TrainRun <mesokit.cli.train.TrainRun>`
+  - ```{autodoc2-docstring} mesokit.cli.train.TrainRun
+    :summary:
+    ```
+````
+
 ### Functions
 
 ````{list-table}
@@ -17,6 +29,10 @@
 
 * - {py:obj}`train_command <mesokit.cli.train.train_command>`
   - ```{autodoc2-docstring} mesokit.cli.train.train_command
+    :summary:
+    ```
+* - {py:obj}`run_train <mesokit.cli.train.run_train>`
+  - ```{autodoc2-docstring} mesokit.cli.train.run_train
     :summary:
     ```
 * - {py:obj}`_instantiate_model <mesokit.cli.train._instantiate_model>`
@@ -71,6 +87,76 @@
 :canonical: mesokit.cli.train.train_command
 
 ```{autodoc2-docstring} mesokit.cli.train.train_command
+```
+````
+
+`````{py:class} TrainRun
+:canonical: mesokit.cli.train.TrainRun
+
+```{autodoc2-docstring} mesokit.cli.train.TrainRun
+```
+
+````{py:attribute} result
+:canonical: mesokit.cli.train.TrainRun.result
+:type: mesokit.trainers.TrainResult
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.train.TrainRun.result
+```
+
+````
+
+````{py:attribute} checkpoint_name
+:canonical: mesokit.cli.train.TrainRun.checkpoint_name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.train.TrainRun.checkpoint_name
+```
+
+````
+
+````{py:attribute} config_path
+:canonical: mesokit.cli.train.TrainRun.config_path
+:type: pathlib.Path
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.train.TrainRun.config_path
+```
+
+````
+
+````{py:attribute} trainer_name
+:canonical: mesokit.cli.train.TrainRun.trainer_name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.train.TrainRun.trainer_name
+```
+
+````
+
+````{py:attribute} registered
+:canonical: mesokit.cli.train.TrainRun.registered
+:type: bool
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.train.TrainRun.registered
+```
+
+````
+
+`````
+
+````{py:function} run_train(*, model: str, dyn: str, data: str, trainer: str | None = None, config: str = 'default', name: str | None = None, register: bool = True, force: bool = False, epochs: int | None = None, batch_size: int | None = None, device: str | None = None) -> mesokit.cli.train.TrainRun
+:canonical: mesokit.cli.train.run_train
+
+```{autodoc2-docstring} mesokit.cli.train.run_train
 ```
 ````
 

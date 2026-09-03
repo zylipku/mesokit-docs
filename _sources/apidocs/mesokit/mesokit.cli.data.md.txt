@@ -9,6 +9,18 @@
 
 ## Module Contents
 
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`GenerateResult <mesokit.cli.data.GenerateResult>`
+  - ```{autodoc2-docstring} mesokit.cli.data.GenerateResult
+    :summary:
+    ```
+````
+
 ### Functions
 
 ````{list-table}
@@ -25,6 +37,30 @@
     ```
 * - {py:obj}`generate <mesokit.cli.data.generate>`
   - ```{autodoc2-docstring} mesokit.cli.data.generate
+    :summary:
+    ```
+* - {py:obj}`run_generate <mesokit.cli.data.run_generate>`
+  - ```{autodoc2-docstring} mesokit.cli.data.run_generate
+    :summary:
+    ```
+* - {py:obj}`load_data_config <mesokit.cli.data.load_data_config>`
+  - ```{autodoc2-docstring} mesokit.cli.data.load_data_config
+    :summary:
+    ```
+* - {py:obj}`check_override_keys <mesokit.cli.data.check_override_keys>`
+  - ```{autodoc2-docstring} mesokit.cli.data.check_override_keys
+    :summary:
+    ```
+* - {py:obj}`apply_overrides <mesokit.cli.data.apply_overrides>`
+  - ```{autodoc2-docstring} mesokit.cli.data.apply_overrides
+    :summary:
+    ```
+* - {py:obj}`parse_override <mesokit.cli.data.parse_override>`
+  - ```{autodoc2-docstring} mesokit.cli.data.parse_override
+    :summary:
+    ```
+* - {py:obj}`coerce_value <mesokit.cli.data.coerce_value>`
+  - ```{autodoc2-docstring} mesokit.cli.data.coerce_value
     :summary:
     ```
 * - {py:obj}`_next_version_name <mesokit.cli.data._next_version_name>`
@@ -115,10 +151,104 @@
 ```
 ````
 
-````{py:function} generate(dyn: typing.Annotated[str, typer.Option('--dyn', help='Registered dynamics name, e.g. allen_cahn_1d.')], output: typing.Annotated[pathlib.Path | None, typer.Option('--output', help='HDF5 path to write. Defaults to data/<dyn>/<name>.h5.')] = None, config: typing.Annotated[str | None, typer.Option('--config', help="Named config under configs/data/<dyn>/ (no extension). Defaults to 'default'.")] = None, name: typing.Annotated[str | None, typer.Option('--name', help='Register the generated file under this name. Defaults to <dyn>_v<n>.')] = None, no_registry: typing.Annotated[bool, typer.Option('--no-registry', help='Skip auto-registration. Mutually exclusive with --name.')] = False, force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing registry entry.')] = False, verbose: typing.Annotated[bool, typer.Option('--verbose', help="Show the simulator's full chatter (e.g. Dedalus per-step logs).")] = False) -> None
+````{py:function} generate(dyn: typing.Annotated[str, typer.Option('--dyn', help='Registered dynamics name, e.g. allen_cahn_1d.')], output: typing.Annotated[pathlib.Path | None, typer.Option('--output', help='HDF5 path to write. Defaults to data/<dyn>/<name>.h5.')] = None, config: typing.Annotated[str | None, typer.Option('--config', help="Named config under configs/data/<dyn>/ (no extension). Defaults to 'default'.")] = None, name: typing.Annotated[str | None, typer.Option('--name', help='Register the generated file under this name. Defaults to <dyn>_v<n>.')] = None, no_registry: typing.Annotated[bool, typer.Option('--no-registry', help='Skip auto-registration. Mutually exclusive with --name.')] = False, force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing registry entry.')] = False, verbose: typing.Annotated[bool, typer.Option('--verbose', help="Show the simulator's full chatter (e.g. Dedalus per-step logs).")] = False, set_: typing.Annotated[list[str] | None, typer.Option('--set', metavar='KEY=VALUE', help='Override one recipe key (a simulator kwarg) for this run; repeatable. The value is read as int, float, bool or string, in that order.')] = None) -> None
 :canonical: mesokit.cli.data.generate
 
 ```{autodoc2-docstring} mesokit.cli.data.generate
+```
+````
+
+`````{py:class} GenerateResult
+:canonical: mesokit.cli.data.GenerateResult
+
+```{autodoc2-docstring} mesokit.cli.data.GenerateResult
+```
+
+````{py:attribute} name
+:canonical: mesokit.cli.data.GenerateResult.name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.data.GenerateResult.name
+```
+
+````
+
+````{py:attribute} path
+:canonical: mesokit.cli.data.GenerateResult.path
+:type: pathlib.Path
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.data.GenerateResult.path
+```
+
+````
+
+````{py:attribute} shape
+:canonical: mesokit.cli.data.GenerateResult.shape
+:type: tuple[int, ...]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.data.GenerateResult.shape
+```
+
+````
+
+````{py:attribute} report
+:canonical: mesokit.cli.data.GenerateResult.report
+:type: mesokit.data.validate.ValidationReport | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.data.GenerateResult.report
+```
+
+````
+
+`````
+
+````{py:function} run_generate(dyn: str, *, config: str | None = None, name: str | None = None, output: pathlib.Path | None = None, register: bool = True, force: bool = False, verbose: bool = False, overrides: collections.abc.Mapping[str, typing.Any] | None = None) -> mesokit.cli.data.GenerateResult
+:canonical: mesokit.cli.data.run_generate
+
+```{autodoc2-docstring} mesokit.cli.data.run_generate
+```
+````
+
+````{py:function} load_data_config(dyn: str, stem: str = 'default') -> omegaconf.DictConfig
+:canonical: mesokit.cli.data.load_data_config
+
+```{autodoc2-docstring} mesokit.cli.data.load_data_config
+```
+````
+
+````{py:function} check_override_keys(cfg: omegaconf.DictConfig, keys: collections.abc.Iterable[str]) -> None
+:canonical: mesokit.cli.data.check_override_keys
+
+```{autodoc2-docstring} mesokit.cli.data.check_override_keys
+```
+````
+
+````{py:function} apply_overrides(cfg: omegaconf.DictConfig, overrides: collections.abc.Mapping[str, typing.Any]) -> omegaconf.DictConfig
+:canonical: mesokit.cli.data.apply_overrides
+
+```{autodoc2-docstring} mesokit.cli.data.apply_overrides
+```
+````
+
+````{py:function} parse_override(spec: str) -> tuple[str, typing.Any]
+:canonical: mesokit.cli.data.parse_override
+
+```{autodoc2-docstring} mesokit.cli.data.parse_override
+```
+````
+
+````{py:function} coerce_value(raw: str) -> typing.Any
+:canonical: mesokit.cli.data.coerce_value
+
+```{autodoc2-docstring} mesokit.cli.data.coerce_value
 ```
 ````
 

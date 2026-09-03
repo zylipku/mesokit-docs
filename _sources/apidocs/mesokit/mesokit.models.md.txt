@@ -13,11 +13,11 @@
 :titlesonly:
 :maxdepth: 3
 
-mesokit.models.deeponet
+mesokit.models.fno
 mesokit.models.onsagernet
 mesokit.models.sindy
+mesokit.models.deeponet
 mesokit.models.spectral_onsagernet
-mesokit.models.fno
 ```
 
 ## Submodules
@@ -26,9 +26,9 @@ mesokit.models.fno
 :titlesonly:
 :maxdepth: 1
 
-mesokit.models._spectral
-mesokit.models.registry
 mesokit.models.dynamics_base
+mesokit.models.registry
+mesokit.models._spectral
 ```
 
 ## Package Contents
