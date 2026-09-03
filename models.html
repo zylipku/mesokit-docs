@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Extending mesokit" href="extending.html"><link rel="prev" title="Versioning and Compatibility" href="data_processing/versioning.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Spectral OnsagerNet" href="models/spectral_onsagernet.html"><link rel="prev" title="Versioning and Compatibility" href="data_processing/versioning.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Models - mesokit</title>
@@ -194,151 +194,168 @@
   <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="data_processing.html">Data Processing</a><input aria-label="Toggle navigation of Data Processing" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="data_processing/structure.html">Data Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_processing/predefined.html">Predefined Datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_processing/custom.html">Custom Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_processing/custom_simulator.html">Custom Simulators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_processing/examples.html">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_processing/versioning.html">Versioning and Compatibility</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending mesokit</a></li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Models</a><input aria-label="Toggle navigation of Models" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/spectral_onsagernet.html">Spectral OnsagerNet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/onsagernet.html">OnsagerNet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/fno.html">Fourier Neural Operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/custom_model.html">Custom Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="training.html">Training</a><input aria-label="Toggle navigation of Training" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="training/recipes.html">Training Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training/training_views.html">Training Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training/lit_trainer.html">LitTrainer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training/custom_trainer.html">Custom Trainers</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="interpretability.html">Interpretability</a><input aria-label="Toggle navigation of Interpretability" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="interpretability/potential.html">The Potential Artifact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interpretability/custom_artifact.html">Custom Artifacts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skills.html">Agent Skills</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API reference</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit</span></code></a><input aria-label="Toggle navigation of mesokit" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills</span></code></a><input aria-label="Toggle navigation of mesokit.skills" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_add_simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_simulator</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_convert_data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_convert_data</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_add_artifact.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_artifact</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_train</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_add_model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_model</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_add_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_trainer</span></code></a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit</span></code></a><input aria-label="Toggle navigation of mesokit" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models</span></code></a><input aria-label="Toggle navigation of mesokit.models" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno</span></code></a><input aria-label="Toggle navigation of mesokit.models.fno" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.fno1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.fno_dynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno_dynamics</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.fno2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.fno3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno3d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers</span></code></a><input aria-label="Toggle navigation of mesokit.trainers" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer</span></code></a><input aria-label="Toggle navigation of mesokit.trainers.lit_trainer" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer.lit_trainer</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer._lit_module</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.onsagernet" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.components.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.components</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_3d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_1d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.registry</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.trainer_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.trainer_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.sindy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.sindy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.deeponet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.deeponet</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet.potential" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.polynomial</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.allen_cahn</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.coercive_autograd</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data</span></code></a><input aria-label="Toggle navigation of mesokit.data" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.peridynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics</span></code></a><input aria-label="Toggle navigation of mesokit.data.peridynamics" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_3d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.artifacts</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.dynamics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.dynamics_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models._spectral.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models._spectral</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data</span></code></a><input aria-label="Toggle navigation of mesokit.data" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.peridynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics</span></code></a><input aria-label="Toggle navigation of mesokit.data.peridynamics" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.peridynamics.peridynamics_fracture_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics.peridynamics_fracture_2d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.llg.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg</span></code></a><input aria-label="Toggle navigation of mesokit.data.llg" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.llg.llg_lattice_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg.llg_lattice_2d</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.kdv.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv</span></code></a><input aria-label="Toggle navigation of mesokit.data.kdv" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.kdv.kdv_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv.kdv_1d</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn</span></code></a><input aria-label="Toggle navigation of mesokit.data.allen_cahn" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn</span></code></a><input aria-label="Toggle navigation of mesokit.data.allen_cahn" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.allen_cahn.allen_cahn_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn.allen_cahn_2d</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.allen_cahn.allen_cahn_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn.allen_cahn_1d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.cahn_hilliard.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard</span></code></a><input aria-label="Toggle navigation of mesokit.data.cahn_hilliard" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.kdv.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv</span></code></a><input aria-label="Toggle navigation of mesokit.data.kdv" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.kdv.kdv_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv.kdv_1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.cahn_hilliard.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard</span></code></a><input aria-label="Toggle navigation of mesokit.data.cahn_hilliard" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.cahn_hilliard.cahn_hilliard_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard.cahn_hilliard_2d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.ising.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising</span></code></a><input aria-label="Toggle navigation of mesokit.data.ising" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.ising.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising</span></code></a><input aria-label="Toggle navigation of mesokit.data.ising" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.ising.ising_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising.ising_2d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.llg.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg</span></code></a><input aria-label="Toggle navigation of mesokit.data.llg" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.llg.llg_lattice_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg.llg_lattice_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.format.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.format</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.validate.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.validate</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.format.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.format</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils</span></code></a><input aria-label="Toggle navigation of mesokit.utils" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.mlp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.mlp</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.activation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.activation</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers</span></code></a><input aria-label="Toggle navigation of mesokit.trainers" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer</span></code></a><input aria-label="Toggle navigation of mesokit.trainers.lit_trainer" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer._lit_module</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer.lit_trainer</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.training.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.training" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.trainer_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.trainer_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.trainers.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.training.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.training" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.training.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training.train</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.viz.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.viz" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.viz.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.viz" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.tutorial.viz.plots.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz.plots</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret</span></code></a><input aria-label="Toggle navigation of mesokit.interpret" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret</span></code></a><input aria-label="Toggle navigation of mesokit.interpret" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.plotter.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.plotter</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.compare.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.compare</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.interpret.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models</span></code></a><input aria-label="Toggle navigation of mesokit.models" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.deeponet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.deeponet</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.onsagernet" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_2d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_1d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_3d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.onsagernet.components.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.components</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils</span></code></a><input aria-label="Toggle navigation of mesokit.utils" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.activation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.activation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.utils.mlp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.mlp</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.sindy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.sindy</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet.potential" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.polynomial</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.coercive_autograd</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.allen_cahn</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.base</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills</span></code></a><input aria-label="Toggle navigation of mesokit.skills" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_add_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_trainer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_add_simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_simulator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_train</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_convert_data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_convert_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_add_model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.skills.mesokit_add_artifact.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_artifact</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_1d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.artifacts</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_2d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_3d</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno</span></code></a><input aria-label="Toggle navigation of mesokit.models.fno" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.fno3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno3d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.fno1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno1d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.fno_dynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno_dynamics</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.models.fno.fno2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno2d</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models._spectral.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models._spectral</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.registry</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.models.dynamics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.dynamics_base</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli</span></code></a><input aria-label="Toggle navigation of mesokit.cli" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli</span></code></a><input aria-label="Toggle navigation of mesokit.cli" class="toctree-checkbox" id="toctree-checkbox-27" name="toctree-checkbox-27" role="switch" type="checkbox"/><label for="toctree-checkbox-27"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.skills</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.model</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.skills</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -385,15 +402,13 @@
 <h1>Models<a class="headerlink" href="#models" title="Link to this heading">¶</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">mesokit</span></code> ships three model families. Each is written once for any number
 of spatial dimensions and registered under one name per dimension, so the
-same code trains on <code class="docutils literal notranslate"><span class="pre">allen_cahn_1d</span></code> and on <code class="docutils literal notranslate"><span class="pre">cahn_hilliard_2d</span></code>. The
-<strong>Overview</strong> tab covers what every model has in common and how to choose;
-the other tabs describe one family each — the equations, what is learned,
-the time stepping, the interpretability artifact, and the shipped recipes.</p>
-<div class="sd-tab-set docutils">
-<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
-<label class="sd-tab-label" for="sd-tab-item-0">
-Overview</label><div class="sd-tab-content docutils">
-<p class="rubric" id="the-families">The families</p>
+same code trains on <code class="docutils literal notranslate"><span class="pre">allen_cahn_1d</span></code> and on <code class="docutils literal notranslate"><span class="pre">cahn_hilliard_2d</span></code>. This page
+covers what every model has in common and how to choose; the pages under
+it describe one family each — the equations, what is learned, the time
+stepping, the interpretability artifact, and the shipped recipes — and how
+to add a model of your own.</p>
+<section id="the-families">
+<h2>The Families<a class="headerlink" href="#the-families" title="Link to this heading">¶</a></h2>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -406,19 +421,19 @@ Overview</label><div class="sd-tab-content docutils">
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d</span></code>, <code class="docutils literal notranslate"><span class="pre">_2d</span></code>, <code class="docutils literal notranslate"><span class="pre">_3d</span></code></p></td>
-<td><p>Spectral OnsagerNet</p></td>
+<td><p><a class="reference internal" href="models/spectral_onsagernet.html"><span class="std std-doc">Spectral OnsagerNet</span></a></p></td>
 <td><p>Onsager principle, <span class="math notranslate nohighlight">\(M\)</span> and <span class="math notranslate nohighlight">\(W\)</span> diagonal in Fourier space</p></td>
 <td><p>a free energy <span class="math notranslate nohighlight">\(V_\theta[u]\)</span>, a mobility spectrum <span class="math notranslate nohighlight">\(K^m_{\mathbf k}\)</span> and a reactive spectrum <span class="math notranslate nohighlight">\(K^w_{\mathbf k}\)</span></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">potential</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">onsagernet_1d</span></code>, <code class="docutils literal notranslate"><span class="pre">_2d</span></code>, <code class="docutils literal notranslate"><span class="pre">_3d</span></code></p></td>
-<td><p>OnsagerNet (classical)</p></td>
+<td><p><a class="reference internal" href="models/onsagernet.html"><span class="std std-doc">OnsagerNet (classical)</span></a></p></td>
 <td><p>Onsager principle on the flattened field, <span class="math notranslate nohighlight">\(M(\mathbf x)\)</span> SPD and <span class="math notranslate nohighlight">\(W(\mathbf x)\)</span> antisymmetric, possibly state-dependent</p></td>
 <td><p>a coercive free energy <span class="math notranslate nohighlight">\(V_\theta(\mathbf x)\)</span>, the operators <span class="math notranslate nohighlight">\(M_\theta\)</span>, <span class="math notranslate nohighlight">\(W_\theta\)</span></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">potential</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fno1d</span></code>, <code class="docutils literal notranslate"><span class="pre">fno2d</span></code>, <code class="docutils literal notranslate"><span class="pre">fno3d</span></code></p></td>
-<td><p>Fourier Neural Operator</p></td>
+<td><p><a class="reference internal" href="models/fno.html"><span class="std std-doc">Fourier Neural Operator</span></a></p></td>
 <td><p>none</p></td>
 <td><p>a black-box right-hand side <span class="math notranslate nohighlight">\(\partial_t u \approx \mathcal{G}_\theta(u)\)</span></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">spectrum</span></code> (declared, not yet implemented)</p></td>
@@ -446,22 +461,27 @@ shipped datasets come from. The classical family treats the grid as a
 the state and puts no restriction on <span class="math notranslate nohighlight">\(V\)</span>, at the price that every network
 has the grid size as its input width. FNO is the structure-free baseline
 the two are compared against.</p>
-<p class="rubric" id="common-surface">Common surface</p>
+</section>
+<section id="common-surface">
+<h2>Common Surface<a class="headerlink" href="#common-surface" title="Link to this heading">¶</a></h2>
 <p>Every model consumes a batch of <strong>single-channel</strong> fields
 <span class="math notranslate nohighlight">\(u \in \mathbb{R}^{B \times N_1 \times \cdots \times N_d}\)</span> on a periodic box
 and exposes <code class="docutils literal notranslate"><span class="pre">forward(u,</span> <span class="pre">dt)</span></code> (one step), <code class="docutils literal notranslate"><span class="pre">rollout(u0,</span> <span class="pre">n_steps,</span> <span class="pre">dt)</span></code>,
 <code class="docutils literal notranslate"><span class="pre">list_artifacts()</span></code> and <code class="docutils literal notranslate"><span class="pre">artifact(name)</span></code> — the <code class="docutils literal notranslate"><span class="pre">DynamicsModel</span></code> protocol
-described in <a class="reference internal" href="extending.html"><span class="std std-doc">Extending</span></a>. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--model</span> <span class="pre">&lt;name&gt;</span></code>
-resolves the class, the trainer registered for it (<code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code> for all of
-them) and the recipe under <code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;name&gt;/</span></code>; the step size
-<code class="docutils literal notranslate"><span class="pre">dt</span></code> is read from the dataset’s time grid unless the recipe sets it. The
-grid in the recipe (<code class="docutils literal notranslate"><span class="pre">Nx</span></code>, <code class="docutils literal notranslate"><span class="pre">Ny</span></code>, <code class="docutils literal notranslate"><span class="pre">Lx</span></code>, <code class="docutils literal notranslate"><span class="pre">Ly</span></code>, and for the classical family
-the <code class="docutils literal notranslate"><span class="pre">in_dim</span></code> / <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> of its blocks) must match the dataset —
-<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> does not infer it.</p>
+described in <a class="reference internal" href="models/custom_model.html"><span class="std std-doc">Custom Models</span></a>. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--model</span> <span class="pre">&lt;name&gt;</span></code> resolves the class, the trainer registered for it
+(<code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code> for all of them) and the recipe under
+<code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;name&gt;/</span></code>; the step size <code class="docutils literal notranslate"><span class="pre">dt</span></code> is read from the
+dataset’s time grid unless the recipe sets it. The grid in the recipe
+(<code class="docutils literal notranslate"><span class="pre">Nx</span></code>, <code class="docutils literal notranslate"><span class="pre">Ny</span></code>, <code class="docutils literal notranslate"><span class="pre">Lx</span></code>, <code class="docutils literal notranslate"><span class="pre">Ly</span></code>, and for the classical family the <code class="docutils literal notranslate"><span class="pre">in_dim</span></code> /
+<code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> of its blocks) must match the dataset — <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> does
+not infer it. See <a class="reference internal" href="training.html"><span class="std std-doc">Training</span></a> for the recipe layout and the
+Python path.</p>
 <p>All families are single-channel. For the multi-channel datasets
 (<code class="docutils literal notranslate"><span class="pre">llg_lattice_2d</span></code>, <code class="docutils literal notranslate"><span class="pre">peridynamics_fracture_2d</span></code>) pick one channel through the
 <code class="docutils literal notranslate"><span class="pre">dataset.channel</span></code> key of the recipe; multi-channel models are on the roadmap.</p>
-<p class="rubric" id="choosing-a-model">Choosing a model</p>
+</section>
+<section id="choosing-a-model">
+<h2>Choosing a Model<a class="headerlink" href="#choosing-a-model" title="Link to this heading">¶</a></h2>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -488,322 +508,39 @@ the <code class="docutils literal notranslate"><span class="pre">in_dim</span></
 <tr class="row-odd"><td><p>To verify the pipeline on data whose law you know</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_&lt;n&gt;d</span></code> with <code class="docutils literal notranslate"><span class="pre">identity_M</span></code>, <code class="docutils literal notranslate"><span class="pre">learn_W:</span> <span class="pre">false</span></code>, <code class="docutils literal notranslate"><span class="pre">AllenCahnPotential</span></code></p></td>
 </tr>
+<tr class="row-even"><td><p>A model none of the above covers</p></td>
+<td><p><a class="reference internal" href="models/custom_model.html"><span class="std std-doc">Custom Models</span></a></p></td>
+</tr>
 </tbody>
 </table>
 </div>
-<p class="rubric" id="interpretability">Interpretability</p>
+</section>
+<section id="interpretability">
+<h2>Interpretability<a class="headerlink" href="#interpretability" title="Link to this heading">¶</a></h2>
 <p>The two Onsager families share the <code class="docutils literal notranslate"><span class="pre">potential</span></code> artifact
 (<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">extract</span> <span class="pre">--artifact</span> <span class="pre">potential</span></code>): the learned <span class="math notranslate nohighlight">\(V_\theta\)</span>
 on a constant-field slice with its components, the Fourier multipliers of
 <span class="math notranslate nohighlight">\(M\)</span> and <span class="math notranslate nohighlight">\(W\)</span> when the operators are diagonal in Fourier space (always for the
 spectral family, for the circulant blocks of the classical one), and, on
 Allen–Cahn checkpoints, a scatter of the learned against the analytic
-potential over real snapshots. Details are in the family tabs.</p>
+potential over real snapshots. How to read it is on
+<a class="reference internal" href="interpretability/potential.html"><span class="std std-doc">The Potential Artifact</span></a>; the family pages
+say what each family puts into it.</p>
+</section>
+<section id="how-to-use-this-section">
+<h2>How to Use This Section<a class="headerlink" href="#how-to-use-this-section" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Understand a family</strong> — <a class="reference internal" href="models/spectral_onsagernet.html"><span class="std std-doc">Spectral OnsagerNet</span></a>,
+<a class="reference internal" href="models/onsagernet.html"><span class="std std-doc">OnsagerNet</span></a>, <a class="reference internal" href="models/fno.html"><span class="std std-doc">Fourier Neural Operator</span></a>:
+equations, learnable parts, time stepping, physics checks, recipes.</p></li>
+<li><p><strong>Write your own</strong> — <a class="reference internal" href="models/custom_model.html"><span class="std std-doc">Custom Models</span></a>: the
+<code class="docutils literal notranslate"><span class="pre">DynamicsModel</span></code> protocol, the two implementation patterns, and the spectral
+helpers that make one implementation serve 1D, 2D and 3D.</p></li>
+<li><p><strong>Train one</strong> — <a class="reference internal" href="training.html"><span class="std std-doc">Training</span></a>.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
 </div>
-<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
-<label class="sd-tab-label" for="sd-tab-item-1">
-Spectral OnsagerNet</label><div class="sd-tab-content docutils">
-<p class="rubric" id="model">Model</p>
-<p>The Onsager principle writes a dissipative dynamics as the flow of a free
-energy through a mobility. Spectral OnsagerNet takes this literally,</p>
-<div class="math-wrapper docutils container">
-<div class="math notranslate nohighlight">
-\[
-\frac{\partial u}{\partial t} = -(M + W)\,\frac{\delta V_\theta}{\delta u},
-\]</div>
-</div>
-<p>with <span class="math notranslate nohighlight">\(M \succeq 0\)</span> symmetric (dissipative), <span class="math notranslate nohighlight">\(W\)</span> antisymmetric (reversible)
-and <span class="math notranslate nohighlight">\(V_\theta\)</span> a learnable potential, and assumes both operators are
-diagonal in Fourier space on the periodic box. With
-<span class="math notranslate nohighlight">\(\hat u_{\mathbf k}\)</span> the <code class="docutils literal notranslate"><span class="pre">rfftn</span></code> coefficients this is one complex ODE per
-mode,</p>
-<div class="math-wrapper docutils container">
-<div class="math notranslate nohighlight">
-\[
-\frac{d\hat u_{\mathbf k}}{dt} = -\bigl(K^m_{\mathbf k} + K^w_{\mathbf k}\bigr)\,
-\widehat{\frac{\delta V_\theta}{\delta u}}_{\mathbf k},
-\qquad
-K^m_{\mathbf k} = \mu_{\mathbf k}^2 \ge 0,\quad
-K^w_{\mathbf k} = i\,\omega_{\mathbf k} \in i\mathbb{R},
-\]</div>
-</div>
-<p>where <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\omega\)</span> are the learnable arrays <code class="docutils literal notranslate"><span class="pre">Km_params</span></code> / <code class="docutils literal notranslate"><span class="pre">Kw_params</span></code>
-of the spectral shape <span class="math notranslate nohighlight">\((N_1, \ldots, N_{d-1}, N_d/2 + 1)\)</span>. The squared
-parameterisation keeps the mobility non-negative; the purely imaginary
-<span class="math notranslate nohighlight">\(K^w\)</span> is what an antisymmetric operator looks like mode by mode. A learned
-<span class="math notranslate nohighlight">\(K^m\)</span> that vanishes at <span class="math notranslate nohighlight">\(\mathbf k = 0\)</span> is a conserved dynamics
-(Cahn–Hilliard type); a constant <span class="math notranslate nohighlight">\(K^m\)</span> is a non-conserved one (Allen–Cahn
-type); a non-zero <span class="math notranslate nohighlight">\(K^w\)</span> is a reversible, wave-like part.</p>
-<p><strong>Time stepping.</strong> The potential supplies its spectral gradient split into
-a linear part and a remainder, <span class="math notranslate nohighlight">\(\widehat{\delta V/\delta u} = \hat L\,\hat u + \hat N(\hat u)\)</span>,
-and the default <code class="docutils literal notranslate"><span class="pre">sbdf1</span></code> stepper treats the linear part implicitly:</p>
-<div class="math-wrapper docutils container">
-<div class="math notranslate nohighlight">
-\[
-\hat u^{n+1}_{\mathbf k} = \frac{\hat u^n_{\mathbf k} - \Delta t\,(K^m + K^w)_{\mathbf k}\,\hat N_{\mathbf k}(\hat u^n)}
-{1 + \Delta t\,(K^m + K^w)_{\mathbf k}\,\hat L_{\mathbf k}} .
-\]</div>
-</div>
-<p>Explicit <code class="docutils literal notranslate"><span class="pre">euler</span></code>, <code class="docutils literal notranslate"><span class="pre">rk2</span></code>, <code class="docutils literal notranslate"><span class="pre">rk3</span></code> and <code class="docutils literal notranslate"><span class="pre">rk4</span></code> steppers on the same right-hand
-side are available through <code class="docutils literal notranslate"><span class="pre">step_method</span></code>. Steps are taken in Fourier space
-and transformed back, so the physical-space <code class="docutils literal notranslate"><span class="pre">rhs(u)</span></code> and <code class="docutils literal notranslate"><span class="pre">forward(u,</span> <span class="pre">dt)</span></code>
-are what training and rollout see.</p>
-<p class="rubric" id="potentials">Potentials</p>
-<div class="table-wrapper colwidths-auto docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Class</p></th>
-<th class="head"><p><span class="math notranslate nohighlight">\(V_\theta[u]\)</span></p></th>
-<th class="head"><p>Learnable</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PolynomialPotential</span></code> (default)</p></td>
-<td><p><span class="math notranslate nohighlight">\(\int \tfrac{a}{4}u^4 + \tfrac{c}{3}u^3 + \tfrac{b}{2}u^2 + d\,u\,dx\)</span>, <span class="math notranslate nohighlight">\(a = a_{\sqrt{}}^2\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(a, b, c, d\)</span></p></td>
-<td><p>starter; contains the Allen–Cahn double well at <span class="math notranslate nohighlight">\(a = 1\)</span>, <span class="math notranslate nohighlight">\(b = -1/\varepsilon^2\)</span></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AllenCahnPotential</span></code></p></td>
-<td><p><span class="math notranslate nohighlight">\(\int \tfrac12 \lvert\nabla u\rvert^2 + \tfrac{u^4}{4\varepsilon^2} - \tfrac{u^2}{2\varepsilon^2}\,dx\)</span></p></td>
-<td><p>nothing</p></td>
-<td><p>physics check; reference law for the <code class="docutils literal notranslate"><span class="pre">potential</span></code> artifact</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CoerciveAutogradPotential</span></code></p></td>
-<td><p><span class="math notranslate nohighlight">\(\int \tfrac{a}{2}u^2 + F_\theta(u)\,dx + \int \tfrac{b}{2}\lvert\nabla u\rvert^2\,dx + \lvert v_\theta(\hat u_{\text{low}})\rvert\)</span>, <span class="math notranslate nohighlight">\(a, b \ge 0\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(a, b\)</span>, pointwise MLP <span class="math notranslate nohighlight">\(F_\theta\)</span>, complex MLP <span class="math notranslate nohighlight">\(v_\theta\)</span> on the lowest <code class="docutils literal notranslate"><span class="pre">v_truncate</span></code> modes per axis (<code class="docutils literal notranslate"><span class="pre">v_truncate</span></code><span class="math notranslate nohighlight">\(^d\)</span> inputs)</p></td>
-<td><p>the headline interpretable choice: pointwise, local and nonlocal energy read off separately</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>All potentials share the <code class="docutils literal notranslate"><span class="pre">SpectralPotential</span></code> base, which owns the grid, the
-wavenumbers and <span class="math notranslate nohighlight">\(\lvert\mathbf k\rvert^2\)</span>, so each is written once for 1D, 2D
-and 3D; the gradients of the coercive potential are obtained by autograd
-(pointwise term in physical space, nonlocal term directly in Fourier space),
-the gradient-energy term in closed form. The three terms are exactly what
-the <code class="docutils literal notranslate"><span class="pre">potential</span></code> artifact plots as <span class="math notranslate nohighlight">\(V_0\)</span>, <span class="math notranslate nohighlight">\(V_1\)</span>, <span class="math notranslate nohighlight">\(V_2\)</span>.</p>
-<p class="rubric" id="physics-check">Physics check</p>
-<p>Because the family contains the data-generating equation as a special case,
-its correctness can be checked without training. With <code class="docutils literal notranslate"><span class="pre">identity_M:</span> <span class="pre">true</span></code>
-(<span class="math notranslate nohighlight">\(K^m \equiv 1\)</span>), <code class="docutils literal notranslate"><span class="pre">learn_W:</span> <span class="pre">false</span></code> (<span class="math notranslate nohighlight">\(K^w \equiv 0\)</span>) and <code class="docutils literal notranslate"><span class="pre">AllenCahnPotential</span></code>,
-the model <em>is</em> <span class="math notranslate nohighlight">\(u_t = \Delta u + (u - u^3)/\varepsilon^2\)</span>. On a resolved grid
-(128² with <span class="math notranslate nohighlight">\(\varepsilon = 0.1\)</span>) its RK4 rollout over one frame of
-<code class="docutils literal notranslate"><span class="pre">allen_cahn_2d</span></code> matches the Dedalus frames to a mean-squared error of
-<span class="math notranslate nohighlight">\(10^{-13}\)</span>, about <span class="math notranslate nohighlight">\(10^{-9}\)</span> of the frame-to-frame change; the test suite
-asserts this. The recipe
-<code class="docutils literal notranslate"><span class="pre">configs/train/allen_cahn_2d/spectral_onsagernet_2d/physics_check.yaml</span></code>
-runs the same model through <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> at zero learning rate, so the
-reported loss is the one-step scheme error. On the 32² <code class="docutils literal notranslate"><span class="pre">fdr</span></code> grid the
-interface (<span class="math notranslate nohighlight">\(\varepsilon = 0.1\)</span>) is narrower than a cell and the residual is
-dominated by aliasing of <span class="math notranslate nohighlight">\(u^3\)</span> — the potentials evaluate the nonlinearity
-on the native grid while the data are de-aliased — so treat that grid as a
-smoke test, not a benchmark.</p>
-<p class="rubric" id="the-potential-artifact">The <code class="docutils literal notranslate"><span class="pre">potential</span></code> artifact</p>
-<p><code class="docutils literal notranslate"><span class="pre">artifact(&quot;potential&quot;)</span></code> returns a <code class="docutils literal notranslate"><span class="pre">PotentialLandscape</span></code>: the potential on a
-constant-field slice <span class="math notranslate nohighlight">\(u \equiv c\)</span> (with the <span class="math notranslate nohighlight">\(V_0 / V_1 / V_2\)</span> components when
-the potential has them), the learned multipliers <span class="math notranslate nohighlight">\(K^m\)</span> and
-<span class="math notranslate nohighlight">\(\operatorname{Im} K^w\)</span> on the spectral grid, and — when the checkpoint was
-trained on an Allen–Cahn dataset — a scatter of the learned <span class="math notranslate nohighlight">\(V_\theta\)</span>
-against the analytic <span class="math notranslate nohighlight">\(V\)</span> over real snapshots with its Pearson correlation
-and linear fit. In 1D the multipliers are plotted against the mode index;
-in 2D and 3D as images over <span class="math notranslate nohighlight">\((k_x, k_y)\)</span> (the <span class="math notranslate nohighlight">\(k_z = 0\)</span> plane in 3D).</p>
-<p class="rubric" id="recipes">Recipes</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>configs/train/allen_cahn_1d/spectral_onsagernet_1d/{default,coercive,smoke}.yaml
-configs/train/kdv_1d/spectral_onsagernet_1d/default.yaml
-configs/train/allen_cahn_2d/spectral_onsagernet_2d/{default,coercive,physics_check,smoke,physics_check_smoke}.yaml
-configs/train/cahn_hilliard_2d/spectral_onsagernet_2d/default.yaml
-configs/train/ising_2d/spectral_onsagernet_2d/default.yaml
-</pre></div>
-</div>
-<p>A potential is selected by nesting it under <code class="docutils literal notranslate"><span class="pre">model.potential</span></code> in the recipe;
-<code class="docutils literal notranslate"><span class="pre">null</span></code> means the polynomial default, and the <code class="docutils literal notranslate"><span class="pre">coercive.yaml</span></code> recipes are the
-headline configuration (sine final activations, <code class="docutils literal notranslate"><span class="pre">v_truncate</span> <span class="pre">=</span> <span class="pre">16</span></code>). The
-potential’s <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> / <code class="docutils literal notranslate"><span class="pre">domain</span></code> must match the model’s <code class="docutils literal notranslate"><span class="pre">Nx</span></code>, <code class="docutils literal notranslate"><span class="pre">Ny</span></code>,
-<code class="docutils literal notranslate"><span class="pre">Lx</span></code>, <code class="docutils literal notranslate"><span class="pre">Ly</span></code>, which in turn must match the dataset.</p>
-</div>
-<input id="sd-tab-item-2" name="sd-tab-set-0" type="radio">
-<label class="sd-tab-label" for="sd-tab-item-2">
-OnsagerNet</label><div class="sd-tab-content docutils">
-<p class="rubric" id="id1">Model</p>
-<p>The classical OnsagerNet (Yu, Tian, E, Li 2021) applies the generalised
-Onsager principle to a finite-dimensional state. <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> uses it on the
-grid directly: the field on <span class="math notranslate nohighlight">\(N_1 \times \cdots \times N_d\)</span> points is
-flattened to <span class="math notranslate nohighlight">\(\mathbf x = \operatorname{vec}(u) \in \mathbb{R}^d\)</span>,
-<span class="math notranslate nohighlight">\(d = N_1 \cdots N_d\)</span>, and evolved by</p>
-<div class="math-wrapper docutils container">
-<div class="math notranslate nohighlight">
-\[
-\frac{d\mathbf x}{dt} = -\bigl(M_\theta(\mathbf x) + W_\theta(\mathbf x)\bigr)\,\nabla V_\theta(\mathbf x),
-\qquad
-M_\theta \succ 0 \text{ symmetric},\quad W_\theta = -W_\theta^{\top}.
-\]</div>
-</div>
-<p>Nothing is assumed about Fourier space: the operators may depend on the
-state and the potential sees the whole vector at once. This is the most
-general Onsager parameterisation in the toolkit, and the most expensive —
-every network has <span class="math notranslate nohighlight">\(d\)</span> as its input width, so the family is meant for modest
-grids (256 points in 1D, <span class="math notranslate nohighlight">\(32^2\)</span> to <span class="math notranslate nohighlight">\(128^2\)</span> in 2D).</p>
-<p><strong>Potential.</strong> <code class="docutils literal notranslate"><span class="pre">CoercivePotential</span></code> is</p>
-<div class="math-wrapper docutils container">
-<div class="math notranslate nohighlight">
-\[
-V_\theta(\mathbf x) = \frac{\alpha}{2}\,\lVert\mathbf x\rVert^2 + \mathrm{MLP}_\theta(\mathbf x),
-\qquad \alpha = e^{\log\alpha} &gt; 0,
-\]</div>
-</div>
-<p>a scalar MLP (three hidden layers of width 256, <code class="docutils literal notranslate"><span class="pre">tanh</span></code>, no output bias)
-plus a coercive quadratic that guarantees <span class="math notranslate nohighlight">\(V \to +\infty\)</span> as
-<span class="math notranslate nohighlight">\(\lVert\mathbf x\rVert \to \infty\)</span>. Its gradient is taken by autograd inside
-the right-hand side, with a second-order graph during training so the loss
-back-propagates through <span class="math notranslate nohighlight">\(\nabla V\)</span>.</p>
-<p><strong>Operators.</strong> <span class="math notranslate nohighlight">\(M\)</span> and <span class="math notranslate nohighlight">\(W\)</span> are modules with an <code class="docutils literal notranslate"><span class="pre">apply(x,</span> <span class="pre">v)</span></code> method that
-returns the matrix–vector product; the matrices themselves are never formed
-and their structure holds by construction, not by penalty:</p>
-<div class="table-wrapper colwidths-auto docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Block</p></th>
-<th class="head"><p>Definition</p></th>
-<th class="head"><p>Guarantee</p></th>
-<th class="head"><p>Cost per product</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DiagonalDissipation</span></code></p></td>
-<td><p><span class="math notranslate nohighlight">\(M(\mathbf x) = \operatorname{diag}\bigl(\beta + \operatorname{softplus}\,m_\theta(\mathbf x)\bigr)\)</span></p></td>
-<td><p>SPD, entries <span class="math notranslate nohighlight">\(&gt; \beta\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(O(d)\)</span> + one MLP</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LowRankDissipation</span></code></p></td>
-<td><p><span class="math notranslate nohighlight">\(M(\mathbf x) = \beta I + B_\theta(\mathbf x)\,B_\theta(\mathbf x)^{\top}\)</span>, <span class="math notranslate nohighlight">\(B \in \mathbb{R}^{d\times r}\)</span></p></td>
-<td><p>SPD, eigenvalues <span class="math notranslate nohighlight">\(\ge \beta\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(O(d r)\)</span> + one MLP</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LowRankConservation</span></code></p></td>
-<td><p><span class="math notranslate nohighlight">\(W(\mathbf x) = B_\theta(\mathbf x)\,C^{\top} - C\,B_\theta(\mathbf x)^{\top}\)</span>, <span class="math notranslate nohighlight">\(C \in \mathbb{R}^{d\times r}\)</span> learnable</p></td>
-<td><p>antisymmetric</p></td>
-<td><p><span class="math notranslate nohighlight">\(O(d r)\)</span> + one MLP</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CirculantDissipation</span></code></p></td>
-<td><p><span class="math notranslate nohighlight">\(M v = \mathcal F^{-1}\bigl[\operatorname{softplus}(\theta_{\mathbf k})\,\mathcal F v\bigr] + \beta v\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span> even in <span class="math notranslate nohighlight">\(\mathbf k\)</span></p></td>
-<td><p>SPD, translation-invariant, state-independent</p></td>
-<td><p><span class="math notranslate nohighlight">\(O(d \log d)\)</span></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CirculantConservation</span></code></p></td>
-<td><p><span class="math notranslate nohighlight">\(W v = \mathcal F^{-1}\bigl[i\,\theta_{\mathbf k}\,\mathcal F v\bigr]\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span> odd in <span class="math notranslate nohighlight">\(\mathbf k\)</span> (zero at <span class="math notranslate nohighlight">\(\mathbf k = 0\)</span> and Nyquist)</p></td>
-<td><p>antisymmetric, translation-invariant, state-independent</p></td>
-<td><p><span class="math notranslate nohighlight">\(O(d \log d)\)</span></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>The circulant blocks are convolutions on the periodic grid parameterised by
-their Fourier multipliers; they are the classical-OnsagerNet counterpart of
-the Spectral OnsagerNet’s <span class="math notranslate nohighlight">\(K^m_{\mathbf k}\)</span> / <span class="math notranslate nohighlight">\(K^w_{\mathbf k}\)</span>, written for
-any dimension through the shared <code class="docutils literal notranslate"><span class="pre">SpectralGrid</span></code>. <code class="docutils literal notranslate"><span class="pre">band_size</span></code> initialises
-them as short-range kernels (a wrapped Gaussian of that many grid points for
-<span class="math notranslate nohighlight">\(M\)</span>, a small constant on the lowest modes for <span class="math notranslate nohighlight">\(W\)</span>). The state-dependent
-blocks are the original OnsagerNet design; <code class="docutils literal notranslate"><span class="pre">conservation:</span> <span class="pre">null</span></code> gives a
-purely dissipative model.</p>
-<p><strong>Time stepping.</strong> The right-hand side is generic, so only the explicit
-steppers are available: <code class="docutils literal notranslate"><span class="pre">euler</span></code> (default) and <code class="docutils literal notranslate"><span class="pre">rk4</span></code>. With <span class="math notranslate nohighlight">\(W = 0\)</span> the exact
-dynamics satisfy <span class="math notranslate nohighlight">\(\dot V = -\nabla V^{\top} M \nabla V \le 0\)</span>, so <span class="math notranslate nohighlight">\(V_\theta\)</span>
-is a Lyapunov function of the learned model; the test suite checks that one
-Euler step of the purely dissipative model lowers <span class="math notranslate nohighlight">\(V_\theta\)</span>.</p>
-<p class="rubric" id="relation-to-spectral-onsagernet">Relation to Spectral OnsagerNet</p>
-<div class="table-wrapper colwidths-auto docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p></p></th>
-<th class="head"><p>Spectral OnsagerNet</p></th>
-<th class="head"><p>OnsagerNet</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>State</p></td>
-<td><p>Fourier modes <span class="math notranslate nohighlight">\(\hat u_{\mathbf k}\)</span></p></td>
-<td><p>flattened field <span class="math notranslate nohighlight">\(\mathbf x \in \mathbb{R}^d\)</span></p></td>
-</tr>
-<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(M\)</span>, <span class="math notranslate nohighlight">\(W\)</span></p></td>
-<td><p>one multiplier per mode, state-independent</p></td>
-<td><p>any SPD / antisymmetric block, may depend on <span class="math notranslate nohighlight">\(\mathbf x\)</span></p></td>
-</tr>
-<tr class="row-even"><td><p>Potential</p></td>
-<td><p>functional of <span class="math notranslate nohighlight">\(u\)</span> with a spectral <span class="math notranslate nohighlight">\(\hat L\)</span> / <span class="math notranslate nohighlight">\(\hat N\)</span> split</p></td>
-<td><p>any scalar network of <span class="math notranslate nohighlight">\(\mathbf x\)</span></p></td>
-</tr>
-<tr class="row-odd"><td><p>Stepper</p></td>
-<td><p>SBDF1 (implicit linear part), explicit RK</p></td>
-<td><p>explicit Euler / RK4</p></td>
-</tr>
-<tr class="row-even"><td><p>Cost</p></td>
-<td><p><span class="math notranslate nohighlight">\(O(d \log d)\)</span> per step, parameters independent of <span class="math notranslate nohighlight">\(d\)</span></p></td>
-<td><p>networks of input width <span class="math notranslate nohighlight">\(d\)</span></p></td>
-</tr>
-<tr class="row-odd"><td><p>Best for</p></td>
-<td><p>translation-invariant PDE data, large grids</p></td>
-<td><p>small grids, state-dependent mobility, checking what the spectral assumptions buy</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>A classical model with <code class="docutils literal notranslate"><span class="pre">CirculantDissipation</span></code> and <code class="docutils literal notranslate"><span class="pre">CirculantConservation</span></code>
-is the spectral model’s operator structure with a free potential; comparing
-it against <code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_&lt;n&gt;d</span></code> isolates the effect of the potential
-parameterisation, and swapping in the low-rank blocks isolates the effect of
-state dependence in <span class="math notranslate nohighlight">\(M\)</span> and <span class="math notranslate nohighlight">\(W\)</span>.</p>
-<p class="rubric" id="id2">The <code class="docutils literal notranslate"><span class="pre">potential</span></code> artifact</p>
-<p><code class="docutils literal notranslate"><span class="pre">artifact(&quot;potential&quot;)</span></code> returns the same <code class="docutils literal notranslate"><span class="pre">PotentialLandscape</span></code> as the
-spectral family: <span class="math notranslate nohighlight">\(V_\theta\)</span> on the constant-field slice <span class="math notranslate nohighlight">\(u \equiv c\)</span> with its
-two components (<span class="math notranslate nohighlight">\(V_0 = \tfrac{\alpha}{2}\lVert\mathbf x\rVert^2\)</span>,
-<span class="math notranslate nohighlight">\(V_1 = \mathrm{MLP}_\theta\)</span>), the Fourier multipliers of <span class="math notranslate nohighlight">\(M\)</span> and <span class="math notranslate nohighlight">\(W\)</span> when
-the corresponding block is circulant (omitted, with a note in the summary,
-when it is state-dependent), and the Allen–Cahn reference scatter when the
-checkpoint was trained on an Allen–Cahn dataset.</p>
-<p class="rubric" id="id3">Recipes</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>configs/train/allen_cahn_1d/onsagernet_1d/{default,circulant,smoke}.yaml
-configs/train/kdv_1d/onsagernet_1d/default.yaml
-configs/train/allen_cahn_2d/onsagernet_2d/{default,smoke}.yaml
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> is the original low-rank design (<span class="math notranslate nohighlight">\(M\)</span> of rank 8, <span class="math notranslate nohighlight">\(W\)</span> of rank
-4, both from MLPs of the state); <code class="docutils literal notranslate"><span class="pre">circulant.yaml</span></code> swaps both for the
-convolution blocks; the KdV recipe keeps <span class="math notranslate nohighlight">\(W\)</span> and steps with <code class="docutils literal notranslate"><span class="pre">rk4</span></code>; the 2D
-recipes use a circulant <span class="math notranslate nohighlight">\(M\)</span> and no <span class="math notranslate nohighlight">\(W\)</span> because the potential MLP already
-holds <span class="math notranslate nohighlight">\(16384 \times 256\)</span> weights in its first layer on the 128² grid. The
-blocks are nested under <code class="docutils literal notranslate"><span class="pre">model.potential</span></code>, <code class="docutils literal notranslate"><span class="pre">model.dissipation</span></code> and
-<code class="docutils literal notranslate"><span class="pre">model.conservation</span></code>; their <code class="docutils literal notranslate"><span class="pre">in_dim</span></code> (or <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> for the circulant
-blocks) must equal the model’s <span class="math notranslate nohighlight">\(N_1 \cdots N_d\)</span> (or grid), which is checked
-at construction.</p>
-</div>
-<input id="sd-tab-item-3" name="sd-tab-set-0" type="radio">
-<label class="sd-tab-label" for="sd-tab-item-3">
-Fourier Neural Operator</label><div class="sd-tab-content docutils">
-<p class="rubric" id="id4">Model</p>
-<p><code class="docutils literal notranslate"><span class="pre">FNODynamics</span></code> wraps <code class="docutils literal notranslate"><span class="pre">neuralop.models.FNO</span></code> as a right-hand side,
-<span class="math notranslate nohighlight">\(\partial_t u \approx \mathcal{G}_\theta(u)\)</span>, and steps it with explicit
-Euler (default) or RK4. An FNO layer lifts the field to <code class="docutils literal notranslate"><span class="pre">hidden_channels</span></code>
-channels, multiplies the lowest <code class="docutils literal notranslate"><span class="pre">n_modes</span></code> Fourier coefficients per axis by
-learned complex weights, adds a pointwise linear path and a nonlinearity;
-<code class="docutils literal notranslate"><span class="pre">n_layers</span></code> such layers are followed by a projection back to one channel.
-<code class="docutils literal notranslate"><span class="pre">n_modes</span></code> is an integer or one entry per axis; <code class="docutils literal notranslate"><span class="pre">fno1d</span></code> / <code class="docutils literal notranslate"><span class="pre">fno2d</span></code> / <code class="docutils literal notranslate"><span class="pre">fno3d</span></code>
-differ only in the number of spatial axes handed to neuralop. It is the
-black-box baseline the interpretable families are compared against.</p>
-<p class="rubric" id="the-spectrum-artifact">The <code class="docutils literal notranslate"><span class="pre">spectrum</span></code> artifact</p>
-<p>Declared, not yet implemented: per-mode error and response diagnostics are
-on the roadmap, and <code class="docutils literal notranslate"><span class="pre">artifact(&quot;spectrum&quot;)</span></code> raises <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>
-until then.</p>
-<p class="rubric" id="id5">Recipes</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>configs/train/allen_cahn_1d/fno1d/default.yaml
-configs/train/kdv_1d/fno1d/default.yaml
-configs/train/allen_cahn_2d/fno2d/{default,smoke}.yaml
-configs/train/cahn_hilliard_2d/fno2d/default.yaml
-configs/train/ising_2d/fno2d/{default,smoke}.yaml
-</pre></div>
-</div>
-</div>
-</div>
+</section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
 <ul class="simple">
@@ -823,12 +560,12 @@ Equations”, ICLR 2021.</p></li>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="extending.html">
+          <a class="next-page" href="models/spectral_onsagernet.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Extending mesokit</div>
+                <div class="title">Spectral OnsagerNet</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -874,6 +611,11 @@ Equations”, ICLR 2021.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Models</a><ul>
+<li><a class="reference internal" href="#the-families">The Families</a></li>
+<li><a class="reference internal" href="#common-surface">Common Surface</a></li>
+<li><a class="reference internal" href="#choosing-a-model">Choosing a Model</a></li>
+<li><a class="reference internal" href="#interpretability">Interpretability</a></li>
+<li><a class="reference internal" href="#how-to-use-this-section">How to Use This Section</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>

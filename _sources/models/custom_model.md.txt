@@ -1,0 +1,142 @@
+# Custom Models
+
+You extend `mesokit` from **your own module**, never by editing
+`src/mesokit/`. A model is registered by name through
+`mesokit.models.register`, and the registry is populated by *import*: put
+your code in a module the process can import (a package installed into the
+environment, or a directory on `PYTHONPATH`) and import it before calling
+anything by name.
+
+What reaches the CLI today: custom models run through the Python API.
+`mesokit train` and `mesokit interpret` resolve only the architectures the
+installed package registered; loading user modules from the CLI is on the
+roadmap. Train custom models from Python as shown in
+[Training](../training.md), and build their artifacts from Python as
+shown in [Interpretability](../interpretability.md).
+
+## Reuse Before Writing
+
+Most "new model" needs are a new **component** of a shipped family, which
+keeps the family's stepper, trainer and `potential` artifact:
+
+| You want … | Write | Plug into |
+| --- | --- | --- |
+| a different free energy for Spectral OnsagerNet | a subclass of `mesokit.models.spectral_onsagernet.SpectralPotential` implementing `dVdu_h(u_hat)` and, for the implicit `sbdf1` step, `L_hat()` / `N_hat(u_hat)`; optionally `V(u)` and `_V0` / `_V1` / `_V2` so the artifact can plot it | `SpectralOnsagerNet<n>d(..., potential=MyPotential(grid_shape, domain))` |
+| a different mobility / reactive operator for the classical OnsagerNet | a module with `apply(x, v)` returning $M(\mathbf x)\,v$ (SPD) or $W(\mathbf x)\,v$ (antisymmetric) and an `in_dim` attribute | `OnsagerNet<n>d(..., dissipation=…, conservation=…)` |
+| a different potential for the classical OnsagerNet | a module with `forward(x) -> (B,)` on the flattened state (add `V`, `_V0`, `_V1` for the artifact) | `OnsagerNet<n>d(..., potential=…)` |
+| a genuinely new dynamics | a full `DynamicsModel` (below) | your trainer of choice |
+
+The shipped implementations are the reference: `mesokit.models.fno` (rhs
+plus explicit stepper around an external operator),
+`mesokit.models.onsagernet` (rhs with autograd, pluggable blocks),
+`mesokit.models.spectral_onsagernet` (custom `forward` in Fourier space,
+pluggable potentials).
+
+## The `DynamicsModel` Protocol
+
+A model is any `torch.nn.Module` that structurally satisfies
+`mesokit.models.DynamicsModel`: `forward(u, dt)` advances one step,
+`rollout(u0, n_steps, dt)` iterates it, `list_artifacts()` names at least
+one interpretability artifact, and `artifact(name)` builds it. Tensors carry
+a leading batch dimension; the stock training views slice one channel and
+feed `(B, *grid_shape)` — `(B, Nx)` for 1D data, `(B, Nx, Ny)` for 2D — so
+a model declares which grids it accepts through its constructor (the
+shipped families are registered once per dimension: `fno1d` / `fno2d` /
+`fno3d`, `spectral_onsagernet_1d` / `_2d` / `_3d`, `onsagernet_1d` / `_2d` /
+`_3d`). The protocol is structural (`typing.Protocol`); no inheritance is
+required, and `isinstance(model, DynamicsModel)` checks it at runtime.
+
+Two implementation patterns cover the shipped families. The simplest is a
+right-hand side plus one of the shared explicit steppers:
+
+```python
+# my_models.py
+import torch
+from torch import Tensor, nn
+from torch.nn import functional as F
+
+from mesokit.models import euler_step, register, rollout
+
+
+@register("linear_decay_1d")
+class LinearDecay1d(nn.Module):
+    """du/dt = -softplus(rate) * u with a single learnable scalar."""
+
+    def __init__(self, Nx: int = 64) -> None:
+        super().__init__()
+        self.Nx = Nx
+        self.rate = nn.Parameter(torch.tensor(0.0))
+
+    def rhs(self, u: Tensor) -> Tensor:
+        return -F.softplus(self.rate) * u
+
+    def forward(self, u: Tensor, dt: float) -> Tensor:
+        return euler_step(self.rhs, u, dt)
+
+    def rollout(self, u0: Tensor, n_steps: int, dt: float) -> Tensor:
+        return rollout(self.forward, u0, n_steps, dt)
+
+    def list_artifacts(self) -> list[str]:
+        return ["rate"]
+
+    def artifact(self, name: str):
+        if name not in self.list_artifacts():
+            raise KeyError(f"unknown artifact {name!r}; available: {self.list_artifacts()}")
+        from my_artifacts import ScalarArtifact
+
+        return ScalarArtifact(
+            model_name="linear_decay_1d",
+            dyn_name="decay_1d",
+            artifact_name=name,
+            value=float(F.softplus(self.rate)),
+        )
+```
+
+`ScalarArtifact` is the minimal artifact class from
+[Custom Artifacts](../interpretability/custom_artifact.md).
+`mesokit.models.rk4_step` is the other stock stepper.
+
+Models that need an operator between time slices or an implicit / spectral
+scheme implement `forward` directly instead; `SpectralOnsagerNet` in the
+API reference is the shipped example. Validate the trailing shape in
+`forward` and raise a clear `ValueError` on a mismatch — that is the error
+users hit most.
+
+## Writing Once for 1D, 2D and 3D
+
+`mesokit.models._spectral.SpectralGrid(grid_shape, domain)` gives you the
+wavenumbers, transforms and cell volume for any periodic box, so the same
+code serves every dimension: `rfft(u)` / `irfft(u_hat)` over the trailing
+axes, per-axis `wavenumbers()`, `k_squared()`, `gradient(u)`,
+`integrate(density)`, `cell_volume`, and the `truncate(u_hat, n_modes)`
+helper used by nonlocal potentials. Grids must be even along every axis.
+The shipped families keep a dimension-agnostic core taking `grid_shape` /
+`domain` tuples plus thin registered shells (`Nx, Lx` → `Nx, Ny, Lx, Ly`);
+that convention makes a new family usable in every dimension with no FFT
+code of its own.
+
+Two more conventions worth keeping: enforce structure by parameterisation
+(squares, softplus, antisymmetric construction), not by penalty; and take
+gradients of a learned potential by autograd inside `rhs`, wrapped in
+`torch.inference_mode(False)` and `torch.enable_grad()` so evaluation
+loops that run under inference mode still work.
+
+## Checking Before Training
+
+```python
+# check_model.py
+import torch
+
+import my_models  # registers
+from mesokit.models import DynamicsModel, available
+
+model = my_models.LinearDecay1d(Nx=64)
+assert isinstance(model, DynamicsModel)
+assert "linear_decay_1d" in available()
+u = torch.randn(4, 64)
+assert model(u, 1e-2).shape == u.shape
+assert model.rollout(u, 3, 1e-2).shape == (4, 4, 64)
+```
+
+Then train it from Python with `LitTrainer` or your own trainer; see
+[Training](../training.md) and [Custom Trainers](../training/custom_trainer.md).

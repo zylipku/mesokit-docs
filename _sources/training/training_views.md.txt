@@ -1,0 +1,53 @@
+(dataset-adapters)=
+# Training Views
+
+A `TrajectoryDataset` is not directly iterable by a
+`torch.utils.data.DataLoader`. The package ships two thin adapters in
+{py:mod}`mesokit.data.datasets` that wrap a `TrajectoryDataset` and
+expose the standard `__len__` / `__getitem__` interface expected by
+PyTorch. A recipe selects one in its `dataset` section; from Python you
+construct it directly.
+
+| Adapter | Constructor | Yields | Use case |
+| --- | --- | --- | --- |
+| `SnapshotPairDataset` | `SnapshotPairDataset(traj, *, stride=1, channel=0)` | `(u_t, u_{t+stride})` | Autoregressive one-step (or `k`-step) predictors; the default of every shipped recipe. |
+| `LookbackWindowDataset` | `LookbackWindowDataset(traj, *, lookback, lead=1, stride=1, channel=0)` | `(stack(u_{t-lookback+1}, …, u_t), u_{t+lead})` | Models that condition on more than the current state (RNN-style, memory). |
+
+`lookback` has no default. Samples are enumerated over every trajectory
+and every valid start index, so one `DataLoader` mixes trajectories.
+
+`stride` means different things in the two adapters. In
+`SnapshotPairDataset` it is the gap between the two frames of a pair, so
+the effective time step is `stride` times the frame spacing and a trainer
+`dt` set by hand must be scaled accordingly (`mesokit train` infers the
+frame spacing only). In `LookbackWindowDataset` it is the step between
+successive windows; the history frames are always consecutive and the
+target is the single frame `lead` steps after the last of them.
+
+Both adapters take `channel: int = 0` and yield `(*grid_shape,)`-shaped
+samples — preserving the single-channel input contract the shipped models
+expect. Multi-channel datasets select one channel per adapter instance;
+consuming the full `data[i, t, :, …]` tensor is a planned extension of the
+adapters and the model families together.
+
+```python
+from torch.utils.data import DataLoader
+
+from mesokit.data import TrajectoryDataset
+from mesokit.data.datasets import LookbackWindowDataset, SnapshotPairDataset
+
+ds = TrajectoryDataset.load_hdf5("data/allen_cahn_1d/allen_cahn_1d_v0.h5")
+pairs = SnapshotPairDataset(ds, stride=1, channel=0)
+u_t, u_next = pairs[0]                      # both (Nx,)
+windows = LookbackWindowDataset(ds, lookback=3, lead=1)
+history, target = windows[0]                # (3, Nx) and (Nx,)
+loader = DataLoader(pairs, batch_size=32, shuffle=True)
+```
+
+These adapters are toolkit examples, not requirements — every trainer in
+`mesokit.trainers` accepts an arbitrary `torch.utils.data.DataLoader`, so
+you are free to write your own adapter if your problem needs a different
+sampling view (multi-frame targets for a rollout loss, operator pairs,
+contrastive crops, …); a custom `Dataset` over `traj.data[:, :, channel]`
+is a few lines. See [Custom Trainers](custom_trainer.md) for a loss that
+needs one.

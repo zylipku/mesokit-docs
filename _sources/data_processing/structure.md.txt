@@ -158,29 +158,8 @@ The dataclass enforces the cache-file invariants at construction time
 type-checks is guaranteed to round-trip through `save_hdf5` /
 `load_hdf5` without losing information.
 
-(dataset-adapters)=
-## Training Views (`torch.utils.data.Dataset` adapters)
+## Training Views
 
-A `TrajectoryDataset` is not directly iterable by a
-`torch.utils.data.DataLoader`. The package ships two thin adapters in
-{py:mod}`mesokit.data.datasets` that wrap a `TrajectoryDataset` and
-expose the standard `__len__` / `__getitem__` interface expected by
-PyTorch:
-
-| Adapter | Yields | Use case |
-| --- | --- | --- |
-| `SnapshotPairDataset` | `(u_t, u_{t+stride})` | Autoregressive one-step (or `k`-step) predictors. |
-| `LookbackWindowDataset` | `(stack(u_{t-k+1}, ..., u_t), u_{t+lead})` | Models that condition on more than the current state (RNN-style, memory). |
-
-Both adapters take a `channel: int = 0` kwarg so they yield
-`(*grid_shape,)`-shaped samples by default — preserving the
-single-channel input contract that built-in models like `FNO1d` and
-`SpectralOnsagerNet1d` expect. Multi-channel datasets either select one
-channel per adapter instance, or a future model can consume the full
-`data[i, t, :, :]` tensor directly.
-
-These adapters are toolkit examples, not requirements — every trainer
-in `mesokit.trainers` accepts an arbitrary `torch.utils.data.DataLoader`,
-so a user is free to write their own adapter if their paper needs a
-different sampling view (operator pairs, contrastive crops, …). See
-[Examples](examples.md) for end-to-end usage.
+Turning a `TrajectoryDataset` into PyTorch samples is the job of the
+adapters in `mesokit.data.datasets`; they are described in
+[Training Views](../training/training_views.md).

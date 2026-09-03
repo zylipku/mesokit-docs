@@ -1066,4 +1066,4 @@ The shipped model families are registered per dimension (`fno1d/2d/3d`,
 `spectral_onsagernet_1d/2d/3d`, see [Models](../models.md)) and consume one
 channel; the multi-channel datasets train one channel at a time through
 {ref}`the stock adapters <dataset-adapters>`, and
-[Extending](../extending.md) covers registering a model of your own.
+[Custom Models](../models/custom_model.md) covers registering a model of your own.

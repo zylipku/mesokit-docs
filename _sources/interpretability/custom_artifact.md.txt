@@ -1,0 +1,95 @@
+# Custom Artifacts
+
+An artifact is whatever your model returns from `artifact(name)`, or
+whatever you compute post hoc from a trained model. The comparison
+harness (`mesokit.interpret.compare`) relies only on the
+`mesokit.interpret.InterpretabilityArtifact` surface: three labels,
+`summary()`, `plot(ax=None)`, and `save(path)`. Anything else (a sympy
+expression, a potential on a grid, a spectrum) is yours to add. Keep the
+artifact class next to the model that builds it. Like custom models,
+custom artifacts are built from Python: `mesokit interpret` cannot import
+your module yet.
+
+## The Minimal Class
+
+```python
+# my_artifacts.py
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+import matplotlib.pyplot as plt
+
+from mesokit.interpret import repr_html_summary
+
+
+@dataclass
+class ScalarArtifact:
+    model_name: str
+    dyn_name: str
+    artifact_name: str
+    value: float
+
+    def summary(self) -> str:
+        return f"{self.model_name} on {self.dyn_name}: learned {self.artifact_name} = {self.value:.4g}"
+
+    def plot(self, ax: Any | None = None) -> Any:
+        if ax is None:
+            _, ax = plt.subplots()
+        ax.bar([self.artifact_name], [self.value])
+        ax.set_title(self.summary())
+        return ax.figure
+
+    def save(self, path: str | Path, **kwargs: Any) -> Path:
+        fig = self.plot()
+        fig.savefig(path, **kwargs)
+        plt.close(fig)
+        return Path(path)
+
+    def _repr_html_(self) -> str:  # optional notebook display
+        return repr_html_summary(self)
+```
+
+`plot(ax)` must draw into a supplied axis: that is how `compare` places
+several artifacts in one figure. This class is what the `LinearDecay1d`
+example on [Custom Models](../models/custom_model.md) returns.
+
+## Post-hoc Artifacts for Shipped Models
+
+You do not need to subclass a shipped model to read a new quantity off it.
+Rebuild the checkpoint ([Interpretability](../interpretability.md)), then
+compute from what the model exposes: for Spectral OnsagerNet `model.Km`,
+`model.Kw`, `model.potential.V(u)`, `model.grid` (wavenumbers,
+`integrate`), `model.rhs(u)`; for the classical OnsagerNet
+`model.potential`, `model.dissipation.apply(x, v)`, `model.conservation`,
+`model.grad_potential(x)`, and `model.Km` / `model.Kw` for circulant
+blocks; for FNO `model.rhs(u)`. A `from_model(...)` classmethod that does
+the computation keeps the dataclass plain data:
+
+```python
+@dataclass(frozen=True)
+class MobilitySpectrum:
+    """Km(k) of a 1D Spectral OnsagerNet against k², with the fitted diffusion constant."""
+
+    model_name: str
+    dyn_name: str
+    artifact_name: str
+    k: np.ndarray
+    Km: np.ndarray
+    diffusion_fit: float
+
+    @classmethod
+    def from_model(cls, model, *, model_name: str, dyn_name: str) -> "MobilitySpectrum":
+        with torch.no_grad():
+            k = model.grid.wavenumbers()[0].flatten().numpy()
+            Km = model.Km.detach().real.cpu().numpy()
+        slope = float(np.polyfit(k**2, Km, deg=1)[0])
+        return cls(model_name, dyn_name, "mobility_spectrum", k, Km, slope)
+    ...
+```
+
+Wrap computations in `torch.no_grad()`, compute any reference on the same
+grid and frames as the learned quantity, and check the artifact on a
+known case (the physics-check checkpoint) before trusting it on a fit.
+Place it beside the shipped one with
+`compare([mine, model.artifact("potential")]).save(path)`.

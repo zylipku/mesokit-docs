@@ -279,7 +279,7 @@ registering it, use the Python helper `mesokit.data.validate(path)`.
 Hand an arbitrary dataset to a coding agent installed on your machine, let
 it convert the file with the `mesokit-convert-data` skill shipped in the
 package, then validate (and optionally register) the result. The skill
-itself, and the two others that cover training and extending, are
+itself, and the five others that cover training and extending, are
 described in [Agent Skills](skills.md); `mesokit skills` below installs
 them into an agent for conversational use.
 
@@ -421,7 +421,7 @@ Two things to know:
   multi-channel datasets (`llg_lattice_2d`, `peridynamics_fracture_2d`)
   train on one channel at a time through the `dataset.channel` key of the
   recipe. Custom models currently run through the Python API rather than
-  `mesokit train`; see [Models](models.md) and [Extending](extending.md).
+  `mesokit train`; see [Models](models.md) and [Custom Models](models/custom_model.md).
 
 Errors:
 
@@ -780,5 +780,10 @@ registries and the config lookup.
 | `mesokit model list` | read `.mesokit/checkpoints.json` |
 | `mesokit interpret list` / `extract` | `model.load_state_dict(torch.load("model.pt"))`; `model.list_artifacts()`; `model.artifact(name).save(path)` |
 
-See [Extending](extending.md) for the full Python surface and for registering
-your own simulators, models, trainers and artifacts.
+See [Training](training.md) and [Interpretability](interpretability.md) for
+the full Python surface, and the custom pages of each section
+([Custom Simulators](data_processing/custom_simulator.md),
+[Custom Models](models/custom_model.md),
+[Custom Trainers](training/custom_trainer.md),
+[Custom Artifacts](interpretability/custom_artifact.md)) for registering your
+own.

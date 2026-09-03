@@ -53,6 +53,10 @@ Start with the page that matches your task:
 - **Bringing your own HDF5 file** —
   [Custom Datasets](data_processing/custom.md) for the minimal writer,
   `mesokit.data.validate(path)`, and `mesokit data register`.
+- **Generating from your own equation** —
+  [Custom Simulators](data_processing/custom_simulator.md) for the simulator
+  contract, `mesokit.data.register`, and wiring `mesokit data generate` to
+  your own callable.
 - **Copy-paste workflows** — [Examples](data_processing/examples.md) for
   end-to-end snippets that combine the above.
 - **What v1 guarantees** —
@@ -67,6 +71,7 @@ Start with the page that matches your task:
 data_processing/structure
 data_processing/predefined
 data_processing/custom
+data_processing/custom_simulator
 data_processing/examples
 data_processing/versioning
 ```

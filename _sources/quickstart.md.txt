@@ -117,17 +117,18 @@ Flags:
 - `--backend`: `foreground` (default; streams the agent's output and
   blocks) or `tmux` (detaches into a session you can attach to later).
 - `--hint`: free-form prompt fragment appended to the task.
-
-The same skill, plus two more for training and extending, can be used
-conversationally in your agent; see [Agent Skills](skills.md).
 - `--output`: where to write the converted HDF5; defaults to
   `data/parsed/<input_stem>.h5`.
 - `--name`: register the output under this name on success.
 
+The same skill, plus five more for training and extending, can be used
+conversationally in your agent; see [Agent Skills](skills.md).
+
 ## Training Models
 
-Training is routed through trainer classes under `mesokit.trainers`. The
-CLI keeps the surface uniform: `--model` resolves the architecture,
+Training is routed through trainer classes under `mesokit.trainers`
+(the full picture, including the Python API, is in [Training](training.md)).
+The CLI keeps the surface uniform: `--model` resolves the architecture,
 `--trainer` optionally overrides the default trainer, and `--data` can be
 either a registered dataset name or a path to an HDF5 file.
 
@@ -176,8 +177,9 @@ evaluation and comparison.
 
 Some models optionally produce an `InterpretabilityArtifact` — a
 structured, self-describing object containing a human-readable view of
-what the model learned (discovered equations, a learned free-energy
-landscape, a per-mode error spectrum, …).
+what the model learned (a learned free-energy landscape, a per-mode error
+spectrum, …); see [Interpretability](interpretability.md) for the contract
+and how to read the shipped artifact.
 
 To see available artifacts for a registered model:
 
@@ -193,10 +195,15 @@ mesokit interpret extract --model MODEL_NAME --artifact ARTIFACT_NAME --output f
 
 ## Next Steps
 
-- The notebooks under [`notebooks/`](https://github.com/MLDS-NUS/mesokit/tree/main/notebooks)
-  walk through the same flow with figures and commentary — see
-  [Tutorial](tutorial.md).
-- For the schema details when authoring or registering your own HDF5
-  files, see [Data Processing](data_processing.md) and the deeper pages under
-  [Data Structure](data_processing/structure.md), [Custom Datasets](data_processing/custom.md),
-  and [Examples](data_processing/examples.md).
+Each stage above has its own section of the guide:
+
+- [Data Processing](data_processing.md) — the schema when authoring or
+  registering your own HDF5 files ([Data Structure](data_processing/structure.md),
+  [Custom Datasets](data_processing/custom.md), [Examples](data_processing/examples.md))
+  and generating data from your own equation
+  ([Custom Simulators](data_processing/custom_simulator.md)).
+- [Models](models.md) — what each family computes and how to choose.
+- [Training](training.md) — recipes, training views, the shipped trainer's
+  options, and training from Python.
+- [Interpretability](interpretability.md) — reading the potential artifact
+  and building your own.

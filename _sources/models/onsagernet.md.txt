@@ -1,0 +1,121 @@
+# OnsagerNet
+
+Registered as `onsagernet_1d`, `onsagernet_2d`, `onsagernet_3d`. The
+classical OnsagerNet applied to the grid as a finite-dimensional state:
+state-dependent operators allowed, no assumption of translation invariance,
+every network with the grid size as its input width.
+
+## Model
+
+The classical OnsagerNet (Yu, Tian, E, Li 2021) applies the generalised
+Onsager principle to a finite-dimensional state. `mesokit` uses it on the
+grid directly: the field on $N_1 \times \cdots \times N_d$ points is
+flattened to $\mathbf x = \operatorname{vec}(u) \in \mathbb{R}^d$,
+$d = N_1 \cdots N_d$, and evolved by
+
+$$
+\frac{d\mathbf x}{dt} = -\bigl(M_\theta(\mathbf x) + W_\theta(\mathbf x)\bigr)\,\nabla V_\theta(\mathbf x),
+\qquad
+M_\theta \succ 0 \text{ symmetric},\quad W_\theta = -W_\theta^{\top}.
+$$
+
+Nothing is assumed about Fourier space: the operators may depend on the
+state and the potential sees the whole vector at once. This is the most
+general Onsager parameterisation in the toolkit, and the most expensive —
+every network has $d$ as its input width, so the family is meant for modest
+grids (256 points in 1D, $32^2$ to $128^2$ in 2D).
+
+## Potential
+
+`CoercivePotential` is
+
+$$
+V_\theta(\mathbf x) = \frac{\alpha}{2}\,\lVert\mathbf x\rVert^2 + \mathrm{MLP}_\theta(\mathbf x),
+\qquad \alpha = e^{\log\alpha} > 0,
+$$
+
+a scalar MLP (three hidden layers of width 256, `tanh`, no output bias)
+plus a coercive quadratic that guarantees $V \to +\infty$ as
+$\lVert\mathbf x\rVert \to \infty$. Its gradient is taken by autograd inside
+the right-hand side, with a second-order graph during training so the loss
+back-propagates through $\nabla V$.
+
+## Operators
+
+$M$ and $W$ are modules with an `apply(x, v)` method that returns the
+matrix–vector product; the matrices themselves are never formed and their
+structure holds by construction, not by penalty:
+
+| Block | Definition | Guarantee | Cost per product |
+| --- | --- | --- | --- |
+| `DiagonalDissipation` | $M(\mathbf x) = \operatorname{diag}\bigl(\beta + \operatorname{softplus}\,m_\theta(\mathbf x)\bigr)$ | SPD, entries $> \beta$ | $O(d)$ + one MLP |
+| `LowRankDissipation` | $M(\mathbf x) = \beta I + B_\theta(\mathbf x)\,B_\theta(\mathbf x)^{\top}$, $B \in \mathbb{R}^{d\times r}$ | SPD, eigenvalues $\ge \beta$ | $O(d r)$ + one MLP |
+| `LowRankConservation` | $W(\mathbf x) = B_\theta(\mathbf x)\,C^{\top} - C\,B_\theta(\mathbf x)^{\top}$, $C \in \mathbb{R}^{d\times r}$ learnable | antisymmetric | $O(d r)$ + one MLP |
+| `CirculantDissipation` | $M v = \mathcal F^{-1}\bigl[\operatorname{softplus}(\theta_{\mathbf k})\,\mathcal F v\bigr] + \beta v$, $\theta$ even in $\mathbf k$ | SPD, translation-invariant, state-independent | $O(d \log d)$ |
+| `CirculantConservation` | $W v = \mathcal F^{-1}\bigl[i\,\theta_{\mathbf k}\,\mathcal F v\bigr]$, $\theta$ odd in $\mathbf k$ (zero at $\mathbf k = 0$ and Nyquist) | antisymmetric, translation-invariant, state-independent | $O(d \log d)$ |
+
+The circulant blocks are convolutions on the periodic grid parameterised by
+their Fourier multipliers; they are the classical-OnsagerNet counterpart of
+the Spectral OnsagerNet's $K^m_{\mathbf k}$ / $K^w_{\mathbf k}$, written for
+any dimension through the shared `SpectralGrid`. `band_size` initialises
+them as short-range kernels (a wrapped Gaussian of that many grid points for
+$M$, a small constant on the lowest modes for $W$). The state-dependent
+blocks are the original OnsagerNet design; `conservation: null` gives a
+purely dissipative model. Writing a block of your own is covered in
+[Custom Models](custom_model.md).
+
+## Time Stepping
+
+The right-hand side is generic, so only the explicit steppers are
+available: `euler` (default) and `rk4`. With $W = 0$ the exact dynamics
+satisfy $\dot V = -\nabla V^{\top} M \nabla V \le 0$, so $V_\theta$ is a
+Lyapunov function of the learned model; the test suite checks that one
+Euler step of the purely dissipative model lowers $V_\theta$.
+
+## Relation to Spectral OnsagerNet
+
+| | Spectral OnsagerNet | OnsagerNet |
+| --- | --- | --- |
+| State | Fourier modes $\hat u_{\mathbf k}$ | flattened field $\mathbf x \in \mathbb{R}^d$ |
+| $M$, $W$ | one multiplier per mode, state-independent | any SPD / antisymmetric block, may depend on $\mathbf x$ |
+| Potential | functional of $u$ with a spectral $\hat L$ / $\hat N$ split | any scalar network of $\mathbf x$ |
+| Stepper | SBDF1 (implicit linear part), explicit RK | explicit Euler / RK4 |
+| Cost | $O(d \log d)$ per step, parameters independent of $d$ | networks of input width $d$ |
+| Best for | translation-invariant PDE data, large grids | small grids, state-dependent mobility, checking what the spectral assumptions buy |
+
+A classical model with `CirculantDissipation` and `CirculantConservation`
+is the spectral model's operator structure with a free potential; comparing
+it against `spectral_onsagernet_<n>d` isolates the effect of the potential
+parameterisation, and swapping in the low-rank blocks isolates the effect of
+state dependence in $M$ and $W$.
+
+## What the `potential` Artifact Shows
+
+`artifact("potential")` returns the same `PotentialLandscape` as the
+spectral family (described in
+[The Potential Artifact](../interpretability/potential.md)). For this
+family it holds: $V_\theta$ on the constant-field slice $u \equiv c$ with
+its two components ($V_0 = \tfrac{\alpha}{2}\lVert\mathbf x\rVert^2$,
+$V_1 = \mathrm{MLP}_\theta$); the Fourier multipliers of $M$ and $W$ only
+when the corresponding block is circulant (omitted, with a note in the
+summary, when it is state-dependent); and the Allen–Cahn reference scatter
+when the checkpoint was trained on an Allen–Cahn dataset.
+
+## Recipes
+
+```text
+configs/train/allen_cahn_1d/onsagernet_1d/{default,circulant,smoke}.yaml
+configs/train/kdv_1d/onsagernet_1d/default.yaml
+configs/train/allen_cahn_2d/onsagernet_2d/{default,smoke}.yaml
+```
+
+`default.yaml` is the original low-rank design ($M$ of rank 8, $W$ of rank
+4, both from MLPs of the state); `circulant.yaml` swaps both for the
+convolution blocks; the KdV recipe keeps $W$ and steps with `rk4`; the 2D
+recipes use a circulant $M$ and no $W$ because the potential MLP already
+holds $16384 \times 256$ weights in its first layer on the 128² grid. The
+blocks are nested under `model.potential`, `model.dissipation` and
+`model.conservation`; their `in_dim` (or `grid_shape` for the circulant
+blocks) must equal the model's $N_1 \cdots N_d$ (or grid), which is checked
+at construction. The recipe format is described in
+[Training Recipes](../training/recipes.md).

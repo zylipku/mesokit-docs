@@ -1,0 +1,65 @@
+# The Potential Artifact
+
+`artifact("potential")` on either Onsager family returns a
+`PotentialLandscape` (`mesokit.models.spectral_onsagernet.artifacts`). It
+is one object with up to three views of what the model learned; the
+family pages say exactly which parts each family fills in
+([Spectral OnsagerNet](../models/spectral_onsagernet.md),
+[OnsagerNet](../models/onsagernet.md)).
+
+## What It Holds
+
+| Field | Content | Present when |
+| --- | --- | --- |
+| `u_values`, `V_values` | the potential on the constant-field slice $u \equiv c$, $c$ on a grid over $[-2, 2]$ by default | always |
+| `components` | the slice split into the potential's terms, labelled `V0`, `V1`, `V2` | the potential exposes them (the coercive potentials; the classical `CoercivePotential` gives `V0` quadratic and `V1` network) |
+| `dVdu_values` | the mean gradient on the slice | the potential exposes a physical-space gradient |
+| `Km`, `Kw`, `mode_numbers` | the mobility multipliers and the imaginary part of the reactive multipliers on the `rfftn` grid, shape `(Nx//2+1,)` in 1D, `(Nx, Ny//2+1)` in 2D, … | the operators are Fourier multipliers: always for the spectral family, only for circulant blocks of the classical one (`None` otherwise) |
+| `reference_scatter` | the learned $V_\theta$ against the analytic Allen–Cahn energy $\int \tfrac12\lvert\nabla u\rvert^2 + \tfrac{u^4}{4\varepsilon^2} - \tfrac{u^2}{2\varepsilon^2}$ over real snapshots, with Pearson $r$, slope and intercept | the checkpoint's dataset is an Allen–Cahn one with `eps` in its `physical` group (the CLI attaches it; from Python pass `reference_dataset=` to `PotentialLandscape.from_model`) |
+| `grid_shape`, `domain`, `potential_kind` | the model's grid and the potential class name | always |
+
+`summary()` states the slice range, the largest multipliers (or a note that
+the operators are state-dependent), and the scatter statistics. `plot()`
+draws one panel per view: the scatter when present, the slice with its
+components, then the multipliers — a line plot against the mode index in
+1D, images of $K^m$ and $\operatorname{Im} K^w$ over $(k_x, k_y)$ in 2D and
+3D (the $k_z = 0$ plane in 3D).
+
+## What to Look For
+
+- **The slice.** A double well is the signature of phase-separating data
+  (Allen–Cahn, Cahn–Hilliard, Ising below $T_c$); a single well means
+  relaxation to a uniform state. The components say which term carries
+  the shape: for `CoerciveAutogradPotential`, `V0` is the pointwise energy,
+  `V1` the gradient energy (zero on a constant field), `V2` the nonlocal
+  term.
+- **$K^m$ against mode.** Close to zero at $\mathbf k = 0$ means the
+  dynamics conserves the mean (Cahn–Hilliard type); flat means a
+  non-conserved relaxation (Allen–Cahn type); growth like $\lvert\mathbf
+  k\rvert^2$ is a diffusion-like mobility.
+- **$\operatorname{Im} K^w$.** Non-zero means a reversible, wave-like part
+  was found (KdV, advection); it should stay near zero on purely
+  dissipative data.
+- **The scatter.** On Allen–Cahn checkpoints, $r \approx 1$ with slope
+  $\approx 1$ means the learned potential is the physical free energy up to
+  an offset; a good correlation with a slope far from one means the shape
+  is right but the scale is absorbed elsewhere (into $K^m$).
+
+The physics-check recipe (`configs/train/allen_cahn_2d/spectral_onsagernet_2d/physics_check.yaml`)
+is a useful control: its checkpoint has $K^m \equiv 1$, $K^w \equiv 0$ and
+the analytic potential, so its artifact is what a perfect fit looks like.
+
+## Building It Yourself
+
+```python
+from mesokit.data import TrajectoryDataset
+from mesokit.models.spectral_onsagernet import PotentialLandscape
+
+ds = TrajectoryDataset.load_hdf5("data/allen_cahn_1d/allen_cahn_1d_v0.h5")
+artifact = PotentialLandscape.from_model(model, model_name="son_v0", dyn_name=ds.dyn, reference_dataset=ds)
+print(artifact.summary())
+artifact.save("figs/son_v0_potential.png")
+```
+
+`u_min`, `u_max`, `n_grid` control the slice and `max_snapshots` the number
+of frames used for the scatter.

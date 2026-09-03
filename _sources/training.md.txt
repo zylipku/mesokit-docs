@@ -1,0 +1,114 @@
+# Training
+
+Training fits a model's one-step map to consecutive frames of a
+trajectory dataset. This page is the user-facing entry point for what is
+being fitted, the two ways to run it (the `mesokit train` command and the
+Python API), and what a run leaves on disk.
+
+## What Is Fitted
+
+A `TrajectoryDataset` holds frames `u(t_j)` on a shared time grid. A
+*training view* turns it into samples: the stock `SnapshotPairDataset`
+yields pairs `(u_t, u_{t+stride})` over every trajectory and every valid
+`t`. The model advances the first by the frame spacing `dt` and the loss is
+the mean-squared error against the second,
+
+$$
+\mathcal L = \operatorname{mean}\bigl\lVert\, \text{model}(u_t, \Delta t) - u_{t+1} \,\bigr\rVert^2 .
+$$
+
+`dt` is read from the dataset (`numerical["dt"]`, else the spacing of
+`times`) unless the recipe or trainer sets it. `rollout_steps > 1` compares
+a multi-step rollout against the next `k` frames instead. The shipped
+trainer, `LitTrainer`, runs this loop with Lightning for every registered
+family; a useful baseline for the loss is the persistence error
+$\operatorname{mean}\lVert u_{t+1} - u_t\rVert^2$, which a model that
+learned nothing reproduces.
+
+## Two Ways to Run It
+
+**The command.** `mesokit train --model <name> --dyn <dyn> --data <dataset>`
+resolves the model class from the registry, the trainer registered for it,
+and the recipe `configs/train/<dyn>/<model>/<stem>.yaml` (`--config
+<stem>`, default `default`), then loads the dataset, builds the training
+view and the `DataLoader`, calls `fit`, and registers the checkpoint.
+`--epochs`, `--batch-size` and `--device` override the recipe for one run.
+Every option is in the [Command-Line Reference](cli.md); the recipe
+format is on [Training Recipes](training/recipes.md).
+
+**The Python API.** The same pieces, called directly. This is the only
+path for custom models and trainers today, and the natural one in a
+notebook:
+
+```python
+# train_from_python.py
+from torch.utils.data import DataLoader
+
+from mesokit.data import TrajectoryDataset
+from mesokit.data.datasets import SnapshotPairDataset
+from mesokit.models import get
+from mesokit.trainers import LitTrainer
+
+ds = TrajectoryDataset.load_hdf5("data/allen_cahn_1d/allen_cahn_1d_v0.h5")
+loader = DataLoader(SnapshotPairDataset(ds, stride=1, channel=0), batch_size=32, shuffle=True)
+
+model = get("spectral_onsagernet_1d")(Nx=ds.grid_shape[0], Lx=float(ds.physical["Lx"]))
+trainer = LitTrainer(max_epochs=20, lr=1e-3, dt=float(ds.numerical["dt"]), accelerator="cpu",
+                     checkpoint_root="checkpoints/allen_cahn_1d", run_id="son_nb")
+result = trainer.fit(model, loader)
+
+print(result.checkpoint_path, result.history["train_loss"][-1], result.metadata["epochs_run"])
+artifact = model.artifact("potential")
+print(artifact.summary())
+artifact.save("figs/son_nb.png")
+```
+
+The grid comes from the dataset (`ds.grid_shape`, `ds.physical`), never
+typed by hand; that is the mismatch the command guards against with its
+recipe. Register the checkpoint afterwards so the CLI can find it:
+
+```sh
+mesokit model register --model son_nb --file checkpoints/allen_cahn_1d/son_nb/model.pt --config <your config.yaml>
+```
+
+Start every new configuration with a smoke-sized run (one or two epochs on
+CPU) before the real one; the shipped defaults are 100 epochs.
+
+## What a Run Leaves Behind
+
+```text
+checkpoints/<dyn>/<run_id>/
+├── model.pt          plain state_dict; loads without Lightning
+├── config.yaml       the resolved recipe plus model / dyn / dataset names (written by the command)
+├── history.json      {"train_loss": [...], "val_loss": [...]} per epoch
+└── lit_*.ckpt        Lightning checkpoints (best and last)
+.mesokit/checkpoints.json   name -> paths and metadata (the command; `mesokit model register` for Python runs)
+```
+
+`fit` returns a `TrainResult` with the in-memory model, `checkpoint_path`,
+`run_id`, the same `history` dict, and `metadata` (`epochs_run`,
+`wall_time_s`, `lightning_checkpoint_path`). None of this should be
+committed. `mesokit model list` shows the registered runs;
+[Interpretability](interpretability.md) is what to do with them next.
+
+## How to Use This Section
+
+- **Writing or adapting a recipe** — [Training Recipes](training/recipes.md):
+  the four sections of `configs/train/<dyn>/<model>/<stem>.yaml`, variants,
+  and the grid-matching rules.
+- **Choosing how frames become samples** — [Training Views](training/training_views.md):
+  `SnapshotPairDataset`, `LookbackWindowDataset`, `stride`, `channel`.
+- **The shipped trainer's options** — [LitTrainer](training/lit_trainer.md):
+  every constructor argument, what `fit` writes, reading `history.json`.
+- **A different loss or loop** — [Custom Trainers](training/custom_trainer.md):
+  the `fit` contract and a Lightning-free example.
+
+```{toctree}
+:maxdepth: 1
+:hidden:
+
+training/recipes
+training/training_views
+training/lit_trainer
+training/custom_trainer
+```

@@ -1,0 +1,112 @@
+# Custom Trainers
+
+A trainer is anything with `fit(model, train_loader, val_loader=None) ->
+TrainResult`. It owns the training loop and writes the canonical
+Lightning-free `model.pt` state-dict; registry bookkeeping is done by the
+CLI, so `fit` is safe to call from a notebook. Register it with
+`mesokit.trainers.register_trainer` under the model name it is the default
+for. Like custom models, custom trainers run through the Python API today:
+`mesokit train` resolves only the shipped registration.
+
+Before writing one, check whether [LitTrainer](lit_trainer.md) already
+covers the need: multi-step rollout losses (`rollout_steps`), optimiser and
+schedule (`optimizer`, `scheduler`, `lr`, `weight_decay`), gradient
+clipping, device selection. Only the objective itself is fixed there.
+
+## The Contract
+
+`TrainResult` (in `mesokit.trainers`) carries `model`, `checkpoint_path`,
+`run_id`, `history` and an optional `metadata` dict. `checkpoint_path`
+must be a plain `state_dict` at `<checkpoint_root>/<run_id>/model.pt`:
+that is what `mesokit model register` indexes and what `mesokit interpret`
+loads. The training view is yours to choose; `mesokit.data.datasets`
+ships `SnapshotPairDataset` (adjacent-step pairs) and
+`LookbackWindowDataset` ([Training Views](training_views.md)), and any
+`torch.utils.data.DataLoader` is accepted.
+
+```python
+# my_trainer.py
+from pathlib import Path
+
+import torch
+from torch import nn, optim
+from torch.nn import functional as F
+from torch.utils.data import DataLoader
+
+from mesokit.trainers import TrainResult, register_trainer
+
+
+@register_trainer("linear_decay_1d")
+class PlainTorchTrainer:
+    """Minimal next-step MSE loop without Lightning."""
+
+    def __init__(
+        self,
+        *,
+        epochs: int = 50,
+        lr: float = 1e-2,
+        dt: float = 0.05,
+        checkpoint_root: str | Path = "checkpoints/decay_1d",
+        run_id: str = "plain",
+    ) -> None:
+        self.epochs, self.lr, self.dt = epochs, lr, dt
+        self.checkpoint_root, self.run_id = Path(checkpoint_root), run_id
+
+    def fit(self, model: nn.Module, train_loader: DataLoader, val_loader: DataLoader | None = None) -> TrainResult:
+        optimizer = optim.Adam(model.parameters(), lr=self.lr)
+        history: dict[str, list[float]] = {"train_loss": []}
+        for _ in range(self.epochs):
+            total = 0.0
+            for u_t, u_next in train_loader:
+                loss = F.mse_loss(model(u_t, self.dt), u_next)
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+                total += loss.item()
+            history["train_loss"].append(total / len(train_loader))
+        run_dir = self.checkpoint_root / self.run_id
+        run_dir.mkdir(parents=True, exist_ok=True)
+        checkpoint_path = run_dir / "model.pt"
+        torch.save(model.state_dict(), checkpoint_path)
+        return TrainResult(model=model, checkpoint_path=checkpoint_path, run_id=self.run_id, history=history)
+```
+
+Swap the loss for whatever the problem needs — a rollout over `k` frames
+(then the view must yield `k`-frame targets), a physics penalty read off
+the model, a weighting — and keep `dt` consistent with the frames the loss
+compares.
+
+## Using It
+
+```python
+# run_decay.py
+from torch.utils.data import DataLoader
+
+import my_artifacts  # noqa: F401
+import my_models
+import my_sims  # noqa: F401
+import my_trainer
+from mesokit.data import simulate
+from mesokit.data.datasets import SnapshotPairDataset
+
+ds = simulate("decay_1d", n_traj=8, Nx=64, T=1.0, n_time=21, rate=0.7)
+loader = DataLoader(SnapshotPairDataset(ds), batch_size=32, shuffle=True)
+
+model = my_models.LinearDecay1d(Nx=ds.grid_shape[0])
+trainer = my_trainer.PlainTorchTrainer(epochs=200, lr=5e-2, dt=float(ds.numerical["dt"]))
+result = trainer.fit(model, loader)
+
+artifact = model.artifact("rate")
+print(artifact.summary())  # learned rate close to 0.7
+print(result.checkpoint_path, result.history["train_loss"][-1])
+artifact.save("figs/decay_rate.png")
+```
+
+`my_sims`, `my_models` and `my_artifacts` are the examples from
+[Custom Simulators](../data_processing/custom_simulator.md),
+[Custom Models](../models/custom_model.md) and
+[Custom Artifacts](../interpretability/custom_artifact.md). Swap
+`PlainTorchTrainer` for `mesokit.trainers.LitTrainer(max_epochs=...,
+dt=...)` to get Lightning's checkpointing and `history.json` for free; the
+`fit` call is identical. Register the checkpoint afterwards with `mesokit
+model register` so the CLI can list it.

@@ -1,0 +1,76 @@
+# LitTrainer
+
+`mesokit.trainers.LitTrainer` is the shipped trainer, registered as the
+default for every model family (`fno1d/2d/3d`,
+`spectral_onsagernet_1d/2d/3d`, `onsagernet_1d/2d/3d`). It wraps the model
+in a Lightning module that computes the next-frame (or `rollout_steps`-frame)
+mean-squared error, runs `lightning.Trainer`, and writes a Lightning-free
+checkpoint. The `trainer` section of a recipe holds its keyword arguments;
+from Python you construct it directly. `SpectralOnsagerNetTrainer` is an
+alias kept for older code.
+
+## Options
+
+All arguments are keyword-only.
+
+| Argument | Default | Meaning |
+| --- | --- | --- |
+| `max_epochs` | `100` | Epochs to run (`--epochs` on the command line). Must be ≥ 1. |
+| `lr` | `1e-3` | Learning rate. |
+| `weight_decay` | `0.0` | Weight decay of the optimiser. |
+| `optimizer` | `"adamw"` | `"adamw"` or `"adam"`. |
+| `scheduler` | `"cosine"` | `"cosine"` (`CosineAnnealingLR` over `max_epochs`) or `None`. |
+| `accelerator` | `"auto"` | Lightning accelerator: `auto`, `cpu`, `gpu` (`--device` on the command line). |
+| `devices` | `1` | Number (or Lightning spec) of devices. |
+| `gradient_clip_val` | `None` | Gradient-norm clipping threshold; `None` disables it. |
+| `rollout_steps` | `1` | `1`: next-frame loss on `(u_t, u_{t+1})` pairs. `k > 1`: the model is rolled `k` steps and compared against targets shaped `(B, k, *grid)`, so the training view must yield those. |
+| `dt` | `1.0` | Step size handed to `model.forward`. The command replaces it by the dataset's frame spacing when the recipe says `dt: null`; from Python pass `float(ds.numerical["dt"])` (times the view's `stride`). |
+| `checkpoint_root` | `None` → `checkpoints/unknown` | Directory that receives `<run_id>/`; the command passes `checkpoints/<dyn>`. |
+| `run_id` | `None` → random 8-hex id | Run directory name; the command passes the checkpoint name. |
+| `enable_progress_bar` | `True` | Lightning progress bar. |
+| `log_every_n_steps` | `1` | Lightning logging cadence. |
+
+## `fit`
+
+```python
+result = LitTrainer(...).fit(model, train_loader, val_loader=None)
+```
+
+`fit` trains in place and returns a `TrainResult`:
+
+| Field | Content |
+| --- | --- |
+| `model` | the trained `nn.Module` (the same object you passed in) |
+| `checkpoint_path` | `<checkpoint_root>/<run_id>/model.pt`, a plain `state_dict`; load with `model.load_state_dict(torch.load(path))`, no Lightning needed |
+| `run_id` | the run directory name |
+| `history` | `{"train_loss": [...]}` per epoch, plus `"val_loss"` when a validation loader was given |
+| `metadata` | `epochs_run`, `wall_time_s`, `lightning_checkpoint_path` (the best Lightning `.ckpt`, or the last one) |
+
+Beside `model.pt` the run directory holds `history.json` (the same
+`history` dict) and the Lightning checkpoints `lit_<epoch>.ckpt` /
+`last.ckpt`, chosen on `val_loss` when a validation loader is given and on
+`train_loss` otherwise. The command adds `config.yaml`; a Python run has
+no config file unless you write one.
+
+## Reading `history.json`
+
+```python
+import json
+import matplotlib.pyplot as plt
+
+history = json.loads(open("checkpoints/allen_cahn_1d/son_nb/history.json").read())
+plt.semilogy(history["train_loss"], label="train")
+if "val_loss" in history:
+    plt.semilogy(history["val_loss"], label="val")
+plt.xlabel("epoch"); plt.ylabel("MSE"); plt.legend()
+```
+
+The curve should fall and settle. A flat line at the persistence error
+(`mean((u_{t+1} - u_t)^2)` over the loader) means the model learned
+nothing: check `dt`, the learning rate and the grid before anything else.
+
+## What It Does Not Do
+
+The loss is fixed to mean-squared error on the model's prediction; there
+is no override point from user code. A different objective, weighting or
+loop is a [custom trainer](custom_trainer.md).

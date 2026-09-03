@@ -1,32 +1,38 @@
 # mesokit
 
-A toolkit for learning **mesoscopic dynamics** from data.
-`mesokit` is a step-by-step companion: the tutorial and the library
-evolve together. The product framing is **interpretability** —
-predictive accuracy is a precondition, not the headline.
+A toolkit for learning **mesoscopic dynamics** from data. The product
+framing is **interpretability** — predictive accuracy is a precondition,
+not the headline.
 
-Start with the [Quickstart](quickstart.md) for installation and the
-first end-to-end run. The [Command-Line Reference](cli.md) documents every
-`mesokit` command with examples; the [Tutorial](tutorial.md) walks through
-the same flow with figures and commentary,
-[Data Processing](data_processing.md) is the guide for generating,
-validating, authoring, or registering datasets, and [Models](models.md)
-describes what the shipped model families (Spectral OnsagerNet, classical
-OnsagerNet, FNO) compute. [Extending](extending.md) is the contract for
-your own simulators, models, trainers and artifacts, and
-[Agent Skills](skills.md) explains the skills a coding agent can use
-to do those tasks for you.
+The user guide follows the stages of the toolkit. Start with the
+[Quickstart](quickstart.md) for installation and the first end-to-end
+run, then:
+
+- [Data Processing](data_processing.md) — the trajectory-dataset contract,
+  the shipped simulators, bringing your own files or your own equation.
+- [Models](models.md) — what the shipped families compute (Spectral
+  OnsagerNet, classical OnsagerNet, FNO), how to choose, and how to write
+  your own.
+- [Training](training.md) — what is fitted, the `mesokit train` recipes,
+  the training views, the shipped `LitTrainer`, and custom trainers.
+- [Interpretability](interpretability.md) — the artifact contract, the
+  potential artifact and how to read it, comparing artifacts, and custom
+  ones.
+
+The [Command-Line Reference](cli.md) documents every `mesokit` command
+with examples, and [Agent Skills](skills.md) explains the skills a coding
+agent can use to do each stage for you.
 
 ```{toctree}
 :maxdepth: 2
 :caption: User Guide
 
 quickstart
-cli
-tutorial
 data_processing
 models
-extending
+training
+interpretability
+cli
 skills
 ```
 

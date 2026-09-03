@@ -14,8 +14,8 @@
 :maxdepth: 1
 
 mesokit.models.spectral_onsagernet.potential.polynomial
-mesokit.models.spectral_onsagernet.potential.coercive_autograd
 mesokit.models.spectral_onsagernet.potential.allen_cahn
+mesokit.models.spectral_onsagernet.potential.coercive_autograd
 mesokit.models.spectral_onsagernet.potential.base
 ```
 

@@ -1,0 +1,36 @@
+# Fourier Neural Operator
+
+Registered as `fno1d`, `fno2d`, `fno3d`. The structure-free baseline the
+interpretable families are compared against.
+
+## Model
+
+`FNODynamics` wraps `neuralop.models.FNO` as a right-hand side,
+$\partial_t u \approx \mathcal{G}_\theta(u)$, and steps it with explicit
+Euler (default) or RK4. An FNO layer lifts the field to `hidden_channels`
+channels, multiplies the lowest `n_modes` Fourier coefficients per axis by
+learned complex weights, adds a pointwise linear path and a nonlinearity;
+`n_layers` such layers are followed by a projection back to one channel.
+`n_modes` is an integer or one entry per axis; `fno1d` / `fno2d` / `fno3d`
+differ only in the number of spatial axes handed to neuralop. It is the
+black-box baseline the interpretable families are compared against.
+
+## The `spectrum` Artifact
+
+Declared, not yet implemented: per-mode error and response diagnostics are
+on the roadmap, and `artifact("spectrum")` raises `NotImplementedError`
+until then. `mesokit interpret list` still shows the name. To read
+something off a trained FNO today, build a post-hoc artifact from its
+`rhs(u)` as described in [Custom Artifacts](../interpretability/custom_artifact.md).
+
+## Recipes
+
+```text
+configs/train/allen_cahn_1d/fno1d/default.yaml
+configs/train/kdv_1d/fno1d/default.yaml
+configs/train/allen_cahn_2d/fno2d/{default,smoke}.yaml
+configs/train/cahn_hilliard_2d/fno2d/default.yaml
+configs/train/ising_2d/fno2d/{default,smoke}.yaml
+```
+
+The recipe format is described in [Training Recipes](../training/recipes.md).

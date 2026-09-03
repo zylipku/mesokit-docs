@@ -1,0 +1,95 @@
+# Training Recipes
+
+`mesokit train` is driven by Hydra YAML recipes. The CLI reads them from
+the current working directory, so run commands from the repository root
+(or your project root). Recipes for the shipped datasets and families are
+listed on each [model page](../models.md); this page is the format.
+
+## Layout
+
+```text
+configs/train/<dyn>/<model>/<stem>.yaml
+```
+
+`<dyn>` is the dataset's dynamics name, `<model>` the registered
+architecture name, and `<stem>` the recipe selected by `--config <stem>`
+(default `default`). Sibling files are variants; `smoke.yaml` recipes are
+tiny CPU fixtures, some on grids that do not match the real datasets.
+
+The data side has the same convention: `configs/data/<dyn>/default.yaml`
+is the recipe `mesokit data generate --dyn <dyn>` uses, and its `_target_`
+may be any importable callable that satisfies the simulator contract
+([Custom Simulators](../data_processing/custom_simulator.md)).
+
+## The Four Sections
+
+```yaml
+model:                    # constructor kwargs of the registered class
+  _target_: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d   # optional; defaults to the registered class
+  Nx: 256
+  Lx: 6.283185307179586
+  potential: null         # nested components are Hydra objects too
+
+dataset:                  # the training view wrapping the TrajectoryDataset
+  _target_: mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset
+  stride: 1
+  # channel: 0            # pick one field of a multi-channel dataset
+
+dataloader:               # torch.utils.data.DataLoader kwargs
+  batch_size: 32
+  shuffle: true
+  num_workers: 0
+
+trainer:                  # LitTrainer kwargs (or the registered trainer's)
+  max_epochs: 100
+  lr: 1.0e-3
+  dt: null                # null: infer from the data
+  accelerator: auto
+  rollout_steps: 1
+```
+
+- **`model`** — keyword arguments of the model constructor. `_target_` is
+  optional and defaults to the class registered under `--model`. Nested
+  components (a potential, an operator block) are Hydra objects with their
+  own `_target_`.
+- **`dataset`** — the `TrajectoryDataset` wrapper; `mesokit train` calls it
+  with `traj=<the loaded dataset>` plus these keys. See
+  [Training Views](training_views.md).
+- **`dataloader`** — merged over `{batch_size: 32, shuffle: true,
+  num_workers: 0}`; `--batch-size` overrides `batch_size`.
+- **`trainer`** — hyperparameters of the trainer registered for the model
+  (`--trainer` overrides the name); `dt: null` means "infer from the data".
+  `--epochs` overrides `max_epochs`, `--device` overrides `accelerator`.
+  The full option list is on [LitTrainer](lit_trainer.md).
+
+## Rules That Are Checked Late
+
+The grid in the recipe must match the dataset; `mesokit train` does not
+infer it, and a mismatch surfaces at the first batch (or, for `Lx` alone,
+as silently wrong wavenumbers):
+
+1. `model.Nx` (`Ny`, `Nz`) equal the dataset's `grid_shape`; `Lx` (`Ly`,
+   `Lz`) equal the box lengths in its `physical` group.
+2. A nested `model.potential` of the spectral family repeats the grid:
+   `grid_shape` and `domain` equal to the model's.
+3. The classical family's blocks carry `in_dim` equal to `Nx * Ny * …`
+   (circulant blocks: `grid_shape` equal to the model's); this is checked
+   at construction.
+4. Multi-channel datasets need `dataset.channel`; the shipped models are
+   single-channel.
+
+## A Recipe for Your Own Dynamics
+
+A built-in model on your own dynamics needs its own recipe. Copy the
+closest shipped one for the same family and dimension, for example
+`configs/train/allen_cahn_1d/spectral_onsagernet_1d/default.yaml` to
+`configs/train/decay_1d/spectral_onsagernet_1d/default.yaml`, set `Nx` /
+`Lx` to your grid, then:
+
+```sh
+mesokit train --model spectral_onsagernet_1d --dyn decay_1d --data decay_1d_v0 --epochs 5 --device cpu
+```
+
+The saved `checkpoints/<dyn>/<run>/config.yaml` is the resolved recipe
+with `model_name`, `dyn`, `dataset_name` and `checkpoint_name` added; it
+is what `mesokit interpret` uses to rebuild the model.

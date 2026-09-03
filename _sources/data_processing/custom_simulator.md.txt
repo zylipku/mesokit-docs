@@ -1,0 +1,120 @@
+# Custom Simulators
+
+A simulator turns your own equation, solver or data generator into
+registered, validated trajectory datasets, so that `mesokit data generate`
+and the Python `simulate(name, ...)` entry point work for your dynamics the
+same way they do for the shipped ones. This page is the contract plus a
+minimal example you can copy. To bring *existing* files into `mesokit`
+instead, see [Custom Datasets](custom.md).
+
+## Where Extensions Live
+
+- Put your code in a module the `mesokit` process can import: a package
+  installed into the pixi environment, or a directory on `PYTHONPATH`.
+- Registries are populated by *import*. Import your module (or run it as a
+  script) before calling anything by name.
+- Config entries for your own dynamics (`configs/data/<dyn>/`,
+  `configs/train/<dyn>/<model>/`) sit beside the shipped ones; see
+  [Training Recipes](../training/recipes.md) for the training side.
+
+Custom simulators reach the CLI end to end: `mesokit data generate --dyn
+<dyn>` runs any importable callable named by the Hydra `_target_` in
+`configs/data/<dyn>/default.yaml`. (Custom models, trainers and artifacts
+run through the Python API; see [Custom Models](../models/custom_model.md).)
+
+## The Contract
+
+A simulator is any **keyword-only** callable that returns a
+`TrajectoryDataset`. It must accept `verbose: bool = False` (the CLI
+forwards `--verbose` through it) and should echo its identifying parameters
+into the three metadata groups so the file is self-describing. Include the
+box lengths in `physical` and the stored frame spacing `dt` in `numerical`:
+`mesokit train` reads `dt` from there, and the shipped spectral models
+require a periodic box with an even number of points per axis.
+
+```python
+# my_sims.py
+import numpy as np
+import torch
+
+from mesokit.data import TrajectoryDataset, register
+
+
+@register("decay_1d")
+def simulate_decay_1d(
+    *,
+    n_traj: int = 8,
+    Nx: int = 64,
+    T: float = 1.0,
+    n_time: int = 21,
+    rate: float = 1.0,
+    seed: int = 0,
+    verbose: bool = False,
+) -> TrajectoryDataset:
+    """Every trajectory decays exponentially from a random initial field."""
+    rng = np.random.default_rng(seed)
+    times = np.linspace(0.0, T, n_time)
+    u0 = rng.standard_normal((n_traj, 1, Nx))  # (n_traj, n_channel, Nx)
+    data = u0[:, None] * np.exp(-rate * times)[None, :, None, None]
+    return TrajectoryDataset(
+        data=torch.as_tensor(data, dtype=torch.float32),  # (n_traj, n_time, 1, Nx)
+        times=torch.as_tensor(times, dtype=torch.float32),
+        dyn="decay_1d",
+        physical={"T": T, "rate": rate},
+        numerical={"Nx": Nx, "dt": T / (n_time - 1)},
+        provenance={"seed": seed, "generator": "my_sims.simulate_decay_1d"},
+        channel_names=("u",),
+    )
+```
+
+## From Python
+
+Dispatch by name and save the v1 cache file:
+
+```python
+# save_decay.py
+from pathlib import Path
+
+import my_sims  # noqa: F401  (registers "decay_1d")
+from mesokit.data import simulate
+
+ds = simulate("decay_1d", n_traj=4)
+out = Path("data/decay_1d/decay_1d_v0.h5")
+out.parent.mkdir(parents=True, exist_ok=True)
+ds.save_hdf5(out)
+```
+
+Register it with `mesokit data register --name decay_1d_v0 --file
+data/decay_1d/decay_1d_v0.h5`, which also runs the validator.
+
+## From the CLI
+
+Point a Hydra config at your callable and make sure your module is
+importable in the `mesokit` process:
+
+```yaml
+# configs/data/decay_1d/default.yaml
+_target_: my_sims.simulate_decay_1d
+n_traj: 8
+Nx: 64
+T: 1.0
+n_time: 21
+rate: 1.0
+seed: 0
+```
+
+```sh
+PYTHONPATH=. mesokit data generate --dyn decay_1d      # writes + registers decay_1d_v0
+```
+
+Sibling files under `configs/data/decay_1d/` are variants selected by stem
+with `--config <stem>`. `mesokit data list` shows the dataset under
+`custom:` because the CLI process never imported `my_sims`; everything
+downstream works regardless. Validation and registration of files you
+wrote some other way are covered in [Custom Datasets](custom.md).
+
+## Next
+
+Training a shipped model on your dynamics needs a recipe under
+`configs/train/decay_1d/<model>/default.yaml` with the same grid; see
+[Training Recipes](../training/recipes.md).

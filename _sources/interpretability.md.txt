@@ -1,0 +1,116 @@
+# Interpretability
+
+Interpretability is the product framing of `mesokit`: predictive accuracy
+is a precondition, the headline is what a trained model lets you *read*.
+A model expresses that through **artifacts** — self-describing objects
+with a summary, a plot and a file writer — that the CLI extracts from a
+registered checkpoint and that the Python API builds from any model
+object. This page is the entry point for the artifact contract, the two
+ways to get one, and the comparison harness.
+
+## What an Artifact Is
+
+`mesokit.interpret.InterpretabilityArtifact` is a structural protocol.
+Every artifact carries three labels — `model_name`, `dyn_name`,
+`artifact_name` — and three methods:
+
+| Method | Returns | Used by |
+| --- | --- | --- |
+| `summary()` | one or two sentences with the numbers that matter | `mesokit interpret extract` (printed), notebooks |
+| `plot(ax=None)` | draws on the given axis, or creates a figure and returns it | `compare`, `save` |
+| `save(path, **kwargs)` | writes the figure, returns the `Path` | `mesokit interpret extract` |
+
+`mesokit.interpret.repr_html_summary(artifact)` renders the summary as
+HTML for notebook display; the shipped artifacts expose it as
+`_repr_html_`.
+
+A model declares its artifacts through `list_artifacts()` and builds one
+with `artifact(name)`. What the shipped families provide:
+
+| Family | Artifact | Content |
+| --- | --- | --- |
+| Spectral OnsagerNet, OnsagerNet | `potential` | the learned free energy on a constant-field slice, the Onsager mode multipliers, and on Allen–Cahn data a scatter against the analytic law — [The Potential Artifact](interpretability/potential.md) |
+| FNO | `spectrum` | declared, not yet implemented (raises `NotImplementedError`) |
+
+## From the Command Line
+
+```sh
+mesokit interpret list --model <checkpoint>                                   # names from list_artifacts()
+mesokit interpret extract --model <checkpoint> --artifact potential --output figs/potential.png
+mesokit interpret extract --model <checkpoint> --artifact all --output figs/<checkpoint>/   # one PNG per artifact
+```
+
+`extract` (alias `explain`) rebuilds the model from the checkpoint's saved
+`config.yaml`, loads `model.pt`, and for data-backed artifacts also loads
+the dataset the checkpoint was trained on (`--max-snapshots`, default
+5000, caps how many frames such artifacts use). With a single artifact
+name it prints `summary()` and writes `--output` as a file; with `all` (or
+`*`) `--output` must be a **directory** (no suffix) and one
+`<artifact_name>.png` is written per artifact, without summaries. Every
+option is in the [Command-Line Reference](cli.md).
+
+## From Python
+
+```python
+artifact = model.artifact("potential")      # any model object: freshly trained, or rebuilt from a checkpoint
+print(artifact.summary())
+fig = artifact.plot()                       # matplotlib figure
+artifact.save("figs/potential.png")
+```
+
+To rebuild a checkpoint outside the CLI, instantiate the model from the
+run's `config.yaml` and load the state dict:
+
+```python
+import torch
+from hydra.utils import instantiate
+from omegaconf import OmegaConf
+
+cfg = OmegaConf.load("checkpoints/allen_cahn_1d/son_v0/config.yaml")
+model = instantiate(cfg.model)
+model.load_state_dict(torch.load("checkpoints/allen_cahn_1d/son_v0/model.pt", map_location="cpu"))
+model.eval()
+```
+
+For a custom model, import your module first; `mesokit interpret` cannot
+do that yet, so custom artifacts are built this way.
+
+## Comparing Artifacts
+
+`mesokit.interpret.compare(artifacts)` returns an `ArtifactPlotter`, the
+harness the CLI itself uses. It relies only on the protocol surface, so
+artifacts from different families and from your own classes sit side by
+side:
+
+| `ArtifactPlotter` | Does |
+| --- | --- |
+| `from_model(model, names=None)` | build the named artifacts (default: all of `list_artifacts()`) |
+| `from_artifacts(artifacts)` | wrap already-built artifacts; what `compare` calls |
+| `names()` | the artifact names in order |
+| `plot()` | one axis per artifact in a row, returns the figure |
+| `save(path, *, dpi=180, close=True)` | write that figure |
+| `save_all(output_dir, *, extension="png")` | one file per artifact, named `<artifact_name>.<extension>` |
+| `save_one(artifact_name, output)` | one artifact to one file |
+
+```python
+from mesokit.interpret import compare
+
+plotter = compare([model_a.artifact("potential"), model_b.artifact("potential")])
+plotter.save("figs/a_vs_b.png")
+```
+
+## How to Use This Section
+
+- **Reading the shipped artifact** — [The Potential Artifact](interpretability/potential.md):
+  what each panel shows and what to look for.
+- **Reading something else off a model** — [Custom Artifacts](interpretability/custom_artifact.md):
+  the contract, a minimal class, and post-hoc artifacts from a checkpoint.
+- **Getting a model to interpret** — [Training](training.md).
+
+```{toctree}
+:maxdepth: 1
+:hidden:
+
+interpretability/potential
+interpretability/custom_artifact
+```
