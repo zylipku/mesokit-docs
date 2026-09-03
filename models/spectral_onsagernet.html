@@ -492,6 +492,23 @@ and 3D; the gradients of the coercive potential are obtained by autograd
 the gradient-energy term in closed form. The three terms are exactly what
 the <code class="docutils literal notranslate"><span class="pre">potential</span></code> artifact plots as <span class="math notranslate nohighlight">\(V_0\)</span>, <span class="math notranslate nohighlight">\(V_1\)</span>, <span class="math notranslate nohighlight">\(V_2\)</span>. Writing a potential
 of your own is covered in <a class="reference internal" href="custom_model.html"><span class="std std-doc">Custom Models</span></a>.</p>
+<p>Every potential also accepts <code class="docutils literal notranslate"><span class="pre">dealias</span></code> (default <code class="docutils literal notranslate"><span class="pre">None</span></code>). The pointwise part
+of the gradient — <span class="math notranslate nohighlight">\(u^3\)</span> in the polynomial and Allen–Cahn potentials,
+<span class="math notranslate nohighlight">\(F_\theta'(u)\)</span> in the coercive one — is a product formed on the grid, which
+is exact only while the field is band-limited to a third of the spectrum;
+beyond that the high modes of the product fold back onto low ones. With
+<code class="docutils literal notranslate"><span class="pre">dealias:</span> <span class="pre">2</span></code> the field is zero-padded to a grid twice as fine along every
+axis, the nonlinearity is evaluated there and the result is projected back
+onto the symmetric band <span class="math notranslate nohighlight">\(\lvert k_i\rvert \le N_i/2 - 1\)</span> — the same
+convention as the de-aliased data generators, exact for a cubic (factor <span class="math notranslate nohighlight">\(p\)</span>
+is exact up to degree <span class="math notranslate nohighlight">\(2p - 1\)</span>). The gradient-energy and nonlocal terms are
+already spectral and are not padded, and no parameter or buffer changes, so
+checkpoints are unaffected. The cost is the pointwise evaluation on <span class="math notranslate nohighlight">\(2^d\)</span>
+times more points (about four times the model’s FFT work in 2D). Use it
+when the data are de-aliased and the grid is coarse relative to the
+interface width — the 32² <code class="docutils literal notranslate"><span class="pre">fdr</span></code> datasets — and leave it off when the data
+were produced without de-aliasing, since the model then has to reproduce
+the same aliased product. <code class="docutils literal notranslate"><span class="pre">SpectralPotential.pointwise_to_spectral(fn,</span> <span class="pre">u_hat)</span></code> is the helper a custom potential calls to get the same behaviour.</p>
 </section>
 <section id="physics-check">
 <h2>Physics Check<a class="headerlink" href="#physics-check" title="Link to this heading">¶</a></h2>
@@ -506,10 +523,17 @@ asserts this. The recipe
 <code class="docutils literal notranslate"><span class="pre">configs/train/allen_cahn_2d/spectral_onsagernet_2d/physics_check.yaml</span></code>
 runs the same model through <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> at zero learning rate, so the
 reported loss is the one-step scheme error. On the 32² <code class="docutils literal notranslate"><span class="pre">fdr</span></code> grid the
-interface (<span class="math notranslate nohighlight">\(\varepsilon = 0.1\)</span>) is narrower than a cell and the residual is
-dominated by aliasing of <span class="math notranslate nohighlight">\(u^3\)</span> — the potentials evaluate the nonlinearity
-on the native grid while the data are de-aliased — so treat that grid as a
-smoke test, not a benchmark.</p>
+interface (<span class="math notranslate nohighlight">\(\varepsilon = 0.1\)</span>) is narrower than a cell, and with the
+nonlinearity formed on the native grid the same RK4 rollout is off by a
+mean-squared error of <span class="math notranslate nohighlight">\(2 \times 10^{-5}\)</span> — 16% of the frame-to-frame
+change. That is not the resolution but aliasing of <span class="math notranslate nohighlight">\(u^3\)</span>, which the
+Dedalus solver removes and the native product does not. With <code class="docutils literal notranslate"><span class="pre">dealias:</span> <span class="pre">2</span></code>
+(set in <code class="docutils literal notranslate"><span class="pre">physics_check_smoke.yaml</span></code>) the model forms <span class="math notranslate nohighlight">\(u^3\)</span> exactly as the
+data generator did and the residual drops to <span class="math notranslate nohighlight">\(5 \times 10^{-14}\)</span>,
+<span class="math notranslate nohighlight">\(3 \times 10^{-10}\)</span> of the frame change — below the 128² figure — so the
+coarse grid is a faithful physics check too; the one-step <code class="docutils literal notranslate"><span class="pre">sbdf1</span></code> loss the
+recipe reports is then the scheme’s own <span class="math notranslate nohighlight">\(\Delta t\)</span> error, about 100 times
+below the aliased value. The test suite asserts both residuals.</p>
 </section>
 <section id="what-the-potential-artifact-shows">
 <h2>What the <code class="docutils literal notranslate"><span class="pre">potential</span></code> Artifact Shows<a class="headerlink" href="#what-the-potential-artifact-shows" title="Link to this heading">¶</a></h2>

@@ -23,7 +23,7 @@
 
 ### API
 
-`````{py:class} CoerciveAutogradPotential(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float], F_module: torch.nn.Module, v_module: torch.nn.Module, v_truncate: int = 16)
+`````{py:class} CoerciveAutogradPotential(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float], F_module: torch.nn.Module, v_module: torch.nn.Module, v_truncate: int = 16, *, dealias: int | None = None)
 :canonical: mesokit.models.spectral_onsagernet.potential.coercive_autograd.CoerciveAutogradPotential
 
 Bases: {py:obj}`mesokit.models.spectral_onsagernet.potential.base.SpectralPotential`

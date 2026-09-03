@@ -23,7 +23,7 @@
 
 ### API
 
-`````{py:class} AllenCahnPotential(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float], eps: float = 0.1)
+`````{py:class} AllenCahnPotential(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float], eps: float = 0.1, *, dealias: int | None = None)
 :canonical: mesokit.models.spectral_onsagernet.potential.allen_cahn.AllenCahnPotential
 
 Bases: {py:obj}`mesokit.models.spectral_onsagernet.potential.base.SpectralPotential`

@@ -27,6 +27,14 @@
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`_check_pad_factor <mesokit.models._spectral._check_pad_factor>`
+  - ```{autodoc2-docstring} mesokit.models._spectral._check_pad_factor
+    :summary:
+    ```
+* - {py:obj}`_with_axis <mesokit.models._spectral._with_axis>`
+  - ```{autodoc2-docstring} mesokit.models._spectral._with_axis
+    :summary:
+    ```
 * - {py:obj}`axis_names <mesokit.models._spectral.axis_names>`
   - ```{autodoc2-docstring} mesokit.models._spectral.axis_names
     :summary:
@@ -178,6 +186,38 @@
 
 ````
 
+````{py:method} refined(factor: int) -> mesokit.models._spectral.SpectralGrid
+:canonical: mesokit.models._spectral.SpectralGrid.refined
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.refined
+```
+
+````
+
+````{py:method} pad_spectrum(u_hat: torch.Tensor, factor: int) -> torch.Tensor
+:canonical: mesokit.models._spectral.SpectralGrid.pad_spectrum
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.pad_spectrum
+```
+
+````
+
+````{py:method} truncate_spectrum(w_hat: torch.Tensor, factor: int) -> torch.Tensor
+:canonical: mesokit.models._spectral.SpectralGrid.truncate_spectrum
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.truncate_spectrum
+```
+
+````
+
+````{py:method} zero_nyquist(u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models._spectral.SpectralGrid.zero_nyquist
+
+```{autodoc2-docstring} mesokit.models._spectral.SpectralGrid.zero_nyquist
+```
+
+````
+
 ````{py:method} as_kwargs() -> dict[str, tuple[int, ...] | tuple[float, ...]]
 :canonical: mesokit.models._spectral.SpectralGrid.as_kwargs
 
@@ -187,6 +227,20 @@
 ````
 
 `````
+
+````{py:function} _check_pad_factor(factor: int) -> int
+:canonical: mesokit.models._spectral._check_pad_factor
+
+```{autodoc2-docstring} mesokit.models._spectral._check_pad_factor
+```
+````
+
+````{py:function} _with_axis(shape: torch.Size, axis: int, size: int) -> list[int]
+:canonical: mesokit.models._spectral._with_axis
+
+```{autodoc2-docstring} mesokit.models._spectral._with_axis
+```
+````
 
 ````{py:function} axis_names(ndim: int) -> tuple[str, ...]
 :canonical: mesokit.models._spectral.axis_names

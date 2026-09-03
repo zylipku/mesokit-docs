@@ -68,6 +68,25 @@ the gradient-energy term in closed form. The three terms are exactly what
 the `potential` artifact plots as $V_0$, $V_1$, $V_2$. Writing a potential
 of your own is covered in [Custom Models](custom_model.md).
 
+Every potential also accepts `dealias` (default `None`). The pointwise part
+of the gradient — $u^3$ in the polynomial and Allen–Cahn potentials,
+$F_\theta'(u)$ in the coercive one — is a product formed on the grid, which
+is exact only while the field is band-limited to a third of the spectrum;
+beyond that the high modes of the product fold back onto low ones. With
+`dealias: 2` the field is zero-padded to a grid twice as fine along every
+axis, the nonlinearity is evaluated there and the result is projected back
+onto the symmetric band $\lvert k_i\rvert \le N_i/2 - 1$ — the same
+convention as the de-aliased data generators, exact for a cubic (factor $p$
+is exact up to degree $2p - 1$). The gradient-energy and nonlocal terms are
+already spectral and are not padded, and no parameter or buffer changes, so
+checkpoints are unaffected. The cost is the pointwise evaluation on $2^d$
+times more points (about four times the model's FFT work in 2D). Use it
+when the data are de-aliased and the grid is coarse relative to the
+interface width — the 32² `fdr` datasets — and leave it off when the data
+were produced without de-aliasing, since the model then has to reproduce
+the same aliased product. `SpectralPotential.pointwise_to_spectral(fn,
+u_hat)` is the helper a custom potential calls to get the same behaviour.
+
 ## Physics Check
 
 Because the family contains the data-generating equation as a special case,
@@ -81,10 +100,17 @@ asserts this. The recipe
 `configs/train/allen_cahn_2d/spectral_onsagernet_2d/physics_check.yaml`
 runs the same model through `mesokit train` at zero learning rate, so the
 reported loss is the one-step scheme error. On the 32² `fdr` grid the
-interface ($\varepsilon = 0.1$) is narrower than a cell and the residual is
-dominated by aliasing of $u^3$ — the potentials evaluate the nonlinearity
-on the native grid while the data are de-aliased — so treat that grid as a
-smoke test, not a benchmark.
+interface ($\varepsilon = 0.1$) is narrower than a cell, and with the
+nonlinearity formed on the native grid the same RK4 rollout is off by a
+mean-squared error of $2 \times 10^{-5}$ — 16% of the frame-to-frame
+change. That is not the resolution but aliasing of $u^3$, which the
+Dedalus solver removes and the native product does not. With `dealias: 2`
+(set in `physics_check_smoke.yaml`) the model forms $u^3$ exactly as the
+data generator did and the residual drops to $5 \times 10^{-14}$,
+$3 \times 10^{-10}$ of the frame change — below the 128² figure — so the
+coarse grid is a faithful physics check too; the one-step `sbdf1` loss the
+recipe reports is then the scheme's own $\Delta t$ error, about 100 times
+below the aliased value. The test suite asserts both residuals.
 
 ## What the `potential` Artifact Shows
 

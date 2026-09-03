@@ -21,7 +21,7 @@ keeps the family's stepper, trainer and `potential` artifact:
 
 | You want … | Write | Plug into |
 | --- | --- | --- |
-| a different free energy for Spectral OnsagerNet | a subclass of `mesokit.models.spectral_onsagernet.SpectralPotential` implementing `dVdu_h(u_hat)` and, for the implicit `sbdf1` step, `L_hat()` / `N_hat(u_hat)`; optionally `V(u)` and `_V0` / `_V1` / `_V2` so the artifact can plot it | `SpectralOnsagerNet<n>d(..., potential=MyPotential(grid_shape, domain))` |
+| a different free energy for Spectral OnsagerNet | a subclass of `mesokit.models.spectral_onsagernet.SpectralPotential` implementing `dVdu_h(u_hat)` and, for the implicit `sbdf1` step, `L_hat()` / `N_hat(u_hat)`; optionally `V(u)` and `_V0` / `_V1` / `_V2` so the artifact can plot it; form pointwise terms with `self.pointwise_to_spectral(fn, u_hat)` so the `dealias` option applies | `SpectralOnsagerNet<n>d(..., potential=MyPotential(grid_shape, domain))` |
 | a different mobility / reactive operator for the classical OnsagerNet | a module with `apply(x, v)` returning $M(\mathbf x)\,v$ (SPD) or $W(\mathbf x)\,v$ (antisymmetric) and an `in_dim` attribute | `OnsagerNet<n>d(..., dissipation=…, conservation=…)` |
 | a different potential for the classical OnsagerNet | a module with `forward(x) -> (B,)` on the flattened state (add `V`, `_V0`, `_V1` for the artifact) | `OnsagerNet<n>d(..., potential=…)` |
 | a genuinely new dynamics | a full `DynamicsModel` (below) | your trainer of choice |
@@ -108,8 +108,11 @@ users hit most.
 wavenumbers, transforms and cell volume for any periodic box, so the same
 code serves every dimension: `rfft(u)` / `irfft(u_hat)` over the trailing
 axes, per-axis `wavenumbers()`, `k_squared()`, `gradient(u)`,
-`integrate(density)`, `cell_volume`, and the `truncate(u_hat, n_modes)`
-helper used by nonlocal potentials. Grids must be even along every axis.
+`integrate(density)`, `cell_volume`, the `truncate(u_hat, n_modes)`
+helper used by nonlocal potentials, and the de-aliasing pair
+`pad_spectrum(u_hat, factor)` / `truncate_spectrum(w_hat, factor)` (with
+`refined(factor)` for the fine grid and `zero_nyquist(u_hat)` for the
+symmetric band). Grids must be even along every axis.
 The shipped families keep a dimension-agnostic core taking `grid_shape` /
 `domain` tuples plus thin registered shells (`Nx, Lx` → `Nx, Ny, Lx, Ly`);
 that convention makes a new family usable in every dimension with no FFT

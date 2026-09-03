@@ -23,7 +23,7 @@
 
 ### API
 
-`````{py:class} PolynomialPotential(grid_shape: collections.abc.Sequence[int] = (256, ), domain: collections.abc.Sequence[float] | None = None, a_init: float = 1.0, b_init: float = -0.1)
+`````{py:class} PolynomialPotential(grid_shape: collections.abc.Sequence[int] = (256, ), domain: collections.abc.Sequence[float] | None = None, a_init: float = 1.0, b_init: float = -0.1, *, dealias: int | None = None)
 :canonical: mesokit.models.spectral_onsagernet.potential.polynomial.PolynomialPotential
 
 Bases: {py:obj}`mesokit.models.spectral_onsagernet.potential.base.SpectralPotential`

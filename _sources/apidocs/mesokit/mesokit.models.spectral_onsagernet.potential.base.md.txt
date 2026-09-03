@@ -62,7 +62,7 @@ Bases: {py:obj}`torch.nn.Module`, {py:obj}`abc.ABC`
 
 `````
 
-`````{py:class} SpectralPotential(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float])
+`````{py:class} SpectralPotential(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float], *, dealias: int | None = None)
 :canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential
 
 Bases: {py:obj}`mesokit.models.spectral_onsagernet.potential.base.Potential`
@@ -124,6 +124,14 @@ Bases: {py:obj}`mesokit.models.spectral_onsagernet.potential.base.Potential`
 :canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.to_physical
 
 ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.to_physical
+```
+
+````
+
+````{py:method} pointwise_to_spectral(fn: collections.abc.Callable[[torch.Tensor], torch.Tensor], u_hat: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.pointwise_to_spectral
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.potential.base.SpectralPotential.pointwise_to_spectral
 ```
 
 ````
