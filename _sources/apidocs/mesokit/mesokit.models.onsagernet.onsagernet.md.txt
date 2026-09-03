@@ -1,0 +1,236 @@
+# {py:mod}`mesokit.models.onsagernet.onsagernet`
+
+```{py:module} mesokit.models.onsagernet.onsagernet
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`OnsagerNet <mesokit.models.onsagernet.onsagernet.OnsagerNet>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`STEP_METHODS <mesokit.models.onsagernet.onsagernet.STEP_METHODS>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.STEP_METHODS
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} STEP_METHODS
+:canonical: mesokit.models.onsagernet.onsagernet.STEP_METHODS
+:value: >
+   ('euler', 'rk4')
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.STEP_METHODS
+```
+
+````
+
+`````{py:class} OnsagerNet(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float] | None = None, *, potential: torch.nn.Module | None = None, dissipation: torch.nn.Module | None = None, conservation: torch.nn.Module | None = None, step_method: str = 'euler')
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet
+
+Bases: {py:obj}`torch.nn.Module`
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.__init__
+```
+
+````{py:attribute} registry_name
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.registry_name
+:type: str
+:value: >
+   'onsagernet'
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.registry_name
+```
+
+````
+
+````{py:property} grid_shape
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.grid_shape
+:type: tuple[int, ...]
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.grid_shape
+```
+
+````
+
+````{py:property} domain
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.domain
+:type: tuple[float, ...]
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.domain
+```
+
+````
+
+````{py:property} ndim
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.ndim
+:type: int
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.ndim
+```
+
+````
+
+````{py:method} _axis(name: str) -> int
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet._axis
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet._axis
+```
+
+````
+
+````{py:property} Nx
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.Nx
+:type: int
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.Nx
+```
+
+````
+
+````{py:property} Ny
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.Ny
+:type: int
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.Ny
+```
+
+````
+
+````{py:property} Nz
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.Nz
+:type: int
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.Nz
+```
+
+````
+
+````{py:property} Lx
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.Lx
+:type: float
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.Lx
+```
+
+````
+
+````{py:property} Ly
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.Ly
+:type: float
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.Ly
+```
+
+````
+
+````{py:property} Lz
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.Lz
+:type: float
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.Lz
+```
+
+````
+
+````{py:property} Km
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.Km
+:type: torch.Tensor | None
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.Km
+```
+
+````
+
+````{py:property} Kw
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.Kw
+:type: torch.Tensor | None
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.Kw
+```
+
+````
+
+````{py:method} grad_potential(x: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.grad_potential
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.grad_potential
+```
+
+````
+
+````{py:method} rhs(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.rhs
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.rhs
+```
+
+````
+
+````{py:method} forward(u: torch.Tensor, dt: float) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.forward
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.forward
+```
+
+````
+
+````{py:method} rollout(u0: torch.Tensor, n_steps: int, dt: float) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.rollout
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.rollout
+```
+
+````
+
+````{py:method} list_artifacts() -> list[str]
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.list_artifacts
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.list_artifacts
+```
+
+````
+
+````{py:method} artifact(name: str) -> mesokit.interpret.InterpretabilityArtifact
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.artifact
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.artifact
+```
+
+````
+
+````{py:method} extra_repr() -> str
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.extra_repr
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.extra_repr
+```
+
+````
+
+`````

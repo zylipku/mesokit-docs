@@ -412,7 +412,8 @@ Two things to know:
   is a test fixture with `Nx: 8`; it does not fit the 256-point datasets.
   For a quick real run use `--config default --epochs 1 --device cpu`.
 - Every shipped architecture is registered once per dimension — `fno1d` /
-  `fno2d` / `fno3d` and `spectral_onsagernet_1d` / `_2d` / `_3d` — and takes
+  `fno2d` / `fno3d`, `spectral_onsagernet_1d` / `_2d` / `_3d` and
+  `onsagernet_1d` / `_2d` / `_3d` — and takes
   single-channel input; pick the suffix that matches the dataset's grid. The
   multi-channel datasets (`llg_lattice_2d`, `peridynamics_fracture_2d`)
   train on one channel at a time through the `dataset.channel` key of the
@@ -617,7 +618,19 @@ mesokit train --model spectral_onsagernet_2d --dyn allen_cahn_2d --data ac2d_fdr
   --config physics_check_smoke --name ac2d_check                              # Km = 1, Kw = 0, analytic potential
 mesokit train --model spectral_onsagernet_2d --dyn allen_cahn_2d --data ac2d_fdr --config smoke --name ac2d_son
 mesokit train --model fno2d --dyn allen_cahn_2d --data ac2d_fdr --config smoke --name ac2d_fno
+mesokit train --model onsagernet_2d --dyn allen_cahn_2d --data ac2d_fdr --config smoke --name ac2d_on
 mesokit interpret extract --model ac2d_son --artifact potential --output figs/ac2d_son.png
+```
+
+**Classical OnsagerNet** (the grid as a `Nx`-dimensional ODE with learned
+`M(x)`, `W(x)` and a coercive MLP potential) shares the `potential` artifact;
+the `circulant` recipe makes `M` / `W` per-mode multipliers so the artifact
+plots them:
+
+```sh
+mesokit train --model onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 --name on1d_lowrank
+mesokit train --model onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 --config circulant --name on1d_circ
+mesokit interpret extract --model on1d_circ --artifact potential --output figs/on1d_circ.png
 ```
 
 The other 2D and microscopic datasets train the same way (`ising_2d` and

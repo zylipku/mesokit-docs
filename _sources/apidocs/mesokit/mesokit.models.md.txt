@@ -14,6 +14,7 @@
 :maxdepth: 3
 
 mesokit.models.deeponet
+mesokit.models.onsagernet
 mesokit.models.sindy
 mesokit.models.spectral_onsagernet
 mesokit.models.fno
@@ -49,7 +50,7 @@ mesokit.models.dynamics_base
 ````{py:data} __all__
 :canonical: mesokit.models.__all__
 :value: >
-   ['AllenCahnPotential', 'CoerciveAutogradPotential', 'DynamicsModel', 'FNO1d', 'FNO2d', 'FNO3d', 'FNO...
+   ['AllenCahnPotential', 'CirculantConservation', 'CirculantDissipation', 'CoerciveAutogradPotential',...
 
 ```{autodoc2-docstring} mesokit.models.__all__
 ```

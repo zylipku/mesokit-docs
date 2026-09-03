@@ -35,6 +35,10 @@
   - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._leading_plane
     :summary:
     ```
+* - {py:obj}`_multiplier_array <mesokit.models.spectral_onsagernet.artifacts._multiplier_array>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._multiplier_array
+    :summary:
+    ```
 * - {py:obj}`_model_device <mesokit.models.spectral_onsagernet.artifacts._model_device>`
   - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._model_device
     :summary:
@@ -257,7 +261,7 @@
 
 ````{py:attribute} Km
 :canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Km
-:type: numpy.ndarray
+:type: numpy.ndarray | None
 :value: >
    None
 
@@ -268,7 +272,7 @@
 
 ````{py:attribute} Kw
 :canonical: mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.Kw
-:type: numpy.ndarray
+:type: numpy.ndarray | None
 :value: >
    None
 
@@ -438,6 +442,13 @@
 :canonical: mesokit.models.spectral_onsagernet.artifacts._leading_plane
 
 ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._leading_plane
+```
+````
+
+````{py:function} _multiplier_array(values: torch.Tensor | None, *, imaginary: bool) -> numpy.ndarray | None
+:canonical: mesokit.models.spectral_onsagernet.artifacts._multiplier_array
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._multiplier_array
 ```
 ````
 

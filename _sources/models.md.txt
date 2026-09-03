@@ -1,13 +1,45 @@
 # Models
 
-`mesokit` ships two model families. Both are written once for any number of
-spatial dimensions and registered under one name per dimension, so the
-same code trains on `allen_cahn_1d` and on `cahn_hilliard_2d`:
+`mesokit` ships three model families. Each is written once for any number
+of spatial dimensions and registered under one name per dimension, so the
+same code trains on `allen_cahn_1d` and on `cahn_hilliard_2d`. The
+**Overview** tab covers what every model has in common and how to choose;
+the other tabs describe one family each — the equations, what is learned,
+the time stepping, the interpretability artifact, and the shipped recipes.
 
-| Registered names | Family | What is learned | Interpretability artifact |
-| --- | --- | --- | --- |
-| `fno1d`, `fno2d`, `fno3d` | Fourier Neural Operator | a black-box right-hand side $\partial_t u \approx \mathcal{G}_\theta(u)$ | `spectrum` (declared, not yet implemented) |
-| `spectral_onsagernet_1d`, `_2d`, `_3d` | Spectral OnsagerNet | a free energy $V_\theta[u]$, a mobility and a reactive operator | `potential` |
+::::{tab-set}
+
+:::{tab-item} Overview
+
+### The families
+
+| Registered names | Family | Structure assumed | What is learned | Artifact |
+| --- | --- | --- | --- | --- |
+| `spectral_onsagernet_1d`, `_2d`, `_3d` | Spectral OnsagerNet | Onsager principle, $M$ and $W$ diagonal in Fourier space | a free energy $V_\theta[u]$, a mobility spectrum $K^m_{\mathbf k}$ and a reactive spectrum $K^w_{\mathbf k}$ | `potential` |
+| `onsagernet_1d`, `_2d`, `_3d` | OnsagerNet (classical) | Onsager principle on the flattened field, $M(\mathbf x)$ SPD and $W(\mathbf x)$ antisymmetric, possibly state-dependent | a coercive free energy $V_\theta(\mathbf x)$, the operators $M_\theta$, $W_\theta$ | `potential` |
+| `fno1d`, `fno2d`, `fno3d` | Fourier Neural Operator | none | a black-box right-hand side $\partial_t u \approx \mathcal{G}_\theta(u)$ | `spectrum` (declared, not yet implemented) |
+
+Both Onsager families write a dissipative dynamics as the flow of a free
+energy through a mobility,
+
+$$
+\frac{\partial u}{\partial t} = -(M + W)\,\frac{\delta V_\theta}{\delta u},
+\qquad M \succeq 0 \text{ symmetric},\quad W = -W^{\top},
+$$
+
+so the learned potential is a Lyapunov function of the learned dynamics
+whenever $W = 0$: interpretability and stability come from the same
+structure. They differ in *where* the structure is imposed. The spectral
+family assumes $M$ and $W$ are translation-invariant (one complex number per
+Fourier mode) and steps the linear part of $\delta V/\delta u$ implicitly,
+which makes it cheap and exact for the diffuse-interface equations the
+shipped datasets come from. The classical family treats the grid as a
+$d$-dimensional ODE with $d = N_1 \cdots N_d$, lets $M$ and $W$ depend on
+the state and puts no restriction on $V$, at the price that every network
+has the grid size as its input width. FNO is the structure-free baseline
+the two are compared against.
+
+### Common surface
 
 Every model consumes a batch of **single-channel** fields
 $u \in \mathbb{R}^{B \times N_1 \times \cdots \times N_d}$ on a periodic box
@@ -15,9 +47,40 @@ and exposes `forward(u, dt)` (one step), `rollout(u0, n_steps, dt)`,
 `list_artifacts()` and `artifact(name)` — the `DynamicsModel` protocol
 described in [Extending](extending.md). `mesokit train --model <name>`
 resolves the class, the trainer registered for it (`LitTrainer` for all of
-them) and the recipe under `configs/train/<dyn>/<name>/`.
+them) and the recipe under `configs/train/<dyn>/<name>/`; the step size
+`dt` is read from the dataset's time grid unless the recipe sets it. The
+grid in the recipe (`Nx`, `Ny`, `Lx`, `Ly`, and for the classical family
+the `in_dim` / `grid_shape` of its blocks) must match the dataset —
+`mesokit train` does not infer it.
 
-## Spectral OnsagerNet
+All families are single-channel. For the multi-channel datasets
+(`llg_lattice_2d`, `peridynamics_fracture_2d`) pick one channel through the
+`dataset.channel` key of the recipe; multi-channel models are on the roadmap.
+
+### Choosing a model
+
+| If you want to … | Use |
+| --- | --- |
+| A predictive baseline with no structural assumptions | `fno<n>d` |
+| A free energy you can plot, a mobility spectrum, and a reversible / dissipative split, on a translation-invariant problem | `spectral_onsagernet_<n>d` with `CoerciveAutogradPotential` (`--config coercive`) |
+| A quick, few-parameter Onsager fit to look at the learned multipliers | `spectral_onsagernet_<n>d` with the default `PolynomialPotential` |
+| Onsager structure without assuming translation invariance: state-dependent mobility, a potential over the whole field, modest grids | `onsagernet_<n>d` (`--config default` for low-rank $M$, $W$; `--config circulant` for per-mode multipliers) |
+| A reversible (Hamiltonian-like) dynamics such as KdV | either Onsager family with $W$ enabled; `onsagernet_1d` with `rk4` for the classical one |
+| To verify the pipeline on data whose law you know | `spectral_onsagernet_<n>d` with `identity_M`, `learn_W: false`, `AllenCahnPotential` |
+
+### Interpretability
+
+The two Onsager families share the `potential` artifact
+(`mesokit interpret extract --artifact potential`): the learned $V_\theta$
+on a constant-field slice with its components, the Fourier multipliers of
+$M$ and $W$ when the operators are diagonal in Fourier space (always for the
+spectral family, for the circulant blocks of the classical one), and, on
+Allen–Cahn checkpoints, a scatter of the learned against the analytic
+potential over real snapshots. Details are in the family tabs.
+
+:::
+
+:::{tab-item} Spectral OnsagerNet
 
 ### Model
 
@@ -120,20 +183,142 @@ configs/train/ising_2d/spectral_onsagernet_2d/default.yaml
 
 A potential is selected by nesting it under `model.potential` in the recipe;
 `null` means the polynomial default, and the `coercive.yaml` recipes are the
-headline configuration (sine final activations, `v_truncate = 16`). The grid in the recipe (`Nx`, `Ny`,
-`Lx`, `Ly`) must match the dataset — `mesokit train` does not infer it —
-and the potential's `grid_shape` / `domain` must match the model's.
+headline configuration (sine final activations, `v_truncate = 16`). The
+potential's `grid_shape` / `domain` must match the model's `Nx`, `Ny`,
+`Lx`, `Ly`, which in turn must match the dataset.
 
-## Fourier Neural Operator
+:::
+
+:::{tab-item} OnsagerNet
+
+### Model
+
+The classical OnsagerNet (Yu, Tian, E, Li 2021) applies the generalised
+Onsager principle to a finite-dimensional state. `mesokit` uses it on the
+grid directly: the field on $N_1 \times \cdots \times N_d$ points is
+flattened to $\mathbf x = \operatorname{vec}(u) \in \mathbb{R}^d$,
+$d = N_1 \cdots N_d$, and evolved by
+
+$$
+\frac{d\mathbf x}{dt} = -\bigl(M_\theta(\mathbf x) + W_\theta(\mathbf x)\bigr)\,\nabla V_\theta(\mathbf x),
+\qquad
+M_\theta \succ 0 \text{ symmetric},\quad W_\theta = -W_\theta^{\top}.
+$$
+
+Nothing is assumed about Fourier space: the operators may depend on the
+state and the potential sees the whole vector at once. This is the most
+general Onsager parameterisation in the toolkit, and the most expensive —
+every network has $d$ as its input width, so the family is meant for modest
+grids (256 points in 1D, $32^2$ to $128^2$ in 2D).
+
+**Potential.** `CoercivePotential` is
+
+$$
+V_\theta(\mathbf x) = \frac{\alpha}{2}\,\lVert\mathbf x\rVert^2 + \mathrm{MLP}_\theta(\mathbf x),
+\qquad \alpha = e^{\log\alpha} > 0,
+$$
+
+a scalar MLP (three hidden layers of width 256, `tanh`, no output bias)
+plus a coercive quadratic that guarantees $V \to +\infty$ as
+$\lVert\mathbf x\rVert \to \infty$. Its gradient is taken by autograd inside
+the right-hand side, with a second-order graph during training so the loss
+back-propagates through $\nabla V$.
+
+**Operators.** $M$ and $W$ are modules with an `apply(x, v)` method that
+returns the matrix–vector product; the matrices themselves are never formed
+and their structure holds by construction, not by penalty:
+
+| Block | Definition | Guarantee | Cost per product |
+| --- | --- | --- | --- |
+| `DiagonalDissipation` | $M(\mathbf x) = \operatorname{diag}\bigl(\beta + \operatorname{softplus}\,m_\theta(\mathbf x)\bigr)$ | SPD, entries $> \beta$ | $O(d)$ + one MLP |
+| `LowRankDissipation` | $M(\mathbf x) = \beta I + B_\theta(\mathbf x)\,B_\theta(\mathbf x)^{\top}$, $B \in \mathbb{R}^{d\times r}$ | SPD, eigenvalues $\ge \beta$ | $O(d r)$ + one MLP |
+| `LowRankConservation` | $W(\mathbf x) = B_\theta(\mathbf x)\,C^{\top} - C\,B_\theta(\mathbf x)^{\top}$, $C \in \mathbb{R}^{d\times r}$ learnable | antisymmetric | $O(d r)$ + one MLP |
+| `CirculantDissipation` | $M v = \mathcal F^{-1}\bigl[\operatorname{softplus}(\theta_{\mathbf k})\,\mathcal F v\bigr] + \beta v$, $\theta$ even in $\mathbf k$ | SPD, translation-invariant, state-independent | $O(d \log d)$ |
+| `CirculantConservation` | $W v = \mathcal F^{-1}\bigl[i\,\theta_{\mathbf k}\,\mathcal F v\bigr]$, $\theta$ odd in $\mathbf k$ (zero at $\mathbf k = 0$ and Nyquist) | antisymmetric, translation-invariant, state-independent | $O(d \log d)$ |
+
+The circulant blocks are convolutions on the periodic grid parameterised by
+their Fourier multipliers; they are the classical-OnsagerNet counterpart of
+the Spectral OnsagerNet's $K^m_{\mathbf k}$ / $K^w_{\mathbf k}$, written for
+any dimension through the shared `SpectralGrid`. `band_size` initialises
+them as short-range kernels (a wrapped Gaussian of that many grid points for
+$M$, a small constant on the lowest modes for $W$). The state-dependent
+blocks are the original OnsagerNet design; `conservation: null` gives a
+purely dissipative model.
+
+**Time stepping.** The right-hand side is generic, so only the explicit
+steppers are available: `euler` (default) and `rk4`. With $W = 0$ the exact
+dynamics satisfy $\dot V = -\nabla V^{\top} M \nabla V \le 0$, so $V_\theta$
+is a Lyapunov function of the learned model; the test suite checks that one
+Euler step of the purely dissipative model lowers $V_\theta$.
+
+### Relation to Spectral OnsagerNet
+
+| | Spectral OnsagerNet | OnsagerNet |
+| --- | --- | --- |
+| State | Fourier modes $\hat u_{\mathbf k}$ | flattened field $\mathbf x \in \mathbb{R}^d$ |
+| $M$, $W$ | one multiplier per mode, state-independent | any SPD / antisymmetric block, may depend on $\mathbf x$ |
+| Potential | functional of $u$ with a spectral $\hat L$ / $\hat N$ split | any scalar network of $\mathbf x$ |
+| Stepper | SBDF1 (implicit linear part), explicit RK | explicit Euler / RK4 |
+| Cost | $O(d \log d)$ per step, parameters independent of $d$ | networks of input width $d$ |
+| Best for | translation-invariant PDE data, large grids | small grids, state-dependent mobility, checking what the spectral assumptions buy |
+
+A classical model with `CirculantDissipation` and `CirculantConservation`
+is the spectral model's operator structure with a free potential; comparing
+it against `spectral_onsagernet_<n>d` isolates the effect of the potential
+parameterisation, and swapping in the low-rank blocks isolates the effect of
+state dependence in $M$ and $W$.
+
+### The `potential` artifact
+
+`artifact("potential")` returns the same `PotentialLandscape` as the
+spectral family: $V_\theta$ on the constant-field slice $u \equiv c$ with its
+two components ($V_0 = \tfrac{\alpha}{2}\lVert\mathbf x\rVert^2$,
+$V_1 = \mathrm{MLP}_\theta$), the Fourier multipliers of $M$ and $W$ when
+the corresponding block is circulant (omitted, with a note in the summary,
+when it is state-dependent), and the Allen–Cahn reference scatter when the
+checkpoint was trained on an Allen–Cahn dataset.
+
+### Recipes
+
+```text
+configs/train/allen_cahn_1d/onsagernet_1d/{default,circulant,smoke}.yaml
+configs/train/kdv_1d/onsagernet_1d/default.yaml
+configs/train/allen_cahn_2d/onsagernet_2d/{default,smoke}.yaml
+```
+
+`default.yaml` is the original low-rank design ($M$ of rank 8, $W$ of rank
+4, both from MLPs of the state); `circulant.yaml` swaps both for the
+convolution blocks; the KdV recipe keeps $W$ and steps with `rk4`; the 2D
+recipes use a circulant $M$ and no $W$ because the potential MLP already
+holds $16384 \times 256$ weights in its first layer on the 128² grid. The
+blocks are nested under `model.potential`, `model.dissipation` and
+`model.conservation`; their `in_dim` (or `grid_shape` for the circulant
+blocks) must equal the model's $N_1 \cdots N_d$ (or grid), which is checked
+at construction.
+
+:::
+
+:::{tab-item} Fourier Neural Operator
+
+### Model
 
 `FNODynamics` wraps `neuralop.models.FNO` as a right-hand side,
 $\partial_t u \approx \mathcal{G}_\theta(u)$, and steps it with explicit
-Euler (default) or RK4. `n_modes` is the number of retained Fourier modes
-per axis (an integer, or one entry per axis), `hidden_channels` the lifting
-width; `fno1d` / `fno2d` / `fno3d` differ only in the number of spatial axes
-handed to neuralop. It is the black-box baseline the interpretable family is
-compared against; its `spectrum` artifact (per-mode error and response
-diagnostics) is on the roadmap.
+Euler (default) or RK4. An FNO layer lifts the field to `hidden_channels`
+channels, multiplies the lowest `n_modes` Fourier coefficients per axis by
+learned complex weights, adds a pointwise linear path and a nonlinearity;
+`n_layers` such layers are followed by a projection back to one channel.
+`n_modes` is an integer or one entry per axis; `fno1d` / `fno2d` / `fno3d`
+differ only in the number of spatial axes handed to neuralop. It is the
+black-box baseline the interpretable families are compared against.
+
+### The `spectrum` artifact
+
+Declared, not yet implemented: per-mode error and response diagnostics are
+on the roadmap, and `artifact("spectrum")` raises `NotImplementedError`
+until then.
+
+### Recipes
 
 ```text
 configs/train/allen_cahn_1d/fno1d/default.yaml
@@ -143,18 +328,9 @@ configs/train/cahn_hilliard_2d/fno2d/default.yaml
 configs/train/ising_2d/fno2d/{default,smoke}.yaml
 ```
 
-## Choosing a model
+:::
 
-| If you want to … | Use |
-| --- | --- |
-| A predictive baseline with no structural assumptions | `fno<n>d` |
-| A free energy you can plot, a mobility spectrum, and a reversible / dissipative split | `spectral_onsagernet_<n>d` with `CoerciveAutogradPotential` (`--config coercive`) |
-| A quick, few-parameter Onsager fit to look at the learned multipliers | `spectral_onsagernet_<n>d` with the default `PolynomialPotential` |
-| To verify the pipeline on data whose law you know | `spectral_onsagernet_<n>d` with `identity_M`, `learn_W: false`, `AllenCahnPotential` |
-
-Both families are single-channel. For the multi-channel datasets
-(`llg_lattice_2d`, `peridynamics_fracture_2d`) pick one channel through the
-`dataset.channel` key of the recipe; multi-channel models are on the roadmap.
+::::
 
 ## References
 

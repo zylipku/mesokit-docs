@@ -1,0 +1,50 @@
+# {py:mod}`mesokit.models.onsagernet.onsagernet_2d`
+
+```{py:module} mesokit.models.onsagernet.onsagernet_2d
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet_2d
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`OnsagerNet2d <mesokit.models.onsagernet.onsagernet_2d.OnsagerNet2d>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet_2d.OnsagerNet2d
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} OnsagerNet2d(Nx: int = 32, Ny: int | None = None, Lx: float = 2.0 * math.pi, Ly: float | None = None, potential: torch.nn.Module | None = None, dissipation: torch.nn.Module | None = None, conservation: torch.nn.Module | None = None, step_method: str = 'euler')
+:canonical: mesokit.models.onsagernet.onsagernet_2d.OnsagerNet2d
+
+Bases: {py:obj}`mesokit.models.onsagernet.onsagernet.OnsagerNet`
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet_2d.OnsagerNet2d
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet_2d.OnsagerNet2d.__init__
+```
+
+````{py:attribute} registry_name
+:canonical: mesokit.models.onsagernet.onsagernet_2d.OnsagerNet2d.registry_name
+:value: >
+   'onsagernet_2d'
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet_2d.OnsagerNet2d.registry_name
+```
+
+````
+
+`````

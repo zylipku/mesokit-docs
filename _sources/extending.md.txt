@@ -120,7 +120,8 @@ a leading batch dimension; the stock training views slice one channel and
 feed `(B, *grid_shape)` — `(B, Nx)` for 1D data, `(B, Nx, Ny)` for 2D — so
 a model declares which grids it accepts through its constructor (the
 shipped families are registered once per dimension: `fno1d` / `fno2d` /
-`fno3d`, `spectral_onsagernet_1d` / `_2d` / `_3d`).
+`fno3d`, `spectral_onsagernet_1d` / `_2d` / `_3d`, `onsagernet_1d` / `_2d` /
+`_3d`).
 
 Two implementation patterns cover the shipped families. The simplest is a
 right-hand side plus one of the shared explicit steppers:

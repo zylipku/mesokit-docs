@@ -1,0 +1,320 @@
+# {py:mod}`mesokit.models.onsagernet.components`
+
+```{py:module} mesokit.models.onsagernet.components
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`CoercivePotential <mesokit.models.onsagernet.components.CoercivePotential>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components.CoercivePotential
+    :summary:
+    ```
+* - {py:obj}`DiagonalDissipation <mesokit.models.onsagernet.components.DiagonalDissipation>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components.DiagonalDissipation
+    :summary:
+    ```
+* - {py:obj}`LowRankDissipation <mesokit.models.onsagernet.components.LowRankDissipation>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components.LowRankDissipation
+    :summary:
+    ```
+* - {py:obj}`LowRankConservation <mesokit.models.onsagernet.components.LowRankConservation>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components.LowRankConservation
+    :summary:
+    ```
+* - {py:obj}`CirculantDissipation <mesokit.models.onsagernet.components.CirculantDissipation>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components.CirculantDissipation
+    :summary:
+    ```
+* - {py:obj}`CirculantConservation <mesokit.models.onsagernet.components.CirculantConservation>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components.CirculantConservation
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_reflect <mesokit.models.onsagernet.components._reflect>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components._reflect
+    :summary:
+    ```
+* - {py:obj}`_symmetrise_real_kernel <mesokit.models.onsagernet.components._symmetrise_real_kernel>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components._symmetrise_real_kernel
+    :summary:
+    ```
+* - {py:obj}`_circular_distance_sq <mesokit.models.onsagernet.components._circular_distance_sq>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components._circular_distance_sq
+    :summary:
+    ```
+````
+
+### API
+
+`````{py:class} CoercivePotential(in_dim: int, hidden_dims: collections.abc.Sequence[int] = (256, 256, 256), alpha_init: float = 0.01, act_name: str = 'tanh')
+:canonical: mesokit.models.onsagernet.components.CoercivePotential
+
+Bases: {py:obj}`torch.nn.Module`
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CoercivePotential
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CoercivePotential.__init__
+```
+
+````{py:property} alpha
+:canonical: mesokit.models.onsagernet.components.CoercivePotential.alpha
+:type: torch.Tensor
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CoercivePotential.alpha
+```
+
+````
+
+````{py:method} _flatten(x: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.CoercivePotential._flatten
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CoercivePotential._flatten
+```
+
+````
+
+````{py:method} _V0(x: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.CoercivePotential._V0
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CoercivePotential._V0
+```
+
+````
+
+````{py:method} _V1(x: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.CoercivePotential._V1
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CoercivePotential._V1
+```
+
+````
+
+````{py:method} forward(x: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.CoercivePotential.forward
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CoercivePotential.forward
+```
+
+````
+
+````{py:method} V(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.CoercivePotential.V
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CoercivePotential.V
+```
+
+````
+
+````{py:method} grad(x: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.CoercivePotential.grad
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CoercivePotential.grad
+```
+
+````
+
+````{py:method} dVdu(u: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.CoercivePotential.dVdu
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CoercivePotential.dVdu
+```
+
+````
+
+`````
+
+`````{py:class} DiagonalDissipation(in_dim: int, hidden_dims: collections.abc.Sequence[int] = (256, 256), beta: float = 0.001, act_name: str = 'tanh')
+:canonical: mesokit.models.onsagernet.components.DiagonalDissipation
+
+Bases: {py:obj}`torch.nn.Module`
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.DiagonalDissipation
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.DiagonalDissipation.__init__
+```
+
+````{py:method} apply(x: torch.Tensor, v: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.DiagonalDissipation.apply
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.DiagonalDissipation.apply
+```
+
+````
+
+`````
+
+`````{py:class} LowRankDissipation(in_dim: int, rank: int = 8, hidden_dims: collections.abc.Sequence[int] = (256, 256), beta: float = 0.001, act_name: str = 'tanh')
+:canonical: mesokit.models.onsagernet.components.LowRankDissipation
+
+Bases: {py:obj}`torch.nn.Module`
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.LowRankDissipation
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.LowRankDissipation.__init__
+```
+
+````{py:method} factor(x: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.LowRankDissipation.factor
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.LowRankDissipation.factor
+```
+
+````
+
+````{py:method} apply(x: torch.Tensor, v: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.LowRankDissipation.apply
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.LowRankDissipation.apply
+```
+
+````
+
+`````
+
+`````{py:class} LowRankConservation(in_dim: int, rank: int = 4, hidden_dims: collections.abc.Sequence[int] = (256, 256), act_name: str = 'tanh')
+:canonical: mesokit.models.onsagernet.components.LowRankConservation
+
+Bases: {py:obj}`torch.nn.Module`
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.LowRankConservation
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.LowRankConservation.__init__
+```
+
+````{py:method} factor(x: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.LowRankConservation.factor
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.LowRankConservation.factor
+```
+
+````
+
+````{py:method} apply(x: torch.Tensor, v: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.LowRankConservation.apply
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.LowRankConservation.apply
+```
+
+````
+
+`````
+
+````{py:function} _reflect(plane: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components._reflect
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components._reflect
+```
+````
+
+````{py:function} _symmetrise_real_kernel(theta: torch.Tensor, *, odd: bool) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components._symmetrise_real_kernel
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components._symmetrise_real_kernel
+```
+````
+
+````{py:function} _circular_distance_sq(grid: mesokit.models._spectral.SpectralGrid) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components._circular_distance_sq
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components._circular_distance_sq
+```
+````
+
+`````{py:class} CirculantDissipation(grid_shape: collections.abc.Sequence[int] | int, beta: float = 0.001, band_size: int | None = None)
+:canonical: mesokit.models.onsagernet.components.CirculantDissipation
+
+Bases: {py:obj}`torch.nn.Module`
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CirculantDissipation
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CirculantDissipation.__init__
+```
+
+````{py:property} multipliers
+:canonical: mesokit.models.onsagernet.components.CirculantDissipation.multipliers
+:type: torch.Tensor
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CirculantDissipation.multipliers
+```
+
+````
+
+````{py:method} apply(x: torch.Tensor, v: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.CirculantDissipation.apply
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CirculantDissipation.apply
+```
+
+````
+
+`````
+
+`````{py:class} CirculantConservation(grid_shape: collections.abc.Sequence[int] | int, band_size: int | None = None)
+:canonical: mesokit.models.onsagernet.components.CirculantConservation
+
+Bases: {py:obj}`torch.nn.Module`
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CirculantConservation
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CirculantConservation.__init__
+```
+
+````{py:property} multipliers
+:canonical: mesokit.models.onsagernet.components.CirculantConservation.multipliers
+:type: torch.Tensor
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CirculantConservation.multipliers
+```
+
+````
+
+````{py:method} apply(x: torch.Tensor, v: torch.Tensor) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components.CirculantConservation.apply
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components.CirculantConservation.apply
+```
+
+````
+
+`````

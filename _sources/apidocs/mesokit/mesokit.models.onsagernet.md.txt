@@ -1,0 +1,47 @@
+# {py:mod}`mesokit.models.onsagernet`
+
+```{py:module} mesokit.models.onsagernet
+```
+
+```{autodoc2-docstring} mesokit.models.onsagernet
+:allowtitles:
+```
+
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.models.onsagernet.onsagernet_2d
+mesokit.models.onsagernet.onsagernet_1d
+mesokit.models.onsagernet.onsagernet
+mesokit.models.onsagernet.onsagernet_3d
+mesokit.models.onsagernet.components
+```
+
+## Package Contents
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`__all__ <mesokit.models.onsagernet.__all__>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} __all__
+:canonical: mesokit.models.onsagernet.__all__
+:value: >
+   ['CirculantConservation', 'CirculantDissipation', 'CoercivePotential', 'DiagonalDissipation', 'LowRa...
+
+```{autodoc2-docstring} mesokit.models.onsagernet.__all__
+```
+
+````

@@ -11,7 +11,8 @@ first end-to-end run. The [Command-Line Reference](cli.md) documents every
 the same flow with figures and commentary,
 [Data Processing](data_processing.md) is the guide for generating,
 validating, authoring, or registering datasets, and [Models](models.md)
-describes what the shipped model families compute.
+describes what the shipped model families (Spectral OnsagerNet, classical
+OnsagerNet, FNO) compute.
 
 ```{toctree}
 :maxdepth: 2
