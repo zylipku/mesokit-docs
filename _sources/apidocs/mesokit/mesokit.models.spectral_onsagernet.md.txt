@@ -22,11 +22,11 @@ mesokit.models.spectral_onsagernet.potential
 :titlesonly:
 :maxdepth: 1
 
-mesokit.models.spectral_onsagernet.spectral_onsagernet_1d
-mesokit.models.spectral_onsagernet.artifacts
-mesokit.models.spectral_onsagernet.spectral_onsagernet
 mesokit.models.spectral_onsagernet.spectral_onsagernet_2d
 mesokit.models.spectral_onsagernet.spectral_onsagernet_3d
+mesokit.models.spectral_onsagernet.spectral_onsagernet
+mesokit.models.spectral_onsagernet.spectral_onsagernet_1d
+mesokit.models.spectral_onsagernet.artifacts
 ```
 
 ## Package Contents

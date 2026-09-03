@@ -13,5 +13,186 @@
 :titlesonly:
 :maxdepth: 3
 
+mesokit.skills.mesokit_add_trainer
+mesokit.skills.mesokit_add_simulator
+mesokit.skills.mesokit_train
 mesokit.skills.mesokit_convert_data
+mesokit.skills.mesokit_add_model
+mesokit.skills.mesokit_add_artifact
 ```
+
+## Package Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`SkillSpec <mesokit.skills.SkillSpec>`
+  - ```{autodoc2-docstring} mesokit.skills.SkillSpec
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_parse_frontmatter <mesokit.skills._parse_frontmatter>`
+  - ```{autodoc2-docstring} mesokit.skills._parse_frontmatter
+    :summary:
+    ```
+* - {py:obj}`_discover <mesokit.skills._discover>`
+  - ```{autodoc2-docstring} mesokit.skills._discover
+    :summary:
+    ```
+* - {py:obj}`available <mesokit.skills.available>`
+  - ```{autodoc2-docstring} mesokit.skills.available
+    :summary:
+    ```
+* - {py:obj}`get <mesokit.skills.get>`
+  - ```{autodoc2-docstring} mesokit.skills.get
+    :summary:
+    ```
+* - {py:obj}`skill_path <mesokit.skills.skill_path>`
+  - ```{autodoc2-docstring} mesokit.skills.skill_path
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`SKILL_FILE <mesokit.skills.SKILL_FILE>`
+  - ```{autodoc2-docstring} mesokit.skills.SKILL_FILE
+    :summary:
+    ```
+* - {py:obj}`__all__ <mesokit.skills.__all__>`
+  - ```{autodoc2-docstring} mesokit.skills.__all__
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} SKILL_FILE
+:canonical: mesokit.skills.SKILL_FILE
+:value: >
+   'SKILL.md'
+
+```{autodoc2-docstring} mesokit.skills.SKILL_FILE
+```
+
+````
+
+`````{py:class} SkillSpec
+:canonical: mesokit.skills.SkillSpec
+
+```{autodoc2-docstring} mesokit.skills.SkillSpec
+```
+
+````{py:attribute} name
+:canonical: mesokit.skills.SkillSpec.name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.skills.SkillSpec.name
+```
+
+````
+
+````{py:attribute} description
+:canonical: mesokit.skills.SkillSpec.description
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.skills.SkillSpec.description
+```
+
+````
+
+````{py:attribute} package
+:canonical: mesokit.skills.SkillSpec.package
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.skills.SkillSpec.package
+```
+
+````
+
+````{py:attribute} path
+:canonical: mesokit.skills.SkillSpec.path
+:type: pathlib.Path
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.skills.SkillSpec.path
+```
+
+````
+
+````{py:property} directory
+:canonical: mesokit.skills.SkillSpec.directory
+:type: pathlib.Path
+
+```{autodoc2-docstring} mesokit.skills.SkillSpec.directory
+```
+
+````
+
+`````
+
+````{py:function} _parse_frontmatter(text: str) -> dict[str, str]
+:canonical: mesokit.skills._parse_frontmatter
+
+```{autodoc2-docstring} mesokit.skills._parse_frontmatter
+```
+````
+
+````{py:function} _discover() -> dict[str, mesokit.skills.SkillSpec]
+:canonical: mesokit.skills._discover
+
+```{autodoc2-docstring} mesokit.skills._discover
+```
+````
+
+````{py:function} available() -> list[str]
+:canonical: mesokit.skills.available
+
+```{autodoc2-docstring} mesokit.skills.available
+```
+````
+
+````{py:function} get(name: str) -> mesokit.skills.SkillSpec
+:canonical: mesokit.skills.get
+
+```{autodoc2-docstring} mesokit.skills.get
+```
+````
+
+````{py:function} skill_path(name: str) -> pathlib.Path
+:canonical: mesokit.skills.skill_path
+
+```{autodoc2-docstring} mesokit.skills.skill_path
+```
+````
+
+````{py:data} __all__
+:canonical: mesokit.skills.__all__
+:value: >
+   ['SKILL_FILE', 'SkillSpec', 'available', 'get', 'skill_path']
+
+```{autodoc2-docstring} mesokit.skills.__all__
+```
+
+````

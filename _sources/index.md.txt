@@ -12,7 +12,10 @@ the same flow with figures and commentary,
 [Data Processing](data_processing.md) is the guide for generating,
 validating, authoring, or registering datasets, and [Models](models.md)
 describes what the shipped model families (Spectral OnsagerNet, classical
-OnsagerNet, FNO) compute.
+OnsagerNet, FNO) compute. [Extending](extending.md) is the contract for
+your own simulators, models, trainers and artifacts, and
+[Agent Skills](skills.md) explains the skills a coding agent can use
+to do those tasks for you.
 
 ```{toctree}
 :maxdepth: 2
@@ -24,6 +27,7 @@ tutorial
 data_processing
 models
 extending
+skills
 ```
 
 ```{toctree}

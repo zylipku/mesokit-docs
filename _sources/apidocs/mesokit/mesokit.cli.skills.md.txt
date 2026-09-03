@@ -1,0 +1,165 @@
+# {py:mod}`mesokit.cli.skills`
+
+```{py:module} mesokit.cli.skills
+```
+
+```{autodoc2-docstring} mesokit.cli.skills
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_user_dir <mesokit.cli.skills._user_dir>`
+  - ```{autodoc2-docstring} mesokit.cli.skills._user_dir
+    :summary:
+    ```
+* - {py:obj}`target_dir <mesokit.cli.skills.target_dir>`
+  - ```{autodoc2-docstring} mesokit.cli.skills.target_dir
+    :summary:
+    ```
+* - {py:obj}`copy_skill <mesokit.cli.skills.copy_skill>`
+  - ```{autodoc2-docstring} mesokit.cli.skills.copy_skill
+    :summary:
+    ```
+* - {py:obj}`list_ <mesokit.cli.skills.list_>`
+  - ```{autodoc2-docstring} mesokit.cli.skills.list_
+    :summary:
+    ```
+* - {py:obj}`path_ <mesokit.cli.skills.path_>`
+  - ```{autodoc2-docstring} mesokit.cli.skills.path_
+    :summary:
+    ```
+* - {py:obj}`install <mesokit.cli.skills.install>`
+  - ```{autodoc2-docstring} mesokit.cli.skills.install
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`app <mesokit.cli.skills.app>`
+  - ```{autodoc2-docstring} mesokit.cli.skills.app
+    :summary:
+    ```
+* - {py:obj}`_AGENT_HELP <mesokit.cli.skills._AGENT_HELP>`
+  - ```{autodoc2-docstring} mesokit.cli.skills._AGENT_HELP
+    :summary:
+    ```
+* - {py:obj}`_SCOPE_HELP <mesokit.cli.skills._SCOPE_HELP>`
+  - ```{autodoc2-docstring} mesokit.cli.skills._SCOPE_HELP
+    :summary:
+    ```
+* - {py:obj}`_PROJECT_DIRS <mesokit.cli.skills._PROJECT_DIRS>`
+  - ```{autodoc2-docstring} mesokit.cli.skills._PROJECT_DIRS
+    :summary:
+    ```
+* - {py:obj}`_SKIP <mesokit.cli.skills._SKIP>`
+  - ```{autodoc2-docstring} mesokit.cli.skills._SKIP
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} app
+:canonical: mesokit.cli.skills.app
+:value: >
+   'Typer(...)'
+
+```{autodoc2-docstring} mesokit.cli.skills.app
+```
+
+````
+
+````{py:data} _AGENT_HELP
+:canonical: mesokit.cli.skills._AGENT_HELP
+:value: >
+   'Agent whose skill directory to install into: claude (Claude Code) or codex (Codex CLI).'
+
+```{autodoc2-docstring} mesokit.cli.skills._AGENT_HELP
+```
+
+````
+
+````{py:data} _SCOPE_HELP
+:canonical: mesokit.cli.skills._SCOPE_HELP
+:value: >
+   "project: the current directory's skill folder; user: your home-level skill folder."
+
+```{autodoc2-docstring} mesokit.cli.skills._SCOPE_HELP
+```
+
+````
+
+````{py:data} _PROJECT_DIRS
+:canonical: mesokit.cli.skills._PROJECT_DIRS
+:type: dict[str, pathlib.Path]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.skills._PROJECT_DIRS
+```
+
+````
+
+````{py:data} _SKIP
+:canonical: mesokit.cli.skills._SKIP
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.skills._SKIP
+```
+
+````
+
+````{py:function} _user_dir(agent: str) -> pathlib.Path
+:canonical: mesokit.cli.skills._user_dir
+
+```{autodoc2-docstring} mesokit.cli.skills._user_dir
+```
+````
+
+````{py:function} target_dir(agent: str, scope: str, dest: pathlib.Path | None = None) -> pathlib.Path
+:canonical: mesokit.cli.skills.target_dir
+
+```{autodoc2-docstring} mesokit.cli.skills.target_dir
+```
+````
+
+````{py:function} copy_skill(spec: mesokit.skills.SkillSpec, into: pathlib.Path, *, force: bool) -> pathlib.Path
+:canonical: mesokit.cli.skills.copy_skill
+
+```{autodoc2-docstring} mesokit.cli.skills.copy_skill
+```
+````
+
+````{py:function} list_() -> None
+:canonical: mesokit.cli.skills.list_
+
+```{autodoc2-docstring} mesokit.cli.skills.list_
+```
+````
+
+````{py:function} path_(name: typing.Annotated[str, typer.Argument(help='Skill name, as printed by `mesokit skills list`.')]) -> None
+:canonical: mesokit.cli.skills.path_
+
+```{autodoc2-docstring} mesokit.cli.skills.path_
+```
+````
+
+````{py:function} install(names: typing.Annotated[list[str] | None, typer.Argument(help='Skills to install. Omit (or pass --all) to install every shipped skill.')] = None, agent: typing.Annotated[str, typer.Option('--agent', help=_AGENT_HELP)] = 'claude', scope: typing.Annotated[str, typer.Option('--scope', help=_SCOPE_HELP)] = 'project', dest: typing.Annotated[pathlib.Path | None, typer.Option('--dest', help='Explicit skills directory; overrides --agent / --scope.')] = None, all_: typing.Annotated[bool, typer.Option('--all', help='Install every shipped skill.')] = False, force: typing.Annotated[bool, typer.Option('--force', help='Replace a skill folder that already exists.')] = False) -> None
+:canonical: mesokit.cli.skills.install
+
+```{autodoc2-docstring} mesokit.cli.skills.install
+```
+````

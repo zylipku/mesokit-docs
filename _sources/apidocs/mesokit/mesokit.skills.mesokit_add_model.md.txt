@@ -1,0 +1,8 @@
+# {py:mod}`mesokit.skills.mesokit_add_model`
+
+```{py:module} mesokit.skills.mesokit_add_model
+```
+
+```{autodoc2-docstring} mesokit.skills.mesokit_add_model
+:allowtitles:
+```

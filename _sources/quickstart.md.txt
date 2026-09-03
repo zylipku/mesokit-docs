@@ -22,6 +22,15 @@ a pixi shell by running `pixi shell`) if `mesokit` is not on your `PATH`.
 This page shows the happy path; every option, output file, error message
 and more examples are in the [Command-Line Reference](cli.md).
 
+## Two Ways to Follow This Guide
+
+Every step below is a command or a short script you can run yourself. If
+you use a coding agent (Claude Code, Codex CLI), each step is also a
+*skill* the agent can carry out for you — converting your data, choosing
+and training a model, extending mesokit with your own equation or model.
+See [Agent Skills](skills.md) for what they do and how to install them;
+the commands the agent runs are the ones documented here.
+
 ## Data Loading
 
 To see the catalog of pre-defined simulator recipes:
@@ -108,6 +117,9 @@ Flags:
 - `--backend`: `foreground` (default; streams the agent's output and
   blocks) or `tmux` (detaches into a session you can attach to later).
 - `--hint`: free-form prompt fragment appended to the task.
+
+The same skill, plus two more for training and extending, can be used
+conversationally in your agent; see [Agent Skills](skills.md).
 - `--output`: where to write the converted HDF5; defaults to
   `data/parsed/<input_stem>.h5`.
 - `--name`: register the output under this name on success.

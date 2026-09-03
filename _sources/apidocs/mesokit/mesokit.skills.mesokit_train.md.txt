@@ -1,0 +1,8 @@
+# {py:mod}`mesokit.skills.mesokit_train`
+
+```{py:module} mesokit.skills.mesokit_train
+```
+
+```{autodoc2-docstring} mesokit.skills.mesokit_train
+:allowtitles:
+```

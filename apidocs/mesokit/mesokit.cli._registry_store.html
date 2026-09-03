@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="mesokit.cli.main" href="mesokit.cli.main.html"><link rel="prev" title="mesokit.cli.data" href="mesokit.cli.data.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="mesokit.cli.skills" href="mesokit.cli.skills.html"><link rel="prev" title="mesokit.cli.interpret" href="mesokit.cli.interpret.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>mesokit.cli._registry_store - mesokit</title>
@@ -206,132 +206,139 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../extending.html">Extending mesokit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../skills.html">Agent Skills</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="mesokit.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit</span></code></a><input aria-label="Toggle navigation of mesokit" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills</span></code></a><input aria-label="Toggle navigation of mesokit.skills" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_convert_data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_convert_data</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.models.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models</span></code></a><input aria-label="Toggle navigation of mesokit.models" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.models.fno.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno</span></code></a><input aria-label="Toggle navigation of mesokit.models.fno" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno_dynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno_dynamics</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno3d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.trainers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers</span></code></a><input aria-label="Toggle navigation of mesokit.trainers" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.trainers.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer</span></code></a><input aria-label="Toggle navigation of mesokit.trainers.lit_trainer" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.trainers.lit_trainer.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer.lit_trainer</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.trainers.lit_trainer._lit_module.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer._lit_module</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.models.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.onsagernet" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.components.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.components</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_3d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_1d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.trainers.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.registry</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.trainers.trainer_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.trainer_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.models.sindy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.sindy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.models.deeponet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.deeponet</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.models.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4 has-children"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet.potential" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.polynomial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.polynomial</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.allen_cahn</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.coercive_autograd.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.coercive_autograd</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data</span></code></a><input aria-label="Toggle navigation of mesokit.data" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.peridynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics</span></code></a><input aria-label="Toggle navigation of mesokit.data.peridynamics" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_3d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.artifacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.artifacts</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.models.dynamics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.dynamics_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.models.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.models._spectral.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models._spectral</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data</span></code></a><input aria-label="Toggle navigation of mesokit.data" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.peridynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics</span></code></a><input aria-label="Toggle navigation of mesokit.data.peridynamics" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.peridynamics.peridynamics_fracture_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics.peridynamics_fracture_2d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.llg.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg</span></code></a><input aria-label="Toggle navigation of mesokit.data.llg" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.data.llg.llg_lattice_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg.llg_lattice_2d</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.kdv.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv</span></code></a><input aria-label="Toggle navigation of mesokit.data.kdv" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.data.kdv.kdv_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv.kdv_1d</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn</span></code></a><input aria-label="Toggle navigation of mesokit.data.allen_cahn" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn</span></code></a><input aria-label="Toggle navigation of mesokit.data.allen_cahn" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.allen_cahn.allen_cahn_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn.allen_cahn_2d</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.allen_cahn.allen_cahn_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn.allen_cahn_1d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.cahn_hilliard.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard</span></code></a><input aria-label="Toggle navigation of mesokit.data.cahn_hilliard" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.kdv.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv</span></code></a><input aria-label="Toggle navigation of mesokit.data.kdv" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.kdv.kdv_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv.kdv_1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.cahn_hilliard.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard</span></code></a><input aria-label="Toggle navigation of mesokit.data.cahn_hilliard" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.cahn_hilliard.cahn_hilliard_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard.cahn_hilliard_2d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.ising.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising</span></code></a><input aria-label="Toggle navigation of mesokit.data.ising" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.ising.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising</span></code></a><input aria-label="Toggle navigation of mesokit.data.ising" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.ising.ising_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising.ising_2d</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.llg.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg</span></code></a><input aria-label="Toggle navigation of mesokit.data.llg" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.llg.llg_lattice_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg.llg_lattice_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.format.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.format</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.validate.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.validate</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.data.format.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.format</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils</span></code></a><input aria-label="Toggle navigation of mesokit.utils" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.utils.mlp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.mlp</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.utils.activation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.activation</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.trainers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers</span></code></a><input aria-label="Toggle navigation of mesokit.trainers" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.trainers.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer</span></code></a><input aria-label="Toggle navigation of mesokit.trainers.lit_trainer" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.trainers.lit_trainer._lit_module.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer._lit_module</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.trainers.lit_trainer.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer.lit_trainer</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.tutorial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.tutorial.training.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.training" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.trainers.trainer_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.trainer_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.trainers.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.tutorial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.tutorial.training.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.training" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.tutorial.training.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training.train</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.tutorial.viz.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.viz" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.tutorial.viz.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.viz" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.tutorial.viz.plots.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz.plots</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret</span></code></a><input aria-label="Toggle navigation of mesokit.interpret" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret</span></code></a><input aria-label="Toggle navigation of mesokit.interpret" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.interpret.plotter.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.plotter</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.interpret.compare.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.compare</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.interpret.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.models.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models</span></code></a><input aria-label="Toggle navigation of mesokit.models" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.models.deeponet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.deeponet</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.models.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.onsagernet" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_2d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_1d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_3d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.onsagernet.components.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.components</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils</span></code></a><input aria-label="Toggle navigation of mesokit.utils" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.utils.activation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.activation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.utils.mlp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.mlp</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.models.sindy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.sindy</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.models.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4 has-children"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet.potential" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.polynomial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.polynomial</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.coercive_autograd.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.coercive_autograd</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.allen_cahn</span></code></a></li>
-<li class="toctree-l5"><a class="reference internal" href="mesokit.models.spectral_onsagernet.potential.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.base</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_1d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.artifacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.artifacts</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_2d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_3d</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.models.fno.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno</span></code></a><input aria-label="Toggle navigation of mesokit.models.fno" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno3d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno1d</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno_dynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno_dynamics</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="mesokit.models.fno.fno2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno2d</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.models._spectral.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models._spectral</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.models.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.registry</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.models.dynamics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.dynamics_base</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="mesokit.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills</span></code></a><input aria-label="Toggle navigation of mesokit.skills" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_add_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_trainer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_add_simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_simulator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_train</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_convert_data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_convert_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_add_model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.skills.mesokit_add_artifact.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_artifact</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2 current has-children"><a class="reference internal" href="mesokit.cli.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli</span></code></a><input aria-label="Toggle navigation of mesokit.cli" checked="" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.model</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.skills</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -490,23 +497,23 @@ use; documented as a known limitation.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="mesokit.cli.main.html">
+          <a class="next-page" href="mesokit.cli.skills.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></div>
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.skills</span></code></div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="mesokit.cli.data.html">
+          <a class="prev-page" href="mesokit.cli.interpret.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></div>
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></div>
                 
               </div>
             </a>

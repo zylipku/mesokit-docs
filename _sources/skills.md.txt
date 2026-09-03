@@ -1,0 +1,235 @@
+# Agent Skills
+
+`mesokit` ships six *skills*: markdown instruction files that a coding
+agent (Claude Code, Codex CLI) reads when you ask it to do a mesokit task.
+Each one packages the judgment the reference pages leave to the reader —
+which axis is time in your file, which model family fits your data and
+what its recipe must contain, how to plug your own equation into the
+registries — as a single procedure that ends with a self-check the agent
+must pass before it reports success. They live inside the installed
+package, so they are available wherever `mesokit` is, and
+`mesokit skills install` copies them into the folder your agent scans.
+
+Skills are not required to use mesokit. Everything they do is a sequence of
+documented commands and Python calls; they exist so that an agent does the
+sequence correctly on the first try, and asks you only what it cannot read
+from your files.
+
+## Before you start
+
+- A coding agent is installed: [Claude Code](https://claude.com/claude-code)
+  or the Codex CLI. `mesokit data parse` additionally needs its binary on
+  `PATH`.
+- `mesokit` is importable in the shell the agent runs commands in. In the
+  mesokit checkout that means the agent prefixes commands with `pixi run`
+  (the skills say so); in your own project it means the virtual environment
+  with `pip install mesokit` is active when you start the agent.
+- Start the agent in your **project root**: the directory that holds
+  `configs/` and where the `.mesokit/` registries live. All `mesokit`
+  commands assume it.
+- Outside the mesokit checkout, install the skills once (next section).
+
+## Which skill, when
+
+```text
+your data already exists (.npz, .nc, .pt, foreign .h5) ──► mesokit-convert-data ──┐
+your own equation / solver / generator ─────────────────► mesokit-add-simulator ──┤
+                                                                                  ▼
+                                                              registered dataset (.mesokit/datasets.json)
+                                                                                  │
+                                    shipped family (fno, spectral_onsagernet, onsagernet)
+                                                                                  │
+                                                                           mesokit-train ──► checkpoint + `potential` artifact
+                                                                                  │
+                          the toolkit lacks …   a model ─────► mesokit-add-model ─┤
+                                                a loss / loop ► mesokit-add-trainer ┤
+                                                a diagnostic ─► mesokit-add-artifact ┘
+```
+
+| Skill | Ask for it when you want to … | It will … |
+| --- | --- | --- |
+| `mesokit-convert-data` | bring an existing file into mesokit | inspect the file, ask once if the axis layout is unclear, write a `mesokit-trajectory` HDF5 v1 file with the metadata groups filled in, run the validator until it passes, register the dataset if you gave a name |
+| `mesokit-add-simulator` | generate datasets from your own equation or code | wrap it as a registered simulator with the metadata `mesokit train` needs (`dt`, box, grid), wire a `configs/data/<dyn>/` recipe, generate a small dataset, validate it and run a physical sanity check |
+| `mesokit-train` | fit a model and read what it learned | read the dataset's grid and `dt`, choose the family and potential for your goal, write or adapt the recipe with the grid checked against the data, run a one-epoch CPU smoke pass, train, then extract and interpret the `potential` artifact (custom models: the same from Python) |
+| `mesokit-add-model` | a model mesokit does not ship | prefer a new potential or operator block for a shipped family when that suffices; otherwise write a `DynamicsModel` in your module, run the structural smoke test (protocol, shapes, gradients, wrong-grid error), train two epochs |
+| `mesokit-add-trainer` | a different loss, schedule or loop | check whether `LitTrainer`'s options already cover it; if not, write a plain-PyTorch `fit()` registered under your model, and smoke it against the persistence baseline |
+| `mesokit-add-artifact` | a plot or number read off a trained model | build an artifact class with `summary` / `plot` / `save`, wire it into your model or compute it post hoc from a checkpoint, and place it beside the shipped `potential` artifact with `compare` |
+
+All shipped skills carry the `mesokit-` prefix so they stay distinguishable
+in an agent's shared skill folder. The full text of each is in the package
+(`mesokit skills path <name>`) and, in a checkout, under
+`.claude/skills/<name>/SKILL.md`.
+
+## Installing the skills into your agent
+
+Inside the mesokit checkout, Claude Code already sees the skills
+(`.claude/skills/` holds a copy of each). Anywhere else — a project of your
+own with `pip install mesokit`, or Codex in any directory — copy them into
+the folder the agent scans:
+
+```sh
+mesokit skills list                                   # what ships, one line each
+mesokit skills path mesokit-train                     # where the SKILL.md is
+mesokit skills install                                # all six -> ./.claude/skills/   (Claude Code, this project)
+mesokit skills install --scope user                   # all six -> ~/.claude/skills/   (Claude Code, every project)
+mesokit skills install --agent codex                  # all six -> ./.agents/skills/   (Codex, this project)
+mesokit skills install --agent codex --scope user     # all six -> $CODEX_HOME/skills/ (default ~/.codex/skills)
+mesokit skills install mesokit-train --dest ~/my-skills   # one skill, explicit folder
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `NAME …` | all shipped skills | Which skills to copy; `--all` is the explicit form. |
+| `--agent` | `claude` | Whose folder layout to use: `claude` or `codex`. |
+| `--scope` | `project` | `project` writes under the current directory, `user` under your home. |
+| `--dest DIR` | none | Explicit target folder; overrides `--agent` / `--scope`. |
+| `--force` | off | Replace a skill folder that already exists. |
+
+The copy is a snapshot of the installed mesokit version: after upgrading
+mesokit, re-run the command with `--force`. The agent picks up new skills
+at its next session — in Claude Code type `/` and the `mesokit-…` entries
+appear; Codex lists installed skills in its skills view.
+
+## Invoking a skill
+
+**Conversationally.** Describe the task in your own words; the skill's
+description tells the agent when it applies. In Claude Code you can also
+name it: `/mesokit-train`. The agent asks one round of questions for what
+it cannot read from your files, does the work in your project directory,
+runs the skill's self-check, and reports back with the files, commands and
+numbers. This is the mode for all six skills.
+
+**As a worker.** `mesokit data parse` launches an agent non-interactively
+(`claude -p` or `codex exec`), hands it the `mesokit-convert-data` skill
+and your file, and validates the result when the agent exits:
+
+```sh
+mesokit data parse --file ~/runs/field.nc --hint "variable phi, dims (member, time, x)" --name phi_v0
+```
+
+The skill detects which mode it is in from the prompt: with a pinned input
+and output path it skips the interview. Only the conversion skill has a
+worker mode; the others are interactive by nature. The options are in the
+[Command-Line Reference](cli.md) under `mesokit data parse`.
+
+## What to expect
+
+- **The agent runs real commands.** It will read your files, write under
+  `data/`, `checkpoints/`, `figs/`, `.mesokit/` and the `configs/` recipe
+  folders, and launch `mesokit` commands — your agent will show its usual
+  permission prompts. Nothing it produces there should be committed.
+- **Small before large.** Every skill starts with a smoke-sized run (a few
+  trajectories, one epoch on CPU) and tells you before something will run
+  long or use the GPU.
+- **It checks itself.** The conversion skill reports success only when
+  `mesokit.data.validate` passes; the model skill refuses to train before
+  the structural test passes; the artifact skill verifies against a known
+  case.
+- **It does not change the mesokit package.** The `add-*` skills write into
+  your module and stop, with an explanation, when a request would need a
+  change under `src/mesokit/`.
+- **It does not decide what your data is.** When the axis layout, the box
+  or the goal of the fit cannot be read from the file or the request, the
+  skill asks — in one round, not a drip of questions.
+
+## Examples
+
+Each example is a request you could type, what the agent does under the
+skill, and what you get. Paths are illustrative.
+
+### Convert a file
+
+> I have `~/runs/burgers.npz` with arrays `u` of shape (200, 101, 256) and
+> `t`; the domain is [0, 2π) periodic. Make it a mesokit dataset called
+> `burgers_v0`.
+
+The agent inspects the arrays, recognises `(traj, time, x)` from the hint,
+writes `data/parsed/burgers.h5` with `dyn = "burgers_1d"`, `Lx = 2π`,
+`dt = t[1] - t[0]` and `source` pointing at your file, runs the validator,
+and registers the name:
+
+```text
+registered 'burgers_v0' -> /home/me/project/data/parsed/burgers.h5
+dyn=burgers_1d  data=(200, 101, 1, 256) float32  dt=0.01
+```
+
+Had the hint been missing, it would have asked which axis is time before
+writing anything.
+
+### Generate data from your own equation
+
+> Here is my `heat_1d.py` with an explicit-Euler solver for
+> `u_t = κ u_xx` on a periodic grid. Make mesokit generate datasets from
+> it.
+
+The agent wraps the solver as `simulate_heat_1d(*, n_traj, Nx, Lx, T,
+n_time, kappa, seed, verbose)` registered as `heat_1d`, stores `dt`, `Lx`
+and `kappa` in the metadata groups, writes
+`configs/data/heat_1d/default.yaml`, generates a small dataset with
+`PYTHONPATH=. mesokit data generate --dyn heat_1d`, and checks that the
+mean of `u` is conserved along one trajectory before handing over to
+training.
+
+### Train and interpret
+
+> Train Spectral OnsagerNet on `burgers_v0` and show me the potential.
+
+The agent reads the grid (256 points, `Lx = 2π`, `dt = 0.01`), chooses
+`spectral_onsagernet_1d`, copies the Allen–Cahn recipe to
+`configs/train/burgers_1d/spectral_onsagernet_1d/default.yaml` with
+`Nx: 256`, runs
+
+```sh
+mesokit train --model spectral_onsagernet_1d --dyn burgers_1d --data burgers_v0 --epochs 1 --device cpu --no-registry
+mesokit train --model spectral_onsagernet_1d --dyn burgers_1d --data burgers_v0 --name burgers_son
+mesokit interpret extract --model burgers_son --artifact potential --output figs/burgers_son.png
+```
+
+and reports the loss curve, the figure path, and a reading of it: for
+Burgers it will point out the non-zero reactive multipliers `Im Kw` as the
+signature of the advective (reversible) part, and suggest `--config
+coercive` for a richer potential.
+
+### Add a model
+
+> Spectral OnsagerNet's potentials are all local. I want one with a
+> non-local kernel `∫∫ u(x) K(x − y) u(y)`.
+
+The agent recognises this as a new potential, not a new model: it writes a
+`SpectralPotential` subclass in your module with the kernel as learnable
+Fourier multipliers (`dVdu_h`, `L_hat`, `N_hat`), checks its gradient
+against finite differences, plugs it into `SpectralOnsagerNet1d(...,
+potential=...)`, and trains two epochs from Python. The shipped `potential`
+artifact still works, so the next step is `mesokit-train`'s Python path.
+
+### Change the training objective
+
+> Train my model on three-step rollouts instead of next-frame prediction.
+
+The agent first checks `LitTrainer(rollout_steps=3)` with a training view
+whose targets are the next three frames — no new code — and only writes a
+custom `fit()` if you also want a term `LitTrainer` cannot express. Either
+way it reports the smoke loss against the persistence baseline so "it
+learned something" has a number.
+
+### Read a new diagnostic
+
+> From checkpoint `burgers_son`, plot the learned mobility against `k²`
+> and fit the diffusion constant.
+
+The agent loads the checkpoint from its saved `config.yaml`, writes a
+`MobilitySpectrum` artifact (`summary`, `plot`, `save`) that fits
+`Km ≈ D k²`, saves `figs/burgers_son_mobility.png`, places it beside the
+shipped `potential` artifact with `compare`, and states the fitted `D` with
+the caveat that a non-zero `Km(0)` would mean the dynamics is not
+conserved.
+
+## Writing your own
+
+A skill is a folder with a `SKILL.md` whose YAML frontmatter has `name`
+and `description` (the description is what tells the agent when to use
+it — include the phrasings that should trigger it and the cases that
+should not), followed by the instructions. Keep it one procedure with a
+self-check, not a copy of the reference docs, and avoid links relative to
+the repository so the file works after it is copied. The shipped skills are
+the templates; `mesokit skills path <name>` prints one to start from.

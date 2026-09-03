@@ -13,8 +13,8 @@
 :titlesonly:
 :maxdepth: 1
 
-mesokit.utils.mlp
 mesokit.utils.activation
+mesokit.utils.mlp
 ```
 
 ## Package Contents

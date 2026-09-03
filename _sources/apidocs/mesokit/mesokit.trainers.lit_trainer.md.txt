@@ -13,8 +13,8 @@
 :titlesonly:
 :maxdepth: 1
 
-mesokit.trainers.lit_trainer.lit_trainer
 mesokit.trainers.lit_trainer._lit_module
+mesokit.trainers.lit_trainer.lit_trainer
 ```
 
 ## Package Contents

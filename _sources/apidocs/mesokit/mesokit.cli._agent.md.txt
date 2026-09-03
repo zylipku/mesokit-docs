@@ -59,12 +59,8 @@
 :class: autosummary longtable
 :align: left
 
-* - {py:obj}`SKILL_PACKAGE <mesokit.cli._agent.SKILL_PACKAGE>`
-  - ```{autodoc2-docstring} mesokit.cli._agent.SKILL_PACKAGE
-    :summary:
-    ```
-* - {py:obj}`SKILL_RESOURCE <mesokit.cli._agent.SKILL_RESOURCE>`
-  - ```{autodoc2-docstring} mesokit.cli._agent.SKILL_RESOURCE
+* - {py:obj}`SKILL_NAME <mesokit.cli._agent.SKILL_NAME>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.SKILL_NAME
     :summary:
     ```
 * - {py:obj}`AGENTS <mesokit.cli._agent.AGENTS>`
@@ -79,22 +75,12 @@
 
 ### API
 
-````{py:data} SKILL_PACKAGE
-:canonical: mesokit.cli._agent.SKILL_PACKAGE
+````{py:data} SKILL_NAME
+:canonical: mesokit.cli._agent.SKILL_NAME
 :value: >
-   'mesokit.skills.mesokit_convert_data'
+   'mesokit-convert-data'
 
-```{autodoc2-docstring} mesokit.cli._agent.SKILL_PACKAGE
-```
-
-````
-
-````{py:data} SKILL_RESOURCE
-:canonical: mesokit.cli._agent.SKILL_RESOURCE
-:value: >
-   'SKILL.md'
-
-```{autodoc2-docstring} mesokit.cli._agent.SKILL_RESOURCE
+```{autodoc2-docstring} mesokit.cli._agent.SKILL_NAME
 ```
 
 ````
@@ -236,7 +222,7 @@
 
 ````
 
-````{py:function} skill_path() -> pathlib.Path
+````{py:function} skill_path(name: str = SKILL_NAME) -> pathlib.Path
 :canonical: mesokit.cli._agent.skill_path
 
 ```{autodoc2-docstring} mesokit.cli._agent.skill_path

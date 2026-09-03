@@ -278,7 +278,10 @@ registering it, use the Python helper `mesokit.data.validate(path)`.
 
 Hand an arbitrary dataset to a coding agent installed on your machine, let
 it convert the file with the `mesokit-convert-data` skill shipped in the
-package, then validate (and optionally register) the result.
+package, then validate (and optionally register) the result. The skill
+itself, and the two others that cover training and extending, are
+described in [Agent Skills](skills.md); `mesokit skills` below installs
+them into an agent for conversational use.
 
 ```sh
 mesokit data parse --file FILE [--output PATH] [--hint TEXT]
@@ -559,6 +562,62 @@ Invalid value: registered checkpoint path does not exist: /home/me/mesokit/check
 Invalid value: --output must be a directory when --artifact all
 Invalid value: checkpoint 'x' has no model config and no model_name; register a config produced by `mesokit train`
 KeyError: "unknown artifact(s) ['x']; available: ['potential']"      # a traceback, exit status 1
+```
+
+## `mesokit skills`
+
+The agent skills shipped in the package (`mesokit-convert-data`,
+`mesokit-train`, `mesokit-add-simulator`, `mesokit-add-model`,
+`mesokit-add-trainer`, `mesokit-add-artifact`; see [Agent Skills](skills.md)). `list`
+and `path` show what is installed and where; `install` copies skills into
+the folder a coding agent scans so they can be invoked conversationally
+outside the mesokit checkout.
+
+```sh
+mesokit skills list
+mesokit skills path NAME
+mesokit skills install [NAME ...] [--all] [--agent claude|codex] [--scope project|user] [--dest DIR] [--force]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `NAME …` | all shipped skills | Skills to copy (`--all` is the explicit form). |
+| `--agent` | `claude` | Folder layout: `claude` (`.claude/skills/`, `~/.claude/skills/`) or `codex` (`.agents/skills/`, `$CODEX_HOME/skills`, default `~/.codex/skills`). |
+| `--scope` | `project` | `project` writes under the current directory, `user` under your home. |
+| `--dest DIR` | none | Explicit target folder; overrides `--agent` / `--scope`. |
+| `--force` | off | Replace a skill folder that already exists (also how to refresh after upgrading mesokit). |
+
+```sh
+mesokit skills list
+```
+
+```text
+mesokit-add-artifact  Read an interpretable quantity off a trained mesokit model by building a custom interpretability artifact — a plot, a number, a fitted law, a spectrum — either wired into a custom model's `artifact(name)` or computed post hoc from a loaded checkpoint of a shipped model, and compare it side by side with the shipped `potential` artifact
+mesokit-add-model     Write and register a custom dynamics model for mesokit from the user's own module — a new architecture, a physics-structured parameterisation, or a new potential / operator block for the shipped Onsager families — and verify it structurally before any training
+mesokit-add-simulator Register the user's own equation, solver or data generator as a mesokit simulator so that `mesokit data generate` (or a Python call) produces registered, validated trajectory datasets from it
+mesokit-add-trainer   Give a mesokit model a different training procedure — a custom loss (multi-step rollout, weighted, physics-informed), optimiser schedule, curriculum, or a plain-PyTorch loop — by configuring the shipped LitTrainer or writing and registering a custom trainer from the user's own module
+mesokit-convert-data  Convert a user's dataset (numpy, xarray, torch, externally-produced HDF5, ...) into the mesokit-trajectory HDF5 v1 cache, and optionally register it as a named dataset
+mesokit-train         Train one of mesokit's shipped model families (fno, spectral_onsagernet, onsagernet) on a registered mesokit dataset and read the resulting interpretability artifact
+```
+
+```sh
+mesokit skills install --agent codex --scope user
+```
+
+```text
+installed 'mesokit-add-artifact' -> /home/me/.codex/skills/mesokit-add-artifact
+installed 'mesokit-add-model' -> /home/me/.codex/skills/mesokit-add-model
+installed 'mesokit-add-simulator' -> /home/me/.codex/skills/mesokit-add-simulator
+installed 'mesokit-add-trainer' -> /home/me/.codex/skills/mesokit-add-trainer
+installed 'mesokit-convert-data' -> /home/me/.codex/skills/mesokit-convert-data
+installed 'mesokit-train' -> /home/me/.codex/skills/mesokit-train
+the skills are picked up on the agent's next session (Claude Code: type / to see them)
+```
+
+An existing skill folder is never overwritten silently:
+
+```text
+Invalid value: /home/me/.codex/skills/mesokit-train already exists; pass --force to replace it
 ```
 
 ## Recipes
