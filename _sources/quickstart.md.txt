@@ -19,6 +19,7 @@ model is read from the dataset, so no configuration file needs writing:
 pip install .                 # from a clone of the repository (a PyPI release is planned)
 mkdir my-project && cd my-project
 mesokit data avail
+mesokit agent init            # optional: set up Claude Code / Codex for this project
 ```
 
 **Extend the toolkit.** Your own simulators, models, trainers or
@@ -50,7 +51,8 @@ Every step below is a command or a short script you can run yourself. If
 you use a coding agent (Claude Code, Codex CLI), each step is also a
 *skill* the agent can carry out for you — converting your data, choosing
 and training a model, extending mesokit with your own equation or model.
-See [Agent Skills](skills.md) for what they do and how to install them;
+See [Agent Skills](skills.md) for what they do and how to install them
+(in your own project, `mesokit agent init` sets the agent up in one step);
 the commands the agent runs are the ones documented here.
 
 ## Data Loading

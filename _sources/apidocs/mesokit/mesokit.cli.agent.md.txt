@@ -1,0 +1,234 @@
+# {py:mod}`mesokit.cli.agent`
+
+```{py:module} mesokit.cli.agent
+```
+
+```{autodoc2-docstring} mesokit.cli.agent
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`template_path <mesokit.cli.agent.template_path>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.template_path
+    :summary:
+    ```
+* - {py:obj}`render_section <mesokit.cli.agent.render_section>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.render_section
+    :summary:
+    ```
+* - {py:obj}`write_agents_md <mesokit.cli.agent.write_agents_md>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.write_agents_md
+    :summary:
+    ```
+* - {py:obj}`write_claude_md <mesokit.cli.agent.write_claude_md>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.write_claude_md
+    :summary:
+    ```
+* - {py:obj}`install_skills <mesokit.cli.agent.install_skills>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.install_skills
+    :summary:
+    ```
+* - {py:obj}`init <mesokit.cli.agent.init>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.init
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`app <mesokit.cli.agent.app>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.app
+    :summary:
+    ```
+* - {py:obj}`DOCS_URL <mesokit.cli.agent.DOCS_URL>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.DOCS_URL
+    :summary:
+    ```
+* - {py:obj}`AGENTS_FILE <mesokit.cli.agent.AGENTS_FILE>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.AGENTS_FILE
+    :summary:
+    ```
+* - {py:obj}`CLAUDE_FILE <mesokit.cli.agent.CLAUDE_FILE>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.CLAUDE_FILE
+    :summary:
+    ```
+* - {py:obj}`CLAUDE_IMPORT <mesokit.cli.agent.CLAUDE_IMPORT>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.CLAUDE_IMPORT
+    :summary:
+    ```
+* - {py:obj}`BEGIN <mesokit.cli.agent.BEGIN>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.BEGIN
+    :summary:
+    ```
+* - {py:obj}`END <mesokit.cli.agent.END>`
+  - ```{autodoc2-docstring} mesokit.cli.agent.END
+    :summary:
+    ```
+* - {py:obj}`_TEMPLATE <mesokit.cli.agent._TEMPLATE>`
+  - ```{autodoc2-docstring} mesokit.cli.agent._TEMPLATE
+    :summary:
+    ```
+* - {py:obj}`_AGENT_CHOICES <mesokit.cli.agent._AGENT_CHOICES>`
+  - ```{autodoc2-docstring} mesokit.cli.agent._AGENT_CHOICES
+    :summary:
+    ```
+* - {py:obj}`_CLAUDE_SHIM <mesokit.cli.agent._CLAUDE_SHIM>`
+  - ```{autodoc2-docstring} mesokit.cli.agent._CLAUDE_SHIM
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} app
+:canonical: mesokit.cli.agent.app
+:value: >
+   'Typer(...)'
+
+```{autodoc2-docstring} mesokit.cli.agent.app
+```
+
+````
+
+````{py:data} DOCS_URL
+:canonical: mesokit.cli.agent.DOCS_URL
+:value: >
+   'https://zylipku.github.io/mesokit-docs'
+
+```{autodoc2-docstring} mesokit.cli.agent.DOCS_URL
+```
+
+````
+
+````{py:data} AGENTS_FILE
+:canonical: mesokit.cli.agent.AGENTS_FILE
+:value: >
+   'AGENTS.md'
+
+```{autodoc2-docstring} mesokit.cli.agent.AGENTS_FILE
+```
+
+````
+
+````{py:data} CLAUDE_FILE
+:canonical: mesokit.cli.agent.CLAUDE_FILE
+:value: >
+   'CLAUDE.md'
+
+```{autodoc2-docstring} mesokit.cli.agent.CLAUDE_FILE
+```
+
+````
+
+````{py:data} CLAUDE_IMPORT
+:canonical: mesokit.cli.agent.CLAUDE_IMPORT
+:value: >
+   '@AGENTS.md'
+
+```{autodoc2-docstring} mesokit.cli.agent.CLAUDE_IMPORT
+```
+
+````
+
+````{py:data} BEGIN
+:canonical: mesokit.cli.agent.BEGIN
+:value: >
+   '<!-- mesokit:begin -->'
+
+```{autodoc2-docstring} mesokit.cli.agent.BEGIN
+```
+
+````
+
+````{py:data} END
+:canonical: mesokit.cli.agent.END
+:value: >
+   '<!-- mesokit:end -->'
+
+```{autodoc2-docstring} mesokit.cli.agent.END
+```
+
+````
+
+````{py:data} _TEMPLATE
+:canonical: mesokit.cli.agent._TEMPLATE
+:value: >
+   'templates/project_agents.md'
+
+```{autodoc2-docstring} mesokit.cli.agent._TEMPLATE
+```
+
+````
+
+````{py:data} _AGENT_CHOICES
+:canonical: mesokit.cli.agent._AGENT_CHOICES
+:value: >
+   ('claude', 'codex', 'both')
+
+```{autodoc2-docstring} mesokit.cli.agent._AGENT_CHOICES
+```
+
+````
+
+````{py:data} _CLAUDE_SHIM
+:canonical: mesokit.cli.agent._CLAUDE_SHIM
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.agent._CLAUDE_SHIM
+```
+
+````
+
+````{py:function} template_path() -> pathlib.Path
+:canonical: mesokit.cli.agent.template_path
+
+```{autodoc2-docstring} mesokit.cli.agent.template_path
+```
+````
+
+````{py:function} render_section() -> str
+:canonical: mesokit.cli.agent.render_section
+
+```{autodoc2-docstring} mesokit.cli.agent.render_section
+```
+````
+
+````{py:function} write_agents_md(path: pathlib.Path, section: str, *, force: bool) -> str
+:canonical: mesokit.cli.agent.write_agents_md
+
+```{autodoc2-docstring} mesokit.cli.agent.write_agents_md
+```
+````
+
+````{py:function} write_claude_md(path: pathlib.Path) -> str
+:canonical: mesokit.cli.agent.write_claude_md
+
+```{autodoc2-docstring} mesokit.cli.agent.write_claude_md
+```
+````
+
+````{py:function} install_skills(root: pathlib.Path, agent: str, *, force: bool) -> tuple[pathlib.Path, list[str], list[str]]
+:canonical: mesokit.cli.agent.install_skills
+
+```{autodoc2-docstring} mesokit.cli.agent.install_skills
+```
+````
+
+````{py:function} init(directory: typing.Annotated[pathlib.Path, typer.Option('--dir', help='Project root to set up (default: the current directory).')] = Path(), agent: typing.Annotated[str, typer.Option('--agent', help='Whose project skill folder to fill: claude (.claude/skills/), codex (.agents/skills/), or both.')] = 'claude', skills: typing.Annotated[bool, typer.Option('--skills/--no-skills', help='Also install the shipped skills, as `mesokit skills install` would.')] = True, force: typing.Annotated[bool, typer.Option('--force', help='Rewrite an existing mesokit section and replace installed skill folders.')] = False) -> None
+:canonical: mesokit.cli.agent.init
+
+```{autodoc2-docstring} mesokit.cli.agent.init
+```
+````

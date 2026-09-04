@@ -129,7 +129,7 @@
 ```
 ````
 
-````{py:function} target_dir(agent: str, scope: str, dest: pathlib.Path | None = None) -> pathlib.Path
+````{py:function} target_dir(agent: str, scope: str, dest: pathlib.Path | None = None, *, root: pathlib.Path | None = None) -> pathlib.Path
 :canonical: mesokit.cli.skills.target_dir
 
 ```{autodoc2-docstring} mesokit.cli.skills.target_dir

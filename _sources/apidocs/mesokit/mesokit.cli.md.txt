@@ -22,6 +22,7 @@ mesokit.cli.model
 mesokit.cli._recipes
 mesokit.cli.data
 mesokit.cli.sweep
+mesokit.cli.agent
 mesokit.cli._registry_store
 mesokit.cli.main
 ```

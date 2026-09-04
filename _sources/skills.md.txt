@@ -29,7 +29,9 @@ from your files.
 - Start the agent in your **project root**: the directory that holds
   `configs/` and where the `.mesokit/` registries live. All `mesokit`
   commands assume it.
-- Outside the mesokit checkout, install the skills once (next section).
+- Outside the mesokit checkout, run `mesokit agent init` once in your
+  project (next section): it writes the agent's project guidance and
+  installs the skills.
 
 ## Which skill, when
 
@@ -63,6 +65,13 @@ in an agent's shared skill folder. The full text of each is in the package
 `.claude/skills/<name>/SKILL.md`.
 
 ## Installing the skills into your agent
+
+In a project of your own, `mesokit agent init` does the whole setup in one
+step: it writes an `AGENTS.md` with the conventions for using mesokit from
+that directory (plus a `CLAUDE.md` import shim so Claude Code reads the
+same text) and installs the skills — see `mesokit agent` in the
+[Command-Line Reference](cli.md). The commands below install the skills
+alone.
 
 Inside the mesokit checkout, Claude Code already sees the skills
 (`.claude/skills/` holds a copy of each). Anywhere else — a project of your

@@ -4,7 +4,9 @@
 pipeline — **produce data → train → index the checkpoint → interpret** — as
 four command groups plus `sweep`, which runs the first two stages over a
 parameter grid, and keeps two project-local registries so that anything you
-generate or train once can be referred to by name afterwards.
+generate or train once can be referred to by name afterwards. Two more
+groups, `skills` and `agent`, set up a coding agent to drive the same
+commands.
 
 ```text
 mesokit data      avail | list | generate | register | parse
@@ -12,6 +14,8 @@ mesokit train
 mesokit sweep
 mesokit model     list | register
 mesokit interpret list | extract | explain
+mesokit skills    list | path | install
+mesokit agent     init
 ```
 
 Every command and subcommand accepts `--help`. This page is the complete
@@ -774,6 +778,60 @@ An existing skill folder is never overwritten silently:
 Invalid value: /home/me/.codex/skills/mesokit-train already exists; pass --force to replace it
 ```
 
+## `mesokit agent`
+
+Set up a coding agent (Claude Code, Codex CLI) for a project that uses
+mesokit as an installed package. `mesokit skills install` gives the agent
+the procedures; `agent init` gives it the project conventions — an
+`AGENTS.md` saying where the registries and outputs live, that the
+project's own code goes in `plugins/`, to start from smoke-sized settings,
+and which skill does what — and installs the skills in the same step.
+
+```sh
+mesokit agent init [--dir PATH] [--agent claude|codex|both] [--no-skills] [--force]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--dir PATH` | `.` | Project root to write into. |
+| `--agent` | `claude` | Whose project skill folder to fill: `claude` (`.claude/skills/`), `codex` (`.agents/skills/`) or `both`. `AGENTS.md` and `CLAUDE.md` are written regardless. |
+| `--skills` / `--no-skills` | on | Also copy the shipped skills, as `mesokit skills install` would. |
+| `--force` | off | Rewrite an existing mesokit section and replace installed skill folders (how to refresh after upgrading mesokit). |
+
+What it writes:
+
+- `AGENTS.md` — the mesokit section between `<!-- mesokit:begin -->` and
+  `<!-- mesokit:end -->` markers. A new file holds only that section; an
+  existing file gets it appended, and nothing outside the markers is ever
+  changed. Codex reads this file directly.
+- `CLAUDE.md` — a one-line `@AGENTS.md` import so Claude Code reads the
+  same text; an existing `CLAUDE.md` only gains the import line if it is
+  missing.
+- `.claude/skills/<name>/` and / or `.agents/skills/<name>/` — the skills,
+  skipping folders that already exist unless `--force`.
+
+```sh
+cd my-project
+mesokit agent init
+```
+
+```text
+created   /home/me/my-project/AGENTS.md
+created   /home/me/my-project/CLAUDE.md
+skills    6 installed, 0 kept -> /home/me/my-project/.claude/skills
+start your agent in /home/me/my-project and describe the task; re-run with --force after upgrading mesokit
+```
+
+A second run without `--force` is refused rather than duplicating the
+section:
+
+```text
+Invalid value: /home/me/my-project/AGENTS.md already has a mesokit section; pass --force to rewrite it
+```
+
+Inside the mesokit checkout the command is not needed: the repository's
+own `AGENTS.md` covers both using and developing the toolkit.
+
 ## Recipes
 
 **Smallest end-to-end run** (seconds on a CPU):
@@ -882,6 +940,8 @@ mesokit interpret list --model nb_run
 | `checkpoints/<dyn>/<run>/` | `train` | `interpret` | `model.pt`, `config.yaml`, `history.json`, Lightning `.ckpt`. |
 | `.mesokit/checkpoints.json` | `train`, `sweep`, `model register` | `model list`, `interpret` | `name → {path, config_path, model_name, trainer_name, dyn, dataset_name, data, run_id, training_config_hash, metadata}`. |
 | `checkpoints/<dyn>/sweeps/<timestamp>.json` | `sweep` | you (notebooks) | `{dyn, model, params, created, rows}`; one row per grid point with the parameters, names, paths, `train_loss`, `wall_time_s`, `status`, `error`. |
+| `AGENTS.md`, `CLAUDE.md` | `agent init` | your coding agent | Conventions for using mesokit in the project; the mesokit section sits between `<!-- mesokit:begin -->` / `<!-- mesokit:end -->` markers. |
+| `.claude/skills/<name>/`, `.agents/skills/<name>/` | `skills install`, `agent init` | your coding agent | A copy of each shipped skill folder. |
 
 Both registries are plain JSON with atomic writes; you can inspect or hand-edit
 them, and delete an entry by removing its key. Nothing under `data/`,
@@ -925,6 +985,7 @@ A registry entry, for reference:
 | `checkpoint 'x' is not registered` | `interpret` needs a name from `mesokit model list`. | Train, or `mesokit model register`. |
 | `--output must be a directory when --artifact all` | An extension was given with `--artifact all`. | Pass a directory path. |
 | `agent 'claude' is not installed: no claude command on PATH` | The agent CLI is missing from the shell `mesokit` runs in; nothing was launched. | Follow the official installation guide the message names ([Claude Code](https://code.claude.com/docs/en/setup), [Codex CLI](https://developers.openai.com/codex/cli)), check `claude --version`, and re-run; or `--agent codex`. |
+| `AGENTS.md already has a mesokit section; pass --force to rewrite it` | `agent init` was run in this project before. | Add `--force` to refresh the section; text outside the markers is kept. |
 | A tensor size mismatch inside the model during `train` | The recipe's `model.Nx` does not match the dataset grid (e.g. the 8-point `smoke.yaml` fixture on 256-point data). | Use `--config default` or fix `Nx`. |
 | Training is slow or out of memory | Default recipes assume a GPU. | `--device cpu --batch-size 8 --epochs 1` for a smoke run. |
 

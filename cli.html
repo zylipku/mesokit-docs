@@ -358,6 +358,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._recipes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._recipes</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.sweep.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
 </ul>
@@ -408,12 +409,16 @@
 pipeline — <strong>produce data → train → index the checkpoint → interpret</strong> — as
 four command groups plus <code class="docutils literal notranslate"><span class="pre">sweep</span></code>, which runs the first two stages over a
 parameter grid, and keeps two project-local registries so that anything you
-generate or train once can be referred to by name afterwards.</p>
+generate or train once can be referred to by name afterwards. Two more
+groups, <code class="docutils literal notranslate"><span class="pre">skills</span></code> and <code class="docutils literal notranslate"><span class="pre">agent</span></code>, set up a coding agent to drive the same
+commands.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>mesokit data      avail | list | generate | register | parse
 mesokit train
 mesokit sweep
 mesokit model     list | register
 mesokit interpret list | extract | explain
+mesokit skills    list | path | install
+mesokit agent     init
 </pre></div>
 </div>
 <p>Every command and subcommand accepts <code class="docutils literal notranslate"><span class="pre">--help</span></code>. This page is the complete
@@ -1339,6 +1344,75 @@ the skills are picked up on the agent&#39;s next session (Claude Code: type / to
 </pre></div>
 </div>
 </section>
+<section id="mesokit-agent">
+<h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code><a class="headerlink" href="#mesokit-agent" title="Link to this heading">¶</a></h2>
+<p>Set up a coding agent (Claude Code, Codex CLI) for a project that uses
+mesokit as an installed package. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span> <span class="pre">install</span></code> gives the agent
+the procedures; <code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">init</span></code> gives it the project conventions — an
+<code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code> saying where the registries and outputs live, that the
+project’s own code goes in <code class="docutils literal notranslate"><span class="pre">plugins/</span></code>, to start from smoke-sized settings,
+and which skill does what — and installs the skills in the same step.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>agent<span class="w"> </span>init<span class="w"> </span><span class="o">[</span>--dir<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--agent<span class="w"> </span>claude<span class="p">|</span>codex<span class="p">|</span>both<span class="o">]</span><span class="w"> </span><span class="o">[</span>--no-skills<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dir</span> <span class="pre">PATH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.</span></code></p></td>
+<td><p>Project root to write into.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--agent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">claude</span></code></p></td>
+<td><p>Whose project skill folder to fill: <code class="docutils literal notranslate"><span class="pre">claude</span></code> (<code class="docutils literal notranslate"><span class="pre">.claude/skills/</span></code>), <code class="docutils literal notranslate"><span class="pre">codex</span></code> (<code class="docutils literal notranslate"><span class="pre">.agents/skills/</span></code>) or <code class="docutils literal notranslate"><span class="pre">both</span></code>. <code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code> and <code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> are written regardless.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--skills</span></code> / <code class="docutils literal notranslate"><span class="pre">--no-skills</span></code></p></td>
+<td><p>on</p></td>
+<td><p>Also copy the shipped skills, as <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span> <span class="pre">install</span></code> would.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Rewrite an existing mesokit section and replace installed skill folders (how to refresh after upgrading mesokit).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>What it writes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code> — the mesokit section between <code class="docutils literal notranslate"><span class="pre">&lt;!--</span> <span class="pre">mesokit:begin</span> <span class="pre">--&gt;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&lt;!--</span> <span class="pre">mesokit:end</span> <span class="pre">--&gt;</span></code> markers. A new file holds only that section; an
+existing file gets it appended, and nothing outside the markers is ever
+changed. Codex reads this file directly.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> — a one-line <code class="docutils literal notranslate"><span class="pre">&#64;AGENTS.md</span></code> import so Claude Code reads the
+same text; an existing <code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> only gains the import line if it is
+missing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.claude/skills/&lt;name&gt;/</span></code> and / or <code class="docutils literal notranslate"><span class="pre">.agents/skills/&lt;name&gt;/</span></code> — the skills,
+skipping folders that already exist unless <code class="docutils literal notranslate"><span class="pre">--force</span></code>.</p></li>
+</ul>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>my-project
+mesokit<span class="w"> </span>agent<span class="w"> </span>init
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>created   /home/me/my-project/AGENTS.md
+created   /home/me/my-project/CLAUDE.md
+skills    6 installed, 0 kept -&gt; /home/me/my-project/.claude/skills
+start your agent in /home/me/my-project and describe the task; re-run with --force after upgrading mesokit
+</pre></div>
+</div>
+<p>A second run without <code class="docutils literal notranslate"><span class="pre">--force</span></code> is refused rather than duplicating the
+section:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invalid value: /home/me/my-project/AGENTS.md already has a mesokit section; pass --force to rewrite it
+</pre></div>
+</div>
+<p>Inside the mesokit checkout the command is not needed: the repository’s
+own <code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code> covers both using and developing the toolkit.</p>
+</section>
 <section id="recipes">
 <h2>Recipes<a class="headerlink" href="#recipes" title="Link to this heading">¶</a></h2>
 <p><strong>Smallest end-to-end run</strong> (seconds on a CPU):</p>
@@ -1467,6 +1541,16 @@ mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class=
 <td><p>you (notebooks)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{dyn,</span> <span class="pre">model,</span> <span class="pre">params,</span> <span class="pre">created,</span> <span class="pre">rows}</span></code>; one row per grid point with the parameters, names, paths, <code class="docutils literal notranslate"><span class="pre">train_loss</span></code>, <code class="docutils literal notranslate"><span class="pre">wall_time_s</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code>, <code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">init</span></code></p></td>
+<td><p>your coding agent</p></td>
+<td><p>Conventions for using mesokit in the project; the mesokit section sits between <code class="docutils literal notranslate"><span class="pre">&lt;!--</span> <span class="pre">mesokit:begin</span> <span class="pre">--&gt;</span></code> / <code class="docutils literal notranslate"><span class="pre">&lt;!--</span> <span class="pre">mesokit:end</span> <span class="pre">--&gt;</span></code> markers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.claude/skills/&lt;name&gt;/</span></code>, <code class="docutils literal notranslate"><span class="pre">.agents/skills/&lt;name&gt;/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">skills</span> <span class="pre">install</span></code>, <code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">init</span></code></p></td>
+<td><p>your coding agent</p></td>
+<td><p>A copy of each shipped skill folder.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1550,11 +1634,15 @@ them, and delete an entry by removing its key. Nothing under <code class="docuti
 <td><p>The agent CLI is missing from the shell <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> runs in; nothing was launched.</p></td>
 <td><p>Follow the official installation guide the message names (<a class="reference external" href="https://code.claude.com/docs/en/setup">Claude Code</a>, <a class="reference external" href="https://developers.openai.com/codex/cli">Codex CLI</a>), check <code class="docutils literal notranslate"><span class="pre">claude</span> <span class="pre">--version</span></code>, and re-run; or <code class="docutils literal notranslate"><span class="pre">--agent</span> <span class="pre">codex</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p>A tensor size mismatch inside the model during <code class="docutils literal notranslate"><span class="pre">train</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AGENTS.md</span> <span class="pre">already</span> <span class="pre">has</span> <span class="pre">a</span> <span class="pre">mesokit</span> <span class="pre">section;</span> <span class="pre">pass</span> <span class="pre">--force</span> <span class="pre">to</span> <span class="pre">rewrite</span> <span class="pre">it</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">init</span></code> was run in this project before.</p></td>
+<td><p>Add <code class="docutils literal notranslate"><span class="pre">--force</span></code> to refresh the section; text outside the markers is kept.</p></td>
+</tr>
+<tr class="row-even"><td><p>A tensor size mismatch inside the model during <code class="docutils literal notranslate"><span class="pre">train</span></code></p></td>
 <td><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">model.Nx</span></code> does not match the dataset grid (e.g. the 8-point <code class="docutils literal notranslate"><span class="pre">smoke.yaml</span></code> fixture on 256-point data).</p></td>
 <td><p>Use <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">default</span></code> or fix <code class="docutils literal notranslate"><span class="pre">Nx</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p>Training is slow or out of memory</p></td>
+<tr class="row-odd"><td><p>Training is slow or out of memory</p></td>
 <td><p>Default recipes assume a GPU.</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">--device</span> <span class="pre">cpu</span> <span class="pre">--batch-size</span> <span class="pre">8</span> <span class="pre">--epochs</span> <span class="pre">1</span></code> for a smoke run.</p></td>
 </tr>
@@ -1687,6 +1775,7 @@ own.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#mesokit-skills"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-agent"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
 <li><a class="reference internal" href="#recipes">Recipes</a></li>
 <li><a class="reference internal" href="#files-the-cli-reads-and-writes">Files the CLI Reads and Writes</a></li>
 <li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
