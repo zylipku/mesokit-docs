@@ -14,12 +14,12 @@
 :maxdepth: 3
 
 mesokit.data.peridynamics
-mesokit.data.allen_cahn
-mesokit.data.kdv
 mesokit.data.datasets
+mesokit.data.llg
+mesokit.data.kdv
+mesokit.data.allen_cahn
 mesokit.data.cahn_hilliard
 mesokit.data.ising
-mesokit.data.llg
 ```
 
 ## Submodules
@@ -28,13 +28,13 @@ mesokit.data.llg
 :titlesonly:
 :maxdepth: 1
 
-mesokit.data.format
-mesokit.data._progress
-mesokit.data._hdf5
+mesokit.data.registry
 mesokit.data.simulator_base
 mesokit.data.trajectory
-mesokit.data.registry
+mesokit.data._hdf5
+mesokit.data._progress
 mesokit.data.validate
+mesokit.data.format
 ```
 
 ## Package Contents

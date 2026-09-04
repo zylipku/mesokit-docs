@@ -313,10 +313,17 @@ mesokit data parse --file FILE [--output PATH] [--hint TEXT]
 | `--file FILE` | required | Input in any format (`.npz`, `.npy`, `.nc`, `.pt`, non-conforming `.h5`, …). |
 | `--output PATH` | `data/parsed/<stem>.h5` | Where the agent must write the v1 file. |
 | `--hint TEXT` | none | Free-form instructions appended to the agent's prompt (axis names, units, which variable is the field, …). |
-| `--agent` | `claude` | Agent CLI: `claude` (runs `claude -p …`) or `codex` (runs `codex exec …`). The binary must be on `PATH`. |
+| `--agent` | `claude` | Agent CLI: `claude` (runs `claude -p …`) or `codex` (runs `codex exec …`). Checked first: if the command is not installed, `parse` stops and prints the official installation guide to follow. |
 | `--backend` | `foreground` | `foreground` blocks and streams the agent's output; `tmux` detaches into a session. |
 | `--name NAME` | none | Register the produced file under this name on success. Without it the file is only validated. |
 | `--force` | off | Replace an existing registry entry. |
+
+Before anything is created or launched, the command checks that the
+agent's CLI (`claude` or `codex`) is installed in the shell it runs in. If
+it is not, it exits at once and names the official installation guide:
+[Claude Code](https://code.claude.com/docs/en/setup) or the
+[Codex CLI](https://developers.openai.com/codex/cli). Install the agent
+there, confirm `claude --version` (or `codex --version`) works, and re-run.
 
 The prompt tells the agent where the skill file is, which file to convert,
 where to write, and to self-verify by running the validator until it
@@ -350,8 +357,8 @@ when the agent finishes, validate / register with:
   mesokit data register --name burgers_v0 --file /home/me/mesokit/data/parsed/burgers.h5
 ```
 
-Errors: `agent 'claude' requires 'claude' on PATH`, `unknown agent 'x';
-available: claude, codex`, `backend 'tmux' requires the tmux binary on
+Errors: `agent 'claude' is not installed` (with the official installation
+guide to follow), `unknown agent 'x'; available: claude, codex`, `backend 'tmux' requires the tmux binary on
 PATH`, `agent exited with code N`, `agent finished but <output> was not
 written`.
 
@@ -917,7 +924,7 @@ A registry entry, for reference:
 | `registered dataset 'x' points to missing file` | The file was moved or deleted after registration. | Re-register with the new path and `--force`, or regenerate. |
 | `checkpoint 'x' is not registered` | `interpret` needs a name from `mesokit model list`. | Train, or `mesokit model register`. |
 | `--output must be a directory when --artifact all` | An extension was given with `--artifact all`. | Pass a directory path. |
-| `agent 'claude' requires 'claude' on PATH` | The agent CLI is not installed or not on `PATH`. | Install it, or `--agent codex`. |
+| `agent 'claude' is not installed: no claude command on PATH` | The agent CLI is missing from the shell `mesokit` runs in; nothing was launched. | Follow the official installation guide the message names ([Claude Code](https://code.claude.com/docs/en/setup), [Codex CLI](https://developers.openai.com/codex/cli)), check `claude --version`, and re-run; or `--agent codex`. |
 | A tensor size mismatch inside the model during `train` | The recipe's `model.Nx` does not match the dataset grid (e.g. the 8-point `smoke.yaml` fixture on 256-point data). | Use `--config default` or fix `Nx`. |
 | Training is slow or out of memory | Default recipes assume a GPU. | `--device cpu --batch-size 8 --epochs 1` for a smoke run. |
 

@@ -134,8 +134,11 @@ mesokit data parse --file path/to/raw_data.nc \
 
 Flags:
 
-- `--agent`: which agent CLI to invoke (`claude`, `codex`); it must be
-  on your `PATH`.
+- `--agent`: which agent CLI to invoke (`claude`, `codex`). The command
+  checks for it before doing anything else; if it is not installed it
+  stops and points you at the official installation guide
+  ([Claude Code](https://code.claude.com/docs/en/setup),
+  [Codex CLI](https://developers.openai.com/codex/cli)).
 - `--backend`: `foreground` (default; streams the agent's output and
   blocks) or `tmux` (detaches into a session you can attach to later).
 - `--hint`: free-form prompt fragment appended to the task.

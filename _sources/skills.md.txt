@@ -17,9 +17,11 @@ from your files.
 
 ## Before you start
 
-- A coding agent is installed: [Claude Code](https://claude.com/claude-code)
-  or the Codex CLI. `mesokit data parse` additionally needs its binary on
-  `PATH`.
+- A coding agent is installed, following its official guide:
+  [Claude Code](https://code.claude.com/docs/en/setup) or the
+  [Codex CLI](https://developers.openai.com/codex/cli). `mesokit data parse`
+  checks for the `claude` / `codex` command before it does anything and, if
+  the command is missing, stops with a pointer to that guide.
 - `mesokit` is importable in the shell the agent runs commands in. In the
   mesokit checkout that means the agent prefixes commands with `pixi run`
   (the skills say so); in your own project it means the virtual environment

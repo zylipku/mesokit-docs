@@ -43,6 +43,14 @@
   - ```{autodoc2-docstring} mesokit.cli._agent._run_tmux
     :summary:
     ```
+* - {py:obj}`installed <mesokit.cli._agent.installed>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.installed
+    :summary:
+    ```
+* - {py:obj}`not_installed_message <mesokit.cli._agent.not_installed_message>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.not_installed_message
+    :summary:
+    ```
 * - {py:obj}`skill_path <mesokit.cli._agent.skill_path>`
   - ```{autodoc2-docstring} mesokit.cli._agent.skill_path
     :summary:
@@ -109,6 +117,28 @@
    None
 
 ```{autodoc2-docstring} mesokit.cli._agent.AgentSpec.argv
+```
+
+````
+
+````{py:attribute} label
+:canonical: mesokit.cli._agent.AgentSpec.label
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.AgentSpec.label
+```
+
+````
+
+````{py:attribute} install_url
+:canonical: mesokit.cli._agent.AgentSpec.install_url
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.AgentSpec.install_url
 ```
 
 ````
@@ -220,6 +250,20 @@
 ```{autodoc2-docstring} mesokit.cli._agent.BACKENDS
 ```
 
+````
+
+````{py:function} installed(spec: mesokit.cli._agent.AgentSpec) -> bool
+:canonical: mesokit.cli._agent.installed
+
+```{autodoc2-docstring} mesokit.cli._agent.installed
+```
+````
+
+````{py:function} not_installed_message(name: str, spec: mesokit.cli._agent.AgentSpec) -> str
+:canonical: mesokit.cli._agent.not_installed_message
+
+```{autodoc2-docstring} mesokit.cli._agent.not_installed_message
+```
 ````
 
 ````{py:function} skill_path(name: str = SKILL_NAME) -> pathlib.Path
