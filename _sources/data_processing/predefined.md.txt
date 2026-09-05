@@ -23,11 +23,13 @@ training script through the universal `simulate(name, **params)` surface.
 | [`llg_lattice_2d`](#llg-lattice-2d) | Landau–Lifshitz–Gilbert spin lattice | reversible precession + dissipation | `(64, 101, 3, 32, 32)` | NumPy |
 | [`peridynamics_fracture_2d`](#peridynamics-fracture-2d) | Bond-based peridynamics, notched plate under mode-I load | particle mechanics with irreversible bond breaking, coarse-grained to displacement / damage / force fields | `(4, 101, 6, 40, 30)` | LAMMPS + SciPy |
 
-The Dedalus- and LAMMPS-backed simulators need the `sim` Pixi feature. The
-three NumPy/SciPy ones have no solver dependency of their own, but
-`mesokit.data` currently imports the 1D Dedalus simulators at module level,
-so importing the package still requires Dedalus (every Pixi environment
-except `lint` and `docs` has it).
+Dedalus and LAMMPS are conda-forge packages: the checkout's `sim` Pixi
+feature has both, a `pip install mesokit` has neither. The simulators that
+need them import the back-end only when run, so `mesokit.data`, the CLI
+and the three NumPy/SciPy simulators work without it; running one of the
+four without its back-end stops with a message naming the package to add
+(`pixi add dedalus`, `pixi add lammps`; see the
+[installation section](../quickstart.md#installation)).
 
 ## Listing What's Available
 

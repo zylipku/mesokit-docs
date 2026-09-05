@@ -979,6 +979,7 @@ A registry entry, for reference:
 | `--name and --no-registry are mutually exclusive` | Both flags given. | Pick one. |
 | `dataset 'x' already registered; pass --force to overwrite` | Name collision. | Choose another `--name`, or add `--force`. In a `sweep`, `--reuse-data` trains on the existing dataset instead. |
 | `unknown parameter 'x' for simulator …; accepted: …` | A `--set` / `--param` key is not a keyword argument of the simulator. | Pick a key from the `accepted` list (they are the keys of the data recipe). |
+| `allen_cahn_1d needs Dedalus, which is not installed` (or `… needs LAMMPS …`) | The simulator's solver back-end is a conda-forge package that `pip install mesokit` cannot bring in. | `pixi add dedalus` / `pixi add lammps` (or `conda install -c conda-forge …`) in the environment `mesokit` runs in; see [Installation](quickstart.md#installation). |
 | `sanity check failed for …; not registered` | The file violates the v1 contract; the specific checks are printed above the message. | Fix the writer — see [Data Structure](data_processing/structure.md) — or run `mesokit.data.validate(path)` in Python for the full report. |
 | `dataset 'x' is not registered and is not an existing HDF5 path` | `--data` matched neither a name nor a file. | `mesokit data list`, or pass the path. |
 | `registered dataset 'x' points to missing file` | The file was moved or deleted after registration. | Re-register with the new path and `--force`, or regenerate. |

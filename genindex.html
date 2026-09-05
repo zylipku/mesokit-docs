@@ -278,6 +278,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -570,10 +571,10 @@
 </li>
         <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data._jsonable">_jsonable() (in module mesokit.cli.data)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="apidocs/mesokit/mesokit.data.ising.ising_2d.html#mesokit.data.ising.ising_2d._kernel_and_classes">_kernel_and_classes() (in module mesokit.data.ising.ising_2d)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts._leading_plane">_leading_plane() (in module mesokit.models.spectral_onsagernet.artifacts)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html#mesokit.trainers.lit_trainer.lit_trainer._lightning">_lightning() (in module mesokit.trainers.lit_trainer.lit_trainer)</a>
@@ -711,6 +712,8 @@
         <li><a href="apidocs/mesokit/mesokit.cli.agent.html#mesokit.cli.agent._TEMPLATE">_TEMPLATE (in module mesokit.cli.agent)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.data.cahn_hilliard.cahn_hilliard_2d.html#mesokit.data.cahn_hilliard.cahn_hilliard_2d._truncate_spectrum">_truncate_spectrum() (in module mesokit.data.cahn_hilliard.cahn_hilliard_2d)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data._unwrap_instantiation">_unwrap_instantiation() (in module mesokit.cli.data)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.cli.skills.html#mesokit.cli.skills._user_dir">_user_dir() (in module mesokit.cli.skills)</a>
 </li>
@@ -1493,6 +1496,13 @@
 </li>
         </ul></li>
         <li>
+    mesokit.data._optional
+
+        <ul>
+          <li><a href="apidocs/mesokit/mesokit.data._optional.html#module-mesokit.data._optional">module</a>
+</li>
+        </ul></li>
+        <li>
     mesokit.data._progress
 
         <ul>
@@ -2032,6 +2042,8 @@
           <li><a href="apidocs/mesokit/mesokit.trainers.trainer_base.html#mesokit.trainers.trainer_base.TrainResult.metadata">(mesokit.trainers.trainer_base.TrainResult attribute)</a>
 </li>
         </ul></li>
+        <li><a href="apidocs/mesokit/mesokit.data._optional.html#mesokit.data._optional.MissingDependencyError">MissingDependencyError</a>
+</li>
         <li><a href="apidocs/mesokit/mesokit.utils.mlp.html#mesokit.utils.mlp.Mlp">Mlp (class in mesokit.utils.mlp)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.models.fno.artifacts.html#mesokit.models.fno.artifacts.OperatorDiagnostics.mode_numbers">mode_numbers (mesokit.models.fno.artifacts.OperatorDiagnostics attribute)</a>
@@ -2085,6 +2097,8 @@
           <li><a href="apidocs/mesokit/mesokit.data.html#module-mesokit.data">mesokit.data</a>
 </li>
           <li><a href="apidocs/mesokit/mesokit.data._hdf5.html#module-mesokit.data._hdf5">mesokit.data._hdf5</a>
+</li>
+          <li><a href="apidocs/mesokit/mesokit.data._optional.html#module-mesokit.data._optional">mesokit.data._optional</a>
 </li>
           <li><a href="apidocs/mesokit/mesokit.data._progress.html#module-mesokit.data._progress">mesokit.data._progress</a>
 </li>
@@ -2519,17 +2533,23 @@
           <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.html#mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.SpectralOnsagerNet3d.registry_name">(mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.SpectralOnsagerNet3d attribute)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.RegistryStore">RegistryStore (class in mesokit.cli._registry_store)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.RegistryStore.remove">remove() (mesokit.cli._registry_store.RegistryStore method)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="apidocs/mesokit/mesokit.cli.agent.html#mesokit.cli.agent.render_section">render_section() (in module mesokit.cli.agent)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data.GenerateResult.report">report (mesokit.cli.data.GenerateResult attribute)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.interpret.base.html#mesokit.interpret.base.repr_html_summary">repr_html_summary() (in module mesokit.interpret.base)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data._optional.html#mesokit.data._optional.require">require() (in module mesokit.data._optional)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data._optional.html#mesokit.data._optional.require_dedalus">require_dedalus() (in module mesokit.data._optional)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.data._optional.html#mesokit.data._optional.require_lammps">require_lammps() (in module mesokit.data._optional)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.data.format.html#mesokit.data.format.HDF5AttributeEntry.required">required (mesokit.data.format.HDF5AttributeEntry attribute)</a>
 

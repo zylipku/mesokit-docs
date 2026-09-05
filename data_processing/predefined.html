@@ -280,6 +280,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -472,11 +473,13 @@ training script through the universal <code class="docutils literal notranslate"
 </tbody>
 </table>
 </div>
-<p>The Dedalus- and LAMMPS-backed simulators need the <code class="docutils literal notranslate"><span class="pre">sim</span></code> Pixi feature. The
-three NumPy/SciPy ones have no solver dependency of their own, but
-<code class="docutils literal notranslate"><span class="pre">mesokit.data</span></code> currently imports the 1D Dedalus simulators at module level,
-so importing the package still requires Dedalus (every Pixi environment
-except <code class="docutils literal notranslate"><span class="pre">lint</span></code> and <code class="docutils literal notranslate"><span class="pre">docs</span></code> has it).</p>
+<p>Dedalus and LAMMPS are conda-forge packages: the checkout’s <code class="docutils literal notranslate"><span class="pre">sim</span></code> Pixi
+feature has both, a <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">mesokit</span></code> has neither. The simulators that
+need them import the back-end only when run, so <code class="docutils literal notranslate"><span class="pre">mesokit.data</span></code>, the CLI
+and the three NumPy/SciPy simulators work without it; running one of the
+four without its back-end stops with a message naming the package to add
+(<code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">add</span> <span class="pre">dedalus</span></code>, <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">add</span> <span class="pre">lammps</span></code>; see the
+<a class="reference internal" href="../quickstart.html#installation"><span class="std std-ref">installation section</span></a>).</p>
 <section id="listing-what-s-available">
 <h2>Listing What’s Available<a class="headerlink" href="#listing-what-s-available" title="Link to this heading">¶</a></h2>
 <p>From the CLI:</p>

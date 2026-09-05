@@ -43,6 +43,10 @@
   - ```{autodoc2-docstring} mesokit.cli.data.run_generate
     :summary:
     ```
+* - {py:obj}`_unwrap_instantiation <mesokit.cli.data._unwrap_instantiation>`
+  - ```{autodoc2-docstring} mesokit.cli.data._unwrap_instantiation
+    :summary:
+    ```
 * - {py:obj}`load_data_config <mesokit.cli.data.load_data_config>`
   - ```{autodoc2-docstring} mesokit.cli.data.load_data_config
     :summary:
@@ -214,6 +218,13 @@
 :canonical: mesokit.cli.data.run_generate
 
 ```{autodoc2-docstring} mesokit.cli.data.run_generate
+```
+````
+
+````{py:function} _unwrap_instantiation(exc: BaseException) -> BaseException
+:canonical: mesokit.cli.data._unwrap_instantiation
+
+```{autodoc2-docstring} mesokit.cli.data._unwrap_instantiation
 ```
 ````
 

@@ -1,0 +1,69 @@
+# {py:mod}`mesokit.data._optional`
+
+```{py:module} mesokit.data._optional
+```
+
+```{autodoc2-docstring} mesokit.data._optional
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`require <mesokit.data._optional.require>`
+  - ```{autodoc2-docstring} mesokit.data._optional.require
+    :summary:
+    ```
+* - {py:obj}`require_dedalus <mesokit.data._optional.require_dedalus>`
+  - ```{autodoc2-docstring} mesokit.data._optional.require_dedalus
+    :summary:
+    ```
+* - {py:obj}`require_lammps <mesokit.data._optional.require_lammps>`
+  - ```{autodoc2-docstring} mesokit.data._optional.require_lammps
+    :summary:
+    ```
+````
+
+### API
+
+````{py:exception} MissingDependencyError()
+:canonical: mesokit.data._optional.MissingDependencyError
+
+Bases: {py:obj}`ImportError`
+
+```{autodoc2-docstring} mesokit.data._optional.MissingDependencyError
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.data._optional.MissingDependencyError.__init__
+```
+
+````
+
+````{py:function} require(module: str, *, package: str, label: str, needed_by: str) -> types.ModuleType
+:canonical: mesokit.data._optional.require
+
+```{autodoc2-docstring} mesokit.data._optional.require
+```
+````
+
+````{py:function} require_dedalus(needed_by: str) -> types.ModuleType
+:canonical: mesokit.data._optional.require_dedalus
+
+```{autodoc2-docstring} mesokit.data._optional.require_dedalus
+```
+````
+
+````{py:function} require_lammps(needed_by: str) -> types.ModuleType
+:canonical: mesokit.data._optional.require_lammps
+
+```{autodoc2-docstring} mesokit.data._optional.require_lammps
+```
+````

@@ -280,6 +280,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -437,34 +438,37 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data.run_generate" title="mesokit.cli.data.run_generate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_generate</span></code></a></p></td>
 <td><p>Core of <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code>, shared with <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code> and callable from Python.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data.load_data_config" title="mesokit.cli.data.load_data_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_data_config</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data._unwrap_instantiation" title="mesokit.cli.data._unwrap_instantiation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_unwrap_instantiation</span></code></a></p></td>
+<td><p>The simulator’s own exception behind Hydra’s <code class="docutils literal notranslate"><span class="pre">InstantiationException</span></code> wrapper(s).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data.load_data_config" title="mesokit.cli.data.load_data_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_data_config</span></code></a></p></td>
 <td><p>Load <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/&lt;stem&gt;.yaml</span></code> (working directory, then the package) or a YAML path.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data.check_override_keys" title="mesokit.cli.data.check_override_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_override_keys</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data.check_override_keys" title="mesokit.cli.data.check_override_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_override_keys</span></code></a></p></td>
 <td><p>Reject any of <code class="docutils literal notranslate"><span class="pre">keys</span></code> that the recipe’s <code class="docutils literal notranslate"><span class="pre">_target_</span></code> simulator does not accept as a kwarg.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data.apply_overrides" title="mesokit.cli.data.apply_overrides"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_overrides</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data.apply_overrides" title="mesokit.cli.data.apply_overrides"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_overrides</span></code></a></p></td>
 <td><p>Return <code class="docutils literal notranslate"><span class="pre">cfg</span></code> with <code class="docutils literal notranslate"><span class="pre">overrides</span></code> merged on top, after :func:<code class="docutils literal notranslate"><span class="pre">check_override_keys</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data.parse_override" title="mesokit.cli.data.parse_override"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_override</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data.parse_override" title="mesokit.cli.data.parse_override"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_override</span></code></a></p></td>
 <td><p>Split <code class="docutils literal notranslate"><span class="pre">KEY=VALUE</span></code> and coerce the value with :func:<code class="docutils literal notranslate"><span class="pre">coerce_value</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data.coerce_value" title="mesokit.cli.data.coerce_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coerce_value</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data.coerce_value" title="mesokit.cli.data.coerce_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coerce_value</span></code></a></p></td>
 <td><p>Read <code class="docutils literal notranslate"><span class="pre">raw</span></code> as int, then float, then bool (<code class="docutils literal notranslate"><span class="pre">true</span></code> / <code class="docutils literal notranslate"><span class="pre">false</span></code>), else keep it a string.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data._next_version_name" title="mesokit.cli.data._next_version_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_next_version_name</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data._next_version_name" title="mesokit.cli.data._next_version_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_next_version_name</span></code></a></p></td>
 <td><p>Return the next free <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v&lt;n&gt;</span></code> slot in the dataset registry.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data.register" title="mesokit.cli.data.register"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data.register" title="mesokit.cli.data.register"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register</span></code></a></p></td>
 <td><p>Sanity-check an externally-produced HDF5 file and register it as a named dataset.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data._register_file" title="mesokit.cli.data._register_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_register_file</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data._register_file" title="mesokit.cli.data._register_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_register_file</span></code></a></p></td>
 <td><p>Validate <code class="docutils literal notranslate"><span class="pre">file</span></code>, build a record, and store it under <code class="docutils literal notranslate"><span class="pre">name</span></code> in the dataset registry.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data._jsonable" title="mesokit.cli.data._jsonable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_jsonable</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data._jsonable" title="mesokit.cli.data._jsonable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_jsonable</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.data.parse" title="mesokit.cli.data.parse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.data.parse" title="mesokit.cli.data.parse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse</span></code></a></p></td>
 <td><p>Hand off conversion of an arbitrary dataset to an LLM agent.</p></td>
 </tr>
 </tbody>
@@ -579,6 +583,12 @@ simulator runs), instantiates the simulator, saves the dataset to
 <code class="docutils literal notranslate"><span class="pre">output</span></code> (default <code class="docutils literal notranslate"><span class="pre">data/&lt;dyn&gt;/&lt;name&gt;.h5</span></code>) and, when <code class="docutils literal notranslate"><span class="pre">register</span></code> is
 true, validates and registers it under <code class="docutils literal notranslate"><span class="pre">name</span></code> (default the next free
 <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v&lt;n&gt;</span></code>). <code class="docutils literal notranslate"><span class="pre">report</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> when nothing was registered.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.data._unwrap_instantiation">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.data.</span></span><span class="sig-name descname"><span class="pre">_unwrap_instantiation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseException</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BaseException</span></span></span><a class="headerlink" href="#mesokit.cli.data._unwrap_instantiation" title="Link to this definition">¶</a></dt>
+<dd><p>The simulator’s own exception behind Hydra’s <code class="docutils literal notranslate"><span class="pre">InstantiationException</span></code> wrapper(s).</p>
 </dd></dl>
 
 <dl class="py function">
@@ -727,6 +737,7 @@ the command stops at once and names its official installation guide.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#mesokit.cli.data.run_generate"><code class="docutils literal notranslate"><span class="pre">run_generate()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.data._unwrap_instantiation"><code class="docutils literal notranslate"><span class="pre">_unwrap_instantiation()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.data.load_data_config"><code class="docutils literal notranslate"><span class="pre">load_data_config()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.data.check_override_keys"><code class="docutils literal notranslate"><span class="pre">check_override_keys()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.data.apply_overrides"><code class="docutils literal notranslate"><span class="pre">apply_overrides()</span></code></a></li>

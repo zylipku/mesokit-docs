@@ -280,6 +280,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -411,18 +412,41 @@ interpretability artifact — end to end. Every command runs from a
 generates (<code class="docutils literal notranslate"><span class="pre">data/</span></code>), the checkpoints, the figures and its <code class="docutils literal notranslate"><span class="pre">.mesokit/</span></code>
 registries. Any directory works; nothing has to be written by hand there.</p>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<span id="id1"></span><h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <p>There are two ways to install, for two kinds of use.</p>
 <p><strong>Use the toolkit as a package.</strong> Built-in simulators, the three model
 families, training and interpretation are all reachable from the <code class="docutils literal notranslate"><span class="pre">mesokit</span></code>
 command; the shipped recipes travel with the package, and the grid of a
 model is read from the dataset, so no configuration file needs writing:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>.<span class="w">                 </span><span class="c1"># from a clone of the repository (a PyPI release is planned)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mesokit<span class="w">           </span><span class="c1"># from PyPI (release pending; from a clone: pip install .)</span>
 mkdir<span class="w"> </span>my-project<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>my-project
 mesokit<span class="w"> </span>data<span class="w"> </span>avail
 mesokit<span class="w"> </span>agent<span class="w"> </span>init<span class="w">            </span><span class="c1"># optional: set up Claude Code / Codex for this project</span>
 </pre></div>
 </div>
+<p>A pip install lacks only two solver back-ends that are conda-forge
+packages rather than PyPI ones: Dedalus, behind <code class="docutils literal notranslate"><span class="pre">allen_cahn_1d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">allen_cahn_2d</span></code> and <code class="docutils literal notranslate"><span class="pre">kdv_1d</span></code>, and LAMMPS, behind
+<code class="docutils literal notranslate"><span class="pre">peridynamics_fracture_2d</span></code>. Those four simulators stay listed and, when
+run, stop with a message naming the package to add; everything else,
+training and interpretation on any dataset included, works as is. To have
+them too, install mesokit into an environment that also holds the two
+packages. With conda:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>mesokit<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.12<span class="w"> </span>dedalus<span class="w"> </span>lammps
+conda<span class="w"> </span>activate<span class="w"> </span>mesokit
+pip<span class="w"> </span>install<span class="w"> </span>mesokit
+</pre></div>
+</div>
+<p>Or as a <a class="reference external" href="https://pixi.sh">pixi</a> project, which resolves conda-forge and
+PyPI together:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>init<span class="w"> </span>my-project<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>my-project
+pixi<span class="w"> </span>add<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.12<span class="w"> </span>dedalus<span class="w"> </span>lammps<span class="w">     </span><span class="c1"># from conda-forge</span>
+pixi<span class="w"> </span>add<span class="w"> </span>--pypi<span class="w"> </span>mesokit<span class="w">                 </span><span class="c1"># from PyPI</span>
+</pre></div>
+</div>
+<p>Until the PyPI release, install from a clone instead of <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">mesokit</span></code> (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">/path/to/mesokit</span></code>), or point the pixi project at
+it: <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">=</span> <span class="pre">{</span> <span class="pre">path</span> <span class="pre">=</span> <span class="pre">&quot;/path/to/mesokit&quot;</span> <span class="pre">}</span></code> under <code class="docutils literal notranslate"><span class="pre">[pypi-dependencies]</span></code>
+in its <code class="docutils literal notranslate"><span class="pre">pixi.toml</span></code>, then <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">install</span></code>.</p>
 <p><strong>Extend the toolkit.</strong> Your own simulators, models, trainers or
 artifacts are Python. Work from a checkout, whose <a class="reference external" href="https://pixi.sh">pixi</a>
 environment provides an editable install, and put your code in its

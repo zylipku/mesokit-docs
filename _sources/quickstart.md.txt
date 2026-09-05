@@ -6,6 +6,8 @@ interpretability artifact — end to end. Every command runs from a
 generates (`data/`), the checkpoints, the figures and its `.mesokit/`
 registries. Any directory works; nothing has to be written by hand there.
 
+(installation)=
+
 ## Installation
 
 There are two ways to install, for two kinds of use.
@@ -16,11 +18,40 @@ command; the shipped recipes travel with the package, and the grid of a
 model is read from the dataset, so no configuration file needs writing:
 
 ```bash
-pip install .                 # from a clone of the repository (a PyPI release is planned)
+pip install mesokit           # from PyPI (release pending; from a clone: pip install .)
 mkdir my-project && cd my-project
 mesokit data avail
 mesokit agent init            # optional: set up Claude Code / Codex for this project
 ```
+
+A pip install lacks only two solver back-ends that are conda-forge
+packages rather than PyPI ones: Dedalus, behind `allen_cahn_1d`,
+`allen_cahn_2d` and `kdv_1d`, and LAMMPS, behind
+`peridynamics_fracture_2d`. Those four simulators stay listed and, when
+run, stop with a message naming the package to add; everything else,
+training and interpretation on any dataset included, works as is. To have
+them too, install mesokit into an environment that also holds the two
+packages. With conda:
+
+```bash
+conda create -n mesokit -c conda-forge python=3.12 dedalus lammps
+conda activate mesokit
+pip install mesokit
+```
+
+Or as a [pixi](https://pixi.sh) project, which resolves conda-forge and
+PyPI together:
+
+```bash
+pixi init my-project && cd my-project
+pixi add python=3.12 dedalus lammps     # from conda-forge
+pixi add --pypi mesokit                 # from PyPI
+```
+
+Until the PyPI release, install from a clone instead of `pip install
+mesokit` (`pip install /path/to/mesokit`), or point the pixi project at
+it: `mesokit = { path = "/path/to/mesokit" }` under `[pypi-dependencies]`
+in its `pixi.toml`, then `pixi install`.
 
 **Extend the toolkit.** Your own simulators, models, trainers or
 artifacts are Python. Work from a checkout, whose [pixi](https://pixi.sh)
