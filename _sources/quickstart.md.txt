@@ -48,6 +48,18 @@ pixi add python=3.12 dedalus lammps     # from conda-forge
 pixi add --pypi mesokit                 # from PyPI
 ```
 
+**GPU and torch.** mesokit depends on `torch>=2.9,<2.11`. Up to 2.10 the
+default torch wheel on PyPI is a CUDA 12.8 build, which runs on any CUDA
+12.x or 13.x driver, so a plain install works on a GPU machine with no
+PyTorch index to choose (from 2.11 the default wheel needs a CUDA 13
+driver, which is why the bound is there). A machine without a GPU can skip
+the CUDA libraries, about 3 GB, by installing CPU torch first:
+
+```bash
+pip install torch --index-url https://download.pytorch.org/whl/cpu      # then: pip install mesokit
+pixi add --pypi --index https://download.pytorch.org/whl/cpu torch      # pixi: then pixi add --pypi mesokit
+```
+
 Until the PyPI release, install from a clone instead of `pip install
 mesokit` (`pip install /path/to/mesokit`), or point the pixi project at
 it: `mesokit = { path = "/path/to/mesokit" }` under `[pypi-dependencies]`

@@ -444,6 +444,16 @@ pixi<span class="w"> </span>add<span class="w"> </span><span class="nv">python</
 pixi<span class="w"> </span>add<span class="w"> </span>--pypi<span class="w"> </span>mesokit<span class="w">                 </span><span class="c1"># from PyPI</span>
 </pre></div>
 </div>
+<p><strong>GPU and torch.</strong> mesokit depends on <code class="docutils literal notranslate"><span class="pre">torch&gt;=2.9,&lt;2.11</span></code>. Up to 2.10 the
+default torch wheel on PyPI is a CUDA 12.8 build, which runs on any CUDA
+12.x or 13.x driver, so a plain install works on a GPU machine with no
+PyTorch index to choose (from 2.11 the default wheel needs a CUDA 13
+driver, which is why the bound is there). A machine without a GPU can skip
+the CUDA libraries, about 3 GB, by installing CPU torch first:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu<span class="w">      </span><span class="c1"># then: pip install mesokit</span>
+pixi<span class="w"> </span>add<span class="w"> </span>--pypi<span class="w"> </span>--index<span class="w"> </span>https://download.pytorch.org/whl/cpu<span class="w"> </span>torch<span class="w">      </span><span class="c1"># pixi: then pixi add --pypi mesokit</span>
+</pre></div>
+</div>
 <p>Until the PyPI release, install from a clone instead of <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">mesokit</span></code> (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">/path/to/mesokit</span></code>), or point the pixi project at
 it: <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">=</span> <span class="pre">{</span> <span class="pre">path</span> <span class="pre">=</span> <span class="pre">&quot;/path/to/mesokit&quot;</span> <span class="pre">}</span></code> under <code class="docutils literal notranslate"><span class="pre">[pypi-dependencies]</span></code>
 in its <code class="docutils literal notranslate"><span class="pre">pixi.toml</span></code>, then <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">install</span></code>.</p>
