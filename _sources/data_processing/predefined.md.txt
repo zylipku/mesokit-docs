@@ -29,7 +29,7 @@ need them import the back-end only when run, so `mesokit.data`, the CLI
 and the three NumPy/SciPy simulators work without it; running one of the
 four without its back-end stops with a message naming the package to add
 (`pixi add dedalus`, `pixi add lammps`; see the
-[installation section](../quickstart.md#installation)).
+[installation section](#installation)).
 
 ## Listing What's Available
 
