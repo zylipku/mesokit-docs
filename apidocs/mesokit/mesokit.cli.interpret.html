@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -424,22 +425,25 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._load_registered_model" title="mesokit.cli.interpret._load_registered_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_registered_model</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._load_config" title="mesokit.cli.interpret._load_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_config</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._view_channels" title="mesokit.cli.interpret._view_channels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_view_channels</span></code></a></p></td>
+<td><p>The dataset as the training view saw it: the channels <code class="docutils literal notranslate"><span class="pre">dataset.channel</span></code> selected.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._load_config" title="mesokit.cli.interpret._load_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_config</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._instantiate_model" title="mesokit.cli.interpret._instantiate_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_model</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._instantiate_model" title="mesokit.cli.interpret._instantiate_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_model</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._checkpoint_state_dict" title="mesokit.cli.interpret._checkpoint_state_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_checkpoint_state_dict</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._checkpoint_state_dict" title="mesokit.cli.interpret._checkpoint_state_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_checkpoint_state_dict</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._load_reference_dataset" title="mesokit.cli.interpret._load_reference_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_reference_dataset</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._load_reference_dataset" title="mesokit.cli.interpret._load_reference_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_reference_dataset</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._record_or_config_value" title="mesokit.cli.interpret._record_or_config_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_record_or_config_value</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._record_or_config_value" title="mesokit.cli.interpret._record_or_config_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_record_or_config_value</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._existing_file" title="mesokit.cli.interpret._existing_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_existing_file</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._existing_file" title="mesokit.cli.interpret._existing_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_existing_file</span></code></a></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -482,6 +486,15 @@
 <dt class="sig sig-object py" id="mesokit.cli.interpret._load_registered_model">
 <span class="sig-prename descclassname"><span class="pre">mesokit.cli.interpret.</span></span><span class="sig-name descname"><span class="pre">_load_registered_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_reference_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_snapshots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli.interpret._load_registered_model" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.interpret._view_channels">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.interpret.</span></span><span class="sig-name descname"><span class="pre">_view_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">mesokit.data.TrajectoryDataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">mesokit.data.TrajectoryDataset</span></span></span><a class="headerlink" href="#mesokit.cli.interpret._view_channels" title="Link to this definition">¶</a></dt>
+<dd><p>The dataset as the training view saw it: the channels <code class="docutils literal notranslate"><span class="pre">dataset.channel</span></code> selected.</p>
+<p>An integer (the default <code class="docutils literal notranslate"><span class="pre">0</span></code>) is one field, <code class="docutils literal notranslate"><span class="pre">null</span></code> every channel, a
+list those channels — so the artifacts meet states shaped like the ones
+the model was trained on.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mesokit.cli.interpret._load_config">
@@ -581,6 +594,7 @@
 <li><a class="reference internal" href="#mesokit.cli.interpret.list_"><code class="docutils literal notranslate"><span class="pre">list_()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._extract_impl"><code class="docutils literal notranslate"><span class="pre">_extract_impl()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._load_registered_model"><code class="docutils literal notranslate"><span class="pre">_load_registered_model()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.interpret._view_channels"><code class="docutils literal notranslate"><span class="pre">_view_channels()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._load_config"><code class="docutils literal notranslate"><span class="pre">_load_config()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._instantiate_model"><code class="docutils literal notranslate"><span class="pre">_instantiate_model()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._checkpoint_state_dict"><code class="docutils literal notranslate"><span class="pre">_checkpoint_state_dict()</span></code></a></li>

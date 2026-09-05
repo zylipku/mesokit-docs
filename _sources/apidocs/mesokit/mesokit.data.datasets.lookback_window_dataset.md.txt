@@ -23,7 +23,7 @@
 
 ### API
 
-`````{py:class} LookbackWindowDataset(traj: mesokit.data.trajectory.TrajectoryDataset, *, lookback: int, lead: int = 1, stride: int = 1, channel: int = 0)
+`````{py:class} LookbackWindowDataset(traj: mesokit.data.trajectory.TrajectoryDataset, *, lookback: int, lead: int = 1, stride: int = 1, channel: int | collections.abc.Sequence[int] | None = 0)
 :canonical: mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset
 
 Bases: {py:obj}`torch.utils.data.Dataset`\[{py:obj}`tuple`\[{py:obj}`torch.Tensor`\, {py:obj}`torch.Tensor`\]\]
@@ -36,6 +36,15 @@ Bases: {py:obj}`torch.utils.data.Dataset`\[{py:obj}`tuple`\[{py:obj}`torch.Tenso
 
 ```{autodoc2-docstring} mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset.__init__
 ```
+
+````{py:property} channels
+:canonical: mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset.channels
+:type: int | None
+
+```{autodoc2-docstring} mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset.channels
+```
+
+````
 
 ````{py:method} __len__() -> int
 :canonical: mesokit.data.datasets.lookback_window_dataset.LookbackWindowDataset.__len__

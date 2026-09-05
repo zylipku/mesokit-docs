@@ -39,6 +39,10 @@
   - ```{autodoc2-docstring} mesokit.cli.train._complete_model_config
     :summary:
     ```
+* - {py:obj}`_sample_channels <mesokit.cli.train._sample_channels>`
+  - ```{autodoc2-docstring} mesokit.cli.train._sample_channels
+    :summary:
+    ```
 * - {py:obj}`_dataset_domain <mesokit.cli.train._dataset_domain>`
   - ```{autodoc2-docstring} mesokit.cli.train._dataset_domain
     :summary:
@@ -222,6 +226,13 @@
 ```
 ````
 
+````{py:function} _sample_channels(cfg: omegaconf.DictConfig, traj: mesokit.data.TrajectoryDataset) -> int
+:canonical: mesokit.cli.train._sample_channels
+
+```{autodoc2-docstring} mesokit.cli.train._sample_channels
+```
+````
+
 ````{py:data} _AXES
 :canonical: mesokit.cli.train._AXES
 :value: >
@@ -239,7 +250,7 @@
 ```
 ````
 
-````{py:function} _fill_grid_keywords(section: omegaconf.DictConfig, *, grid_shape: tuple[int, ...], domain: tuple[float, ...], depth: int, path: str = 'model', mismatches: list[str] | None = None) -> None
+````{py:function} _fill_grid_keywords(section: omegaconf.DictConfig, *, grid_shape: tuple[int, ...], domain: tuple[float, ...], depth: int, n_channels: int = 1, path: str = 'model', mismatches: list[str] | None = None) -> None
 :canonical: mesokit.cli.train._fill_grid_keywords
 
 ```{autodoc2-docstring} mesokit.cli.train._fill_grid_keywords

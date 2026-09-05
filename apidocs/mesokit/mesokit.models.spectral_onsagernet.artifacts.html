@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -438,46 +439,49 @@ real snapshots.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-left">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._leading_plane" title="mesokit.models.spectral_onsagernet.artifacts._leading_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_leading_plane</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._per_channel" title="mesokit.models.spectral_onsagernet.artifacts._per_channel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_per_channel</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[(&quot;&quot;,</span> <span class="pre">values)]</span></code> for one multiplier set, <code class="docutils literal notranslate"><span class="pre">[(&quot;[0]&quot;,</span> <span class="pre">...),</span> <span class="pre">(&quot;[1]&quot;,</span> <span class="pre">...)]</span></code> over a leading channel axis.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._leading_plane" title="mesokit.models.spectral_onsagernet.artifacts._leading_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_leading_plane</span></code></a></p></td>
 <td><p>First two spectral axes at index 0 of every further axis (<code class="docutils literal notranslate"><span class="pre">k_z</span> <span class="pre">=</span> <span class="pre">0</span></code> in 3D).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._multiplier_array" title="mesokit.models.spectral_onsagernet.artifacts._multiplier_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_multiplier_array</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._multiplier_array" title="mesokit.models.spectral_onsagernet.artifacts._multiplier_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_multiplier_array</span></code></a></p></td>
 <td><p>Detach a Fourier multiplier to numpy: the real part of <code class="docutils literal notranslate"><span class="pre">Km</span></code>, the imaginary part of <code class="docutils literal notranslate"><span class="pre">Kw</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._model_device" title="mesokit.models.spectral_onsagernet.artifacts._model_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_model_device</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._model_device" title="mesokit.models.spectral_onsagernet.artifacts._model_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_model_device</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._model_dtype" title="mesokit.models.spectral_onsagernet.artifacts._model_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_model_dtype</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._model_dtype" title="mesokit.models.spectral_onsagernet.artifacts._model_dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_model_dtype</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._evaluate_total_potential" title="mesokit.models.spectral_onsagernet.artifacts._evaluate_total_potential"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_evaluate_total_potential</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._evaluate_total_potential" title="mesokit.models.spectral_onsagernet.artifacts._evaluate_total_potential"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_evaluate_total_potential</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._collapse_energy" title="mesokit.models.spectral_onsagernet.artifacts._collapse_energy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_collapse_energy</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._collapse_energy" title="mesokit.models.spectral_onsagernet.artifacts._collapse_energy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_collapse_energy</span></code></a></p></td>
 <td><p>Reduce <code class="docutils literal notranslate"><span class="pre">V</span></code> output to one number per batch element.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._evaluate_gradient_slice" title="mesokit.models.spectral_onsagernet.artifacts._evaluate_gradient_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_evaluate_gradient_slice</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._evaluate_gradient_slice" title="mesokit.models.spectral_onsagernet.artifacts._evaluate_gradient_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_evaluate_gradient_slice</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._evaluate_components" title="mesokit.models.spectral_onsagernet.artifacts._evaluate_components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_evaluate_components</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._evaluate_components" title="mesokit.models.spectral_onsagernet.artifacts._evaluate_components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_evaluate_components</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._build_reference_scatter" title="mesokit.models.spectral_onsagernet.artifacts._build_reference_scatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_build_reference_scatter</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._build_reference_scatter" title="mesokit.models.spectral_onsagernet.artifacts._build_reference_scatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_build_reference_scatter</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._dataset_eps" title="mesokit.models.spectral_onsagernet.artifacts._dataset_eps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dataset_eps</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._dataset_eps" title="mesokit.models.spectral_onsagernet.artifacts._dataset_eps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dataset_eps</span></code></a></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">eps</span></code> from the dataset’s <code class="docutils literal notranslate"><span class="pre">physical</span></code> group (or a flat <code class="docutils literal notranslate"><span class="pre">metadata</span></code> mapping).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._flatten_snapshots" title="mesokit.models.spectral_onsagernet.artifacts._flatten_snapshots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_flatten_snapshots</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._flatten_snapshots" title="mesokit.models.spectral_onsagernet.artifacts._flatten_snapshots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_flatten_snapshots</span></code></a></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">(n_traj,</span> <span class="pre">n_time,</span> <span class="pre">1,</span> <span class="pre">*grid_shape)</span></code> → <code class="docutils literal notranslate"><span class="pre">(n_traj</span> <span class="pre">·</span> <span class="pre">n_time,</span> <span class="pre">*grid_shape)</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._allen_cahn_reference_energy" title="mesokit.models.spectral_onsagernet.artifacts._allen_cahn_reference_energy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_allen_cahn_reference_energy</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._allen_cahn_reference_energy" title="mesokit.models.spectral_onsagernet.artifacts._allen_cahn_reference_energy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_allen_cahn_reference_energy</span></code></a></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">∫</span> <span class="pre">½|∇u|²</span> <span class="pre">+</span> <span class="pre">u⁴/(4ε²)</span> <span class="pre">−</span> <span class="pre">u²/(2ε²)</span> <span class="pre">dx</span></code> per snapshot, spectrally.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._scatter_stats" title="mesokit.models.spectral_onsagernet.artifacts._scatter_stats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_scatter_stats</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._scatter_stats" title="mesokit.models.spectral_onsagernet.artifacts._scatter_stats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_scatter_stats</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._pyplot" title="mesokit.models.spectral_onsagernet.artifacts._pyplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_pyplot</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._pyplot" title="mesokit.models.spectral_onsagernet.artifacts._pyplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_pyplot</span></code></a></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -542,9 +546,10 @@ real snapshots.</p>
 u_values, V_values: the constant-field slice <code class="docutils literal notranslate"><span class="pre">V(u</span> <span class="pre">≡</span> <span class="pre">const)</span></code>.
 Km, Kw: mobility multipliers and the imaginary part of the reactive
 multipliers on the <code class="docutils literal notranslate"><span class="pre">rfftn</span></code> grid — shape <code class="docutils literal notranslate"><span class="pre">(Nx//2+1,)</span></code> in 1D,
-<code class="docutils literal notranslate"><span class="pre">(Nx,</span> <span class="pre">Ny//2+1)</span></code> in 2D, and so on. <code class="docutils literal notranslate"><span class="pre">None</span></code> when the model’s
-operator is not a Fourier multiplier (state-dependent <code class="docutils literal notranslate"><span class="pre">M</span></code> / <code class="docutils literal notranslate"><span class="pre">W</span></code>
-of the classical OnsagerNet).
+<code class="docutils literal notranslate"><span class="pre">(Nx,</span> <span class="pre">Ny//2+1)</span></code> in 2D, and so on, with a leading channel axis
+for a multi-channel model (one multiplier set per field). <code class="docutils literal notranslate"><span class="pre">None</span></code>
+when the model’s operator is not a Fourier multiplier
+(state-dependent <code class="docutils literal notranslate"><span class="pre">M</span></code> / <code class="docutils literal notranslate"><span class="pre">W</span></code> of the classical OnsagerNet).
 grid_shape, domain: the model’s periodic box.
 mode_numbers: mode index along the last spectral axis (the only axis
 in 1D), kept for line plots.</p>
@@ -700,6 +705,12 @@ line plot in 1D, an image of <code class="docutils literal notranslate"><span cl
 <span class="sig-name descname"><span class="pre">_plot_modes_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._plot_modes_image" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.spectral_onsagernet.artifacts._per_channel">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.spectral_onsagernet.artifacts.</span></span><span class="sig-name descname"><span class="pre">_per_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.models.spectral_onsagernet.artifacts._per_channel" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">[(&quot;&quot;,</span> <span class="pre">values)]</span></code> for one multiplier set, <code class="docutils literal notranslate"><span class="pre">[(&quot;[0]&quot;,</span> <span class="pre">...),</span> <span class="pre">(&quot;[1]&quot;,</span> <span class="pre">...)]</span></code> over a leading channel axis.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -883,6 +894,7 @@ line plot in 1D, an image of <code class="docutils literal notranslate"><span cl
 <li><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape._plot_modes_image"><code class="docutils literal notranslate"><span class="pre">PotentialLandscape._plot_modes_image()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._per_channel"><code class="docutils literal notranslate"><span class="pre">_per_channel()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._leading_plane"><code class="docutils literal notranslate"><span class="pre">_leading_plane()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._multiplier_array"><code class="docutils literal notranslate"><span class="pre">_multiplier_array()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.models.spectral_onsagernet.artifacts._model_device"><code class="docutils literal notranslate"><span class="pre">_model_device()</span></code></a></li>

@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -484,6 +485,23 @@ dynamics using a generalized Onsager principle</em>, Phys. Rev. Fluids 6, 114402
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.onsagernet.components._circular_distance_sq" title="mesokit.models.onsagernet.components._circular_distance_sq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_circular_distance_sq</span></code></a></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">|r|²</span></code> in grid units with periodic wrap, shape <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.onsagernet.components._check_channels" title="mesokit.models.onsagernet.components._check_channels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check_channels</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.onsagernet.components._per_channel" title="mesokit.models.onsagernet.components._per_channel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_per_channel</span></code></a></p></td>
+<td><p>The single-channel initial multipliers, repeated for every channel when there are several.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.models.onsagernet.components._symmetrise_channels" title="mesokit.models.onsagernet.components._symmetrise_channels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_symmetrise_channels</span></code></a></p></td>
+<td><dl class="myst field-list simple">
+<dt class="field-odd">func<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">_symmetrise_real_kernel</span></code> on one multiplier set or on each of a leading channel axis.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.models.onsagernet.components._field_shape" title="mesokit.models.onsagernet.components._field_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_field_shape</span></code></a></p></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -652,7 +670,7 @@ is the entry itself, the odd part is zero (DC and Nyquist vanish).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mesokit.models.onsagernet.components.CirculantDissipation">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.models.onsagernet.components.</span></span><span class="sig-name descname"><span class="pre">CirculantDissipation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mesokit.models.onsagernet.components.CirculantDissipation" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.models.onsagernet.components.</span></span><span class="sig-name descname"><span class="pre">CirculantDissipation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mesokit.models.onsagernet.components.CirculantDissipation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
 <p>State-independent SPD convolution <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">v</span> <span class="pre">=</span> <span class="pre">irfftn(softplus(θ)</span> <span class="pre">⊙</span> <span class="pre">rfftn(v))</span> <span class="pre">+</span> <span class="pre">β</span> <span class="pre">v</span></code>.</p>
 <p>A circulant operator on the periodic grid is diagonal in Fourier space;
@@ -661,15 +679,19 @@ real positive multipliers make it symmetric positive definite. The
 <code class="docutils literal notranslate"><span class="pre">band_size</span></code> biases the initial kernel toward a short spatial range (a
 wrapped Gaussian of that many grid points); without it every mode starts
 at <code class="docutils literal notranslate"><span class="pre">softplus(0)</span></code>.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">n_channels</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> the state holds several fields and <code class="docutils literal notranslate"><span class="pre">M</span></code> is
+block-diagonal: one multiplier set per channel (<code class="docutils literal notranslate"><span class="pre">θ</span></code> of shape
+<code class="docutils literal notranslate"><span class="pre">(C,</span> <span class="pre">*spectral_shape)</span></code>), each applied to its own field.</p>
 <p>Args:
-grid_shape: grid points per axis; the state has <code class="docutils literal notranslate"><span class="pre">prod(grid_shape)</span></code> entries.
+grid_shape: grid points per axis; the state has <code class="docutils literal notranslate"><span class="pre">n_channels</span> <span class="pre">·</span> <span class="pre">prod(grid_shape)</span></code> entries.
 beta: minimum eigenvalue.
-band_size: optional initial kernel width in grid points.</p>
+band_size: optional initial kernel width in grid points.
+n_channels: fields per state (default <code class="docutils literal notranslate"><span class="pre">1</span></code>).</p>
 <p class="rubric">Initialization</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="mesokit.models.onsagernet.components.CirculantDissipation.multipliers">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">multipliers</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">torch.Tensor</span></span><a class="headerlink" href="#mesokit.models.onsagernet.components.CirculantDissipation.multipliers" title="Link to this definition">¶</a></dt>
-<dd><p>Fourier multipliers of <code class="docutils literal notranslate"><span class="pre">M</span></code> (real, <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">β</span></code>) on the <code class="docutils literal notranslate"><span class="pre">rfftn</span></code> grid.</p>
+<dd><p>Fourier multipliers of <code class="docutils literal notranslate"><span class="pre">M</span></code> (real, <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">β</span></code>) on the <code class="docutils literal notranslate"><span class="pre">rfftn</span></code> grid, per channel when there are several.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -682,7 +704,7 @@ band_size: optional initial kernel width in grid points.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mesokit.models.onsagernet.components.CirculantConservation">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.models.onsagernet.components.</span></span><span class="sig-name descname"><span class="pre">CirculantConservation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mesokit.models.onsagernet.components.CirculantConservation" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.models.onsagernet.components.</span></span><span class="sig-name descname"><span class="pre">CirculantConservation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mesokit.models.onsagernet.components.CirculantConservation" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></p>
 <p>State-independent antisymmetric convolution <code class="docutils literal notranslate"><span class="pre">W</span> <span class="pre">v</span> <span class="pre">=</span> <span class="pre">irfftn(i</span> <span class="pre">θ</span> <span class="pre">⊙</span> <span class="pre">rfftn(v))</span></code>.</p>
 <p>A real antisymmetric circulant has purely imaginary, odd Fourier
@@ -690,14 +712,17 @@ multipliers; <code class="docutils literal notranslate"><span class="pre">i</spa
 Nyquist entries are therefore zero by construction. <code class="docutils literal notranslate"><span class="pre">band_size</span></code>
 initialises <code class="docutils literal notranslate"><span class="pre">θ</span></code> to a small constant on the modes with
 <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">max_i</span> <span class="pre">|k_i|</span> <span class="pre">≤</span> <span class="pre">band_size</span> <span class="pre">//</span> <span class="pre">2</span></code>; otherwise <code class="docutils literal notranslate"><span class="pre">W</span></code> starts at zero.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">n_channels</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> the operator is block-diagonal: one odd
+multiplier set per channel.</p>
 <p>Args:
 grid_shape: grid points per axis.
-band_size: optional initial kernel width in grid points.</p>
+band_size: optional initial kernel width in grid points.
+n_channels: fields per state (default <code class="docutils literal notranslate"><span class="pre">1</span></code>).</p>
 <p class="rubric">Initialization</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="mesokit.models.onsagernet.components.CirculantConservation.multipliers">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">multipliers</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">torch.Tensor</span></span><a class="headerlink" href="#mesokit.models.onsagernet.components.CirculantConservation.multipliers" title="Link to this definition">¶</a></dt>
-<dd><p>Imaginary part <code class="docutils literal notranslate"><span class="pre">θ</span></code> of the Fourier multipliers of <code class="docutils literal notranslate"><span class="pre">W</span></code> (odd; zero at DC and Nyquist).</p>
+<dd><p>Imaginary part <code class="docutils literal notranslate"><span class="pre">θ</span></code> of the multipliers of <code class="docutils literal notranslate"><span class="pre">W</span></code> (odd; zero at DC and Nyquist), per channel when several.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -707,6 +732,32 @@ band_size: optional initial kernel width in grid points.</p>
 </dd></dl>
 
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.onsagernet.components._check_channels">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.onsagernet.components.</span></span><span class="sig-name descname"><span class="pre">_check_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#mesokit.models.onsagernet.components._check_channels" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.onsagernet.components._per_channel">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.onsagernet.components.</span></span><span class="sig-name descname"><span class="pre">_per_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#mesokit.models.onsagernet.components._per_channel" title="Link to this definition">¶</a></dt>
+<dd><p>The single-channel initial multipliers, repeated for every channel when there are several.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.onsagernet.components._symmetrise_channels">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.onsagernet.components.</span></span><span class="sig-name descname"><span class="pre">_symmetrise_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">odd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#mesokit.models.onsagernet.components._symmetrise_channels" title="Link to this definition">¶</a></dt>
+<dd><dl class="myst field-list simple">
+<dt class="field-odd">Func<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">_symmetrise_real_kernel</span></code> on one multiplier set or on each of a leading channel axis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.models.onsagernet.components._field_shape">
+<span class="sig-prename descclassname"><span class="pre">mesokit.models.onsagernet.components.</span></span><span class="sig-name descname"><span class="pre">_field_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mesokit.models._spectral.html#mesokit.models._spectral.SpectralGrid" title="mesokit.models._spectral.SpectralGrid"><span class="pre">mesokit.models._spectral.SpectralGrid</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.models.onsagernet.components._field_shape" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </section>
 </section>
@@ -810,6 +861,10 @@ band_size: optional initial kernel width in grid points.</p>
 <li><a class="reference internal" href="#mesokit.models.onsagernet.components.CirculantConservation.apply"><code class="docutils literal notranslate"><span class="pre">CirculantConservation.apply()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#mesokit.models.onsagernet.components._check_channels"><code class="docutils literal notranslate"><span class="pre">_check_channels()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.onsagernet.components._per_channel"><code class="docutils literal notranslate"><span class="pre">_per_channel()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.onsagernet.components._symmetrise_channels"><code class="docutils literal notranslate"><span class="pre">_symmetrise_channels()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.models.onsagernet.components._field_shape"><code class="docutils literal notranslate"><span class="pre">_field_shape()</span></code></a></li>
 </ul>
 </li>
 </ul>

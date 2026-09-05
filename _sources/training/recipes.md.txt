@@ -69,7 +69,7 @@ model:                    # constructor kwargs of the registered class
 dataset:                  # the training view wrapping the TrajectoryDataset
   _target_: mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset
   stride: 1
-  # channel: 0            # pick one field of a multi-channel dataset
+  # channel: 0            # one field (default); null: every channel; [0, 2]: those channels
 
 dataloader:               # torch.utils.data.DataLoader kwargs
   batch_size: 32
@@ -101,22 +101,25 @@ trainer:                  # LitTrainer kwargs (or the registered trainer's)
   overrides `max_epochs`, `--device` overrides `accelerator`. The full
   option list is on [LitTrainer](lit_trainer.md).
 
-## The Grid Comes From the Dataset
+## The Grid and the Channels Come From the Dataset
 
 Grid keywords a constructor accepts but the recipe leaves out are filled
 from the dataset, recursively for nested components: `Nx` / `Ny` / `Nz`
 from `grid_shape`; `Lx` / `Ly` / `Lz` from the `physical` group (`2π` when
 `Lx` is absent, a missing later axis repeating the first); `grid_shape`
-and `domain` of a nested potential; `in_dim` (the number of grid points)
-and `grid_shape` of the classical OnsagerNet's blocks. A written box length
-is kept (a dataset may lack `Lx`); a written number of grid points (`Nx`,
-`grid_shape`, `in_dim`) that contradicts the dataset is refused before
-training starts, naming the key. The shipped recipes carry no grid keys at
-all — leave them out of recipes you write too, and they run on any grid of
-their dynamics. Two things are not inferred: multi-channel
-datasets need `dataset.channel` (the shipped models are single-channel),
-and a potential's `eps` or a block's rank are modelling choices, not
-grid facts.
+and `domain` of a nested potential; `in_dim` (the number of state entries)
+and `grid_shape` of the classical OnsagerNet's blocks. The channel count
+comes the same way, from the view's `dataset.channel`: an integer means
+one field, `null` every channel, a list those channels, and `n_channels`
+(the two Onsager families), `in_channels` / `out_channels` (FNO) and the
+factor in `in_dim` follow. A written box length is kept (a dataset may
+lack `Lx`); a written number of grid points or channels (`Nx`,
+`grid_shape`, `in_dim`, `n_channels`, `in_channels`) that contradicts the
+dataset is refused before training starts, naming the key. The shipped
+recipes carry none of these keys — leave them out of recipes you write
+too, and they run on any grid of their dynamics. Not inferred: a
+potential's `eps` or a block's rank, which are modelling choices, not
+facts of the data.
 
 ## A Recipe for Your Own Dynamics
 

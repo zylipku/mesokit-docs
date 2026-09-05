@@ -458,11 +458,12 @@ Two things to know:
   For a quick real run use `--config default --epochs 1 --device cpu`.
 - Every shipped architecture is registered once per dimension — `fno1d` /
   `fno2d` / `fno3d`, `spectral_onsagernet_1d` / `_2d` / `_3d` and
-  `onsagernet_1d` / `_2d` / `_3d` — and takes
-  single-channel input; pick the suffix that matches the dataset's grid. The
-  multi-channel datasets (`llg_lattice_2d`, `peridynamics_fracture_2d`)
-  train on one channel at a time through the `dataset.channel` key of the
-  recipe. A model (or trainer) of your own under `./plugins/` is imported
+  `onsagernet_1d` / `_2d` / `_3d` — pick the suffix that matches the
+  dataset's grid. What the model sees of a multi-channel dataset
+  (`llg_lattice_2d`, `peridynamics_fracture_2d`) is the recipe's
+  `dataset.channel` key: an integer for one field, `null` for every
+  channel, a list for some; the model's channel count follows
+  ([Models](models.md)). A model (or trainer) of your own under `./plugins/` is imported
   before every command, so its registered name works like a shipped one
   (a model without a trainer of its own trains with `LitTrainer`); a recipe
   may also name any class by `model._target_` / `trainer._target_`. See
@@ -919,7 +920,8 @@ The other 2D and microscopic datasets train the same way (`ising_2d` and
 mesokit data generate --dyn ising_2d --config kac --name ising_kac
 mesokit train --model spectral_onsagernet_2d --dyn ising_2d --data ising_kac --epochs 20
 mesokit data generate --dyn cahn_hilliard_2d       # ~10 min, ~210 MB
-mesokit data generate --dyn llg_lattice_2d         # 3 channels; train one channel via dataset.channel
+mesokit data generate --dyn llg_lattice_2d         # 3 channels; the shipped recipes train on all of them
+mesokit train --model fno2d --data llg_lattice_2d_v0 --epochs 20
 mesokit data generate --dyn peridynamics_fracture_2d --config fdr
 ```
 

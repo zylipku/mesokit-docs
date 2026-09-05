@@ -47,6 +47,10 @@
   - ```{autodoc2-docstring} mesokit.models.fno.artifacts._chunked
     :summary:
     ```
+* - {py:obj}`_with_channels <mesokit.models.fno.artifacts._with_channels>`
+  - ```{autodoc2-docstring} mesokit.models.fno.artifacts._with_channels
+    :summary:
+    ```
 * - {py:obj}`_snapshot_pairs <mesokit.models.fno.artifacts._snapshot_pairs>`
   - ```{autodoc2-docstring} mesokit.models.fno.artifacts._snapshot_pairs
     :summary:
@@ -429,7 +433,14 @@
 ```
 ````
 
-````{py:function} _snapshot_pairs(dataset: typing.Any | None, *, grid_shape: tuple[int, ...], max_snapshots: int) -> tuple[torch.Tensor, torch.Tensor] | None
+````{py:function} _with_channels(fields: torch.Tensor, channels: int) -> torch.Tensor
+:canonical: mesokit.models.fno.artifacts._with_channels
+
+```{autodoc2-docstring} mesokit.models.fno.artifacts._with_channels
+```
+````
+
+````{py:function} _snapshot_pairs(dataset: typing.Any | None, *, grid_shape: tuple[int, ...], channels: int, max_snapshots: int) -> tuple[torch.Tensor, torch.Tensor] | None
 :canonical: mesokit.models.fno.artifacts._snapshot_pairs
 
 ```{autodoc2-docstring} mesokit.models.fno.artifacts._snapshot_pairs
@@ -443,7 +454,7 @@
 ```
 ````
 
-````{py:function} _conservation_residual(increments: torch.Tensor) -> float
+````{py:function} _conservation_residual(increments: torch.Tensor, *, ndim: int) -> float
 :canonical: mesokit.models.fno.artifacts._conservation_residual
 
 ```{autodoc2-docstring} mesokit.models.fno.artifacts._conservation_residual

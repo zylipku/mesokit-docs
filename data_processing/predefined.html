@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -1747,8 +1748,9 @@ mesoscopic description of these data targets.</p></li>
 </table>
 </div>
 <p>The shipped model families are registered per dimension (<code class="docutils literal notranslate"><span class="pre">fno1d/2d/3d</span></code>,
-<code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d/2d/3d</span></code>, see <a class="reference internal" href="../models.html"><span class="std std-doc">Models</span></a>) and consume one
-channel; the multi-channel datasets train one channel at a time through
+<code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d/2d/3d</span></code>, <code class="docutils literal notranslate"><span class="pre">onsagernet_1d/2d/3d</span></code>, see
+<a class="reference internal" href="../models.html"><span class="std std-doc">Models</span></a>); what they see of a multi-channel dataset — one
+field, every channel or a list of them — is the <code class="docutils literal notranslate"><span class="pre">channel</span></code> selection of
 <a class="reference internal" href="../training/training_views.html#dataset-adapters"><span class="std std-ref">the stock adapters</span></a>, and
 <a class="reference internal" href="../models/custom_model.html"><span class="std std-doc">Custom Models</span></a> covers registering a model of your own.</p>
 </section>

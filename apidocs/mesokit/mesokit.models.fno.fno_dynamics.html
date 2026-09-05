@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -410,8 +411,9 @@
 <p>Delegates the operator to :class:<code class="docutils literal notranslate"><span class="pre">neuralop.models.FNO</span></code>, which is itself
 dimension-agnostic (the length of <code class="docutils literal notranslate"><span class="pre">n_modes</span></code> sets the number of spatial
 axes). :class:<code class="docutils literal notranslate"><span class="pre">FNODynamics</span></code> implements <code class="docutils literal notranslate"><span class="pre">rhs(u)</span> <span class="pre">≈</span> <span class="pre">FNO(u)</span></code> on a batch of
-single-channel fields <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">*grid_shape)</span></code> and composes <code class="docutils literal notranslate"><span class="pre">forward</span></code> /
-<code class="docutils literal notranslate"><span class="pre">rollout</span></code> from the shared explicit steppers in</p>
+fields — one field <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">*grid_shape)</span></code> or <code class="docutils literal notranslate"><span class="pre">in_channels</span></code> of them
+<code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">C,</span> <span class="pre">*grid_shape)</span></code>, coupled through the operator’s channels — and
+composes <code class="docutils literal notranslate"><span class="pre">forward</span></code> / <code class="docutils literal notranslate"><span class="pre">rollout</span></code> from the shared explicit steppers in</p>
 <dl class="myst field-list simple">
 <dt class="field-odd">mod<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">mesokit.models.dynamics_base</span></code>. The registered :class:<code class="docutils literal notranslate"><span class="pre">FNO1d</span></code> /</p>
@@ -478,8 +480,11 @@ ndim: number of spatial axes.
 n_modes: retained Fourier modes per axis — an <code class="docutils literal notranslate"><span class="pre">int</span></code> for all axes or
 one entry per axis.
 hidden_channels: width of the FNO lifting.
-in_channels, out_channels: field channels; the shipped training views
-are single-channel so both default to <code class="docutils literal notranslate"><span class="pre">1</span></code>.
+in_channels, out_channels: channels of the state, <code class="docutils literal notranslate"><span class="pre">1</span></code> for one field
+(a training view with an integer <code class="docutils literal notranslate"><span class="pre">channel</span></code>) or <code class="docutils literal notranslate"><span class="pre">C</span></code> for
+<code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">C,</span> <span class="pre">*grid_shape)</span></code> states (<code class="docutils literal notranslate"><span class="pre">channel:</span> <span class="pre">null</span></code> or a list).
+A dynamics model returns the state it was given, so the two must
+be equal; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> fills both from the dataset view.
 step_method: <code class="docutils literal notranslate"><span class="pre">&quot;euler&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;rk4&quot;</span></code>.
 grid_shape, domain: optional periodic box the operator is meant for.
 The FNO itself is resolution-agnostic and never reads them; they
@@ -496,7 +501,7 @@ reference dataset is attached.
 <dl class="py method">
 <dt class="sig sig-object py" id="mesokit.models.fno.fno_dynamics.FNODynamics.rhs">
 <span class="sig-name descname"><span class="pre">rhs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#mesokit.models.fno.fno_dynamics.FNODynamics.rhs" title="Link to this definition">¶</a></dt>
-<dd><p>Predict <code class="docutils literal notranslate"><span class="pre">du/dt(u)</span> <span class="pre">≈</span> <span class="pre">FNO(u)</span></code> for <code class="docutils literal notranslate"><span class="pre">u</span></code> of shape <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">*grid_shape)</span></code>.</p>
+<dd><p>Predict <code class="docutils literal notranslate"><span class="pre">du/dt(u)</span> <span class="pre">≈</span> <span class="pre">FNO(u)</span></code> for <code class="docutils literal notranslate"><span class="pre">u</span></code> shaped <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">*grid_shape)</span></code> or <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">in_channels,</span> <span class="pre">*grid_shape)</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">

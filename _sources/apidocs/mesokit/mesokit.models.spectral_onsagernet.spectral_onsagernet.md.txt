@@ -45,7 +45,7 @@
 
 ````
 
-`````{py:class} SpectralOnsagerNet(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float], *, learn_M: bool = True, learn_W: bool = True, potential: mesokit.models.spectral_onsagernet.potential.Potential | None = None, step_method: str = 'sbdf1', identity_M: bool = False)
+`````{py:class} SpectralOnsagerNet(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float], *, learn_M: bool = True, learn_W: bool = True, potential: mesokit.models.spectral_onsagernet.potential.Potential | None = None, step_method: str = 'sbdf1', identity_M: bool = False, n_channels: int = 1)
 :canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet.SpectralOnsagerNet
 
 Bases: {py:obj}`torch.nn.Module`
@@ -185,6 +185,14 @@ Bases: {py:obj}`torch.nn.Module`
 
 ````
 
+````{py:method} _check_state(u: torch.Tensor) -> None
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet.SpectralOnsagerNet._check_state
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet.SpectralOnsagerNet._check_state
+```
+
+````
+
 ````{py:method} rhs(u: torch.Tensor) -> torch.Tensor
 :canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet.SpectralOnsagerNet.rhs
 
@@ -205,6 +213,14 @@ Bases: {py:obj}`torch.nn.Module`
 :canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet.SpectralOnsagerNet.forward
 
 ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet.SpectralOnsagerNet.forward
+```
+
+````
+
+````{py:method} extra_repr() -> str
+:canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet.SpectralOnsagerNet.extra_repr
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.spectral_onsagernet.SpectralOnsagerNet.extra_repr
 ```
 
 ````

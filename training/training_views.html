@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -444,11 +445,13 @@ the effective time step is <code class="docutils literal notranslate"><span clas
 frame spacing only). In <code class="docutils literal notranslate"><span class="pre">LookbackWindowDataset</span></code> it is the step between
 successive windows; the history frames are always consecutive and the
 target is the single frame <code class="docutils literal notranslate"><span class="pre">lead</span></code> steps after the last of them.</p>
-<p>Both adapters take <code class="docutils literal notranslate"><span class="pre">channel:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></code> and yield <code class="docutils literal notranslate"><span class="pre">(*grid_shape,)</span></code>-shaped
-samples — preserving the single-channel input contract the shipped models
-expect. Multi-channel datasets select one channel per adapter instance;
-consuming the full <code class="docutils literal notranslate"><span class="pre">data[i,</span> <span class="pre">t,</span> <span class="pre">:,</span> <span class="pre">…]</span></code> tensor is a planned extension of the
-adapters and the model families together.</p>
+<p><code class="docutils literal notranslate"><span class="pre">channel</span></code> decides what a sample carries. An integer (the default <code class="docutils literal notranslate"><span class="pre">0</span></code>)
+picks one field and the samples are <code class="docutils literal notranslate"><span class="pre">(*grid_shape,)</span></code>, so a single-channel
+dataset flows through untouched. <code class="docutils literal notranslate"><span class="pre">None</span></code> keeps every channel and a list of
+integers keeps those, in that order; the samples are then
+<code class="docutils literal notranslate"><span class="pre">(C,</span> <span class="pre">*grid_shape)</span></code> — the input of the multi-channel models, whose channel
+count <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> fills from this key (<a class="reference internal" href="../models.html"><span class="std std-doc">Models</span></a>). The
+adapter’s <code class="docutils literal notranslate"><span class="pre">channels</span></code> property reports <code class="docutils literal notranslate"><span class="pre">None</span></code> or <code class="docutils literal notranslate"><span class="pre">C</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">mesokit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrajectoryDataset</span>
@@ -460,8 +463,16 @@ adapters and the model families together.</p>
 <span class="n">windows</span> <span class="o">=</span> <span class="n">LookbackWindowDataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">lookback</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lead</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">history</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">windows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                <span class="c1"># (3, Nx) and (Nx,)</span>
 <span class="n">loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">pairs</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">llg</span> <span class="o">=</span> <span class="n">TrajectoryDataset</span><span class="o">.</span><span class="n">load_hdf5</span><span class="p">(</span><span class="s2">&quot;data/llg_lattice_2d/llg_lattice_2d_v0.h5&quot;</span><span class="p">)</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="n">SnapshotPairDataset</span><span class="p">(</span><span class="n">llg</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>    <span class="c1"># (mx, my, mz) together</span>
+<span class="n">m_t</span><span class="p">,</span> <span class="n">m_next</span> <span class="o">=</span> <span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                        <span class="c1"># both (3, Nx, Ny)</span>
+<span class="n">inplane</span> <span class="o">=</span> <span class="n">SnapshotPairDataset</span><span class="p">(</span><span class="n">llg</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>   <span class="c1"># (2, Nx, Ny) samples</span>
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.select_channels([...])</span></code> returns a copy of the bundle
+with only those channels (and their names), the same selection applied
+once and for all.</p>
 <p>These adapters are toolkit examples, not requirements — every trainer in
 <code class="docutils literal notranslate"><span class="pre">mesokit.trainers</span></code> accepts an arbitrary <code class="docutils literal notranslate"><span class="pre">torch.utils.data.DataLoader</span></code>, so
 you are free to write your own adapter if your problem needs a different

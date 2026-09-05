@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -511,6 +512,14 @@ channel_names: optional ordered channel labels; length must match
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">grid_shape</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.data.trajectory.TrajectoryDataset.grid_shape" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.data.trajectory.TrajectoryDataset.select_channels">
+<span class="sig-name descname"><span class="pre">select_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mesokit.data.trajectory.TrajectoryDataset" title="mesokit.data.trajectory.TrajectoryDataset"><span class="pre">mesokit.data.trajectory.TrajectoryDataset</span></a></span></span><a class="headerlink" href="#mesokit.data.trajectory.TrajectoryDataset.select_channels" title="Link to this definition">¶</a></dt>
+<dd><p>A copy holding only <code class="docutils literal notranslate"><span class="pre">channels</span></code> (in that order), with the matching <code class="docutils literal notranslate"><span class="pre">channel_names</span></code>.</p>
+<p>The metadata groups are shared, not copied. This is the dataset a
+model trained through a view with <code class="docutils literal notranslate"><span class="pre">channel=channels</span></code> has seen.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="mesokit.data.trajectory.TrajectoryDataset.metadata">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">metadata</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.data.trajectory.TrajectoryDataset.metadata" title="Link to this definition">¶</a></dt>
@@ -615,6 +624,7 @@ for untrusted inputs.</p>
 <li><a class="reference internal" href="#mesokit.data.trajectory.TrajectoryDataset.n_time"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.n_time</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data.trajectory.TrajectoryDataset.n_channel"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.n_channel</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data.trajectory.TrajectoryDataset.grid_shape"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.grid_shape</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.data.trajectory.TrajectoryDataset.select_channels"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.select_channels()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data.trajectory.TrajectoryDataset.metadata"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.metadata</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data.trajectory.TrajectoryDataset.save_hdf5"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.save_hdf5()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data.trajectory.TrajectoryDataset.load_hdf5"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.load_hdf5()</span></code></a></li>

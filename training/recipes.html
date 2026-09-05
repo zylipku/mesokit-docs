@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -469,7 +470,7 @@ may be any importable callable that satisfies the simulator contract
 <span class="nt">dataset</span><span class="p">:</span><span class="w">                  </span><span class="c1"># the training view wrapping the TrajectoryDataset</span>
 <span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset</span>
 <span class="w">  </span><span class="nt">stride</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">  </span><span class="c1"># channel: 0            # pick one field of a multi-channel dataset</span>
+<span class="w">  </span><span class="c1"># channel: 0            # one field (default); null: every channel; [0, 2]: those channels</span>
 
 <span class="nt">dataloader</span><span class="p">:</span><span class="w">               </span><span class="c1"># torch.utils.data.DataLoader kwargs</span>
 <span class="w">  </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
@@ -502,22 +503,25 @@ overrides <code class="docutils literal notranslate"><span class="pre">max_epoch
 option list is on <a class="reference internal" href="lit_trainer.html"><span class="std std-doc">LitTrainer</span></a>.</p></li>
 </ul>
 </section>
-<section id="the-grid-comes-from-the-dataset">
-<h2>The Grid Comes From the Dataset<a class="headerlink" href="#the-grid-comes-from-the-dataset" title="Link to this heading">¶</a></h2>
+<section id="the-grid-and-the-channels-come-from-the-dataset">
+<h2>The Grid and the Channels Come From the Dataset<a class="headerlink" href="#the-grid-and-the-channels-come-from-the-dataset" title="Link to this heading">¶</a></h2>
 <p>Grid keywords a constructor accepts but the recipe leaves out are filled
 from the dataset, recursively for nested components: <code class="docutils literal notranslate"><span class="pre">Nx</span></code> / <code class="docutils literal notranslate"><span class="pre">Ny</span></code> / <code class="docutils literal notranslate"><span class="pre">Nz</span></code>
 from <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>; <code class="docutils literal notranslate"><span class="pre">Lx</span></code> / <code class="docutils literal notranslate"><span class="pre">Ly</span></code> / <code class="docutils literal notranslate"><span class="pre">Lz</span></code> from the <code class="docutils literal notranslate"><span class="pre">physical</span></code> group (<code class="docutils literal notranslate"><span class="pre">2π</span></code> when
 <code class="docutils literal notranslate"><span class="pre">Lx</span></code> is absent, a missing later axis repeating the first); <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>
-and <code class="docutils literal notranslate"><span class="pre">domain</span></code> of a nested potential; <code class="docutils literal notranslate"><span class="pre">in_dim</span></code> (the number of grid points)
-and <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> of the classical OnsagerNet’s blocks. A written box length
-is kept (a dataset may lack <code class="docutils literal notranslate"><span class="pre">Lx</span></code>); a written number of grid points (<code class="docutils literal notranslate"><span class="pre">Nx</span></code>,
-<code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>, <code class="docutils literal notranslate"><span class="pre">in_dim</span></code>) that contradicts the dataset is refused before
-training starts, naming the key. The shipped recipes carry no grid keys at
-all — leave them out of recipes you write too, and they run on any grid of
-their dynamics. Two things are not inferred: multi-channel
-datasets need <code class="docutils literal notranslate"><span class="pre">dataset.channel</span></code> (the shipped models are single-channel),
-and a potential’s <code class="docutils literal notranslate"><span class="pre">eps</span></code> or a block’s rank are modelling choices, not
-grid facts.</p>
+and <code class="docutils literal notranslate"><span class="pre">domain</span></code> of a nested potential; <code class="docutils literal notranslate"><span class="pre">in_dim</span></code> (the number of state entries)
+and <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> of the classical OnsagerNet’s blocks. The channel count
+comes the same way, from the view’s <code class="docutils literal notranslate"><span class="pre">dataset.channel</span></code>: an integer means
+one field, <code class="docutils literal notranslate"><span class="pre">null</span></code> every channel, a list those channels, and <code class="docutils literal notranslate"><span class="pre">n_channels</span></code>
+(the two Onsager families), <code class="docutils literal notranslate"><span class="pre">in_channels</span></code> / <code class="docutils literal notranslate"><span class="pre">out_channels</span></code> (FNO) and the
+factor in <code class="docutils literal notranslate"><span class="pre">in_dim</span></code> follow. A written box length is kept (a dataset may
+lack <code class="docutils literal notranslate"><span class="pre">Lx</span></code>); a written number of grid points or channels (<code class="docutils literal notranslate"><span class="pre">Nx</span></code>,
+<code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>, <code class="docutils literal notranslate"><span class="pre">in_dim</span></code>, <code class="docutils literal notranslate"><span class="pre">n_channels</span></code>, <code class="docutils literal notranslate"><span class="pre">in_channels</span></code>) that contradicts the
+dataset is refused before training starts, naming the key. The shipped
+recipes carry none of these keys — leave them out of recipes you write
+too, and they run on any grid of their dynamics. Not inferred: a
+potential’s <code class="docutils literal notranslate"><span class="pre">eps</span></code> or a block’s rank, which are modelling choices, not
+facts of the data.</p>
 </section>
 <section id="a-recipe-for-your-own-dynamics">
 <h2>A Recipe for Your Own Dynamics<a class="headerlink" href="#a-recipe-for-your-own-dynamics" title="Link to this heading">¶</a></h2>
@@ -597,7 +601,7 @@ is what <code class="docutils literal notranslate"><span class="pre">mesokit</sp
 <li><a class="reference internal" href="#recipes-are-optional">Recipes Are Optional</a></li>
 <li><a class="reference internal" href="#layout">Layout</a></li>
 <li><a class="reference internal" href="#the-four-sections">The Four Sections</a></li>
-<li><a class="reference internal" href="#the-grid-comes-from-the-dataset">The Grid Comes From the Dataset</a></li>
+<li><a class="reference internal" href="#the-grid-and-the-channels-come-from-the-dataset">The Grid and the Channels Come From the Dataset</a></li>
 <li><a class="reference internal" href="#a-recipe-for-your-own-dynamics">A Recipe for Your Own Dynamics</a></li>
 </ul>
 </li>

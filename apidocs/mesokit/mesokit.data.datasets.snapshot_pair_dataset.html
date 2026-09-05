@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="mesokit.data.llg" href="mesokit.data.llg.html"><link rel="prev" title="mesokit.data.datasets.lookback_window_dataset" href="mesokit.data.datasets.lookback_window_dataset.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="mesokit.data.llg" href="mesokit.data.llg.html"><link rel="prev" title="mesokit.data.datasets._channels" href="mesokit.data.datasets._channels.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>mesokit.data.datasets.snapshot_pair_dataset - mesokit</title>
@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 current has-children"><a class="reference internal" href="mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -428,7 +429,7 @@ view: an autoregressive next-step predictor learns from these pairs.</p>
 <h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset.</span></span><span class="sig-name descname"><span class="pre">SnapshotPairDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset" title="mesokit.data.trajectory.TrajectoryDataset"><span class="pre">mesokit.data.trajectory.TrajectoryDataset</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset.</span></span><span class="sig-name descname"><span class="pre">SnapshotPairDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset" title="mesokit.data.trajectory.TrajectoryDataset"><span class="pre">mesokit.data.trajectory.TrajectoryDataset</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.Tensor</span></code>]]</p>
 <p>Pairs <code class="docutils literal notranslate"><span class="pre">(u_t,</span> <span class="pre">u_{t+stride})</span></code> flattened over all trajectories.</p>
 <p>Args:
@@ -437,11 +438,20 @@ traj: source trajectory bundle. <code class="docutils literal notranslate"><span
 stride: integer step between input and target snapshot. <code class="docutils literal notranslate"><span class="pre">stride=1</span></code>
 (default) yields adjacent-step pairs; <code class="docutils literal notranslate"><span class="pre">stride=k</span></code> yields
 <code class="docutils literal notranslate"><span class="pre">k</span></code>-step-ahead pairs.
-channel: which channel to slice out of <code class="docutils literal notranslate"><span class="pre">traj.data</span></code>. Defaults to
-<code class="docutils literal notranslate"><span class="pre">0</span></code> so single-channel datasets (<code class="docutils literal notranslate"><span class="pre">n_channel</span> <span class="pre">==</span> <span class="pre">1</span></code>) flow through
-transparently as <code class="docutils literal notranslate"><span class="pre">(*grid_shape,)</span></code> samples.</p>
-<p>Each item is a tuple of two tensors with shape <code class="docutils literal notranslate"><span class="pre">(*grid_shape,)</span></code>.</p>
+channel: what a sample carries. An integer picks one field and the
+samples are <code class="docutils literal notranslate"><span class="pre">(*grid_shape,)</span></code> — the default <code class="docutils literal notranslate"><span class="pre">0</span></code> lets
+single-channel datasets flow through transparently. <code class="docutils literal notranslate"><span class="pre">None</span></code> keeps
+every channel and a sequence of integers keeps those, in that
+order; the samples are then <code class="docutils literal notranslate"><span class="pre">(C,</span> <span class="pre">*grid_shape)</span></code>, the input of the
+multi-channel models.</p>
+<p>Each item is a tuple of two tensors of the same shape.</p>
 <p class="rubric">Initialization</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.channels">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">channels</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.channels" title="Link to this definition">¶</a></dt>
+<dd><p>Channels per sample: <code class="docutils literal notranslate"><span class="pre">None</span></code> for <code class="docutils literal notranslate"><span class="pre">(*grid_shape,)</span></code> samples, else the <code class="docutils literal notranslate"><span class="pre">C</span></code> of <code class="docutils literal notranslate"><span class="pre">(C,</span> <span class="pre">*grid_shape)</span></code>.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__len__">
 <span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__len__" title="Link to this definition">¶</a></dt>
@@ -472,14 +482,14 @@ transparently as <code class="docutils literal notranslate"><span class="pre">(*
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="mesokit.data.datasets.lookback_window_dataset.html">
+          <a class="prev-page" href="mesokit.data.datasets._channels.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></div>
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></div>
                 
               </div>
             </a>
@@ -518,6 +528,7 @@ transparently as <code class="docutils literal notranslate"><span class="pre">(*
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#api">API</a><ul>
 <li><a class="reference internal" href="#mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset"><code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.channels"><code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset.channels</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__len__"><code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset.__len__()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset.__getitem__()</span></code></a></li>
 </ul>

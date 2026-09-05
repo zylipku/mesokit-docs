@@ -59,6 +59,22 @@
   - ```{autodoc2-docstring} mesokit.models.onsagernet.components._circular_distance_sq
     :summary:
     ```
+* - {py:obj}`_check_channels <mesokit.models.onsagernet.components._check_channels>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components._check_channels
+    :summary:
+    ```
+* - {py:obj}`_per_channel <mesokit.models.onsagernet.components._per_channel>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components._per_channel
+    :summary:
+    ```
+* - {py:obj}`_symmetrise_channels <mesokit.models.onsagernet.components._symmetrise_channels>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components._symmetrise_channels
+    :summary:
+    ```
+* - {py:obj}`_field_shape <mesokit.models.onsagernet.components._field_shape>`
+  - ```{autodoc2-docstring} mesokit.models.onsagernet.components._field_shape
+    :summary:
+    ```
 ````
 
 ### API
@@ -253,7 +269,7 @@ Bases: {py:obj}`torch.nn.Module`
 ```
 ````
 
-`````{py:class} CirculantDissipation(grid_shape: collections.abc.Sequence[int] | int, beta: float = 0.001, band_size: int | None = None)
+`````{py:class} CirculantDissipation(grid_shape: collections.abc.Sequence[int] | int, beta: float = 0.001, band_size: int | None = None, n_channels: int = 1)
 :canonical: mesokit.models.onsagernet.components.CirculantDissipation
 
 Bases: {py:obj}`torch.nn.Module`
@@ -286,7 +302,7 @@ Bases: {py:obj}`torch.nn.Module`
 
 `````
 
-`````{py:class} CirculantConservation(grid_shape: collections.abc.Sequence[int] | int, band_size: int | None = None)
+`````{py:class} CirculantConservation(grid_shape: collections.abc.Sequence[int] | int, band_size: int | None = None, n_channels: int = 1)
 :canonical: mesokit.models.onsagernet.components.CirculantConservation
 
 Bases: {py:obj}`torch.nn.Module`
@@ -318,3 +334,31 @@ Bases: {py:obj}`torch.nn.Module`
 ````
 
 `````
+
+````{py:function} _check_channels(n_channels: int) -> int
+:canonical: mesokit.models.onsagernet.components._check_channels
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components._check_channels
+```
+````
+
+````{py:function} _per_channel(init: torch.Tensor, n_channels: int) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components._per_channel
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components._per_channel
+```
+````
+
+````{py:function} _symmetrise_channels(theta: torch.Tensor, *, ndim: int, odd: bool) -> torch.Tensor
+:canonical: mesokit.models.onsagernet.components._symmetrise_channels
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components._symmetrise_channels
+```
+````
+
+````{py:function} _field_shape(grid: mesokit.models._spectral.SpectralGrid, n_channels: int) -> tuple[int, ...]
+:canonical: mesokit.models.onsagernet.components._field_shape
+
+```{autodoc2-docstring} mesokit.models.onsagernet.components._field_shape
+```
+````

@@ -14,6 +14,7 @@
 :maxdepth: 1
 
 mesokit.data.datasets.lookback_window_dataset
+mesokit.data.datasets._channels
 mesokit.data.datasets.snapshot_pair_dataset
 ```
 

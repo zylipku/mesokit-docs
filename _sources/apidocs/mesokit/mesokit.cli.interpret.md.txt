@@ -27,6 +27,10 @@
   - ```{autodoc2-docstring} mesokit.cli.interpret._load_registered_model
     :summary:
     ```
+* - {py:obj}`_view_channels <mesokit.cli.interpret._view_channels>`
+  - ```{autodoc2-docstring} mesokit.cli.interpret._view_channels
+    :summary:
+    ```
 * - {py:obj}`_load_config <mesokit.cli.interpret._load_config>`
   - ```{autodoc2-docstring} mesokit.cli.interpret._load_config
     :summary:
@@ -95,6 +99,13 @@
 :canonical: mesokit.cli.interpret._load_registered_model
 
 ```{autodoc2-docstring} mesokit.cli.interpret._load_registered_model
+```
+````
+
+````{py:function} _view_channels(dataset: mesokit.data.TrajectoryDataset, cfg: omegaconf.DictConfig) -> mesokit.data.TrajectoryDataset
+:canonical: mesokit.cli.interpret._view_channels
+
+```{autodoc2-docstring} mesokit.cli.interpret._view_channels
 ```
 ````
 

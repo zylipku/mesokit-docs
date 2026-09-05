@@ -23,7 +23,7 @@
 
 ### API
 
-`````{py:class} OnsagerNet3d(Nx: int = 16, Ny: int | None = None, Nz: int | None = None, Lx: float = 2.0 * math.pi, Ly: float | None = None, Lz: float | None = None, potential: torch.nn.Module | None = None, dissipation: torch.nn.Module | None = None, conservation: torch.nn.Module | None = None, step_method: str = 'euler')
+`````{py:class} OnsagerNet3d(Nx: int = 16, Ny: int | None = None, Nz: int | None = None, Lx: float = 2.0 * math.pi, Ly: float | None = None, Lz: float | None = None, potential: torch.nn.Module | None = None, dissipation: torch.nn.Module | None = None, conservation: torch.nn.Module | None = None, step_method: str = 'euler', n_channels: int = 1)
 :canonical: mesokit.models.onsagernet.onsagernet_3d.OnsagerNet3d
 
 Bases: {py:obj}`mesokit.models.onsagernet.onsagernet.OnsagerNet`

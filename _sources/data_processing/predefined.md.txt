@@ -1065,7 +1065,8 @@ simulation units;
 | Learn a damage / phase-field fracture model from particle mechanics | `peridynamics_fracture_2d` (needs the `sim` feature for LAMMPS). |
 
 The shipped model families are registered per dimension (`fno1d/2d/3d`,
-`spectral_onsagernet_1d/2d/3d`, see [Models](../models.md)) and consume one
-channel; the multi-channel datasets train one channel at a time through
+`spectral_onsagernet_1d/2d/3d`, `onsagernet_1d/2d/3d`, see
+[Models](../models.md)); what they see of a multi-channel dataset — one
+field, every channel or a list of them — is the `channel` selection of
 {ref}`the stock adapters <dataset-adapters>`, and
 [Custom Models](../models/custom_model.md) covers registering a model of your own.

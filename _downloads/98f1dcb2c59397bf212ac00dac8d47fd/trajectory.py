@@ -13,6 +13,7 @@ container itself is geometry-agnostic.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -80,6 +81,26 @@ class TrajectoryDataset:
     @property
     def grid_shape(self) -> tuple[int, ...]:
         return tuple(self.data.shape[3:])
+
+    def select_channels(self, channels: Sequence[int]) -> TrajectoryDataset:
+        """A copy holding only ``channels`` (in that order), with the matching ``channel_names``.
+
+        The metadata groups are shared, not copied. This is the dataset a
+        model trained through a view with ``channel=channels`` has seen.
+        """
+        indices = [int(c) for c in channels]
+        if not indices or any(not 0 <= c < self.n_channel for c in indices):
+            raise ValueError(f"channels={indices} out of range for n_channel={self.n_channel}")
+        names = None if self.channel_names is None else tuple(self.channel_names[c] for c in indices)
+        return TrajectoryDataset(
+            data=self.data[:, :, indices],
+            times=self.times,
+            dyn=self.dyn,
+            physical=self.physical,
+            numerical=self.numerical,
+            provenance=self.provenance,
+            channel_names=names,
+        )
 
     @property
     def metadata(self) -> dict[str, Any]:

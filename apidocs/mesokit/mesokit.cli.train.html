@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -435,40 +436,43 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_complete_model_config</span></code></p></td>
 <td><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">model</span></code> section with the registry default <code class="docutils literal notranslate"><span class="pre">_target_</span></code> and the dataset’s grid filled in.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dataset_domain</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_sample_channels</span></code></p></td>
+<td><p>Channels of one training sample, from the dataset view’s <code class="docutils literal notranslate"><span class="pre">channel</span></code> key.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dataset_domain</span></code></p></td>
 <td><p>Box lengths per axis from <code class="docutils literal notranslate"><span class="pre">physical</span></code> (<code class="docutils literal notranslate"><span class="pre">Lx</span></code>, <code class="docutils literal notranslate"><span class="pre">Ly</span></code>, <code class="docutils literal notranslate"><span class="pre">Lz</span></code>).</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_fill_grid_keywords</span></code></p></td>
-<td><p>Fill the grid keywords <code class="docutils literal notranslate"><span class="pre">section</span></code>’s <code class="docutils literal notranslate"><span class="pre">_target_</span></code> accepts from the dataset, recursively.</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_fill_grid_keywords</span></code></p></td>
+<td><p>Fill the grid and channel keywords <code class="docutils literal notranslate"><span class="pre">section</span></code>’s <code class="docutils literal notranslate"><span class="pre">_target_</span></code> accepts from the dataset, recursively.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_dataset</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_dataset</span></code></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_loader</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_loader</span></code></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_trainer_config</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_trainer_config</span></code></p></td>
 <td><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">trainer</span></code> section with its <code class="docutils literal notranslate"><span class="pre">_target_</span></code> resolved.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_train_config</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_train_config</span></code></p></td>
 <td><p>The recipe for <code class="docutils literal notranslate"><span class="pre">dyn</span></code> / <code class="docutils literal notranslate"><span class="pre">model</span></code> and where it came from (<code class="docutils literal notranslate"><span class="pre">&quot;recipe&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;defaults&quot;</span></code>).</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_default_train_config</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_default_train_config</span></code></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_trajectory</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_trajectory</span></code></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_infer_dt</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_infer_dt</span></code></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_next_checkpoint_name</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_next_checkpoint_name</span></code></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_resolved_config</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_resolved_config</span></code></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_checkpoint_record</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_checkpoint_record</span></code></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -573,6 +577,13 @@
 ```
 ````
 
+````{py:function} _sample_channels(cfg: omegaconf.DictConfig, traj: mesokit.data.TrajectoryDataset) -&gt; int
+:canonical: mesokit.cli.train._sample_channels
+
+```{autodoc2-docstring} mesokit.cli.train._sample_channels
+```
+````
+
 ````{py:data} _AXES
 :canonical: mesokit.cli.train._AXES
 :value: &gt;
@@ -590,7 +601,7 @@
 ```
 ````
 
-````{py:function} _fill_grid_keywords(section: omegaconf.DictConfig, *, grid_shape: tuple[int, ...], domain: tuple[float, ...], depth: int, path: str = &#39;model&#39;, mismatches: list[str] | None = None) -&gt; None
+````{py:function} _fill_grid_keywords(section: omegaconf.DictConfig, *, grid_shape: tuple[int, ...], domain: tuple[float, ...], depth: int, n_channels: int = 1, path: str = &#39;model&#39;, mismatches: list[str] | None = None) -&gt; None
 :canonical: mesokit.cli.train._fill_grid_keywords
 
 ```{autodoc2-docstring} mesokit.cli.train._fill_grid_keywords

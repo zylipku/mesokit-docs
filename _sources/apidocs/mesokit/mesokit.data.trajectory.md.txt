@@ -150,6 +150,14 @@
 
 ````
 
+````{py:method} select_channels(channels: collections.abc.Sequence[int]) -> mesokit.data.trajectory.TrajectoryDataset
+:canonical: mesokit.data.trajectory.TrajectoryDataset.select_channels
+
+```{autodoc2-docstring} mesokit.data.trajectory.TrajectoryDataset.select_channels
+```
+
+````
+
 ````{py:property} metadata
 :canonical: mesokit.data.trajectory.TrajectoryDataset.metadata
 :type: dict[str, typing.Any]

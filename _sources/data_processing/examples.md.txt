@@ -132,7 +132,8 @@ ds.save_hdf5("data/toy_coupled.h5")
 ```
 
 `SnapshotPairDataset(ds, channel=0)` yields `(u_t, u_{t+1})` pairs for the
-first field, `channel=1` for the second. A future model that consumes both
-fields at once would slice the full `data[i, t, :, :]` tensor instead. The
-on-disk schema is identical; only the size of the channel axis and the
-content of `channel_names` change.
+first field, `channel=1` for the second, and `channel=None` pairs of
+`(2, Nx, Ny)` states holding both, which is what a model trained on both
+fields at once takes (`dataset.channel: null` in a recipe; see
+[Models](../models.md)). The on-disk schema is identical; only the size
+of the channel axis and the content of `channel_names` change.

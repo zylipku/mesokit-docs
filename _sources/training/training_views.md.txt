@@ -24,11 +24,13 @@ frame spacing only). In `LookbackWindowDataset` it is the step between
 successive windows; the history frames are always consecutive and the
 target is the single frame `lead` steps after the last of them.
 
-Both adapters take `channel: int = 0` and yield `(*grid_shape,)`-shaped
-samples — preserving the single-channel input contract the shipped models
-expect. Multi-channel datasets select one channel per adapter instance;
-consuming the full `data[i, t, :, …]` tensor is a planned extension of the
-adapters and the model families together.
+`channel` decides what a sample carries. An integer (the default `0`)
+picks one field and the samples are `(*grid_shape,)`, so a single-channel
+dataset flows through untouched. `None` keeps every channel and a list of
+integers keeps those, in that order; the samples are then
+`(C, *grid_shape)` — the input of the multi-channel models, whose channel
+count `mesokit train` fills from this key ([Models](../models.md)). The
+adapter's `channels` property reports `None` or `C`.
 
 ```python
 from torch.utils.data import DataLoader
@@ -42,7 +44,16 @@ u_t, u_next = pairs[0]                      # both (Nx,)
 windows = LookbackWindowDataset(ds, lookback=3, lead=1)
 history, target = windows[0]                # (3, Nx) and (Nx,)
 loader = DataLoader(pairs, batch_size=32, shuffle=True)
+
+llg = TrajectoryDataset.load_hdf5("data/llg_lattice_2d/llg_lattice_2d_v0.h5")
+vec = SnapshotPairDataset(llg, channel=None)    # (mx, my, mz) together
+m_t, m_next = vec[0]                        # both (3, Nx, Ny)
+inplane = SnapshotPairDataset(llg, channel=[0, 1])   # (2, Nx, Ny) samples
 ```
+
+`TrajectoryDataset.select_channels([...])` returns a copy of the bundle
+with only those channels (and their names), the same selection applied
+once and for all.
 
 These adapters are toolkit examples, not requirements — every trainer in
 `mesokit.trainers` accepts an arbitrary `torch.utils.data.DataLoader`, so

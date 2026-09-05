@@ -31,6 +31,10 @@
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`_per_channel <mesokit.models.spectral_onsagernet.artifacts._per_channel>`
+  - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._per_channel
+    :summary:
+    ```
 * - {py:obj}`_leading_plane <mesokit.models.spectral_onsagernet.artifacts._leading_plane>`
   - ```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._leading_plane
     :summary:
@@ -437,6 +441,13 @@
 ````
 
 `````
+
+````{py:function} _per_channel(values: numpy.ndarray, ndim: int) -> list[tuple[str, numpy.ndarray]]
+:canonical: mesokit.models.spectral_onsagernet.artifacts._per_channel
+
+```{autodoc2-docstring} mesokit.models.spectral_onsagernet.artifacts._per_channel
+```
+````
 
 ````{py:function} _leading_plane(values: numpy.ndarray) -> numpy.ndarray
 :canonical: mesokit.models.spectral_onsagernet.artifacts._leading_plane

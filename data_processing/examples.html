@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -525,10 +526,11 @@ contract with <code class="docutils literal notranslate"><span class="pre">n_cha
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset(ds,</span> <span class="pre">channel=0)</span></code> yields <code class="docutils literal notranslate"><span class="pre">(u_t,</span> <span class="pre">u_{t+1})</span></code> pairs for the
-first field, <code class="docutils literal notranslate"><span class="pre">channel=1</span></code> for the second. A future model that consumes both
-fields at once would slice the full <code class="docutils literal notranslate"><span class="pre">data[i,</span> <span class="pre">t,</span> <span class="pre">:,</span> <span class="pre">:]</span></code> tensor instead. The
-on-disk schema is identical; only the size of the channel axis and the
-content of <code class="docutils literal notranslate"><span class="pre">channel_names</span></code> change.</p>
+first field, <code class="docutils literal notranslate"><span class="pre">channel=1</span></code> for the second, and <code class="docutils literal notranslate"><span class="pre">channel=None</span></code> pairs of
+<code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">Nx,</span> <span class="pre">Ny)</span></code> states holding both, which is what a model trained on both
+fields at once takes (<code class="docutils literal notranslate"><span class="pre">dataset.channel:</span> <span class="pre">null</span></code> in a recipe; see
+<a class="reference internal" href="../models.html"><span class="std std-doc">Models</span></a>). The on-disk schema is identical; only the size
+of the channel axis and the content of <code class="docutils literal notranslate"><span class="pre">channel_names</span></code> change.</p>
 </section>
 </section>
 

@@ -38,9 +38,10 @@ the two are compared against.
 
 ## Common Surface
 
-Every model consumes a batch of **single-channel** fields
-$u \in \mathbb{R}^{B \times N_1 \times \cdots \times N_d}$ on a periodic box
-and exposes `forward(u, dt)` (one step), `rollout(u0, n_steps, dt)`,
+Every model consumes a batch of fields on a periodic box — one field
+$u \in \mathbb{R}^{B \times N_1 \times \cdots \times N_d}$, or $C$ of them
+$u \in \mathbb{R}^{B \times C \times N_1 \times \cdots \times N_d}$ — and
+exposes `forward(u, dt)` (one step), `rollout(u0, n_steps, dt)`,
 `list_artifacts()` and `artifact(name)` — the `DynamicsModel` protocol
 described in [Custom Models](models/custom_model.md). `mesokit train
 --model <name>` resolves the class, the trainer registered for it
@@ -48,12 +49,27 @@ described in [Custom Models](models/custom_model.md). `mesokit train
 `configs/train/<dyn>/<name>/`; the step size `dt` is read from the
 dataset's time grid unless the recipe sets it, and the grid (`Nx`, `Ny`,
 `Lx`, `Ly`, and for the classical family the `in_dim` / `grid_shape` of
-its blocks) is filled from the dataset unless the recipe sets it. See
-[Training](training.md) for the recipe layout and the Python path.
+its blocks) and the channel count are filled from the dataset unless the
+recipe sets them. See [Training](training.md) for the recipe layout and
+the Python path.
 
-All families are single-channel. For the multi-channel datasets
-(`llg_lattice_2d`, `peridynamics_fracture_2d`) pick one channel through the
-`dataset.channel` key of the recipe; multi-channel models are on the roadmap.
+**Channels.** What a model sees is decided by the recipe's
+`dataset.channel` key ([Training Views](training/training_views.md)): an
+integer (the default `0`) is one field, `null` every channel of the
+dataset, a list those channels — and the model's channel count
+(`in_channels` / `out_channels` for FNO, `n_channels` for the two Onsager
+families) follows. The families treat several channels differently:
+
+| Family | With $C$ channels |
+| --- | --- |
+| FNO | One operator with $C$ input and output channels: the fields are coupled through the lifting. |
+| Classical OnsagerNet | The $C$ fields are flattened into one state vector of $C \cdot \prod N_i$ entries, so the potential and the state-dependent operators see, and couple, all of them; the circulant operators are block-diagonal (one multiplier set per channel). |
+| Spectral OnsagerNet | Channel by channel: each field has its own `Km` / `Kw` multipliers and the potential acts on each alone. No coupling between channels yet, and nothing enforces a constraint such as $\lvert m \rvert = 1$. |
+
+The shipped recipes for `llg_lattice_2d` (`fno2d`, `spectral_onsagernet_2d`)
+train on all three magnetisation components, the one for
+`peridynamics_fracture_2d` (`fno2d`) on channels 0–4 (the constant `mask`
+channel is not a field to predict).
 
 ## Choosing a Model
 

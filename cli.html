@@ -254,6 +254,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
 </ul>
 </li>
@@ -961,11 +962,12 @@ is a test fixture with <code class="docutils literal notranslate"><span class="p
 For a quick real run use <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">default</span> <span class="pre">--epochs</span> <span class="pre">1</span> <span class="pre">--device</span> <span class="pre">cpu</span></code>.</p></li>
 <li><p>Every shipped architecture is registered once per dimension — <code class="docutils literal notranslate"><span class="pre">fno1d</span></code> /
 <code class="docutils literal notranslate"><span class="pre">fno2d</span></code> / <code class="docutils literal notranslate"><span class="pre">fno3d</span></code>, <code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d</span></code> / <code class="docutils literal notranslate"><span class="pre">_2d</span></code> / <code class="docutils literal notranslate"><span class="pre">_3d</span></code> and
-<code class="docutils literal notranslate"><span class="pre">onsagernet_1d</span></code> / <code class="docutils literal notranslate"><span class="pre">_2d</span></code> / <code class="docutils literal notranslate"><span class="pre">_3d</span></code> — and takes
-single-channel input; pick the suffix that matches the dataset’s grid. The
-multi-channel datasets (<code class="docutils literal notranslate"><span class="pre">llg_lattice_2d</span></code>, <code class="docutils literal notranslate"><span class="pre">peridynamics_fracture_2d</span></code>)
-train on one channel at a time through the <code class="docutils literal notranslate"><span class="pre">dataset.channel</span></code> key of the
-recipe. A model (or trainer) of your own under <code class="docutils literal notranslate"><span class="pre">./plugins/</span></code> is imported
+<code class="docutils literal notranslate"><span class="pre">onsagernet_1d</span></code> / <code class="docutils literal notranslate"><span class="pre">_2d</span></code> / <code class="docutils literal notranslate"><span class="pre">_3d</span></code> — pick the suffix that matches the
+dataset’s grid. What the model sees of a multi-channel dataset
+(<code class="docutils literal notranslate"><span class="pre">llg_lattice_2d</span></code>, <code class="docutils literal notranslate"><span class="pre">peridynamics_fracture_2d</span></code>) is the recipe’s
+<code class="docutils literal notranslate"><span class="pre">dataset.channel</span></code> key: an integer for one field, <code class="docutils literal notranslate"><span class="pre">null</span></code> for every
+channel, a list for some; the model’s channel count follows
+(<a class="reference internal" href="models.html"><span class="std std-doc">Models</span></a>). A model (or trainer) of your own under <code class="docutils literal notranslate"><span class="pre">./plugins/</span></code> is imported
 before every command, so its registered name works like a shipped one
 (a model without a trainer of its own trains with <code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code>); a recipe
 may also name any class by <code class="docutils literal notranslate"><span class="pre">model._target_</span></code> / <code class="docutils literal notranslate"><span class="pre">trainer._target_</span></code>. See
@@ -1482,7 +1484,8 @@ mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span cla
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--config<span class="w"> </span>kac<span class="w"> </span>--name<span class="w"> </span>ising_kac
 mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_2d<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--data<span class="w"> </span>ising_kac<span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
 mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>cahn_hilliard_2d<span class="w">       </span><span class="c1"># ~10 min, ~210 MB</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>llg_lattice_2d<span class="w">         </span><span class="c1"># 3 channels; train one channel via dataset.channel</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>llg_lattice_2d<span class="w">         </span><span class="c1"># 3 channels; the shipped recipes train on all of them</span>
+mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>fno2d<span class="w"> </span>--data<span class="w"> </span>llg_lattice_2d_v0<span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
 mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>peridynamics_fracture_2d<span class="w"> </span>--config<span class="w"> </span>fdr
 </pre></div>
 </div>

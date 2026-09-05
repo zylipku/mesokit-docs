@@ -45,7 +45,7 @@
 
 ````
 
-`````{py:class} OnsagerNet(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float] | None = None, *, potential: torch.nn.Module | None = None, dissipation: torch.nn.Module | None = None, conservation: torch.nn.Module | None = None, step_method: str = 'euler')
+`````{py:class} OnsagerNet(grid_shape: collections.abc.Sequence[int], domain: collections.abc.Sequence[float] | None = None, *, potential: torch.nn.Module | None = None, dissipation: torch.nn.Module | None = None, conservation: torch.nn.Module | None = None, step_method: str = 'euler', n_channels: int = 1)
 :canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet
 
 Bases: {py:obj}`torch.nn.Module`
@@ -181,6 +181,15 @@ Bases: {py:obj}`torch.nn.Module`
 :canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.grad_potential
 
 ```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.grad_potential
+```
+
+````
+
+````{py:property} state_shape
+:canonical: mesokit.models.onsagernet.onsagernet.OnsagerNet.state_shape
+:type: tuple[int, ...]
+
+```{autodoc2-docstring} mesokit.models.onsagernet.onsagernet.OnsagerNet.state_shape
 ```
 
 ````

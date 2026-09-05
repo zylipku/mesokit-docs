@@ -23,7 +23,7 @@
 
 ### API
 
-`````{py:class} SnapshotPairDataset(traj: mesokit.data.trajectory.TrajectoryDataset, *, stride: int = 1, channel: int = 0)
+`````{py:class} SnapshotPairDataset(traj: mesokit.data.trajectory.TrajectoryDataset, *, stride: int = 1, channel: int | collections.abc.Sequence[int] | None = 0)
 :canonical: mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset
 
 Bases: {py:obj}`torch.utils.data.Dataset`\[{py:obj}`tuple`\[{py:obj}`torch.Tensor`\, {py:obj}`torch.Tensor`\]\]
@@ -36,6 +36,15 @@ Bases: {py:obj}`torch.utils.data.Dataset`\[{py:obj}`tuple`\[{py:obj}`torch.Tenso
 
 ```{autodoc2-docstring} mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__init__
 ```
+
+````{py:property} channels
+:canonical: mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.channels
+:type: int | None
+
+```{autodoc2-docstring} mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.channels
+```
+
+````
 
 ````{py:method} __len__() -> int
 :canonical: mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset.__len__

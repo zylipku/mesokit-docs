@@ -23,7 +23,7 @@
 
 ### API
 
-`````{py:class} SpectralOnsagerNet3d(Nx: int = 32, Ny: int = 32, Nz: int = 32, Lx: float = 2.0 * math.pi, Ly: float = 2.0 * math.pi, Lz: float = 2.0 * math.pi, learn_M: bool = True, learn_W: bool = True, potential: mesokit.models.spectral_onsagernet.potential.Potential | None = None, step_method: str = 'sbdf1', identity_M: bool = False)
+`````{py:class} SpectralOnsagerNet3d(Nx: int = 32, Ny: int = 32, Nz: int = 32, Lx: float = 2.0 * math.pi, Ly: float = 2.0 * math.pi, Lz: float = 2.0 * math.pi, learn_M: bool = True, learn_W: bool = True, potential: mesokit.models.spectral_onsagernet.potential.Potential | None = None, step_method: str = 'sbdf1', identity_M: bool = False, n_channels: int = 1)
 :canonical: mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.SpectralOnsagerNet3d
 
 Bases: {py:obj}`mesokit.models.spectral_onsagernet.spectral_onsagernet.SpectralOnsagerNet`
