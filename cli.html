@@ -888,9 +888,11 @@ registered for that model, write a run directory, and index the checkpoint.</p>
 <code class="docutils literal notranslate"><span class="pre">Lx</span></code> / <code class="docutils literal notranslate"><span class="pre">Ly</span></code> / <code class="docutils literal notranslate"><span class="pre">Lz</span></code>, <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>, <code class="docutils literal notranslate"><span class="pre">domain</span></code> and <code class="docutils literal notranslate"><span class="pre">in_dim</span></code> that the model (or
 a nested potential / block) accepts and the recipe leaves out is filled
 from the dataset’s <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> and <code class="docutils literal notranslate"><span class="pre">physical</span></code> box lengths (<code class="docutils literal notranslate"><span class="pre">2π</span></code> when
-absent). Values written in the recipe or passed with <code class="docutils literal notranslate"><span class="pre">--set</span></code> win, so a
-hard-coded grid that does not match the data still fails. The saved
-<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> records the completed configuration.
+absent). A box length written in the recipe or passed with <code class="docutils literal notranslate"><span class="pre">--set</span></code> is
+kept; a written <code class="docutils literal notranslate"><span class="pre">Nx</span></code> / <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> / <code class="docutils literal notranslate"><span class="pre">in_dim</span></code> that contradicts the
+dataset is refused before training, naming the key. The shipped recipes
+carry no grid keys. The saved <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> records the completed
+configuration.
 | <code class="docutils literal notranslate"><span class="pre">--epochs</span> <span class="pre">N</span></code> | from config | Override <code class="docutils literal notranslate"><span class="pre">trainer.max_epochs</span></code>. |
 | <code class="docutils literal notranslate"><span class="pre">--batch-size</span> <span class="pre">N</span></code> | from config | Override <code class="docutils literal notranslate"><span class="pre">dataloader.batch_size</span></code>. |
 | <code class="docutils literal notranslate"><span class="pre">--device</span></code> | from config | Override <code class="docutils literal notranslate"><span class="pre">trainer.accelerator</span></code>: <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">cpu</span></code> or <code class="docutils literal notranslate"><span class="pre">gpu</span></code>. |</p>

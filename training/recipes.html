@@ -452,7 +452,8 @@ and sharing; otherwise <code class="docutils literal notranslate"><span class="p
 <p><code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;</span></code> is the dataset’s dynamics name, <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;</span></code> the registered
 architecture name, and <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;</span></code> the recipe selected by <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;stem&gt;</span></code>
 (default <code class="docutils literal notranslate"><span class="pre">default</span></code>). Sibling files are variants; <code class="docutils literal notranslate"><span class="pre">smoke.yaml</span></code> recipes are
-tiny CPU fixtures, some on grids that do not match the real datasets.</p>
+tiny CPU fixtures (few epochs, small networks). No shipped recipe writes a
+grid key, so each runs on any grid of its dynamics.</p>
 <p>The data side has the same convention: <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/default.yaml</span></code>
 is the recipe <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--dyn</span> <span class="pre">&lt;dyn&gt;</span></code> uses, and its <code class="docutils literal notranslate"><span class="pre">_target_</span></code>
 may be any importable callable that satisfies the simulator contract
@@ -462,8 +463,7 @@ may be any importable callable that satisfies the simulator contract
 <h2>The Four Sections<a class="headerlink" href="#the-four-sections" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span><span class="w">                    </span><span class="c1"># constructor kwargs of the registered class</span>
 <span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d</span><span class="w">   </span><span class="c1"># optional; defaults to the registered class</span>
-<span class="w">  </span><span class="nt">Nx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
-<span class="w">  </span><span class="nt">Lx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.283185307179586</span>
+<span class="w">  </span><span class="c1"># Nx, Lx: not written; read from the dataset (see below)</span>
 <span class="w">  </span><span class="nt">potential</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">         </span><span class="c1"># nested components are Hydra objects too</span>
 
 <span class="nt">dataset</span><span class="p">:</span><span class="w">                  </span><span class="c1"># the training view wrapping the TrajectoryDataset</span>
@@ -509,10 +509,12 @@ from the dataset, recursively for nested components: <code class="docutils liter
 from <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>; <code class="docutils literal notranslate"><span class="pre">Lx</span></code> / <code class="docutils literal notranslate"><span class="pre">Ly</span></code> / <code class="docutils literal notranslate"><span class="pre">Lz</span></code> from the <code class="docutils literal notranslate"><span class="pre">physical</span></code> group (<code class="docutils literal notranslate"><span class="pre">2π</span></code> when
 <code class="docutils literal notranslate"><span class="pre">Lx</span></code> is absent, a missing later axis repeating the first); <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>
 and <code class="docutils literal notranslate"><span class="pre">domain</span></code> of a nested potential; <code class="docutils literal notranslate"><span class="pre">in_dim</span></code> (the number of grid points)
-and <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> of the classical OnsagerNet’s blocks. Written values are
-never overridden, so a recipe that hard-codes a grid different from the
-data still fails at the first batch — leave the grid out of recipes you
-want to reuse across datasets. Two things are not inferred: multi-channel
+and <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> of the classical OnsagerNet’s blocks. A written box length
+is kept (a dataset may lack <code class="docutils literal notranslate"><span class="pre">Lx</span></code>); a written number of grid points (<code class="docutils literal notranslate"><span class="pre">Nx</span></code>,
+<code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>, <code class="docutils literal notranslate"><span class="pre">in_dim</span></code>) that contradicts the dataset is refused before
+training starts, naming the key. The shipped recipes carry no grid keys at
+all — leave them out of recipes you write too, and they run on any grid of
+their dynamics. Two things are not inferred: multi-channel
 datasets need <code class="docutils literal notranslate"><span class="pre">dataset.channel</span></code> (the shipped models are single-channel),
 and a potential’s <code class="docutils literal notranslate"><span class="pre">eps</span></code> or a block’s rank are modelling choices, not
 grid facts.</p>
@@ -524,8 +526,8 @@ the dataset’s grid apply, and <code class="docutils literal notranslate"><span
 configuration, copy the closest shipped recipe for the same family and
 dimension, for example
 <code class="docutils literal notranslate"><span class="pre">configs/train/allen_cahn_1d/spectral_onsagernet_1d/default.yaml</span></code> to
-<code class="docutils literal notranslate"><span class="pre">configs/train/decay_1d/spectral_onsagernet_1d/default.yaml</span></code>, drop or
-adjust the grid keys, then:</p>
+<code class="docutils literal notranslate"><span class="pre">configs/train/decay_1d/spectral_onsagernet_1d/default.yaml</span></code> (nothing in
+it depends on the grid), then:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>decay_1d_v0<span class="w"> </span>--epochs<span class="w"> </span><span class="m">5</span><span class="w"> </span>--device<span class="w"> </span>cpu
 </pre></div>
 </div>

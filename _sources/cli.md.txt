@@ -394,9 +394,11 @@ The model's grid is read from the dataset: any of `Nx` / `Ny` / `Nz`,
 `Lx` / `Ly` / `Lz`, `grid_shape`, `domain` and `in_dim` that the model (or
 a nested potential / block) accepts and the recipe leaves out is filled
 from the dataset's `grid_shape` and `physical` box lengths (`2π` when
-absent). Values written in the recipe or passed with `--set` win, so a
-hard-coded grid that does not match the data still fails. The saved
-`config.yaml` records the completed configuration.
+absent). A box length written in the recipe or passed with `--set` is
+kept; a written `Nx` / `grid_shape` / `in_dim` that contradicts the
+dataset is refused before training, naming the key. The shipped recipes
+carry no grid keys. The saved `config.yaml` records the completed
+configuration.
 | `--epochs N` | from config | Override `trainer.max_epochs`. |
 | `--batch-size N` | from config | Override `dataloader.batch_size`. |
 | `--device` | from config | Override `trainer.accelerator`: `auto`, `cpu` or `gpu`. |

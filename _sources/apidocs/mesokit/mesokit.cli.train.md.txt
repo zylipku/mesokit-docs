@@ -239,7 +239,7 @@
 ```
 ````
 
-````{py:function} _fill_grid_keywords(section: omegaconf.DictConfig, *, grid_shape: tuple[int, ...], domain: tuple[float, ...], depth: int) -> None
+````{py:function} _fill_grid_keywords(section: omegaconf.DictConfig, *, grid_shape: tuple[int, ...], domain: tuple[float, ...], depth: int, path: str = 'model', mismatches: list[str] | None = None) -> None
 :canonical: mesokit.cli.train._fill_grid_keywords
 
 ```{autodoc2-docstring} mesokit.cli.train._fill_grid_keywords

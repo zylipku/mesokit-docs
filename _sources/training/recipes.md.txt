@@ -50,7 +50,8 @@ configs/train/<dyn>/<model>/<stem>.yaml
 `<dyn>` is the dataset's dynamics name, `<model>` the registered
 architecture name, and `<stem>` the recipe selected by `--config <stem>`
 (default `default`). Sibling files are variants; `smoke.yaml` recipes are
-tiny CPU fixtures, some on grids that do not match the real datasets.
+tiny CPU fixtures (few epochs, small networks). No shipped recipe writes a
+grid key, so each runs on any grid of its dynamics.
 
 The data side has the same convention: `configs/data/<dyn>/default.yaml`
 is the recipe `mesokit data generate --dyn <dyn>` uses, and its `_target_`
@@ -62,8 +63,7 @@ may be any importable callable that satisfies the simulator contract
 ```yaml
 model:                    # constructor kwargs of the registered class
   _target_: mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.SpectralOnsagerNet1d   # optional; defaults to the registered class
-  Nx: 256
-  Lx: 6.283185307179586
+  # Nx, Lx: not written; read from the dataset (see below)
   potential: null         # nested components are Hydra objects too
 
 dataset:                  # the training view wrapping the TrajectoryDataset
@@ -108,10 +108,12 @@ from the dataset, recursively for nested components: `Nx` / `Ny` / `Nz`
 from `grid_shape`; `Lx` / `Ly` / `Lz` from the `physical` group (`2π` when
 `Lx` is absent, a missing later axis repeating the first); `grid_shape`
 and `domain` of a nested potential; `in_dim` (the number of grid points)
-and `grid_shape` of the classical OnsagerNet's blocks. Written values are
-never overridden, so a recipe that hard-codes a grid different from the
-data still fails at the first batch — leave the grid out of recipes you
-want to reuse across datasets. Two things are not inferred: multi-channel
+and `grid_shape` of the classical OnsagerNet's blocks. A written box length
+is kept (a dataset may lack `Lx`); a written number of grid points (`Nx`,
+`grid_shape`, `in_dim`) that contradicts the dataset is refused before
+training starts, naming the key. The shipped recipes carry no grid keys at
+all — leave them out of recipes you write too, and they run on any grid of
+their dynamics. Two things are not inferred: multi-channel
 datasets need `dataset.channel` (the shipped models are single-channel),
 and a potential's `eps` or a block's rank are modelling choices, not
 grid facts.
@@ -123,8 +125,8 @@ the dataset's grid apply, and `--set` adjusts them. To keep a
 configuration, copy the closest shipped recipe for the same family and
 dimension, for example
 `configs/train/allen_cahn_1d/spectral_onsagernet_1d/default.yaml` to
-`configs/train/decay_1d/spectral_onsagernet_1d/default.yaml`, drop or
-adjust the grid keys, then:
+`configs/train/decay_1d/spectral_onsagernet_1d/default.yaml` (nothing in
+it depends on the grid), then:
 
 ```sh
 mesokit train --model spectral_onsagernet_1d --data decay_1d_v0 --epochs 5 --device cpu
