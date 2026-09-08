@@ -1,0 +1,533 @@
+# {py:mod}`mesokit.cli._runs`
+
+```{py:module} mesokit.cli._runs
+```
+
+```{autodoc2-docstring} mesokit.cli._runs
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`RunDir <mesokit.cli._runs.RunDir>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.RunDir
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`now_iso <mesokit.cli._runs.now_iso>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.now_iso
+    :summary:
+    ```
+* - {py:obj}`checkpoints_root <mesokit.cli._runs.checkpoints_root>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.checkpoints_root
+    :summary:
+    ```
+* - {py:obj}`split_key <mesokit.cli._runs.split_key>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.split_key
+    :summary:
+    ```
+* - {py:obj}`join_key <mesokit.cli._runs.join_key>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.join_key
+    :summary:
+    ```
+* - {py:obj}`validate_name <mesokit.cli._runs.validate_name>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.validate_name
+    :summary:
+    ```
+* - {py:obj}`format_value <mesokit.cli._runs.format_value>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.format_value
+    :summary:
+    ```
+* - {py:obj}`name_token <mesokit.cli._runs.name_token>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.name_token
+    :summary:
+    ```
+* - {py:obj}`leaf <mesokit.cli._runs.leaf>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.leaf
+    :summary:
+    ```
+* - {py:obj}`format_params <mesokit.cli._runs.format_params>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.format_params
+    :summary:
+    ```
+* - {py:obj}`metrics_from_history <mesokit.cli._runs.metrics_from_history>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.metrics_from_history
+    :summary:
+    ```
+* - {py:obj}`metrics_from_run_dir <mesokit.cli._runs.metrics_from_run_dir>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.metrics_from_run_dir
+    :summary:
+    ```
+* - {py:obj}`write_run_record <mesokit.cli._runs.write_run_record>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.write_run_record
+    :summary:
+    ```
+* - {py:obj}`read_run_record <mesokit.cli._runs.read_run_record>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.read_run_record
+    :summary:
+    ```
+* - {py:obj}`registry_record <mesokit.cli._runs.registry_record>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.registry_record
+    :summary:
+    ```
+* - {py:obj}`normalize_record <mesokit.cli._runs.normalize_record>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.normalize_record
+    :summary:
+    ```
+* - {py:obj}`_run_dir_of_v1_entry <mesokit.cli._runs._run_dir_of_v1_entry>`
+  - ```{autodoc2-docstring} mesokit.cli._runs._run_dir_of_v1_entry
+    :summary:
+    ```
+* - {py:obj}`has_run_files <mesokit.cli._runs.has_run_files>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.has_run_files
+    :summary:
+    ```
+* - {py:obj}`is_experiment_dir <mesokit.cli._runs.is_experiment_dir>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.is_experiment_dir
+    :summary:
+    ```
+* - {py:obj}`iter_run_dirs <mesokit.cli._runs.iter_run_dirs>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.iter_run_dirs
+    :summary:
+    ```
+* - {py:obj}`describe_error <mesokit.cli._runs.describe_error>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.describe_error
+    :summary:
+    ```
+* - {py:obj}`format_table <mesokit.cli._runs.format_table>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.format_table
+    :summary:
+    ```
+* - {py:obj}`checkpoint_state_dict <mesokit.cli._runs.checkpoint_state_dict>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.checkpoint_state_dict
+    :summary:
+    ```
+* - {py:obj}`run_root <mesokit.cli._runs.run_root>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.run_root
+    :summary:
+    ```
+* - {py:obj}`read_runs_table <mesokit.cli._runs.read_runs_table>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.read_runs_table
+    :summary:
+    ```
+* - {py:obj}`write_runs_table <mesokit.cli._runs.write_runs_table>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.write_runs_table
+    :summary:
+    ```
+* - {py:obj}`new_runs_table <mesokit.cli._runs.new_runs_table>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.new_runs_table
+    :summary:
+    ```
+* - {py:obj}`run_row <mesokit.cli._runs.run_row>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.run_row
+    :summary:
+    ```
+* - {py:obj}`upsert_run_row <mesokit.cli._runs.upsert_run_row>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.upsert_run_row
+    :summary:
+    ```
+* - {py:obj}`resolve_checkpoint <mesokit.cli._runs.resolve_checkpoint>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.resolve_checkpoint
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`RUN_FILE <mesokit.cli._runs.RUN_FILE>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.RUN_FILE
+    :summary:
+    ```
+* - {py:obj}`RUN_SCHEMA_VERSION <mesokit.cli._runs.RUN_SCHEMA_VERSION>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.RUN_SCHEMA_VERSION
+    :summary:
+    ```
+* - {py:obj}`CHECKPOINTS_DIR <mesokit.cli._runs.CHECKPOINTS_DIR>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.CHECKPOINTS_DIR
+    :summary:
+    ```
+* - {py:obj}`LEGACY_SWEEPS_DIR <mesokit.cli._runs.LEGACY_SWEEPS_DIR>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.LEGACY_SWEEPS_DIR
+    :summary:
+    ```
+* - {py:obj}`_RUN_FILES <mesokit.cli._runs._RUN_FILES>`
+  - ```{autodoc2-docstring} mesokit.cli._runs._RUN_FILES
+    :summary:
+    ```
+* - {py:obj}`RECORD_DEFAULTS <mesokit.cli._runs.RECORD_DEFAULTS>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.RECORD_DEFAULTS
+    :summary:
+    ```
+* - {py:obj}`RUNS_FILE <mesokit.cli._runs.RUNS_FILE>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.RUNS_FILE
+    :summary:
+    ```
+* - {py:obj}`RUNS_SCHEMA_VERSION <mesokit.cli._runs.RUNS_SCHEMA_VERSION>`
+  - ```{autodoc2-docstring} mesokit.cli._runs.RUNS_SCHEMA_VERSION
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} RUN_FILE
+:canonical: mesokit.cli._runs.RUN_FILE
+:value: >
+   'run.json'
+
+```{autodoc2-docstring} mesokit.cli._runs.RUN_FILE
+```
+
+````
+
+````{py:data} RUN_SCHEMA_VERSION
+:canonical: mesokit.cli._runs.RUN_SCHEMA_VERSION
+:value: >
+   1
+
+```{autodoc2-docstring} mesokit.cli._runs.RUN_SCHEMA_VERSION
+```
+
+````
+
+````{py:data} CHECKPOINTS_DIR
+:canonical: mesokit.cli._runs.CHECKPOINTS_DIR
+:value: >
+   'checkpoints'
+
+```{autodoc2-docstring} mesokit.cli._runs.CHECKPOINTS_DIR
+```
+
+````
+
+````{py:data} LEGACY_SWEEPS_DIR
+:canonical: mesokit.cli._runs.LEGACY_SWEEPS_DIR
+:value: >
+   'sweeps'
+
+```{autodoc2-docstring} mesokit.cli._runs.LEGACY_SWEEPS_DIR
+```
+
+````
+
+````{py:data} _RUN_FILES
+:canonical: mesokit.cli._runs._RUN_FILES
+:value: >
+   ('run.json', 'model.pt', 'config.yaml', 'history.json')
+
+```{autodoc2-docstring} mesokit.cli._runs._RUN_FILES
+```
+
+````
+
+````{py:data} RECORD_DEFAULTS
+:canonical: mesokit.cli._runs.RECORD_DEFAULTS
+:type: dict[str, typing.Any]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._runs.RECORD_DEFAULTS
+```
+
+````
+
+````{py:function} now_iso() -> str
+:canonical: mesokit.cli._runs.now_iso
+
+```{autodoc2-docstring} mesokit.cli._runs.now_iso
+```
+````
+
+````{py:function} checkpoints_root() -> pathlib.Path
+:canonical: mesokit.cli._runs.checkpoints_root
+
+```{autodoc2-docstring} mesokit.cli._runs.checkpoints_root
+```
+````
+
+````{py:function} split_key(key: str) -> tuple[str | None, str]
+:canonical: mesokit.cli._runs.split_key
+
+```{autodoc2-docstring} mesokit.cli._runs.split_key
+```
+````
+
+````{py:function} join_key(experiment: str | None, run: str) -> str
+:canonical: mesokit.cli._runs.join_key
+
+```{autodoc2-docstring} mesokit.cli._runs.join_key
+```
+````
+
+````{py:function} validate_name(value: str, *, label: str) -> str
+:canonical: mesokit.cli._runs.validate_name
+
+```{autodoc2-docstring} mesokit.cli._runs.validate_name
+```
+````
+
+````{py:function} format_value(value: typing.Any) -> str
+:canonical: mesokit.cli._runs.format_value
+
+```{autodoc2-docstring} mesokit.cli._runs.format_value
+```
+````
+
+````{py:function} name_token(value: typing.Any) -> str
+:canonical: mesokit.cli._runs.name_token
+
+```{autodoc2-docstring} mesokit.cli._runs.name_token
+```
+````
+
+````{py:function} leaf(key: str) -> str
+:canonical: mesokit.cli._runs.leaf
+
+```{autodoc2-docstring} mesokit.cli._runs.leaf
+```
+````
+
+````{py:function} format_params(params: collections.abc.Mapping[str, typing.Any], *, leaves: bool = False) -> str
+:canonical: mesokit.cli._runs.format_params
+
+```{autodoc2-docstring} mesokit.cli._runs.format_params
+```
+````
+
+````{py:function} metrics_from_history(history: collections.abc.Mapping[str, collections.abc.Sequence[float]], metadata: collections.abc.Mapping[str, typing.Any]) -> dict[str, typing.Any]
+:canonical: mesokit.cli._runs.metrics_from_history
+
+```{autodoc2-docstring} mesokit.cli._runs.metrics_from_history
+```
+````
+
+````{py:function} metrics_from_run_dir(run_dir: pathlib.Path) -> dict[str, typing.Any]
+:canonical: mesokit.cli._runs.metrics_from_run_dir
+
+```{autodoc2-docstring} mesokit.cli._runs.metrics_from_run_dir
+```
+````
+
+````{py:function} write_run_record(run_dir: pathlib.Path, record: collections.abc.Mapping[str, typing.Any]) -> pathlib.Path
+:canonical: mesokit.cli._runs.write_run_record
+
+```{autodoc2-docstring} mesokit.cli._runs.write_run_record
+```
+````
+
+````{py:function} read_run_record(run_dir: pathlib.Path) -> dict[str, typing.Any] | None
+:canonical: mesokit.cli._runs.read_run_record
+
+```{autodoc2-docstring} mesokit.cli._runs.read_run_record
+```
+````
+
+````{py:function} registry_record(run_record: collections.abc.Mapping[str, typing.Any], *, path: pathlib.Path, config_path: pathlib.Path | None, run_dir: pathlib.Path, metadata: collections.abc.Mapping[str, typing.Any] | None = None) -> dict[str, typing.Any]
+:canonical: mesokit.cli._runs.registry_record
+
+```{autodoc2-docstring} mesokit.cli._runs.registry_record
+```
+````
+
+````{py:function} normalize_record(key: str, record: collections.abc.Mapping[str, typing.Any]) -> dict[str, typing.Any]
+:canonical: mesokit.cli._runs.normalize_record
+
+```{autodoc2-docstring} mesokit.cli._runs.normalize_record
+```
+````
+
+````{py:function} _run_dir_of_v1_entry(record: collections.abc.Mapping[str, typing.Any]) -> str | None
+:canonical: mesokit.cli._runs._run_dir_of_v1_entry
+
+```{autodoc2-docstring} mesokit.cli._runs._run_dir_of_v1_entry
+```
+````
+
+`````{py:class} RunDir
+:canonical: mesokit.cli._runs.RunDir
+
+```{autodoc2-docstring} mesokit.cli._runs.RunDir
+```
+
+````{py:attribute} dyn
+:canonical: mesokit.cli._runs.RunDir.dyn
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._runs.RunDir.dyn
+```
+
+````
+
+````{py:attribute} experiment
+:canonical: mesokit.cli._runs.RunDir.experiment
+:type: str | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._runs.RunDir.experiment
+```
+
+````
+
+````{py:attribute} run
+:canonical: mesokit.cli._runs.RunDir.run
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._runs.RunDir.run
+```
+
+````
+
+````{py:attribute} path
+:canonical: mesokit.cli._runs.RunDir.path
+:type: pathlib.Path
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._runs.RunDir.path
+```
+
+````
+
+````{py:property} key
+:canonical: mesokit.cli._runs.RunDir.key
+:type: str
+
+```{autodoc2-docstring} mesokit.cli._runs.RunDir.key
+```
+
+````
+
+`````
+
+````{py:function} has_run_files(path: pathlib.Path) -> bool
+:canonical: mesokit.cli._runs.has_run_files
+
+```{autodoc2-docstring} mesokit.cli._runs.has_run_files
+```
+````
+
+````{py:function} is_experiment_dir(path: pathlib.Path) -> bool
+:canonical: mesokit.cli._runs.is_experiment_dir
+
+```{autodoc2-docstring} mesokit.cli._runs.is_experiment_dir
+```
+````
+
+````{py:function} iter_run_dirs(root: pathlib.Path | None = None) -> list[mesokit.cli._runs.RunDir]
+:canonical: mesokit.cli._runs.iter_run_dirs
+
+```{autodoc2-docstring} mesokit.cli._runs.iter_run_dirs
+```
+````
+
+````{py:function} describe_error(exc: BaseException) -> str
+:canonical: mesokit.cli._runs.describe_error
+
+```{autodoc2-docstring} mesokit.cli._runs.describe_error
+```
+````
+
+````{py:function} format_table(headers: collections.abc.Sequence[str], rows: collections.abc.Sequence[collections.abc.Sequence[str]]) -> str
+:canonical: mesokit.cli._runs.format_table
+
+```{autodoc2-docstring} mesokit.cli._runs.format_table
+```
+````
+
+````{py:function} checkpoint_state_dict(path: pathlib.Path) -> dict[str, typing.Any]
+:canonical: mesokit.cli._runs.checkpoint_state_dict
+
+```{autodoc2-docstring} mesokit.cli._runs.checkpoint_state_dict
+```
+````
+
+````{py:data} RUNS_FILE
+:canonical: mesokit.cli._runs.RUNS_FILE
+:value: >
+   'runs.json'
+
+```{autodoc2-docstring} mesokit.cli._runs.RUNS_FILE
+```
+
+````
+
+````{py:data} RUNS_SCHEMA_VERSION
+:canonical: mesokit.cli._runs.RUNS_SCHEMA_VERSION
+:value: >
+   1
+
+```{autodoc2-docstring} mesokit.cli._runs.RUNS_SCHEMA_VERSION
+```
+
+````
+
+````{py:function} run_root(dyn: str, experiment: str | None) -> pathlib.Path
+:canonical: mesokit.cli._runs.run_root
+
+```{autodoc2-docstring} mesokit.cli._runs.run_root
+```
+````
+
+````{py:function} read_runs_table(experiment_dir: pathlib.Path) -> dict[str, typing.Any] | None
+:canonical: mesokit.cli._runs.read_runs_table
+
+```{autodoc2-docstring} mesokit.cli._runs.read_runs_table
+```
+````
+
+````{py:function} write_runs_table(experiment_dir: pathlib.Path, table: collections.abc.Mapping[str, typing.Any]) -> pathlib.Path
+:canonical: mesokit.cli._runs.write_runs_table
+
+```{autodoc2-docstring} mesokit.cli._runs.write_runs_table
+```
+````
+
+````{py:function} new_runs_table(*, experiment: str, dyn: str, model: str | None) -> dict[str, typing.Any]
+:canonical: mesokit.cli._runs.new_runs_table
+
+```{autodoc2-docstring} mesokit.cli._runs.new_runs_table
+```
+````
+
+````{py:function} run_row(record: collections.abc.Mapping[str, typing.Any], *, checkpoint_path: pathlib.Path | str | None, data_status: str | None, wall_time_s: float | None, error: str | None = None) -> dict[str, typing.Any]
+:canonical: mesokit.cli._runs.run_row
+
+```{autodoc2-docstring} mesokit.cli._runs.run_row
+```
+````
+
+````{py:function} upsert_run_row(experiment_dir: pathlib.Path, row: collections.abc.Mapping[str, typing.Any], *, experiment: str, dyn: str, model: str | None) -> dict[str, typing.Any]
+:canonical: mesokit.cli._runs.upsert_run_row
+
+```{autodoc2-docstring} mesokit.cli._runs.upsert_run_row
+```
+````
+
+````{py:function} resolve_checkpoint(name: str, store: typing.Any = None) -> tuple[str, dict[str, typing.Any]]
+:canonical: mesokit.cli._runs.resolve_checkpoint
+
+```{autodoc2-docstring} mesokit.cli._runs.resolve_checkpoint
+```
+````

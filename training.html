@@ -360,6 +360,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._recipes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._recipes</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.sweep.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._runs.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._runs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
@@ -450,10 +451,12 @@ named by <code class="docutils literal notranslate"><span class="pre">_target_</
 <a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a>; the recipe format and lookup order are on
 <a class="reference internal" href="training/recipes.html"><span class="std std-doc">Training Recipes</span></a>.</p>
 <p><strong>The grid.</strong> <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span> <span class="pre">--dyn</span> <span class="pre">&lt;dyn&gt;</span> <span class="pre">--model</span> <span class="pre">&lt;name&gt;</span> <span class="pre">--param</span> <span class="pre">eps=0.05,0.1,0.2</span></code>
-runs <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> and <code class="docutils literal notranslate"><span class="pre">train</span></code> once per point of a parameter grid (several
-<code class="docutils literal notranslate"><span class="pre">--param</span></code> axes form the Cartesian product), names each dataset and checkpoint
-after its parameter values, and writes a summary table to
-<code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/sweeps/&lt;timestamp&gt;.json</span></code>; see
+runs <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> and <code class="docutils literal notranslate"><span class="pre">train</span></code> once per point of a parameter grid, and
+<code class="docutils literal notranslate"><span class="pre">--train-param</span> <span class="pre">trainer.lr=1e-3,1e-4</span></code> scans a training-recipe key on the
+same data (<code class="docutils literal notranslate"><span class="pre">--data</span> <span class="pre">&lt;dataset&gt;</span></code> when there is no simulator axis; the two kinds
+combine). Each run is named after its parameter values and grouped, with
+the summary table <code class="docutils literal notranslate"><span class="pre">runs.json</span></code>, under <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/</span></code>;
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--experiment</span> <span class="pre">E</span></code> puts hand-made runs in the same place. See
 <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code> in the <a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a>. The same loop is
 <code class="docutils literal notranslate"><span class="pre">mesokit.cli.sweep.run_sweep(...)</span></code> from Python.</p>
 <p><strong>The Python API.</strong> The same pieces, called directly — the natural path in
@@ -491,18 +494,25 @@ CPU) before the real one; the shipped defaults are 100 epochs.</p>
 </section>
 <section id="what-a-run-leaves-behind">
 <h2>What a Run Leaves Behind<a class="headerlink" href="#what-a-run-leaves-behind" title="Link to this heading">¶</a></h2>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>checkpoints/&lt;dyn&gt;/&lt;run_id&gt;/
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>checkpoints/&lt;dyn&gt;/&lt;run_id&gt;/            (checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/&lt;run_id&gt;/ with --experiment)
 ├── model.pt          plain state_dict; loads without Lightning
 ├── config.yaml       the resolved recipe plus model / dyn / dataset names (written by the command)
 ├── history.json      {&quot;train_loss&quot;: [...], &quot;val_loss&quot;: [...]} per epoch
+├── run.json          the run record: dataset, recipe, `--set` overrides, final metrics, created, tags (the command)
 └── lit_*.ckpt        Lightning checkpoints (best and last)
-.mesokit/checkpoints.json   name -&gt; paths and metadata (the command; `mesokit model register` for Python runs)
+checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/runs.json   one row per run of the experiment (train --experiment, sweep)
+.mesokit/checkpoints.json   name -&gt; the run record plus paths (the command; `mesokit model register` for Python runs)
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">fit</span></code> returns a <code class="docutils literal notranslate"><span class="pre">TrainResult</span></code> with the in-memory model, <code class="docutils literal notranslate"><span class="pre">checkpoint_path</span></code>,
 <code class="docutils literal notranslate"><span class="pre">run_id</span></code>, the same <code class="docutils literal notranslate"><span class="pre">history</span></code> dict, and <code class="docutils literal notranslate"><span class="pre">metadata</span></code> (<code class="docutils literal notranslate"><span class="pre">epochs_run</span></code>,
 <code class="docutils literal notranslate"><span class="pre">wall_time_s</span></code>, <code class="docutils literal notranslate"><span class="pre">lightning_checkpoint_path</span></code>). None of this should be
-committed. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code> shows the registered runs;
+committed. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code> tabulates the registered runs — dataset,
+varied keys, final loss, when — with <code class="docutils literal notranslate"><span class="pre">--experiment</span></code>, <code class="docutils literal notranslate"><span class="pre">--sort</span> <span class="pre">train_loss</span></code>,
+<code class="docutils literal notranslate"><span class="pre">--tag</span></code>, <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">json</span></code> and friends; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">show</span></code> prints one
+record with the command that reproduces it; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--from</span> <span class="pre">NAME</span></code>
+continues a run from its weights; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">tag</span></code> / <code class="docutils literal notranslate"><span class="pre">remove</span></code> / <code class="docutils literal notranslate"><span class="pre">prune</span></code>
+/ <code class="docutils literal notranslate"><span class="pre">sync</span></code> keep the index tidy (<a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a>).
 <a class="reference internal" href="interpretability.html"><span class="std std-doc">Interpretability</span></a> is what to do with them next.</p>
 </section>
 <section id="how-to-use-this-section">

@@ -360,6 +360,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._recipes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._recipes</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.sweep.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._runs.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._runs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
@@ -523,8 +524,9 @@ alias kept for older code.</p>
 <p>Beside <code class="docutils literal notranslate"><span class="pre">model.pt</span></code> the run directory holds <code class="docutils literal notranslate"><span class="pre">history.json</span></code> (the same
 <code class="docutils literal notranslate"><span class="pre">history</span></code> dict) and the Lightning checkpoints <code class="docutils literal notranslate"><span class="pre">lit_&lt;epoch&gt;.ckpt</span></code> /
 <code class="docutils literal notranslate"><span class="pre">last.ckpt</span></code>, chosen on <code class="docutils literal notranslate"><span class="pre">val_loss</span></code> when a validation loader is given and on
-<code class="docutils literal notranslate"><span class="pre">train_loss</span></code> otherwise. The command adds <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>; a Python run has
-no config file unless you write one.</p>
+<code class="docutils literal notranslate"><span class="pre">train_loss</span></code> otherwise. The command adds <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">run.json</span></code> (the
+run record, with the summary metrics taken from <code class="docutils literal notranslate"><span class="pre">history</span></code>); a Python run
+has neither unless you write them.</p>
 </section>
 <section id="reading-history-json">
 <h2>Reading <code class="docutils literal notranslate"><span class="pre">history.json</span></code><a class="headerlink" href="#reading-history-json" title="Link to this heading">¶</a></h2>

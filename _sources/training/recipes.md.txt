@@ -36,10 +36,15 @@ mesokit train --model spectral_onsagernet_1d --data my_data --set trainer.lr=1e-
 
 The completed configuration is written to
 `checkpoints/<dyn>/<run>/config.yaml`; it is itself a valid recipe, so
-`--config checkpoints/<dyn>/<run>/config.yaml` reproduces a run, and
-copying it into `configs/train/<dyn>/<model>/<stem>.yaml` turns it into a
-named variant. Write a recipe by hand when a configuration is worth naming
-and sharing; otherwise `--set` is enough.
+`--config checkpoints/<dyn>/<run>/config.yaml` reproduces a run (the
+run-specific names it carries are dropped), `mesokit model show <run>`
+prints the exact `mesokit train` line, and `mesokit train --from <run>`
+continues the run from its weights with that config as the recipe. Copying
+the file into `configs/train/<dyn>/<model>/<stem>.yaml` turns it into a
+named variant. The `--set` keys of a run are kept apart from the merged
+config, as `overrides` / `params` in its `run.json`, so `mesokit model
+list` can show what varied. Write a recipe by hand when a configuration is
+worth naming and sharing; otherwise `--set` is enough.
 
 ## Layout
 

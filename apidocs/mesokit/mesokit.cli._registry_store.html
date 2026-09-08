@@ -360,6 +360,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._recipes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._recipes</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.sweep.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._runs.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._runs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
@@ -412,6 +413,16 @@
 <p>Backs <code class="docutils literal notranslate"><span class="pre">./.mesokit/datasets.json</span></code> and <code class="docutils literal notranslate"><span class="pre">./.mesokit/checkpoints.json</span></code>: a flat
 <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">-&gt;</span> <span class="pre">record</span></code> map written atomically via <code class="docutils literal notranslate"><span class="pre">os.replace</span></code>. Anchored at the
 process CWD so each project gets its own registry.</p>
+<p>Each store has a schema version. A file written by an older schema is read
+as it is (missing fields are defaulted by the reader, see</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">func<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">mesokit.cli._runs.normalize_record</span></code>) and stamped with the current
+version on its next write; the checkpoints registry is at version 2 (per-run
+<code class="docutils literal notranslate"><span class="pre">experiment</span></code> / <code class="docutils literal notranslate"><span class="pre">params</span></code> / <code class="docutils literal notranslate"><span class="pre">metrics</span></code> / <code class="docutils literal notranslate"><span class="pre">created</span></code> / <code class="docutils literal notranslate"><span class="pre">tags</span></code> fields
+next to the version-1 paths), the datasets registry at version 1.</p>
+</dd>
+</dl>
 <p>Concurrent CLI invocations cannot corrupt the file (atomic rename), but a
 read-modify-write race can lose updates. Acceptable for single-user tutorial
 use; documented as a known limitation.</p>
@@ -449,6 +460,12 @@ use; documented as a known limitation.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-left">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._registry_store.DATASETS_SCHEMA_VERSION" title="mesokit.cli._registry_store.DATASETS_SCHEMA_VERSION"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATASETS_SCHEMA_VERSION</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._registry_store.CHECKPOINTS_SCHEMA_VERSION" title="mesokit.cli._registry_store.CHECKPOINTS_SCHEMA_VERSION"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CHECKPOINTS_SCHEMA_VERSION</span></code></a></p></td>
+<td></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._registry_store.SCHEMA_VERSION" title="mesokit.cli._registry_store.SCHEMA_VERSION"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SCHEMA_VERSION</span></code></a></p></td>
 <td></td>
 </tr>
@@ -459,14 +476,40 @@ use; documented as a known limitation.</p>
 <section id="api">
 <h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
 <dl class="py data">
+<dt class="sig sig-object py" id="mesokit.cli._registry_store.DATASETS_SCHEMA_VERSION">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._registry_store.</span></span><span class="sig-name descname"><span class="pre">DATASETS_SCHEMA_VERSION</span></span><a class="headerlink" href="#mesokit.cli._registry_store.DATASETS_SCHEMA_VERSION" title="Link to this definition">¶</a></dt>
+<dd><p>1</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mesokit.cli._registry_store.CHECKPOINTS_SCHEMA_VERSION">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._registry_store.</span></span><span class="sig-name descname"><span class="pre">CHECKPOINTS_SCHEMA_VERSION</span></span><a class="headerlink" href="#mesokit.cli._registry_store.CHECKPOINTS_SCHEMA_VERSION" title="Link to this definition">¶</a></dt>
+<dd><p>2</p>
+</dd></dl>
+
+<dl class="py data">
 <dt class="sig sig-object py" id="mesokit.cli._registry_store.SCHEMA_VERSION">
 <span class="sig-prename descclassname"><span class="pre">mesokit.cli._registry_store.</span></span><span class="sig-name descname"><span class="pre">SCHEMA_VERSION</span></span><a class="headerlink" href="#mesokit.cli._registry_store.SCHEMA_VERSION" title="Link to this definition">¶</a></dt>
-<dd><p>1</p>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mesokit.cli._registry_store.AmbiguousNameError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.cli._registry_store.</span></span><span class="sig-name descname"><span class="pre">AmbiguousNameError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mesokit.cli._registry_store.AmbiguousNameError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">LookupError</span></code></p>
+<p>A bare run name that matches several <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code> keys.</p>
+<p class="rubric">Initialization</p>
+<p>Initialize self.  See help(type(self)) for accurate signature.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.cli._registry_store.AmbiguousNameError.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.AmbiguousNameError.__str__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.cli._registry_store.</span></span><span class="sig-name descname"><span class="pre">RegistryStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.cli._registry_store.</span></span><span class="sig-name descname"><span class="pre">RegistryStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SCHEMA_VERSION</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore" title="Link to this definition">¶</a></dt>
 <dd><p>Tiny key-&gt;record JSON store with atomic writes.</p>
 <p class="rubric">Initialization</p>
 <dl class="py method">
@@ -485,6 +528,12 @@ use; documented as a known limitation.</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore.update" title="Link to this definition">¶</a></dt>
+<dd><p>Set <code class="docutils literal notranslate"><span class="pre">fields</span></code> on the existing entry <code class="docutils literal notranslate"><span class="pre">name</span></code> and return the updated record.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore.get" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -498,6 +547,20 @@ use; documented as a known limitation.</p>
 <dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore.remove">
 <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore.remove" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore.replace_all">
+<span class="sig-name descname"><span class="pre">replace_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore.replace_all" title="Link to this definition">¶</a></dt>
+<dd><p>Rewrite the whole <code class="docutils literal notranslate"><span class="pre">entries</span></code> map (<code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">sync</span></code> / <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">prune</span></code>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mesokit.cli._registry_store.RegistryStore.resolve">
+<span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.cli._registry_store.RegistryStore.resolve" title="Link to this definition">¶</a></dt>
+<dd><p>The key <code class="docutils literal notranslate"><span class="pre">name</span></code> denotes: itself, or the unique <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;name&gt;</span></code> it is the run of.</p>
+<p>Raises <code class="docutils literal notranslate"><span class="pre">KeyError</span></code> when nothing matches and :class:<code class="docutils literal notranslate"><span class="pre">AmbiguousNameError</span></code>
+when several experiments hold a run of that name.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -578,14 +641,23 @@ use; documented as a known limitation.</p>
 <li><a class="reference internal" href="#functions">Functions</a></li>
 <li><a class="reference internal" href="#data">Data</a></li>
 <li><a class="reference internal" href="#api">API</a><ul>
+<li><a class="reference internal" href="#mesokit.cli._registry_store.DATASETS_SCHEMA_VERSION"><code class="docutils literal notranslate"><span class="pre">DATASETS_SCHEMA_VERSION</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._registry_store.CHECKPOINTS_SCHEMA_VERSION"><code class="docutils literal notranslate"><span class="pre">CHECKPOINTS_SCHEMA_VERSION</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._registry_store.SCHEMA_VERSION"><code class="docutils literal notranslate"><span class="pre">SCHEMA_VERSION</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._registry_store.AmbiguousNameError"><code class="docutils literal notranslate"><span class="pre">AmbiguousNameError</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit.cli._registry_store.AmbiguousNameError.__str__"><code class="docutils literal notranslate"><span class="pre">AmbiguousNameError.__str__()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore"><code class="docutils literal notranslate"><span class="pre">RegistryStore</span></code></a><ul>
 <li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore._read"><code class="docutils literal notranslate"><span class="pre">RegistryStore._read()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore._write"><code class="docutils literal notranslate"><span class="pre">RegistryStore._write()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore.add"><code class="docutils literal notranslate"><span class="pre">RegistryStore.add()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore.update"><code class="docutils literal notranslate"><span class="pre">RegistryStore.update()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore.get"><code class="docutils literal notranslate"><span class="pre">RegistryStore.get()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore.list"><code class="docutils literal notranslate"><span class="pre">RegistryStore.list()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore.remove"><code class="docutils literal notranslate"><span class="pre">RegistryStore.remove()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore.replace_all"><code class="docutils literal notranslate"><span class="pre">RegistryStore.replace_all()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._registry_store.RegistryStore.resolve"><code class="docutils literal notranslate"><span class="pre">RegistryStore.resolve()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#mesokit.cli._registry_store.datasets_store"><code class="docutils literal notranslate"><span class="pre">datasets_store()</span></code></a></li>

@@ -44,10 +44,12 @@ named by `_target_` in the recipe ([Custom Models](models/custom_model.md)). Eve
 [Training Recipes](training/recipes.md).
 
 **The grid.** `mesokit sweep --dyn <dyn> --model <name> --param eps=0.05,0.1,0.2`
-runs `data generate` and `train` once per point of a parameter grid (several
-`--param` axes form the Cartesian product), names each dataset and checkpoint
-after its parameter values, and writes a summary table to
-`checkpoints/<dyn>/sweeps/<timestamp>.json`; see
+runs `data generate` and `train` once per point of a parameter grid, and
+`--train-param trainer.lr=1e-3,1e-4` scans a training-recipe key on the
+same data (`--data <dataset>` when there is no simulator axis; the two kinds
+combine). Each run is named after its parameter values and grouped, with
+the summary table `runs.json`, under `checkpoints/<dyn>/<experiment>/`;
+`mesokit train --experiment E` puts hand-made runs in the same place. See
 `mesokit sweep` in the [Command-Line Reference](cli.md). The same loop is
 `mesokit.cli.sweep.run_sweep(...)` from Python.
 
@@ -91,18 +93,25 @@ CPU) before the real one; the shipped defaults are 100 epochs.
 ## What a Run Leaves Behind
 
 ```text
-checkpoints/<dyn>/<run_id>/
+checkpoints/<dyn>/<run_id>/            (checkpoints/<dyn>/<experiment>/<run_id>/ with --experiment)
 ├── model.pt          plain state_dict; loads without Lightning
 ├── config.yaml       the resolved recipe plus model / dyn / dataset names (written by the command)
 ├── history.json      {"train_loss": [...], "val_loss": [...]} per epoch
+├── run.json          the run record: dataset, recipe, `--set` overrides, final metrics, created, tags (the command)
 └── lit_*.ckpt        Lightning checkpoints (best and last)
-.mesokit/checkpoints.json   name -> paths and metadata (the command; `mesokit model register` for Python runs)
+checkpoints/<dyn>/<experiment>/runs.json   one row per run of the experiment (train --experiment, sweep)
+.mesokit/checkpoints.json   name -> the run record plus paths (the command; `mesokit model register` for Python runs)
 ```
 
 `fit` returns a `TrainResult` with the in-memory model, `checkpoint_path`,
 `run_id`, the same `history` dict, and `metadata` (`epochs_run`,
 `wall_time_s`, `lightning_checkpoint_path`). None of this should be
-committed. `mesokit model list` shows the registered runs;
+committed. `mesokit model list` tabulates the registered runs — dataset,
+varied keys, final loss, when — with `--experiment`, `--sort train_loss`,
+`--tag`, `--format json` and friends; `mesokit model show` prints one
+record with the command that reproduces it; `mesokit train --from NAME`
+continues a run from its weights; `mesokit model tag` / `remove` / `prune`
+/ `sync` keep the index tidy ([Command-Line Reference](cli.md)).
 [Interpretability](interpretability.md) is what to do with them next.
 
 ## How to Use This Section

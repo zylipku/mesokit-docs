@@ -43,6 +43,14 @@
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`DATASETS_SCHEMA_VERSION <mesokit.cli._registry_store.DATASETS_SCHEMA_VERSION>`
+  - ```{autodoc2-docstring} mesokit.cli._registry_store.DATASETS_SCHEMA_VERSION
+    :summary:
+    ```
+* - {py:obj}`CHECKPOINTS_SCHEMA_VERSION <mesokit.cli._registry_store.CHECKPOINTS_SCHEMA_VERSION>`
+  - ```{autodoc2-docstring} mesokit.cli._registry_store.CHECKPOINTS_SCHEMA_VERSION
+    :summary:
+    ```
 * - {py:obj}`SCHEMA_VERSION <mesokit.cli._registry_store.SCHEMA_VERSION>`
   - ```{autodoc2-docstring} mesokit.cli._registry_store.SCHEMA_VERSION
     :summary:
@@ -51,17 +59,58 @@
 
 ### API
 
+````{py:data} DATASETS_SCHEMA_VERSION
+:canonical: mesokit.cli._registry_store.DATASETS_SCHEMA_VERSION
+:value: >
+   1
+
+```{autodoc2-docstring} mesokit.cli._registry_store.DATASETS_SCHEMA_VERSION
+```
+
+````
+
+````{py:data} CHECKPOINTS_SCHEMA_VERSION
+:canonical: mesokit.cli._registry_store.CHECKPOINTS_SCHEMA_VERSION
+:value: >
+   2
+
+```{autodoc2-docstring} mesokit.cli._registry_store.CHECKPOINTS_SCHEMA_VERSION
+```
+
+````
+
 ````{py:data} SCHEMA_VERSION
 :canonical: mesokit.cli._registry_store.SCHEMA_VERSION
 :value: >
-   1
+   None
 
 ```{autodoc2-docstring} mesokit.cli._registry_store.SCHEMA_VERSION
 ```
 
 ````
 
-`````{py:class} RegistryStore(path: pathlib.Path)
+`````{py:exception} AmbiguousNameError(name: str, candidates: list[str])
+:canonical: mesokit.cli._registry_store.AmbiguousNameError
+
+Bases: {py:obj}`LookupError`
+
+```{autodoc2-docstring} mesokit.cli._registry_store.AmbiguousNameError
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.cli._registry_store.AmbiguousNameError.__init__
+```
+
+````{py:method} __str__() -> str
+:canonical: mesokit.cli._registry_store.AmbiguousNameError.__str__
+
+````
+
+`````
+
+`````{py:class} RegistryStore(path: pathlib.Path, *, schema_version: int = SCHEMA_VERSION)
 :canonical: mesokit.cli._registry_store.RegistryStore
 
 ```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore
@@ -97,6 +146,14 @@
 
 ````
 
+````{py:method} update(name: str, **fields: typing.Any) -> dict[str, typing.Any]
+:canonical: mesokit.cli._registry_store.RegistryStore.update
+
+```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore.update
+```
+
+````
+
 ````{py:method} get(name: str) -> dict[str, typing.Any]
 :canonical: mesokit.cli._registry_store.RegistryStore.get
 
@@ -117,6 +174,22 @@
 :canonical: mesokit.cli._registry_store.RegistryStore.remove
 
 ```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore.remove
+```
+
+````
+
+````{py:method} replace_all(entries: dict[str, dict[str, typing.Any]]) -> None
+:canonical: mesokit.cli._registry_store.RegistryStore.replace_all
+
+```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore.replace_all
+```
+
+````
+
+````{py:method} resolve(name: str) -> str
+:canonical: mesokit.cli._registry_store.RegistryStore.resolve
+
+```{autodoc2-docstring} mesokit.cli._registry_store.RegistryStore.resolve
 ```
 
 ````

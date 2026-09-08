@@ -360,6 +360,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._recipes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._recipes</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.sweep.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._runs.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._runs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
@@ -416,7 +417,7 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-left">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainRun</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train.TrainRun" title="mesokit.cli.train.TrainRun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainRun</span></code></a></p></td>
 <td><p>What :func:<code class="docutils literal notranslate"><span class="pre">run_train</span></code> produced: the trainer’s result plus the registry-facing names and paths.</p></td>
 </tr>
 </tbody>
@@ -431,49 +432,76 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_command</span></code></p></td>
 <td><p>Train a model through its per-family trainer and register the resulting checkpoint.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_train</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_metrics_line</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train.run_train" title="mesokit.cli.train.run_train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_train</span></code></a></p></td>
 <td><p>Core of <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code>, shared with <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code> and callable from Python.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_complete_model_config</span></code></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._validate" title="mesokit.cli.train._validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_validate</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._split_run_name" title="mesokit.cli.train._split_run_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_split_run_name</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">E/run</span></code> is <code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">E</span> <span class="pre">--name</span> <span class="pre">run</span></code>; both given and different is an error.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._check_layout" title="mesokit.cli.train._check_layout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check_layout</span></code></a></p></td>
+<td><p>A run may not take an experiment directory’s name, nor an experiment a run directory’s.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._next_run_name" title="mesokit.cli.train._next_run_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_next_run_name</span></code></a></p></td>
+<td><p>The default run name: free in the registry and on disk.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._prepare_run_dir" title="mesokit.cli.train._prepare_run_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_prepare_run_dir</span></code></a></p></td>
+<td><p>Refuse a run directory that already holds a checkpoint unless <code class="docutils literal notranslate"><span class="pre">force</span></code>, which clears its stale <code class="docutils literal notranslate"><span class="pre">*.ckpt</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._override_params" title="mesokit.cli.train._override_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_override_params</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[&quot;trainer.lr=1e-4&quot;]</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">{&quot;trainer.lr&quot;:</span> <span class="pre">0.0001}</span></code>: the varied keys with their parsed values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._strip_bookkeeping" title="mesokit.cli.train._strip_bookkeeping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_strip_bookkeeping</span></code></a></p></td>
+<td><p>A saved <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> reused as a recipe: drop the names <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> wrote next to the sections.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._source_data" title="mesokit.cli.train._source_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_source_data</span></code></a></p></td>
+<td><p>The dataset a checkpoint was trained on: its registered name if still valid, else the recorded path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._source_config" title="mesokit.cli.train._source_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_source_config</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._load_weights" title="mesokit.cli.train._load_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_weights</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._complete_model_config" title="mesokit.cli.train._complete_model_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_complete_model_config</span></code></a></p></td>
 <td><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">model</span></code> section with the registry default <code class="docutils literal notranslate"><span class="pre">_target_</span></code> and the dataset’s grid filled in.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_sample_channels</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._sample_channels" title="mesokit.cli.train._sample_channels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_sample_channels</span></code></a></p></td>
 <td><p>Channels of one training sample, from the dataset view’s <code class="docutils literal notranslate"><span class="pre">channel</span></code> key.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dataset_domain</span></code></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._dataset_domain" title="mesokit.cli.train._dataset_domain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dataset_domain</span></code></a></p></td>
 <td><p>Box lengths per axis from <code class="docutils literal notranslate"><span class="pre">physical</span></code> (<code class="docutils literal notranslate"><span class="pre">Lx</span></code>, <code class="docutils literal notranslate"><span class="pre">Ly</span></code>, <code class="docutils literal notranslate"><span class="pre">Lz</span></code>).</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_fill_grid_keywords</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._fill_grid_keywords" title="mesokit.cli.train._fill_grid_keywords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_fill_grid_keywords</span></code></a></p></td>
 <td><p>Fill the grid and channel keywords <code class="docutils literal notranslate"><span class="pre">section</span></code>’s <code class="docutils literal notranslate"><span class="pre">_target_</span></code> accepts from the dataset, recursively.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_dataset</span></code></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._instantiate_dataset" title="mesokit.cli.train._instantiate_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_dataset</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dataloader_config</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._dataloader_config" title="mesokit.cli.train._dataloader_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dataloader_config</span></code></a></p></td>
 <td><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">dataloader</span></code> section over the built-in defaults, with <code class="docutils literal notranslate"><span class="pre">--batch-size</span></code> applied.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_trainer_config</span></code></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._trainer_config" title="mesokit.cli.train._trainer_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_trainer_config</span></code></a></p></td>
 <td><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">trainer</span></code> section with its <code class="docutils literal notranslate"><span class="pre">_target_</span></code> resolved.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_train_config</span></code></p></td>
-<td><p>The recipe for <code class="docutils literal notranslate"><span class="pre">dyn</span></code> / <code class="docutils literal notranslate"><span class="pre">model</span></code> and where it came from (<code class="docutils literal notranslate"><span class="pre">&quot;recipe&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;defaults&quot;</span></code>).</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._load_train_config" title="mesokit.cli.train._load_train_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_train_config</span></code></a></p></td>
+<td><p>The recipe for <code class="docutils literal notranslate"><span class="pre">dyn</span></code> / <code class="docutils literal notranslate"><span class="pre">model</span></code>, where it came from (<code class="docutils literal notranslate"><span class="pre">&quot;recipe&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;defaults&quot;</span></code>) and its file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_default_train_config</span></code></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._default_train_config" title="mesokit.cli.train._default_train_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_default_train_config</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_trajectory</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._load_trajectory" title="mesokit.cli.train._load_trajectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_trajectory</span></code></a></p></td>
+<td><p>The dataset <code class="docutils literal notranslate"><span class="pre">data</span></code> names (a registered name or an HDF5 path), its registry name and its file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._infer_dt" title="mesokit.cli.train._infer_dt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_infer_dt</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_infer_dt</span></code></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_next_checkpoint_name</span></code></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_resolved_config</span></code></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_checkpoint_record</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._resolved_config" title="mesokit.cli.train._resolved_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_resolved_config</span></code></a></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -488,7 +516,10 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train.DEFAULT_TRAINING_VIEW" title="mesokit.cli.train.DEFAULT_TRAINING_VIEW"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_TRAINING_VIEW</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_AXES</span></code></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.train._BOOKKEEPING_KEYS" title="mesokit.cli.train._BOOKKEEPING_KEYS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BOOKKEEPING_KEYS</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.train._AXES" title="mesokit.cli.train._AXES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_AXES</span></code></a></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -503,7 +534,13 @@
 <dd><p>‘mesokit.data.datasets.snapshot_pair_dataset.SnapshotPairDataset’</p>
 </dd></dl>
 
-<p>````{py:function} train_command(model: typing.Annotated[str, typer.Option(’–model’, help=’Registered model architecture name.’)], data: typing.Annotated[str, typer.Option(’–data’, help=’Registered dataset name or HDF5 path.’)], dyn: typing.Annotated[str | None, typer.Option(’–dyn’, help=”Dynamics name, e.g. allen_cahn_1d. Defaults to the dataset’s own <code class="docutils literal notranslate"><span class="pre">dyn</span></code>.”)] = None, trainer: typing.Annotated[str | None, typer.Option(’–trainer’, help=’Trainer name. Defaults to the model name.’)] = None, config: typing.Annotated[str, typer.Option(’–config’, help=’Recipe stem under configs/train/<dyn>/<model>/ (working directory, then the installed package), or a path to a YAML file. Without any recipe, built-in defaults are used.’)] = ‘default’, set_: typing.Annotated[list[str] | None, typer.Option(’–set’, metavar=’KEY=VALUE’, help=’Override one recipe key for this run, e.g. trainer.lr=1e-4 or model.potential.eps=0.05; repeatable.’)] = None, name: typing.Annotated[str | None, typer.Option(’–name’, help=’Checkpoint registry name. Defaults to <model>_v<n>.’)] = None, no_registry: typing.Annotated[bool, typer.Option(’–no-registry’, help=’Skip checkpoint registration.’)] = False, force: typing.Annotated[bool, typer.Option(’–force’, help=’Overwrite an existing checkpoint registry entry.’)] = False, epochs: typing.Annotated[int | None, typer.Option(’–epochs’, help=’Override trainer.max_epochs.’)] = None, batch_size: typing.Annotated[int | None, typer.Option(’–batch-size’, help=’Override dataloader.batch_size.’)] = None, device: typing.Annotated[str | None, typer.Option(’–device’, help=’Override accelerator: auto, cpu, gpu.’)] = None) -&gt; None</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="mesokit.cli.train._BOOKKEEPING_KEYS">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_BOOKKEEPING_KEYS</span></span><a class="headerlink" href="#mesokit.cli.train._BOOKKEEPING_KEYS" title="Link to this definition">¶</a></dt>
+<dd><p>(‘model_name’, ‘trainer_name’, ‘dyn’, ‘data’, ‘dataset_name’, ‘checkpoint_name’, ‘train_config’)</p>
+</dd></dl>
+
+<p>````{py:function} train_command(model: typing.Annotated[str | None, typer.Option(’–model’, help=”Registered model architecture name. Defaults to the <code class="docutils literal notranslate"><span class="pre">--from</span></code> checkpoint’s.”)] = None, data: typing.Annotated[str | None, typer.Option(’–data’, help=”Registered dataset name or HDF5 path. Defaults to the <code class="docutils literal notranslate"><span class="pre">--from</span></code> checkpoint’s.”)] = None, dyn: typing.Annotated[str | None, typer.Option(’–dyn’, help=”Dynamics name, e.g. allen_cahn_1d. Defaults to the dataset’s own <code class="docutils literal notranslate"><span class="pre">dyn</span></code>.”)] = None, trainer: typing.Annotated[str | None, typer.Option(’–trainer’, help=’Trainer name. Defaults to the model name.’)] = None, config: typing.Annotated[str | None, typer.Option(’–config’, help=”Recipe stem under configs/train/<dyn>/<model>/ (working directory, then the installed package), or a path to a YAML file; default <code class="docutils literal notranslate"><span class="pre">default</span></code>. Without any recipe, built-in defaults are used. With <code class="docutils literal notranslate"><span class="pre">--from</span></code>, the default is that checkpoint’s saved config.yaml.”)] = None, set_: typing.Annotated[list[str] | None, typer.Option(’–set’, metavar=’KEY=VALUE’, help=’Override one recipe key for this run, e.g. trainer.lr=1e-4 or model.potential.eps=0.05; repeatable.’)] = None, experiment: typing.Annotated[str | None, typer.Option(’–experiment’, help=”Group the run under checkpoints/<dyn>/EXPERIMENT/ and register it as EXPERIMENT/<run>; the experiment’s runs.json gets a row.”)] = None, name: typing.Annotated[str | None, typer.Option(’–name’, help=’Run name (registry key and run directory; <code class="docutils literal notranslate"><span class="pre">E/run</span></code> also selects the experiment). Defaults to <model><em>v<n>, or inside an experiment to <model></em><key><value>… from –set.’)] = None, from_: typing.Annotated[str | None, typer.Option(’–from’, help=’Continue from a registered checkpoint: its weights, its saved config as the recipe and its dataset, unless –config / –data say otherwise; further –set apply on top.’)] = None, tag: typing.Annotated[list[str] | None, typer.Option(’–tag’, help=’Tag recorded on the run (filter with <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">list</span> <span class="pre">--tag</span></code>); repeatable.’)] = None, notes: typing.Annotated[str, typer.Option(’–notes’, help=’Free-text note recorded on the run.’)] = ‘’, no_registry: typing.Annotated[bool, typer.Option(’–no-registry’, help=’Skip checkpoint registration.’)] = False, force: typing.Annotated[bool, typer.Option(’–force’, help=’Overwrite an existing checkpoint registry entry and run directory.’)] = False, epochs: typing.Annotated[int | None, typer.Option(’–epochs’, help=’Override trainer.max_epochs.’)] = None, batch_size: typing.Annotated[int | None, typer.Option(’–batch-size’, help=’Override dataloader.batch_size.’)] = None, device: typing.Annotated[str | None, typer.Option(’–device’, help=’Override accelerator: auto, cpu, gpu.’)] = None) -&gt; None</p>
 <dl class="myst field-list simple">
 <dt class="field-odd">canonical<span class="colon">:</span></dt>
 <dd class="field-odd"><p>mesokit.cli.train.train_command</p>
@@ -511,175 +548,278 @@
 </dl>
 <p>Train a model through its per-family trainer and register the resulting checkpoint.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
-`````{py:class} TrainRun
-:canonical: mesokit.cli.train.TrainRun
+````{py:function} _metrics_line(metrics: collections.abc.Mapping[str, typing.Any]) -&gt; str
+:canonical: mesokit.cli.train._metrics_line
 
-```{autodoc2-docstring} mesokit.cli.train.TrainRun
+```{autodoc2-docstring} mesokit.cli.train._metrics_line
 ```
-
-````{py:attribute} result
-:canonical: mesokit.cli.train.TrainRun.result
-:type: mesokit.trainers.TrainResult
-:value: &gt;
-   None
-
-```{autodoc2-docstring} mesokit.cli.train.TrainRun.result
-```
-
 </pre></div>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="mesokit.cli.train.TrainRun">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">TrainRun</span></span><a class="headerlink" href="#mesokit.cli.train.TrainRun" title="Link to this definition">¶</a></dt>
+<dd><p>What :func:<code class="docutils literal notranslate"><span class="pre">run_train</span></code> produced: the trainer’s result plus the registry-facing names and paths.</p>
+<p><code class="docutils literal notranslate"><span class="pre">checkpoint_name</span></code> is the registry key (<code class="docutils literal notranslate"><span class="pre">&lt;run&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>);
+<code class="docutils literal notranslate"><span class="pre">record</span></code> is the <code class="docutils literal notranslate"><span class="pre">run.json</span></code> content.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="mesokit.cli.train.checkpoint_name">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">checkpoint_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.cli.train.checkpoint_name" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mesokit.cli.train.TrainRun.result">
+<span class="sig-name descname"><span class="pre">result</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">mesokit.trainers.TrainResult</span></span><a class="headerlink" href="#mesokit.cli.train.TrainRun.result" title="Link to this definition">¶</a></dt>
 <dd><p>None</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="mesokit.cli.train.config_path">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">config_path</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span><a class="headerlink" href="#mesokit.cli.train.config_path" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mesokit.cli.train.TrainRun.checkpoint_name">
+<span class="sig-name descname"><span class="pre">checkpoint_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.cli.train.TrainRun.checkpoint_name" title="Link to this definition">¶</a></dt>
 <dd><p>None</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="mesokit.cli.train.trainer_name">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">trainer_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.cli.train.trainer_name" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mesokit.cli.train.TrainRun.config_path">
+<span class="sig-name descname"><span class="pre">config_path</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span><a class="headerlink" href="#mesokit.cli.train.TrainRun.config_path" title="Link to this definition">¶</a></dt>
 <dd><p>None</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="mesokit.cli.train.registered">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">registered</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#mesokit.cli.train.registered" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mesokit.cli.train.TrainRun.trainer_name">
+<span class="sig-name descname"><span class="pre">trainer_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.cli.train.TrainRun.trainer_name" title="Link to this definition">¶</a></dt>
 <dd><p>None</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="mesokit.cli.train.dyn">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">dyn</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Multiline-String&gt;</span></span><a class="headerlink" href="#mesokit.cli.train.dyn" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mesokit.cli.train.TrainRun.registered">
+<span class="sig-name descname"><span class="pre">registered</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#mesokit.cli.train.TrainRun.registered" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli.train.TrainRun.dyn">
+<span class="sig-name descname"><span class="pre">dyn</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Multiline-String&gt;</span></span><a class="headerlink" href="#mesokit.cli.train.TrainRun.dyn" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="mesokit.cli.train.recipe_source">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">recipe_source</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.cli.train.recipe_source" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mesokit.cli.train.TrainRun.recipe_source">
+<span class="sig-name descname"><span class="pre">recipe_source</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.cli.train.TrainRun.recipe_source" title="Link to this definition">¶</a></dt>
 <dd><p>‘recipe’</p>
 </dd></dl>
 
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
-````{py:function} run_train(*, model: str, data: str, dyn: str | None = None, trainer: str | None = None, config: str = &#39;default&#39;, name: str | None = None, register: bool = True, force: bool = False, epochs: int | None = None, batch_size: int | None = None, device: str | None = None, overrides: collections.abc.Sequence[str] | None = None) -&gt; mesokit.cli.train.TrainRun
-:canonical: mesokit.cli.train.run_train
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli.train.TrainRun.run_dir">
+<span class="sig-name descname"><span class="pre">run_dir</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span><a class="headerlink" href="#mesokit.cli.train.TrainRun.run_dir" title="Link to this definition">¶</a></dt>
+<dd><p>‘Path(…)’</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train.run_train
-```
-````
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli.train.TrainRun.record">
+<span class="sig-name descname"><span class="pre">record</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.cli.train.TrainRun.record" title="Link to this definition">¶</a></dt>
+<dd><p>‘field(…)’</p>
+</dd></dl>
 
-````{py:function} _complete_model_config(model: str, cfg: omegaconf.DictConfig, traj: mesokit.data.TrajectoryDataset) -&gt; omegaconf.DictConfig
-:canonical: mesokit.cli.train._complete_model_config
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli.train.TrainRun.experiment">
+<span class="sig-name descname"><span class="pre">experiment</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#mesokit.cli.train.TrainRun.experiment" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._complete_model_config
-```
-````
+</dd></dl>
 
-````{py:function} _sample_channels(cfg: omegaconf.DictConfig, traj: mesokit.data.TrajectoryDataset) -&gt; int
-:canonical: mesokit.cli.train._sample_channels
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train.run_train">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">run_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dyn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_from</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">register</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overrides</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mesokit.cli.train.TrainRun" title="mesokit.cli.train.TrainRun"><span class="pre">mesokit.cli.train.TrainRun</span></a></span></span><a class="headerlink" href="#mesokit.cli.train.run_train" title="Link to this definition">¶</a></dt>
+<dd><p>Core of <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code>, shared with <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code> and callable from Python.</p>
+<p>Loads <code class="docutils literal notranslate"><span class="pre">data</span></code> (a registered name or an HDF5 path) and takes <code class="docutils literal notranslate"><span class="pre">dyn</span></code> from
+it unless given; resolves the recipe <code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;model&gt;/&lt;config&gt;.yaml</span></code>
+(working directory, then the installed package) or a YAML path, falling
+back to built-in defaults when no recipe exists; applies <code class="docutils literal notranslate"><span class="pre">overrides</span></code>
+(<code class="docutils literal notranslate"><span class="pre">key.path=value</span></code>); fills the model’s grid keywords from the dataset;
+fits the model through its trainer into <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;name&gt;/</span></code> —
+<code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/&lt;name&gt;/</span></code> with an <code class="docutils literal notranslate"><span class="pre">experiment</span></code> —
+writes the resolved <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> and the run record <code class="docutils literal notranslate"><span class="pre">run.json</span></code>
+there (the overrides, the varied <code class="docutils literal notranslate"><span class="pre">params</span></code>, the final metrics,
+<code class="docutils literal notranslate"><span class="pre">tags</span></code> and <code class="docutils literal notranslate"><span class="pre">notes</span></code>) and, when <code class="docutils literal notranslate"><span class="pre">register</span></code> is true, indexes the
+checkpoint under <code class="docutils literal notranslate"><span class="pre">name</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;name&gt;</span></code>. The default
+<code class="docutils literal notranslate"><span class="pre">name</span></code> is the next free <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v&lt;n&gt;</span></code>; inside an experiment it is
+<code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_&lt;key&gt;&lt;value&gt;[_...]</span></code> from the overrides (<code class="docutils literal notranslate"><span class="pre">fno2d_lr0.001</span></code>),
+else <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_r&lt;nn&gt;</span></code>. An experiment also keeps <code class="docutils literal notranslate"><span class="pre">runs.json</span></code>, one row
+per run (failed ones included).</p>
+<p><code class="docutils literal notranslate"><span class="pre">init_from</span></code> names a registered checkpoint: its weights are loaded
+into the new model, its saved <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> is the recipe unless
+<code class="docutils literal notranslate"><span class="pre">config</span></code> is given, and its dataset (and <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">trainer</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dyn</span></code>) fill in whatever is not passed. <code class="docutils literal notranslate"><span class="pre">data_params</span></code> are the
+simulator axes of a sweep point, recorded only.</p>
+<p>A run directory that already holds a <code class="docutils literal notranslate"><span class="pre">model.pt</span></code> is refused unless
+<code class="docutils literal notranslate"><span class="pre">force</span></code>, which also clears its stale Lightning checkpoints.</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._sample_channels
-```
-````
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._validate">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.cli.train._validate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
-````{py:data} _AXES
-:canonical: mesokit.cli.train._AXES
-:value: &gt;
-   &#39;xyz&#39;
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._split_run_name">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_split_run_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli.train._split_run_name" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">E/run</span></code> is <code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">E</span> <span class="pre">--name</span> <span class="pre">run</span></code>; both given and different is an error.</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._AXES
-```
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._check_layout">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_check_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">dyn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli.train._check_layout" title="Link to this definition">¶</a></dt>
+<dd><p>A run may not take an experiment directory’s name, nor an experiment a run directory’s.</p>
+</dd></dl>
 
-````
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._next_run_name">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_next_run_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.cli.train._next_run_name" title="Link to this definition">¶</a></dt>
+<dd><p>The default run name: free in the registry and on disk.</p>
+<p>Outside an experiment <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v&lt;n&gt;</span></code>. Inside one,
+<code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_&lt;leaf(key)&gt;&lt;value&gt;[_...]</span></code> from the overrides (<code class="docutils literal notranslate"><span class="pre">force</span></code> reuses
+that exact name; otherwise a taken name gets <code class="docutils literal notranslate"><span class="pre">_2</span></code>, <code class="docutils literal notranslate"><span class="pre">_3</span></code>, …), or
+<code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_r&lt;nn&gt;</span></code> when nothing was overridden.</p>
+</dd></dl>
 
-````{py:function} _dataset_domain(traj: mesokit.data.TrajectoryDataset) -&gt; tuple[float, ...]
-:canonical: mesokit.cli.train._dataset_domain
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._prepare_run_dir">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_prepare_run_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli.train._prepare_run_dir" title="Link to this definition">¶</a></dt>
+<dd><p>Refuse a run directory that already holds a checkpoint unless <code class="docutils literal notranslate"><span class="pre">force</span></code>, which clears its stale <code class="docutils literal notranslate"><span class="pre">*.ckpt</span></code>.</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._dataset_domain
-```
-````
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._override_params">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_override_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">overrides</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli.train._override_params" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">[&quot;trainer.lr=1e-4&quot;]</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">{&quot;trainer.lr&quot;:</span> <span class="pre">0.0001}</span></code>: the varied keys with their parsed values.</p>
+</dd></dl>
 
-````{py:function} _fill_grid_keywords(section: omegaconf.DictConfig, *, grid_shape: tuple[int, ...], domain: tuple[float, ...], depth: int, n_channels: int = 1, path: str = &#39;model&#39;, mismatches: list[str] | None = None) -&gt; None
-:canonical: mesokit.cli.train._fill_grid_keywords
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._strip_bookkeeping">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_strip_bookkeeping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">omegaconf.DictConfig</span></span></span><a class="headerlink" href="#mesokit.cli.train._strip_bookkeeping" title="Link to this definition">¶</a></dt>
+<dd><p>A saved <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> reused as a recipe: drop the names <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> wrote next to the sections.</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._fill_grid_keywords
-```
-````
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._source_data">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_source_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.cli.train._source_data" title="Link to this definition">¶</a></dt>
+<dd><p>The dataset a checkpoint was trained on: its registered name if still valid, else the recorded path.</p>
+</dd></dl>
 
-````{py:function} _instantiate_dataset(cfg: omegaconf.DictConfig, traj: mesokit.data.TrajectoryDataset) -&gt; object
-:canonical: mesokit.cli.train._instantiate_dataset
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._source_config">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_source_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.cli.train._source_config" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._instantiate_dataset
-```
-````
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._load_weights">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_load_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli.train._load_weights" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
-````{py:function} _dataloader_config(cfg: omegaconf.DictConfig, *, batch_size: int | None) -&gt; omegaconf.DictConfig
-:canonical: mesokit.cli.train._dataloader_config
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._complete_model_config">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_complete_model_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">mesokit.data.TrajectoryDataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">omegaconf.DictConfig</span></span></span><a class="headerlink" href="#mesokit.cli.train._complete_model_config" title="Link to this definition">¶</a></dt>
+<dd><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">model</span></code> section with the registry default <code class="docutils literal notranslate"><span class="pre">_target_</span></code> and the dataset’s grid filled in.</p>
+<p>A registered <code class="docutils literal notranslate"><span class="pre">--model</span></code> name supplies the default <code class="docutils literal notranslate"><span class="pre">_target_</span></code>; an
+unregistered name (a user’s own model) is accepted when the recipe names
+the class itself, which Hydra imports by its dotted path. Grid and channel
+keywords the constructor accepts but the recipe leaves out (<code class="docutils literal notranslate"><span class="pre">Nx</span></code> /
+<code class="docutils literal notranslate"><span class="pre">Ny</span></code> / <code class="docutils literal notranslate"><span class="pre">Nz</span></code>, <code class="docutils literal notranslate"><span class="pre">Lx</span></code> / <code class="docutils literal notranslate"><span class="pre">Ly</span></code> / <code class="docutils literal notranslate"><span class="pre">Lz</span></code>, <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>, <code class="docutils literal notranslate"><span class="pre">domain</span></code>,
+<code class="docutils literal notranslate"><span class="pre">in_dim</span></code>, <code class="docutils literal notranslate"><span class="pre">n_channels</span></code>, <code class="docutils literal notranslate"><span class="pre">in_channels</span></code> / <code class="docutils literal notranslate"><span class="pre">out_channels</span></code>) are taken
+from the dataset and the dataset view’s <code class="docutils literal notranslate"><span class="pre">channel</span></code> selection,
+recursively for nested components. A written number of grid points or
+channels that contradicts the dataset is refused here rather than at the
+first batch; written box lengths are kept, since a dataset may lack
+<code class="docutils literal notranslate"><span class="pre">Lx</span></code>. The shipped recipes carry none of these keys.</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._dataloader_config
-```
-````
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._sample_channels">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_sample_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">mesokit.data.TrajectoryDataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#mesokit.cli.train._sample_channels" title="Link to this definition">¶</a></dt>
+<dd><p>Channels of one training sample, from the dataset view’s <code class="docutils literal notranslate"><span class="pre">channel</span></code> key.</p>
+<p>An integer (the default <code class="docutils literal notranslate"><span class="pre">0</span></code>) selects one field, so the model takes
+<code class="docutils literal notranslate"><span class="pre">1</span></code> channel; <code class="docutils literal notranslate"><span class="pre">null</span></code> keeps every channel of the dataset; a list keeps
+those channels.</p>
+</dd></dl>
 
-````{py:function} _trainer_config(trainer_name: str, cfg: omegaconf.DictConfig, traj: mesokit.data.TrajectoryDataset, *, epochs: int | None, device: str | None, explicit: bool = False) -&gt; omegaconf.DictConfig
-:canonical: mesokit.cli.train._trainer_config
+<dl class="py data">
+<dt class="sig sig-object py" id="mesokit.cli.train._AXES">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_AXES</span></span><a class="headerlink" href="#mesokit.cli.train._AXES" title="Link to this definition">¶</a></dt>
+<dd><p>‘xyz’</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._trainer_config
-```
-````
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._dataset_domain">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_dataset_domain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">mesokit.data.TrajectoryDataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli.train._dataset_domain" title="Link to this definition">¶</a></dt>
+<dd><p>Box lengths per axis from <code class="docutils literal notranslate"><span class="pre">physical</span></code> (<code class="docutils literal notranslate"><span class="pre">Lx</span></code>, <code class="docutils literal notranslate"><span class="pre">Ly</span></code>, <code class="docutils literal notranslate"><span class="pre">Lz</span></code>).</p>
+<p>A missing <code class="docutils literal notranslate"><span class="pre">Lx</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">2π</span></code>; a missing later axis repeats the first.</p>
+</dd></dl>
 
-````{py:function} _load_train_config(*, dyn: str, model: str, stem: str) -&gt; tuple[omegaconf.DictConfig, str]
-:canonical: mesokit.cli.train._load_train_config
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._fill_grid_keywords">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_fill_grid_keywords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'model'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mismatches</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli.train._fill_grid_keywords" title="Link to this definition">¶</a></dt>
+<dd><p>Fill the grid and channel keywords <code class="docutils literal notranslate"><span class="pre">section</span></code>’s <code class="docutils literal notranslate"><span class="pre">_target_</span></code> accepts from the dataset, recursively.</p>
+<p><code class="docutils literal notranslate"><span class="pre">n_channels</span></code> is what one training sample carries (<code class="docutils literal notranslate"><span class="pre">1</span></code> for a single
+field); it fills <code class="docutils literal notranslate"><span class="pre">n_channels</span></code>, <code class="docutils literal notranslate"><span class="pre">in_channels</span></code> / <code class="docutils literal notranslate"><span class="pre">out_channels</span></code> and
+scales <code class="docutils literal notranslate"><span class="pre">in_dim</span></code> (<code class="docutils literal notranslate"><span class="pre">n_channels</span> <span class="pre">·</span> <span class="pre">prod(grid_shape)</span></code>, the model’s direct
+components only). A written <code class="docutils literal notranslate"><span class="pre">Nx</span></code> / <code class="docutils literal notranslate"><span class="pre">Ny</span></code> / <code class="docutils literal notranslate"><span class="pre">Nz</span></code>, <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>,
+<code class="docutils literal notranslate"><span class="pre">in_dim</span></code> or channel count that differs from the dataset is reported in
+<code class="docutils literal notranslate"><span class="pre">mismatches</span></code> (as <code class="docutils literal notranslate"><span class="pre">model.potential.grid_shape=[...]</span> <span class="pre">(dataset:</span> <span class="pre">[...])</span></code>)
+and left alone; written box lengths are kept without comment.</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._load_train_config
-```
-````
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._instantiate_dataset">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_instantiate_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">mesokit.data.TrajectoryDataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="headerlink" href="#mesokit.cli.train._instantiate_dataset" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
-````{py:function} _default_train_config() -&gt; omegaconf.DictConfig
-:canonical: mesokit.cli.train._default_train_config
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._dataloader_config">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_dataloader_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">omegaconf.DictConfig</span></span></span><a class="headerlink" href="#mesokit.cli.train._dataloader_config" title="Link to this definition">¶</a></dt>
+<dd><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">dataloader</span></code> section over the built-in defaults, with <code class="docutils literal notranslate"><span class="pre">--batch-size</span></code> applied.</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._default_train_config
-```
-````
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._trainer_config">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">mesokit.data.TrajectoryDataset</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">omegaconf.DictConfig</span></span></span><a class="headerlink" href="#mesokit.cli.train._trainer_config" title="Link to this definition">¶</a></dt>
+<dd><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">trainer</span></code> section with its <code class="docutils literal notranslate"><span class="pre">_target_</span></code> resolved.</p>
+<p>The trainer registered under <code class="docutils literal notranslate"><span class="pre">trainer_name</span></code> supplies the default
+<code class="docutils literal notranslate"><span class="pre">_target_</span></code>; a recipe may name any class instead. A model with no
+trainer of its own (a user’s model) trains with the shipped</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">Class<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">~mesokit.trainers.LitTrainer</span></code>, which fits any <code class="docutils literal notranslate"><span class="pre">DynamicsModel</span></code>;
+only an <code class="docutils literal notranslate"><span class="pre">explicit</span></code> <code class="docutils literal notranslate"><span class="pre">--trainer</span></code> name that is unknown is an error.</p>
+</dd>
+</dl>
+</dd></dl>
 
-````{py:function} _load_trajectory(data: str) -&gt; tuple[mesokit.data.TrajectoryDataset, str | None]
-:canonical: mesokit.cli.train._load_trajectory
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._load_train_config">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_load_train_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">dyn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">omegaconf.DictConfig</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli.train._load_train_config" title="Link to this definition">¶</a></dt>
+<dd><p>The recipe for <code class="docutils literal notranslate"><span class="pre">dyn</span></code> / <code class="docutils literal notranslate"><span class="pre">model</span></code>, where it came from (<code class="docutils literal notranslate"><span class="pre">&quot;recipe&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;defaults&quot;</span></code>) and its file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">stem</span></code> is a recipe stem or a YAML path. With no recipe directory at all
+and the default stem, a built-in recipe is synthesised: model defaults
+(plus the dataset’s grid), <code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset</span></code> with <code class="docutils literal notranslate"><span class="pre">stride:</span> <span class="pre">1</span></code>,
+dataloader defaults, and the registered trainer’s defaults.</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._load_trajectory
-```
-````
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._default_train_config">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_default_train_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">omegaconf.DictConfig</span></span></span><a class="headerlink" href="#mesokit.cli.train._default_train_config" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
-````{py:function} _infer_dt(traj: mesokit.data.TrajectoryDataset) -&gt; float
-:canonical: mesokit.cli.train._infer_dt
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._load_trajectory">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_load_trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">mesokit.data.TrajectoryDataset</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli.train._load_trajectory" title="Link to this definition">¶</a></dt>
+<dd><p>The dataset <code class="docutils literal notranslate"><span class="pre">data</span></code> names (a registered name or an HDF5 path), its registry name and its file.</p>
+</dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._infer_dt
-```
-````
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._infer_dt">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_infer_dt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">mesokit.data.TrajectoryDataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#mesokit.cli.train._infer_dt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
-````{py:function} _next_checkpoint_name(model: str) -&gt; str
-:canonical: mesokit.cli.train._next_checkpoint_name
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli.train._resolved_config">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli.train.</span></span><span class="sig-name descname"><span class="pre">_resolved_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dyn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_config_stem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">omegaconf.DictConfig</span></span></span><a class="headerlink" href="#mesokit.cli.train._resolved_config" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
-```{autodoc2-docstring} mesokit.cli.train._next_checkpoint_name
-```
-````
-
-````{py:function} _resolved_config(cfg: omegaconf.DictConfig, *, model: str, trainer_name: str, dyn: str, data: str, dataset_name: str | None, checkpoint_name: str, train_config_stem: str) -&gt; omegaconf.DictConfig
-:canonical: mesokit.cli.train._resolved_config
-
-```{autodoc2-docstring} mesokit.cli.train._resolved_config
-```
-````
-
-````{py:function} _checkpoint_record(*, result: typing.Any, config_path: pathlib.Path, model: str, trainer_name: str, dyn: str, data: str, dataset_name: str | None, config_yaml: str) -&gt; dict[str, typing.Any]
-:canonical: mesokit.cli.train._checkpoint_record
-
-```{autodoc2-docstring} mesokit.cli.train._checkpoint_record
-```
-````
-</pre></div>
-</div>
 </section>
 </section>
 </section>
@@ -746,12 +886,44 @@
 <li><a class="reference internal" href="#data">Data</a></li>
 <li><a class="reference internal" href="#api">API</a><ul>
 <li><a class="reference internal" href="#mesokit.cli.train.DEFAULT_TRAINING_VIEW"><code class="docutils literal notranslate"><span class="pre">DEFAULT_TRAINING_VIEW</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli.train.checkpoint_name"><code class="docutils literal notranslate"><span class="pre">checkpoint_name</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli.train.config_path"><code class="docutils literal notranslate"><span class="pre">config_path</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli.train.trainer_name"><code class="docutils literal notranslate"><span class="pre">trainer_name</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli.train.registered"><code class="docutils literal notranslate"><span class="pre">registered</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli.train.dyn"><code class="docutils literal notranslate"><span class="pre">dyn</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli.train.recipe_source"><code class="docutils literal notranslate"><span class="pre">recipe_source</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._BOOKKEEPING_KEYS"><code class="docutils literal notranslate"><span class="pre">_BOOKKEEPING_KEYS</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train.TrainRun"><code class="docutils literal notranslate"><span class="pre">TrainRun</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit.cli.train.TrainRun.result"><code class="docutils literal notranslate"><span class="pre">TrainRun.result</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train.TrainRun.checkpoint_name"><code class="docutils literal notranslate"><span class="pre">TrainRun.checkpoint_name</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train.TrainRun.config_path"><code class="docutils literal notranslate"><span class="pre">TrainRun.config_path</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train.TrainRun.trainer_name"><code class="docutils literal notranslate"><span class="pre">TrainRun.trainer_name</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train.TrainRun.registered"><code class="docutils literal notranslate"><span class="pre">TrainRun.registered</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train.TrainRun.dyn"><code class="docutils literal notranslate"><span class="pre">TrainRun.dyn</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train.TrainRun.recipe_source"><code class="docutils literal notranslate"><span class="pre">TrainRun.recipe_source</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train.TrainRun.run_dir"><code class="docutils literal notranslate"><span class="pre">TrainRun.run_dir</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train.TrainRun.record"><code class="docutils literal notranslate"><span class="pre">TrainRun.record</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train.TrainRun.experiment"><code class="docutils literal notranslate"><span class="pre">TrainRun.experiment</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mesokit.cli.train.run_train"><code class="docutils literal notranslate"><span class="pre">run_train()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._validate"><code class="docutils literal notranslate"><span class="pre">_validate()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._split_run_name"><code class="docutils literal notranslate"><span class="pre">_split_run_name()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._check_layout"><code class="docutils literal notranslate"><span class="pre">_check_layout()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._next_run_name"><code class="docutils literal notranslate"><span class="pre">_next_run_name()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._prepare_run_dir"><code class="docutils literal notranslate"><span class="pre">_prepare_run_dir()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._override_params"><code class="docutils literal notranslate"><span class="pre">_override_params()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._strip_bookkeeping"><code class="docutils literal notranslate"><span class="pre">_strip_bookkeeping()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._source_data"><code class="docutils literal notranslate"><span class="pre">_source_data()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._source_config"><code class="docutils literal notranslate"><span class="pre">_source_config()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._load_weights"><code class="docutils literal notranslate"><span class="pre">_load_weights()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._complete_model_config"><code class="docutils literal notranslate"><span class="pre">_complete_model_config()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._sample_channels"><code class="docutils literal notranslate"><span class="pre">_sample_channels()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._AXES"><code class="docutils literal notranslate"><span class="pre">_AXES</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._dataset_domain"><code class="docutils literal notranslate"><span class="pre">_dataset_domain()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._fill_grid_keywords"><code class="docutils literal notranslate"><span class="pre">_fill_grid_keywords()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._instantiate_dataset"><code class="docutils literal notranslate"><span class="pre">_instantiate_dataset()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._dataloader_config"><code class="docutils literal notranslate"><span class="pre">_dataloader_config()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._trainer_config"><code class="docutils literal notranslate"><span class="pre">_trainer_config()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._load_train_config"><code class="docutils literal notranslate"><span class="pre">_load_train_config()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._default_train_config"><code class="docutils literal notranslate"><span class="pre">_default_train_config()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._load_trajectory"><code class="docutils literal notranslate"><span class="pre">_load_trajectory()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._infer_dt"><code class="docutils literal notranslate"><span class="pre">_infer_dt()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli.train._resolved_config"><code class="docutils literal notranslate"><span class="pre">_resolved_config()</span></code></a></li>
 </ul>
 </li>
 </ul>

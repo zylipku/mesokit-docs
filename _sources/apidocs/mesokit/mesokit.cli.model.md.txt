@@ -15,12 +15,100 @@
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`_text <mesokit.cli.model._text>`
+  - ```{autodoc2-docstring} mesokit.cli.model._text
+    :summary:
+    ```
+* - {py:obj}`_seconds <mesokit.cli.model._seconds>`
+  - ```{autodoc2-docstring} mesokit.cli.model._seconds
+    :summary:
+    ```
+* - {py:obj}`_metric <mesokit.cli.model._metric>`
+  - ```{autodoc2-docstring} mesokit.cli.model._metric
+    :summary:
+    ```
+* - {py:obj}`_cell <mesokit.cli.model._cell>`
+  - ```{autodoc2-docstring} mesokit.cli.model._cell
+    :summary:
+    ```
+* - {py:obj}`_sort_records <mesokit.cli.model._sort_records>`
+  - ```{autodoc2-docstring} mesokit.cli.model._sort_records
+    :summary:
+    ```
+* - {py:obj}`_parse_columns <mesokit.cli.model._parse_columns>`
+  - ```{autodoc2-docstring} mesokit.cli.model._parse_columns
+    :summary:
+    ```
+* - {py:obj}`records <mesokit.cli.model.records>`
+  - ```{autodoc2-docstring} mesokit.cli.model.records
+    :summary:
+    ```
 * - {py:obj}`list_ <mesokit.cli.model.list_>`
   - ```{autodoc2-docstring} mesokit.cli.model.list_
     :summary:
     ```
+* - {py:obj}`_filter <mesokit.cli.model._filter>`
+  - ```{autodoc2-docstring} mesokit.cli.model._filter
+    :summary:
+    ```
 * - {py:obj}`register <mesokit.cli.model.register>`
   - ```{autodoc2-docstring} mesokit.cli.model.register
+    :summary:
+    ```
+* - {py:obj}`_names_from_config <mesokit.cli.model._names_from_config>`
+  - ```{autodoc2-docstring} mesokit.cli.model._names_from_config
+    :summary:
+    ```
+* - {py:obj}`resolve_name <mesokit.cli.model.resolve_name>`
+  - ```{autodoc2-docstring} mesokit.cli.model.resolve_name
+    :summary:
+    ```
+* - {py:obj}`tag <mesokit.cli.model.tag>`
+  - ```{autodoc2-docstring} mesokit.cli.model.tag
+    :summary:
+    ```
+* - {py:obj}`remove <mesokit.cli.model.remove>`
+  - ```{autodoc2-docstring} mesokit.cli.model.remove
+    :summary:
+    ```
+* - {py:obj}`prune <mesokit.cli.model.prune>`
+  - ```{autodoc2-docstring} mesokit.cli.model.prune
+    :summary:
+    ```
+* - {py:obj}`_normalized <mesokit.cli.model._normalized>`
+  - ```{autodoc2-docstring} mesokit.cli.model._normalized
+    :summary:
+    ```
+* - {py:obj}`show <mesokit.cli.model.show>`
+  - ```{autodoc2-docstring} mesokit.cli.model.show
+    :summary:
+    ```
+* - {py:obj}`_metrics_text <mesokit.cli.model._metrics_text>`
+  - ```{autodoc2-docstring} mesokit.cli.model._metrics_text
+    :summary:
+    ```
+* - {py:obj}`reproduce_command <mesokit.cli.model.reproduce_command>`
+  - ```{autodoc2-docstring} mesokit.cli.model.reproduce_command
+    :summary:
+    ```
+* - {py:obj}`sync <mesokit.cli.model.sync>`
+  - ```{autodoc2-docstring} mesokit.cli.model.sync
+    :summary:
+    ```
+* - {py:obj}`_optional_path <mesokit.cli.model._optional_path>`
+  - ```{autodoc2-docstring} mesokit.cli.model._optional_path
+    :summary:
+    ```
+* - {py:obj}`_record_from_v1_entry <mesokit.cli.model._record_from_v1_entry>`
+  - ```{autodoc2-docstring} mesokit.cli.model._record_from_v1_entry
+    :summary:
+    ```
+* - {py:obj}`_sync_tables <mesokit.cli.model._sync_tables>`
+  - ```{autodoc2-docstring} mesokit.cli.model._sync_tables
+    :summary:
+    ```
+* - {py:obj}`_import_sweeps <mesokit.cli.model._import_sweeps>`
+  - ```{autodoc2-docstring} mesokit.cli.model._import_sweeps
     :summary:
     ```
 ````
@@ -33,6 +121,18 @@
 
 * - {py:obj}`app <mesokit.cli.model.app>`
   - ```{autodoc2-docstring} mesokit.cli.model.app
+    :summary:
+    ```
+* - {py:obj}`COLUMNS <mesokit.cli.model.COLUMNS>`
+  - ```{autodoc2-docstring} mesokit.cli.model.COLUMNS
+    :summary:
+    ```
+* - {py:obj}`DEFAULT_COLUMNS <mesokit.cli.model.DEFAULT_COLUMNS>`
+  - ```{autodoc2-docstring} mesokit.cli.model.DEFAULT_COLUMNS
+    :summary:
+    ```
+* - {py:obj}`_RENDER <mesokit.cli.model._RENDER>`
+  - ```{autodoc2-docstring} mesokit.cli.model._RENDER
     :summary:
     ```
 ````
@@ -49,16 +149,202 @@
 
 ````
 
-````{py:function} list_() -> None
+````{py:function} _text(value: typing.Any) -> str
+:canonical: mesokit.cli.model._text
+
+```{autodoc2-docstring} mesokit.cli.model._text
+```
+````
+
+````{py:function} _seconds(value: typing.Any) -> str
+:canonical: mesokit.cli.model._seconds
+
+```{autodoc2-docstring} mesokit.cli.model._seconds
+```
+````
+
+````{py:function} _metric(name: str) -> collections.abc.Callable[[collections.abc.Mapping[str, typing.Any]], typing.Any]
+:canonical: mesokit.cli.model._metric
+
+```{autodoc2-docstring} mesokit.cli.model._metric
+```
+````
+
+````{py:data} COLUMNS
+:canonical: mesokit.cli.model.COLUMNS
+:type: dict[str, tuple[str, collections.abc.Callable[[collections.abc.Mapping[str, typing.Any]], typing.Any]]]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.model.COLUMNS
+```
+
+````
+
+````{py:data} DEFAULT_COLUMNS
+:canonical: mesokit.cli.model.DEFAULT_COLUMNS
+:value: >
+   ('name', 'model', 'dataset', 'params', 'train_loss', 'epochs', 'time', 'created', 'tags')
+
+```{autodoc2-docstring} mesokit.cli.model.DEFAULT_COLUMNS
+```
+
+````
+
+````{py:data} _RENDER
+:canonical: mesokit.cli.model._RENDER
+:type: dict[str, collections.abc.Callable[[typing.Any], str]]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.model._RENDER
+```
+
+````
+
+````{py:function} _cell(column: str, record: collections.abc.Mapping[str, typing.Any]) -> str
+:canonical: mesokit.cli.model._cell
+
+```{autodoc2-docstring} mesokit.cli.model._cell
+```
+````
+
+````{py:function} _sort_records(records: list[dict[str, typing.Any]], *, key: str, reverse: bool) -> list[dict[str, typing.Any]]
+:canonical: mesokit.cli.model._sort_records
+
+```{autodoc2-docstring} mesokit.cli.model._sort_records
+```
+````
+
+````{py:function} _parse_columns(spec: str | None) -> list[str]
+:canonical: mesokit.cli.model._parse_columns
+
+```{autodoc2-docstring} mesokit.cli.model._parse_columns
+```
+````
+
+````{py:function} records(store: mesokit.cli._registry_store.RegistryStore | None = None) -> list[dict[str, typing.Any]]
+:canonical: mesokit.cli.model.records
+
+```{autodoc2-docstring} mesokit.cli.model.records
+```
+````
+
+````{py:function} list_(dyn: typing.Annotated[str | None, typer.Option('--dyn', help='Keep runs of this dynamics.')] = None, model: typing.Annotated[str | None, typer.Option('--model', help='Keep runs of this model architecture.')] = None, experiment: typing.Annotated[str | None, typer.Option('--experiment', help='Keep runs of this experiment (`-` for runs outside any).')] = None, dataset: typing.Annotated[str | None, typer.Option('--dataset', help='Keep runs trained on this dataset name.')] = None, tag: typing.Annotated[list[str] | None, typer.Option('--tag', help='Keep runs carrying this tag; repeatable.')] = None, sort: typing.Annotated[str, typer.Option('--sort', help='Sort column (`name`, `created`, `train_loss`, ...); unknown values last.')] = 'name', reverse: typing.Annotated[bool, typer.Option('--reverse', help='Sort descending.')] = False, format_: typing.Annotated[str, typer.Option('--format', help='table, json or csv.')] = 'table', columns: typing.Annotated[str | None, typer.Option('--columns', help=f"Comma-separated columns; default {','.join(DEFAULT_COLUMNS)}.")] = None) -> None
 :canonical: mesokit.cli.model.list_
 
 ```{autodoc2-docstring} mesokit.cli.model.list_
 ```
 ````
 
-````{py:function} register(model: typing.Annotated[str, typer.Option('--model', help='Name to register the checkpoint under.')], file: typing.Annotated[pathlib.Path, typer.Option('--file', help='Existing checkpoint (.pt) file to register.')], config: typing.Annotated[pathlib.Path, typer.Option('--config', help='Config YAML used to train the checkpoint.')], force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing entry.')] = False) -> None
+````{py:function} _filter(rows: list[dict[str, typing.Any]], *, dyn: str | None, model: str | None, experiment: str | None, dataset: str | None, tags: collections.abc.Sequence[str]) -> list[dict[str, typing.Any]]
+:canonical: mesokit.cli.model._filter
+
+```{autodoc2-docstring} mesokit.cli.model._filter
+```
+````
+
+````{py:function} register(model: typing.Annotated[str, typer.Option('--model', help='Name to register the checkpoint under.')], file: typing.Annotated[pathlib.Path, typer.Option('--file', help='Existing checkpoint (.pt) file to register.')], config: typing.Annotated[pathlib.Path, typer.Option('--config', help='Config YAML used to train the checkpoint.')], tag: typing.Annotated[list[str] | None, typer.Option('--tag', help='Tag recorded on the entry; repeatable.')] = None, force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing entry.')] = False) -> None
 :canonical: mesokit.cli.model.register
 
 ```{autodoc2-docstring} mesokit.cli.model.register
+```
+````
+
+````{py:function} _names_from_config(cfg_path: pathlib.Path) -> dict[str, typing.Any]
+:canonical: mesokit.cli.model._names_from_config
+
+```{autodoc2-docstring} mesokit.cli.model._names_from_config
+```
+````
+
+````{py:function} resolve_name(name: str, store: mesokit.cli._registry_store.RegistryStore | None = None) -> str
+:canonical: mesokit.cli.model.resolve_name
+
+```{autodoc2-docstring} mesokit.cli.model.resolve_name
+```
+````
+
+````{py:function} tag(name: typing.Annotated[str, typer.Argument(help='Registered checkpoint name.')], add: typing.Annotated[list[str] | None, typer.Option('--add', help='Tag to add; repeatable.')] = None, remove: typing.Annotated[list[str] | None, typer.Option('--remove', help='Tag to drop; repeatable.')] = None, notes: typing.Annotated[str | None, typer.Option('--notes', help="Replace the run's notes.")] = None) -> None
+:canonical: mesokit.cli.model.tag
+
+```{autodoc2-docstring} mesokit.cli.model.tag
+```
+````
+
+````{py:function} remove(name: typing.Annotated[str, typer.Argument(help='Registered checkpoint name.')], delete_files: typing.Annotated[bool, typer.Option('--delete-files', help='Also delete the run directory `mesokit train` wrote.')] = False) -> None
+:canonical: mesokit.cli.model.remove
+
+```{autodoc2-docstring} mesokit.cli.model.remove
+```
+````
+
+````{py:function} prune(dry_run: typing.Annotated[bool, typer.Option('--dry-run', help='Report what would go without touching anything.')] = False) -> None
+:canonical: mesokit.cli.model.prune
+
+```{autodoc2-docstring} mesokit.cli.model.prune
+```
+````
+
+````{py:function} _normalized(path: pathlib.Path | str) -> str
+:canonical: mesokit.cli.model._normalized
+
+```{autodoc2-docstring} mesokit.cli.model._normalized
+```
+````
+
+````{py:function} show(name: typing.Annotated[str, typer.Argument(help='Registered checkpoint name; a bare run name works when unique across experiments.')]) -> None
+:canonical: mesokit.cli.model.show
+
+```{autodoc2-docstring} mesokit.cli.model.show
+```
+````
+
+````{py:function} _metrics_text(metrics: collections.abc.Mapping[str, typing.Any]) -> str
+:canonical: mesokit.cli.model._metrics_text
+
+```{autodoc2-docstring} mesokit.cli.model._metrics_text
+```
+````
+
+````{py:function} reproduce_command(record: collections.abc.Mapping[str, typing.Any]) -> str
+:canonical: mesokit.cli.model.reproduce_command
+
+```{autodoc2-docstring} mesokit.cli.model.reproduce_command
+```
+````
+
+````{py:function} sync(import_sweeps: typing.Annotated[bool, typer.Option('--import-sweeps', help='Also read the legacy checkpoints/<dyn>/sweeps/*.json summaries into the matching entries.')] = False) -> None
+:canonical: mesokit.cli.model.sync
+
+```{autodoc2-docstring} mesokit.cli.model.sync
+```
+````
+
+````{py:function} _optional_path(value: typing.Any) -> pathlib.Path | None
+:canonical: mesokit.cli.model._optional_path
+
+```{autodoc2-docstring} mesokit.cli.model._optional_path
+```
+````
+
+````{py:function} _record_from_v1_entry(key: str, entry: collections.abc.Mapping[str, typing.Any], run: mesokit.cli._runs.RunDir) -> dict[str, typing.Any]
+:canonical: mesokit.cli.model._record_from_v1_entry
+
+```{autodoc2-docstring} mesokit.cli.model._record_from_v1_entry
+```
+````
+
+````{py:function} _sync_tables(root: pathlib.Path) -> int
+:canonical: mesokit.cli.model._sync_tables
+
+```{autodoc2-docstring} mesokit.cli.model._sync_tables
+```
+````
+
+````{py:function} _import_sweeps(root: pathlib.Path, entries: dict[str, dict[str, typing.Any]]) -> int
+:canonical: mesokit.cli.model._import_sweeps
+
+```{autodoc2-docstring} mesokit.cli.model._import_sweeps
 ```
 ````

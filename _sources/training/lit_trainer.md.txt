@@ -49,8 +49,9 @@ result = LitTrainer(...).fit(model, train_loader, val_loader=None)
 Beside `model.pt` the run directory holds `history.json` (the same
 `history` dict) and the Lightning checkpoints `lit_<epoch>.ckpt` /
 `last.ckpt`, chosen on `val_loss` when a validation loader is given and on
-`train_loss` otherwise. The command adds `config.yaml`; a Python run has
-no config file unless you write one.
+`train_loss` otherwise. The command adds `config.yaml` and `run.json` (the
+run record, with the summary metrics taken from `history`); a Python run
+has neither unless you write them.
 
 ## Reading `history.json`
 

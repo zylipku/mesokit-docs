@@ -360,6 +360,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._recipes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._recipes</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.sweep.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._runs.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._runs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
@@ -460,8 +461,9 @@ the current working directory:</p>
 </table>
 </div>
 <p>Outputs also land in the working directory: <code class="docutils literal notranslate"><span class="pre">data/&lt;dyn&gt;/</span></code> for generated
-HDF5 files, <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;run&gt;/</span></code> for training runs. All of these are
-gitignored.</p>
+HDF5 files, <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;run&gt;/</span></code> for training runs —
+<code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/&lt;run&gt;/</span></code> for runs grouped by <code class="docutils literal notranslate"><span class="pre">--experiment</span></code>,
+registered as <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>. All of these are gitignored.</p>
 <p><strong>Environment.</strong> Prefix commands with <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">run</span></code> (or run inside <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">shell</span></code>)
 unless <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is already on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>run<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
@@ -469,14 +471,18 @@ unless <code class="docutils literal notranslate"><span class="pre">mesokit</spa
 </div>
 <p><strong>Names versus paths.</strong> Wherever a command takes a dataset (<code class="docutils literal notranslate"><span class="pre">--data</span></code>) it
 accepts either a registered name or a path to an HDF5 file; wherever it takes
-a checkpoint (<code class="docutils literal notranslate"><span class="pre">--model</span></code> in <code class="docutils literal notranslate"><span class="pre">interpret</span></code>) it needs a registered name. Registries
+a checkpoint (<code class="docutils literal notranslate"><span class="pre">--model</span></code> in <code class="docutils literal notranslate"><span class="pre">interpret</span></code>, <code class="docutils literal notranslate"><span class="pre">--from</span></code> in <code class="docutils literal notranslate"><span class="pre">train</span></code>, the <code class="docutils literal notranslate"><span class="pre">model</span></code>
+subcommands) it needs a registered name — <code class="docutils literal notranslate"><span class="pre">&lt;run&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>; a
+bare run name is accepted when only one experiment holds it. Registries
 store <strong>pointers</strong>, never copies, so deleting a file leaves a dangling entry
-(<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">list</span></code> flags it as <code class="docutils literal notranslate"><span class="pre">MISSING</span></code>).</p>
+(<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">list</span></code> flags it as <code class="docutils literal notranslate"><span class="pre">MISSING</span></code>; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">prune</span></code> drops
+checkpoint entries whose file is gone).</p>
 <p><strong>Automatic versioned names.</strong> When you do not pass <code class="docutils literal notranslate"><span class="pre">--name</span></code>, generated
 datasets are registered as <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v0</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v1</span></code>, … and trained checkpoints
-as <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v0</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v1</span></code>, … — always the next free slot, so repeated
-runs never overwrite each other. Passing an explicit <code class="docutils literal notranslate"><span class="pre">--name</span></code> that already
-exists is an error unless you add <code class="docutils literal notranslate"><span class="pre">--force</span></code>.</p>
+as <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v0</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v1</span></code>, … — always the next free slot (free in the
+registry and on disk), so repeated runs never overwrite each other. Passing
+an explicit <code class="docutils literal notranslate"><span class="pre">--name</span></code> that is already registered, or whose run directory
+already holds a checkpoint, is an error unless you add <code class="docutils literal notranslate"><span class="pre">--force</span></code>.</p>
 <p><strong>Quiet by default.</strong> Simulators and trainers print a single overwriting
 progress line on stderr; <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> (where offered) restores the underlying
 solver’s full log.</p>
@@ -498,13 +504,15 @@ any_format.{npz,nc,pt,…} ────────► mesokit data parse ──
                                                                                        │
 configs/train/&lt;dyn&gt;/&lt;model&gt;/default.yaml ─────────────────► mesokit train ◄────────────┘
                                                                   │
-                                              checkpoints/&lt;dyn&gt;/&lt;run&gt;/{model.pt, config.yaml, history.json}
+                                        checkpoints/&lt;dyn&gt;/&lt;run&gt;/{model.pt, config.yaml, history.json, run.json}
+                                        checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/&lt;run&gt;/…  + runs.json    (--experiment)
                                                                   │
-                                                      .mesokit/checkpoints.json ◄── mesokit model register
-                                                                  │
+                                                      .mesokit/checkpoints.json ◄── mesokit model register / sync
+                                                                  │          (mesokit model list / show / tag / remove / prune)
                                                        mesokit interpret list / extract ──► figs/*.png
 
-mesokit sweep --param KEY=V1,V2,… = data generate + train per grid point ──► checkpoints/&lt;dyn&gt;/sweeps/&lt;stamp&gt;.json
+mesokit sweep --param KEY=V1,V2,… [--train-param KEY.PATH=V1,V2,…] = data generate + train per grid point
+                                                            ──► checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/{&lt;run&gt;/…, runs.json}
 </pre></div>
 </div>
 </section>
@@ -888,12 +896,13 @@ guide to follow), <code class="docutils literal notranslate"><span class="pre">u
 </section>
 </section>
 <section id="mesokit-train">
-<h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code><a class="headerlink" href="#mesokit-train" title="Link to this heading">¶</a></h2>
+<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code><a class="headerlink" href="#mesokit-train" title="Link to this heading">¶</a></h2>
 <p>Train a registered model architecture on a dataset through the trainer
 registered for that model, write a run directory, and index the checkpoint.</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>ARCH<span class="w"> </span>--data<span class="w"> </span>NAME_OR_PATH<span class="w"> </span><span class="o">[</span>--dyn<span class="w"> </span>DYN<span class="o">]</span>
 <span class="w">              </span><span class="o">[</span>--config<span class="w"> </span>STEM<span class="p">|</span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--set<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--trainer<span class="w"> </span>NAME<span class="o">]</span>
-<span class="w">              </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="w"> </span><span class="p">|</span><span class="w"> </span>--no-registry<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
+<span class="w">              </span><span class="o">[</span>--experiment<span class="w"> </span>E<span class="o">]</span><span class="w"> </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="w"> </span><span class="p">|</span><span class="w"> </span>--no-registry<span class="o">]</span><span class="w"> </span><span class="o">[</span>--from<span class="w"> </span>CKPT<span class="o">]</span>
+<span class="w">              </span><span class="o">[</span>--tag<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--notes<span class="w"> </span>TEXT<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
 <span class="w">              </span><span class="o">[</span>--epochs<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="o">[</span>--batch-size<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="o">[</span>--device<span class="w"> </span>auto<span class="p">|</span>cpu<span class="p">|</span>gpu<span class="o">]</span>
 </pre></div>
 </div>
@@ -907,11 +916,11 @@ registered for that model, write a run directory, and index the checkpoint.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--model</span> <span class="pre">ARCH</span></code></p></td>
-<td><p>required</p></td>
+<td><p>required (or from <code class="docutils literal notranslate"><span class="pre">--from</span></code>)</p></td>
 <td><p>Architecture name from the model registry (<code class="docutils literal notranslate"><span class="pre">fno1d</span></code>, <code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d</span></code>, …).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--data</span></code></p></td>
-<td><p>required</p></td>
+<td><p>required (or from <code class="docutils literal notranslate"><span class="pre">--from</span></code>)</p></td>
 <td><p>Registered dataset name <strong>or</strong> path to a v1 HDF5 file.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dyn</span> <span class="pre">DYN</span></code></p></td>
@@ -930,17 +939,33 @@ registered for that model, write a run directory, and index the checkpoint.</p>
 <td><p><code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">--model</span></code></p></td>
 <td><p>Trainer registry name; every shipped model registers its own default.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">NAME</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ARCH_v&lt;n&gt;</span></code></p></td>
-<td><p>Checkpoint registry name; also the run directory name.</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">E</span></code></p></td>
+<td><p>none</p></td>
+<td><p>Group the run: it lands in <code class="docutils literal notranslate"><span class="pre">checkpoints/DYN/E/&lt;run&gt;/</span></code>, is registered as <code class="docutils literal notranslate"><span class="pre">E/&lt;run&gt;</span></code>, and <code class="docutils literal notranslate"><span class="pre">E/runs.json</span></code> gets a row (see <a class="reference internal" href="#experiments">Experiments</a> below).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">NAME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ARCH_v&lt;n&gt;</span></code>; in an experiment <code class="docutils literal notranslate"><span class="pre">ARCH_&lt;key&gt;&lt;value&gt;…</span></code> from <code class="docutils literal notranslate"><span class="pre">--set</span></code>, else <code class="docutils literal notranslate"><span class="pre">ARCH_r&lt;nn&gt;</span></code></p></td>
+<td><p>Run name: the registry key and the run directory. <code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">E/NAME</span></code> is <code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">E</span> <span class="pre">--name</span> <span class="pre">NAME</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--from</span> <span class="pre">CKPT</span></code></p></td>
+<td><p>none</p></td>
+<td><p>Continue from a registered checkpoint: its weights are loaded into the new model, its saved <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> is the recipe (unless <code class="docutils literal notranslate"><span class="pre">--config</span></code>), and its dataset, model, trainer and dyn fill in whatever is not given; <code class="docutils literal notranslate"><span class="pre">--set</span></code> applies on top. The new record says <code class="docutils literal notranslate"><span class="pre">from:</span> <span class="pre">CKPT</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--no-registry</span></code></p></td>
 <td><p>off</p></td>
 <td><p>Train and write the run directory but do not index it.</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--tag</span> <span class="pre">T</span></code></p></td>
+<td><p>none</p></td>
+<td><p>Tag recorded on the run (<code class="docutils literal notranslate"><span class="pre">run.json</span></code> and the registry); repeatable. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span> <span class="pre">--tag</span> <span class="pre">T</span></code> filters on it.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--notes</span> <span class="pre">TEXT</span></code></p></td>
+<td><p>empty</p></td>
+<td><p>Free-text note recorded on the run.</p></td>
+</tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
 <td><p>off</p></td>
-<td><p>Replace an existing checkpoint entry of the same name.</p></td>
+<td><p>Replace an existing checkpoint entry of the same name and reuse its run directory (stale Lightning <code class="docutils literal notranslate"><span class="pre">.ckpt</span></code> files are cleared first).</p></td>
 </tr>
 </tbody>
 </table>
@@ -973,6 +998,7 @@ The name collision check runs <strong>before</strong> training starts, so a dupl
 trained &#39;spectral_onsagernet_1d&#39; with &#39;spectral_onsagernet_1d&#39;
   checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/model.pt
   config:     /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/config.yaml
+  metrics:    train_loss=0.0004203 epochs=20 time=10.1s
   registered: spectral_onsagernet_1d_v0
 </pre></div>
 </div>
@@ -994,7 +1020,10 @@ trained &#39;spectral_onsagernet_1d&#39; with &#39;spectral_onsagernet_1d&#39;
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">history.json</span></code></p></td>
 <td><p>Per-epoch metric series, e.g. <code class="docutils literal notranslate"><span class="pre">{&quot;train_loss&quot;:</span> <span class="pre">[...]}</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">last.ckpt</span></code>, <code class="docutils literal notranslate"><span class="pre">lit_epoch=NNN.ckpt</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">run.json</span></code></p></td>
+<td><p>The run’s record: <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">created</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>, the <code class="docutils literal notranslate"><span class="pre">dyn</span></code> / <code class="docutils literal notranslate"><span class="pre">model_name</span></code> / <code class="docutils literal notranslate"><span class="pre">trainer_name</span></code>, the dataset (<code class="docutils literal notranslate"><span class="pre">data</span></code>, <code class="docutils literal notranslate"><span class="pre">dataset_name</span></code> and the resolved <code class="docutils literal notranslate"><span class="pre">dataset_path</span></code>), the <code class="docutils literal notranslate"><span class="pre">recipe</span></code> (<code class="docutils literal notranslate"><span class="pre">spec</span></code>, <code class="docutils literal notranslate"><span class="pre">source</span></code>, <code class="docutils literal notranslate"><span class="pre">path</span></code>), the <code class="docutils literal notranslate"><span class="pre">--set</span></code> list as <code class="docutils literal notranslate"><span class="pre">overrides</span></code> and the same keys with parsed values as <code class="docutils literal notranslate"><span class="pre">params</span></code>, the <code class="docutils literal notranslate"><span class="pre">cli</span></code> knobs (<code class="docutils literal notranslate"><span class="pre">epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>, <code class="docutils literal notranslate"><span class="pre">device</span></code>), the final <code class="docutils literal notranslate"><span class="pre">metrics</span></code> (<code class="docutils literal notranslate"><span class="pre">train_loss</span></code>, <code class="docutils literal notranslate"><span class="pre">train_loss_min</span></code>, <code class="docutils literal notranslate"><span class="pre">val_loss</span></code>, <code class="docutils literal notranslate"><span class="pre">epochs_run</span></code>, <code class="docutils literal notranslate"><span class="pre">wall_time_s</span></code>), <code class="docutils literal notranslate"><span class="pre">tags</span></code>, <code class="docutils literal notranslate"><span class="pre">notes</span></code> and the config hash. The registry entry is this record plus the paths; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code> reads the entries. A run that raises inside the trainer leaves <code class="docutils literal notranslate"><span class="pre">run.json</span></code> with <code class="docutils literal notranslate"><span class="pre">status:</span> <span class="pre">failed</span></code> and the error, so <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">prune</span></code> can find it.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">last.ckpt</span></code>, <code class="docutils literal notranslate"><span class="pre">lit_epoch=NNN.ckpt</span></code></p></td>
 <td><p>Lightning checkpoints (optimizer state etc.) written by <code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code>; not needed downstream.</p></td>
 </tr>
 </tbody>
@@ -1011,10 +1040,50 @@ mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="
 <span class="c1"># A hyper-parameter variant: copy default.yaml to configs/train/allen_cahn_1d/spectral_onsagernet_1d/lr1e-4.yaml, then</span>
 mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--config<span class="w"> </span>lr1e-4
 
-<span class="c1"># Throw-away run that must not pollute the checkpoint index.</span>
+<span class="c1"># Throw-away run that must not pollute the checkpoint index (`mesokit model prune` deletes such run directories).</span>
 mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>fno1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--epochs<span class="w"> </span><span class="m">1</span><span class="w"> </span>--device<span class="w"> </span>cpu<span class="w"> </span>--no-registry
+
+<span class="c1"># Tag runs so `mesokit model list --tag paper` finds them later.</span>
+mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span>1e-4<span class="w"> </span>--tag<span class="w"> </span>paper<span class="w"> </span>--notes<span class="w"> </span><span class="s2">&quot;lr scan, best&quot;</span>
+
+<span class="c1"># Three learning rates side by side, under one experiment: checkpoints/allen_cahn_1d/lr-scan/{…_lr0.001, …_lr0.0001, …_lr1e-05}/</span>
+<span class="k">for</span><span class="w"> </span>lr<span class="w"> </span><span class="k">in</span><span class="w"> </span>1e-3<span class="w"> </span>1e-4<span class="w"> </span>1e-5<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span><span class="nv">$lr</span><span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
+<span class="k">done</span>
+mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
+
+<span class="c1"># Keep training the best one for 200 more epochs, at a lower rate.</span>
+mesokit<span class="w"> </span>train<span class="w"> </span>--from<span class="w"> </span>lr-scan/spectral_onsagernet_1d_lr0.0001<span class="w"> </span>--name<span class="w"> </span>lr-scan/son_long<span class="w"> </span>--epochs<span class="w"> </span><span class="m">200</span><span class="w"> </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span>3e-5
 </pre></div>
 </div>
+<section id="experiments">
+<span id="id2"></span><h3>Experiments<a class="headerlink" href="#experiments" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">E</span></code> (on <code class="docutils literal notranslate"><span class="pre">train</span></code>, and always on <code class="docutils literal notranslate"><span class="pre">sweep</span></code>) adds one grouping
+level to the run layout:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>checkpoints/&lt;dyn&gt;/
+├── &lt;run&gt;/                       # runs without --experiment: model.pt, config.yaml, history.json, run.json, *.ckpt
+└── &lt;experiment&gt;/
+    ├── runs.json                # the experiment&#39;s table: one row per run, failed ones included
+    └── &lt;run&gt;/                   # the same files as a flat run
+</pre></div>
+</div>
+<p>The registry key mirrors the path, <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>, so <code class="docutils literal notranslate"><span class="pre">ls</span></code>, <code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-r</span></code>
+and <code class="docutils literal notranslate"><span class="pre">du</span></code> group what the CLI groups; a bare <code class="docutils literal notranslate"><span class="pre">&lt;run&gt;</span></code> is accepted by every
+command that takes a name as long as only one experiment holds it. The
+default run name inside an experiment says what varied —
+<code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_&lt;key&gt;&lt;value&gt;[_…]</span></code> from the <code class="docutils literal notranslate"><span class="pre">--set</span></code> keys’ last components
+(<code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d_lr0.0001</span></code>), <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_r&lt;nn&gt;</span></code> when nothing was
+overridden; a taken name gets <code class="docutils literal notranslate"><span class="pre">_2</span></code>, <code class="docutils literal notranslate"><span class="pre">_3</span></code>, … unless <code class="docutils literal notranslate"><span class="pre">--force</span></code>, which reuses
+it. A run name cannot be an existing experiment’s and vice versa.</p>
+<p><code class="docutils literal notranslate"><span class="pre">runs.json</span></code> is the experiment’s log (<code class="docutils literal notranslate"><span class="pre">schema_version</span></code>, <code class="docutils literal notranslate"><span class="pre">experiment</span></code>, <code class="docutils literal notranslate"><span class="pre">dyn</span></code>,
+<code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">created</span></code>, <code class="docutils literal notranslate"><span class="pre">updated</span></code>, the training <code class="docutils literal notranslate"><span class="pre">axes</span></code> and simulator
+<code class="docutils literal notranslate"><span class="pre">data_axes</span></code> seen so far, and <code class="docutils literal notranslate"><span class="pre">rows</span></code>); every <code class="docutils literal notranslate"><span class="pre">train</span> <span class="pre">--experiment</span> <span class="pre">E</span></code> inserts or
+replaces its row, so does every point of a <code class="docutils literal notranslate"><span class="pre">sweep</span></code>. A row holds <code class="docutils literal notranslate"><span class="pre">run</span></code>,
+<code class="docutils literal notranslate"><span class="pre">checkpoint</span></code> (the registry key), <code class="docutils literal notranslate"><span class="pre">dataset</span></code>, <code class="docutils literal notranslate"><span class="pre">dataset_path</span></code>,
+<code class="docutils literal notranslate"><span class="pre">checkpoint_path</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">data_status</span></code> (<code class="docutils literal notranslate"><span class="pre">generated</span></code>, <code class="docutils literal notranslate"><span class="pre">reused</span></code> or
+<code class="docutils literal notranslate"><span class="pre">given</span></code>), <code class="docutils literal notranslate"><span class="pre">params</span></code>, <code class="docutils literal notranslate"><span class="pre">data_params</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics</span></code>, <code class="docutils literal notranslate"><span class="pre">wall_time_s</span></code>, <code class="docutils literal notranslate"><span class="pre">error</span></code> and
+<code class="docutils literal notranslate"><span class="pre">created</span></code>; a point that failed has a row but no run directory or registry
+entry. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">sync</span></code> rebuilds the table from the run directories.</p>
 <p>Two things to know:</p>
 <ul class="simple">
 <li><p>The shipped <code class="docutils literal notranslate"><span class="pre">smoke.yaml</span></code> under <code class="docutils literal notranslate"><span class="pre">configs/train/allen_cahn_1d/spectral_onsagernet_1d/</span></code>
@@ -1039,16 +1108,22 @@ Invalid value: registered dataset &#39;old&#39; points to missing file: /home/me
 Invalid value: no config &#39;nope&#39; under /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d; available: default, smoke
 Invalid value: --device must be one of: auto, cpu, gpu
 Invalid value: checkpoint &#39;spectral_onsagernet_1d_v0&#39; already registered; pass --force to overwrite
+Invalid value: run directory checkpoints/allen_cahn_1d/son_a already holds a checkpoint; pass --force to overwrite it or choose another --name
 </pre></div>
 </div>
 </section>
+</section>
 <section id="mesokit-sweep">
-<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code><a class="headerlink" href="#mesokit-sweep" title="Link to this heading">¶</a></h2>
-<p>Run <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> and <code class="docutils literal notranslate"><span class="pre">train</span></code> once per point of a grid of physical
-parameters, name every dataset and checkpoint after its parameter values,
-and summarise the runs in a table and a JSON file. This is the built-in
-form of the “for eps in …” shell loop.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>DYN<span class="w"> </span>--model<span class="w"> </span>ARCH<span class="w"> </span>--param<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>V1,V2,...<span class="w"> </span><span class="o">[</span>--param<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>V1,V2,...<span class="w"> </span>...<span class="o">]</span>
+<span id="id3"></span><h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code><a class="headerlink" href="#mesokit-sweep" title="Link to this heading">¶</a></h2>
+<p>Train one checkpoint per point of a parameter grid, as one experiment. Two
+kinds of axis combine: <code class="docutils literal notranslate"><span class="pre">--param</span></code> varies a <strong>simulator</strong> parameter (one
+dataset is generated per value, as <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--set</span></code> would), and
+<code class="docutils literal notranslate"><span class="pre">--train-param</span></code> varies a <strong>training-recipe</strong> key such as <code class="docutils literal notranslate"><span class="pre">trainer.lr</span></code>
+(several checkpoints on the same dataset, as <code class="docutils literal notranslate"><span class="pre">train</span> <span class="pre">--set</span></code> would). The runs
+land under <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/</span></code>, the table is that experiment’s
+<code class="docutils literal notranslate"><span class="pre">runs.json</span></code>. This is the built-in form of the “for eps in …” shell loop.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>DYN<span class="w"> </span>--model<span class="w"> </span>ARCH<span class="w"> </span><span class="o">[</span>--param<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>V1,V2,...<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--train-param<span class="w"> </span>KEY.PATH<span class="o">=</span>V1,V2,...<span class="w"> </span>...<span class="o">]</span>
+<span class="w">              </span><span class="o">[</span>--data<span class="w"> </span>NAME_OR_PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--experiment<span class="w"> </span>E<span class="o">]</span><span class="w"> </span><span class="o">[</span>--tag<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span>
 <span class="w">              </span><span class="o">[</span>--data-config<span class="w"> </span>STEM<span class="o">]</span><span class="w"> </span><span class="o">[</span>--config<span class="w"> </span>STEM<span class="o">]</span><span class="w"> </span><span class="o">[</span>--trainer<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--name-prefix<span class="w"> </span>PREFIX<span class="o">]</span>
 <span class="w">              </span><span class="o">[</span>--epochs<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="o">[</span>--batch-size<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="o">[</span>--device<span class="w"> </span>auto<span class="p">|</span>cpu<span class="p">|</span>gpu<span class="o">]</span>
 <span class="w">              </span><span class="o">[</span>--reuse-data<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span>
@@ -1072,8 +1147,24 @@ form of the “for eps in …” shell loop.</p>
 <td><p>Architecture name from the model registry.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--param</span> <span class="pre">KEY=V1,V2,...</span></code></p></td>
-<td><p>required, repeatable</p></td>
-<td><p>One grid axis. <code class="docutils literal notranslate"><span class="pre">KEY</span></code> is a keyword argument of the simulator (as for <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--set</span></code>); each value is read as int, float, bool or string. Several <code class="docutils literal notranslate"><span class="pre">--param</span></code> flags form the Cartesian product, in the order given.</p></td>
+<td><p>repeatable</p></td>
+<td><p>A data axis. <code class="docutils literal notranslate"><span class="pre">KEY</span></code> is a keyword argument of the simulator (as for <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--set</span></code>); each value is read as int, float, bool or string.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--train-param</span> <span class="pre">KEY.PATH=V1,V2,...</span></code></p></td>
+<td><p>repeatable</p></td>
+<td><p>A training axis over a recipe key (<code class="docutils literal notranslate"><span class="pre">trainer.lr</span></code>, <code class="docutils literal notranslate"><span class="pre">model.n_modes</span></code>, <code class="docutils literal notranslate"><span class="pre">dataset.stride</span></code>); values as above. At least one axis of either kind is required; all axes form one Cartesian product, data axes outermost.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--data</span> <span class="pre">NAME_OR_PATH</span></code></p></td>
+<td><p>none</p></td>
+<td><p>The dataset every point trains on, when there is no <code class="docutils literal notranslate"><span class="pre">--param</span></code> axis (required then, refused otherwise).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">E</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ARCH_&lt;axes&gt;_&lt;timestamp&gt;</span></code></p></td>
+<td><p>The experiment the runs are grouped under.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--tag</span> <span class="pre">T</span></code></p></td>
+<td><p>none</p></td>
+<td><p>Tag recorded on every run; repeatable.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--data-config</span> <span class="pre">STEM</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">default</span></code></p></td>
@@ -1089,7 +1180,7 @@ form of the “for eps in …” shell loop.</p>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--name-prefix</span> <span class="pre">PREFIX</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">DYN</span></code></p></td>
-<td><p>Prefix of every generated name (see below).</p></td>
+<td><p>Prefix of every generated dataset name (see below).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--epochs</span> <span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">--batch-size</span> <span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">--device</span></code></p></td>
 <td><p>from config</p></td>
@@ -1110,57 +1201,68 @@ form of the “for eps in …” shell loop.</p>
 </tbody>
 </table>
 </div>
-<p><strong>Names.</strong> A point <code class="docutils literal notranslate"><span class="pre">eps=0.05,</span> <span class="pre">T=0.5</span></code> gives the dataset
-<code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;_eps0.05_T0.5</span></code> and the checkpoint <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;_&lt;model&gt;_eps0.05_T0.5</span></code>
-(floats are written compactly: <code class="docutils literal notranslate"><span class="pre">1.0</span></code> becomes <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2e-5</span></code> becomes <code class="docutils literal notranslate"><span class="pre">2e-05</span></code>).
-The names are deterministic, so re-running the same sweep with
-<code class="docutils literal notranslate"><span class="pre">--reuse-data</span> <span class="pre">--force</span></code> retrains on the existing data.</p>
+<p><strong>Names.</strong> A data point <code class="docutils literal notranslate"><span class="pre">eps=0.05,</span> <span class="pre">T=0.5</span></code> gives the dataset
+<code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;_eps0.05_T0.5</span></code>; a run is named <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_&lt;key&gt;&lt;value&gt;[_…]</span></code> over both
+kinds of axis, training keys by their last component (<code class="docutils literal notranslate"><span class="pre">eps=0.05,</span> <span class="pre">trainer.lr=1e-3</span></code> → <code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d_eps0.05_lr0.001</span></code>), and registered
+as <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>. Floats are written compactly: <code class="docutils literal notranslate"><span class="pre">1.0</span></code> becomes <code class="docutils literal notranslate"><span class="pre">1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">2e-5</span></code> becomes <code class="docutils literal notranslate"><span class="pre">2e-05</span></code>. The names are deterministic, so re-running the same
+sweep with <code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">E</span> <span class="pre">--reuse-data</span> <span class="pre">--force</span></code> retrains on the existing
+data and replaces the rows. A dataset is generated once per data point and
+shared by that point’s training runs (<code class="docutils literal notranslate"><span class="pre">reused</span></code> in the table).</p>
 <p><strong>Failures.</strong> Every point runs to the end of the grid: a point whose
 simulator or trainer raises is marked <code class="docutils literal notranslate"><span class="pre">FAILED</span></code> in the table with the error
 message, the remaining points still run, and the command exits with status
 <code class="docutils literal notranslate"><span class="pre">1</span></code> at the end. Problems that would break every point — a missing recipe, a
 parameter the simulator does not accept — are reported before anything runs.</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1,0.2<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--data-config<span class="w"> </span>fdr<span class="w"> </span>--epochs<span class="w"> </span><span class="m">2</span><span class="w"> </span>--device<span class="w"> </span>cpu
+<span class="w">  </span>--experiment<span class="w"> </span>eps-scan<span class="w"> </span>--data-config<span class="w"> </span>fdr<span class="w"> </span>--epochs<span class="w"> </span><span class="m">2</span><span class="w"> </span>--device<span class="w"> </span>cpu
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[1/3] eps=0.05
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>experiment &#39;eps-scan&#39;: 3 point(s) under checkpoints/allen_cahn_1d/eps-scan
+[1/3] eps=0.05
   generating dataset &#39;allen_cahn_1d_eps0.05&#39;
-  training checkpoint &#39;allen_cahn_1d_spectral_onsagernet_1d_eps0.05&#39;
+  training checkpoint &#39;eps-scan/spectral_onsagernet_1d_eps0.05&#39;
 … Lightning progress …
 [2/3] eps=0.1
 …
 [3/3] eps=0.2
 …
-PARAMS    DATASET                CHECKPOINT                                    TRAIN_LOSS  TIME   STATUS
-eps=0.05  allen_cahn_1d_eps0.05  allen_cahn_1d_spectral_onsagernet_1d_eps0.05  0.0004203   10.1s  ok
-eps=0.1   allen_cahn_1d_eps0.1   allen_cahn_1d_spectral_onsagernet_1d_eps0.1   0.000112    3.8s   ok
-eps=0.2   allen_cahn_1d_eps0.2   allen_cahn_1d_spectral_onsagernet_1d_eps0.2   5.324e-05   3.8s   ok
-wrote /home/me/mesokit/checkpoints/allen_cahn_1d/sweeps/20260903-192502.json
+PARAMS    DATASET                CHECKPOINT                               TRAIN_LOSS  TIME   STATUS
+eps=0.05  allen_cahn_1d_eps0.05  eps-scan/spectral_onsagernet_1d_eps0.05  0.0004203   10.1s  ok
+eps=0.1   allen_cahn_1d_eps0.1   eps-scan/spectral_onsagernet_1d_eps0.1   0.000112    3.8s   ok
+eps=0.2   allen_cahn_1d_eps0.2   eps-scan/spectral_onsagernet_1d_eps0.2   5.324e-05   3.8s   ok
+wrote /home/me/mesokit/checkpoints/allen_cahn_1d/eps-scan/runs.json
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">TRAIN_LOSS</span></code> is the last <code class="docutils literal notranslate"><span class="pre">train_loss</span></code> entry of the trainer’s history (<code class="docutils literal notranslate"><span class="pre">-</span></code>
 when the trainer logs none); <code class="docutils literal notranslate"><span class="pre">TIME</span></code> is the wall time of generation plus
-training. The JSON file holds the same rows with a few more fields — the
-parameter dict, <code class="docutils literal notranslate"><span class="pre">data_status</span></code> (<code class="docutils literal notranslate"><span class="pre">generated</span></code> or <code class="docutils literal notranslate"><span class="pre">reused</span></code>), <code class="docutils literal notranslate"><span class="pre">error</span></code>,
-<code class="docutils literal notranslate"><span class="pre">dataset_path</span></code>, <code class="docutils literal notranslate"><span class="pre">checkpoint_path</span></code> — under <code class="docutils literal notranslate"><span class="pre">&quot;rows&quot;</span></code>, plus <code class="docutils literal notranslate"><span class="pre">&quot;dyn&quot;</span></code>,
-<code class="docutils literal notranslate"><span class="pre">&quot;model&quot;</span></code> and the <code class="docutils literal notranslate"><span class="pre">&quot;params&quot;</span></code> axes, so a notebook can load it directly:</p>
+training. <code class="docutils literal notranslate"><span class="pre">runs.json</span></code> holds the same rows with a few more fields — <code class="docutils literal notranslate"><span class="pre">params</span></code>
+and <code class="docutils literal notranslate"><span class="pre">data_params</span></code>, <code class="docutils literal notranslate"><span class="pre">data_status</span></code> (<code class="docutils literal notranslate"><span class="pre">generated</span></code>, <code class="docutils literal notranslate"><span class="pre">reused</span></code> or <code class="docutils literal notranslate"><span class="pre">given</span></code>), the
+<code class="docutils literal notranslate"><span class="pre">metrics</span></code> dict, <code class="docutils literal notranslate"><span class="pre">error</span></code>, <code class="docutils literal notranslate"><span class="pre">dataset_path</span></code>, <code class="docutils literal notranslate"><span class="pre">checkpoint_path</span></code>, <code class="docutils literal notranslate"><span class="pre">created</span></code> —
+under <code class="docutils literal notranslate"><span class="pre">&quot;rows&quot;</span></code>, plus <code class="docutils literal notranslate"><span class="pre">&quot;experiment&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;dyn&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;model&quot;</span></code> and the <code class="docutils literal notranslate"><span class="pre">&quot;axes&quot;</span></code> /
+<code class="docutils literal notranslate"><span class="pre">&quot;data_axes&quot;</span></code>, so a notebook can load it directly (<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span> <span class="pre">--experiment</span> <span class="pre">eps-scan</span> <span class="pre">--format</span> <span class="pre">json</span></code> gives the registry’s view of the same
+runs):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span><span class="o">,</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="n">rows</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;checkpoints/allen_cahn_1d/sweeps/20260903-192502.json&quot;</span><span class="p">))[</span><span class="s2">&quot;rows&quot;</span><span class="p">]</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)[[</span><span class="s2">&quot;params&quot;</span><span class="p">,</span> <span class="s2">&quot;checkpoint&quot;</span><span class="p">,</span> <span class="s2">&quot;train_loss&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">]]</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;checkpoints/allen_cahn_1d/eps-scan/runs.json&quot;</span><span class="p">))[</span><span class="s2">&quot;rows&quot;</span><span class="p">]</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)[[</span><span class="s2">&quot;data_params&quot;</span><span class="p">,</span> <span class="s2">&quot;checkpoint&quot;</span><span class="p">,</span> <span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">]]</span>
 </pre></div>
 </div>
 <p>The same loop is available from Python as
-<code class="docutils literal notranslate"><span class="pre">mesokit.cli.sweep.run_sweep(dyn,</span> <span class="pre">model,</span> <span class="pre">{&quot;eps&quot;:</span> <span class="pre">[0.05,</span> <span class="pre">0.1,</span> <span class="pre">0.2]},</span> <span class="pre">epochs=2,</span> <span class="pre">device=&quot;cpu&quot;)</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mesokit.cli.sweep.run_sweep(dyn,</span> <span class="pre">model,</span> <span class="pre">{&quot;eps&quot;:</span> <span class="pre">[0.05,</span> <span class="pre">0.1,</span> <span class="pre">0.2]},</span> <span class="pre">train_params={&quot;trainer.lr&quot;:</span> <span class="pre">[1e-3,</span> <span class="pre">1e-4]},</span> <span class="pre">experiment=&quot;scan&quot;,</span> <span class="pre">epochs=2,</span> <span class="pre">device=&quot;cpu&quot;)</span></code>,
 which returns the list of row dicts.</p>
 <p>More examples:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Two axes -&gt; four points; see the names before committing to the runs.</span>
-mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1<span class="w"> </span>--param<span class="w"> </span><span class="nv">T</span><span class="o">=</span><span class="m">0</span>.05,0.1<span class="w"> </span>--dry-run
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># A learning-rate scan on an existing dataset: no generation, three checkpoints under lr-scan/.</span>
+mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4,1e-5<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
+mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
 
-<span class="c1"># Retrain a grid whose datasets already exist, replacing the old checkpoints.</span>
+<span class="c1"># Data axes times training axes: 2 datasets, 4 checkpoints; see the names before committing to the runs.</span>
+mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1<span class="w"> </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4<span class="w"> </span>--dry-run
+
+<span class="c1"># Retrain a grid whose datasets already exist, replacing the old checkpoints and rows.</span>
 mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>fno1d<span class="w"> </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1,0.2<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--reuse-data<span class="w"> </span>--force<span class="w"> </span>--epochs<span class="w"> </span><span class="m">50</span>
+<span class="w">  </span>--experiment<span class="w"> </span>eps-scan<span class="w"> </span>--reuse-data<span class="w"> </span>--force<span class="w"> </span>--epochs<span class="w"> </span><span class="m">50</span>
 
 <span class="c1"># Custom prefix, variant training recipe.</span>
 mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_2d<span class="w"> </span>--param<span class="w"> </span><span class="nv">T</span><span class="o">=</span><span class="m">1</span>.5,2.0,2.5<span class="w"> </span><span class="se">\</span>
@@ -1170,17 +1272,25 @@ mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"
 <p>Errors:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invalid value: expected KEY=V1,V2,..., got &#39;eps&#39;
 Invalid value: parameter &#39;eps&#39; given more than once
+Invalid value: at least one --param or --train-param axis is required
+Invalid value: --data is required when only --train-param axes are given
+Invalid value: --train-param key &#39;lr&#39; must be a recipe key such as trainer.lr
 Invalid value: unknown parameter &#39;epsilon&#39; for simulator mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d; accepted: eps, n_traj, …
 Invalid value: no config &#39;nope&#39; under /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d; available: default, smoke
 </pre></div>
 </div>
 <p>A per-point failure looks like this in the table (the dataset of a point
 that failed during generation is not registered):</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PARAMS    DATASET                CHECKPOINT                                    TRAIN_LOSS  TIME  STATUS
-eps=0     allen_cahn_1d_eps0     allen_cahn_1d_spectral_onsagernet_1d_eps0     -           0.0s  FAILED: ZeroDivisionError: float division by zero
-eps=0.1   allen_cahn_1d_eps0.1   allen_cahn_1d_spectral_onsagernet_1d_eps0.1   0.000112    3.8s  ok
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PARAMS    DATASET                CHECKPOINT                               TRAIN_LOSS  TIME  STATUS
+eps=0     allen_cahn_1d_eps0     eps-scan/spectral_onsagernet_1d_eps0     -           0.0s  FAILED: ZeroDivisionError: float division by zero
+eps=0.1   allen_cahn_1d_eps0.1   eps-scan/spectral_onsagernet_1d_eps0.1   0.000112    3.8s  ok
 </pre></div>
 </div>
+<p>Earlier versions wrote the summary to <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/sweeps/&lt;stamp&gt;.json</span></code>
+and registered the points as flat <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;_&lt;model&gt;_&lt;suffix&gt;</span></code> names; those
+files are still read by <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">sync</span> <span class="pre">--import-sweeps</span></code>, which copies
+their <code class="docutils literal notranslate"><span class="pre">params</span></code> and <code class="docutils literal notranslate"><span class="pre">train_loss</span></code> into the matching entries and tags them
+<code class="docutils literal notranslate"><span class="pre">sweep:&lt;stamp&gt;</span></code>.</p>
 </section>
 <section id="mesokit-model">
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span></code><a class="headerlink" href="#mesokit-model" title="Link to this heading">¶</a></h2>
@@ -1188,27 +1298,89 @@ eps=0.1   allen_cahn_1d_eps0.1   allen_cahn_1d_spectral_onsagernet_1d_eps0.1   0
 (<code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code>). This is not the registry of architectures —
 that one is populated by the package and inspected from Python with
 <code class="docutils literal notranslate"><span class="pre">mesokit.models.available()</span></code>.</p>
+<p>Every entry mirrors the run’s <code class="docutils literal notranslate"><span class="pre">run.json</span></code> (see <a class="reference internal" href="#mesokit-train"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code></a>):
+the model, dataset and recipe it came from, the <code class="docutils literal notranslate"><span class="pre">--set</span></code> overrides as
+<code class="docutils literal notranslate"><span class="pre">params</span></code>, the final <code class="docutils literal notranslate"><span class="pre">metrics</span></code>, <code class="docutils literal notranslate"><span class="pre">created</span></code>, <code class="docutils literal notranslate"><span class="pre">tags</span></code> and <code class="docutils literal notranslate"><span class="pre">notes</span></code>, plus the paths.
+Entries written by earlier versions (schema 1: paths and names only) are
+read as they are, with empty <code class="docutils literal notranslate"><span class="pre">params</span></code> / <code class="docutils literal notranslate"><span class="pre">metrics</span></code>, and the file is stamped
+schema 2 on its next write.</p>
 <section id="mesokit-model-list">
 <h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code><a class="headerlink" href="#mesokit-model-list" title="Link to this heading">¶</a></h3>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>list
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--dyn<span class="w"> </span>D<span class="o">]</span><span class="w"> </span><span class="o">[</span>--model<span class="w"> </span>ARCH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--experiment<span class="w"> </span>E<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dataset<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--tag<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span>
+<span class="w">                   </span><span class="o">[</span>--sort<span class="w"> </span>COLUMN<span class="o">]</span><span class="w"> </span><span class="o">[</span>--reverse<span class="o">]</span><span class="w"> </span><span class="o">[</span>--format<span class="w"> </span>table<span class="p">|</span>json<span class="p">|</span>csv<span class="o">]</span><span class="w"> </span><span class="o">[</span>--columns<span class="w"> </span>a,b,...<span class="o">]</span>
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>son_eps05_long
-  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/son_eps05_long/model.pt
-  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/son_eps05_long/config.yaml
-spectral_onsagernet_1d_v0
-  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/model.pt
-  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/config.yaml
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>NAME                                   MODEL                   DATASET           PARAMS             TRAIN_LOSS  EPOCHS  TIME   CREATED              TAGS
+lr-scan/spectral_onsagernet_1d_lr0.0001  spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.0001  0.0003117   20      10.3s  2026-09-08T10:21:40  -
+lr-scan/spectral_onsagernet_1d_lr0.001   spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.001   0.0004203   20      10.1s  2026-09-08T10:15:02  -
+son_eps05_long                         spectral_onsagernet_1d  ac_eps05          -                  0.0002950   200     97.4s  2026-09-08T09:12:40  paper
 </pre></div>
 </div>
-<p>Entries are sorted by name; with nothing registered it prints
-<code class="docutils literal notranslate"><span class="pre">(no</span> <span class="pre">checkpoints</span> <span class="pre">registered)</span></code>.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dyn</span></code>, <code class="docutils literal notranslate"><span class="pre">--model</span></code>, <code class="docutils literal notranslate"><span class="pre">--experiment</span></code>, <code class="docutils literal notranslate"><span class="pre">--dataset</span></code>, <code class="docutils literal notranslate"><span class="pre">--tag</span></code></p></td>
+<td><p>Keep only the matching runs (<code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">-</span></code> keeps the runs outside any experiment; <code class="docutils literal notranslate"><span class="pre">--tag</span></code> is repeatable and every given tag must be present).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--sort</span> <span class="pre">COLUMN</span></code></p></td>
+<td><p>Any column name (<code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">created</span></code>, <code class="docutils literal notranslate"><span class="pre">train_loss</span></code>, <code class="docutils literal notranslate"><span class="pre">train_loss_min</span></code>, <code class="docutils literal notranslate"><span class="pre">val_loss</span></code>, <code class="docutils literal notranslate"><span class="pre">epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">time</span></code>, <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">dataset</span></code>, …); runs without a value sort last. <code class="docutils literal notranslate"><span class="pre">--reverse</span></code> descends.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--format</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">table</span></code> (default), <code class="docutils literal notranslate"><span class="pre">json</span></code> (the full records as one list, for <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>) or <code class="docutils literal notranslate"><span class="pre">csv</span></code> (the selected columns).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--columns</span></code></p></td>
+<td><p>Comma-separated columns; the default is <code class="docutils literal notranslate"><span class="pre">name,model,dataset,params,train_loss,epochs,time,created,tags</span></code>. Also available: <code class="docutils literal notranslate"><span class="pre">experiment</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, <code class="docutils literal notranslate"><span class="pre">dyn</span></code>, <code class="docutils literal notranslate"><span class="pre">trainer</span></code>, <code class="docutils literal notranslate"><span class="pre">data_params</span></code>, <code class="docutils literal notranslate"><span class="pre">train_loss_min</span></code>, <code class="docutils literal notranslate"><span class="pre">val_loss</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">notes</span></code>, <code class="docutils literal notranslate"><span class="pre">recipe</span></code>, <code class="docutils literal notranslate"><span class="pre">path</span></code>, <code class="docutils literal notranslate"><span class="pre">config</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">PARAMS</span></code> are the recipe keys the run changed with <code class="docutils literal notranslate"><span class="pre">--set</span></code> or a sweep’s
+<code class="docutils literal notranslate"><span class="pre">--train-param</span></code> (a sweep’s simulator axes are <code class="docutils literal notranslate"><span class="pre">data_params</span></code>); <code class="docutils literal notranslate"><span class="pre">TRAIN_LOSS</span></code>
+is the last epoch’s training loss (<code class="docutils literal notranslate"><span class="pre">-</span></code> when the trainer logs none, and for
+entries made by <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">register</span></code>). Rows are sorted by name unless <code class="docutils literal notranslate"><span class="pre">--sort</span></code>
+says otherwise; with nothing registered it prints <code class="docutils literal notranslate"><span class="pre">(no</span> <span class="pre">checkpoints</span> <span class="pre">registered)</span></code>.</p>
+</section>
+<section id="mesokit-model-show">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">show</span></code><a class="headerlink" href="#mesokit-model-show" title="Link to this heading">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>show<span class="w"> </span>NAME
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>lr-scan/spectral_onsagernet_1d_lr0.0001
+  status:      ok
+  experiment:  lr-scan
+  run dir:     /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001
+  checkpoint:  /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001/model.pt
+  config:      /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001/config.yaml
+  dyn:         allen_cahn_1d
+  model:       spectral_onsagernet_1d (trainer spectral_onsagernet_1d)
+  dataset:     allen_cahn_1d_v0 (/home/me/mesokit/data/allen_cahn_1d/allen_cahn_1d_v0.h5)
+  recipe:      default (recipe: /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d/default.yaml)
+  overrides:   trainer.lr=1e-4
+  params:      trainer.lr=0.0001
+  data params: -
+  from:        -
+  created:     2026-09-08T10:21:40
+  tags:        -
+  notes:       -
+  metrics:     train_loss=0.0003117 train_loss_min=0.0003117 val_loss=- epochs=20 time=10.3s
+  reproduce:   mesokit train --model spectral_onsagernet_1d --data allen_cahn_1d_v0 --dyn allen_cahn_1d --set trainer.lr=1e-4 --epochs 20 --experiment lr-scan
+</pre></div>
+</div>
+<p>The whole record, the metrics, and the <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> line that trains the
+same thing again as a new run of the same experiment (it carries no
+<code class="docutils literal notranslate"><span class="pre">--name</span></code>, so the run gets the next free name). A bare run name works when
+only one experiment holds it.</p>
 </section>
 <section id="mesokit-model-register">
 <h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">register</span></code><a class="headerlink" href="#mesokit-model-register" title="Link to this heading">¶</a></h3>
 <p>Index a checkpoint that was trained elsewhere (a notebook, a cluster job,
 another machine). Only pointers are stored; nothing is copied.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span>--model<span class="w"> </span>NAME<span class="w"> </span>--file<span class="w"> </span>CKPT.pt<span class="w"> </span>--config<span class="w"> </span>CONFIG.yaml<span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span>--model<span class="w"> </span>NAME<span class="w"> </span>--file<span class="w"> </span>CKPT.pt<span class="w"> </span>--config<span class="w"> </span>CONFIG.yaml<span class="w"> </span><span class="o">[</span>--tag<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -1226,9 +1398,12 @@ another machine). Only pointers are stored; nothing is copied.</p>
 <td><p>Existing checkpoint file: a <code class="docutils literal notranslate"><span class="pre">state_dict</span></code>, or a dict with a <code class="docutils literal notranslate"><span class="pre">state_dict</span></code> key such as a Lightning checkpoint (required).</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">CONFIG.yaml</span></code></p></td>
-<td><p>The recipe used to train it; must contain a <code class="docutils literal notranslate"><span class="pre">model</span></code> section with a <code class="docutils literal notranslate"><span class="pre">_target_</span></code> so <code class="docutils literal notranslate"><span class="pre">interpret</span></code> can rebuild the architecture (required).</p></td>
+<td><p>The recipe used to train it; must contain a <code class="docutils literal notranslate"><span class="pre">model</span></code> section with a <code class="docutils literal notranslate"><span class="pre">_target_</span></code> so <code class="docutils literal notranslate"><span class="pre">interpret</span></code> can rebuild the architecture (required). <code class="docutils literal notranslate"><span class="pre">model_name</span></code>, <code class="docutils literal notranslate"><span class="pre">dyn</span></code> and <code class="docutils literal notranslate"><span class="pre">dataset_name</span></code> are copied from it into the entry when present, so the <code class="docutils literal notranslate"><span class="pre">list</span></code> columns are filled.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--tag</span> <span class="pre">T</span></code></p></td>
+<td><p>Tag recorded on the entry; repeatable.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
 <td><p>Replace an existing entry.</p></td>
 </tr>
 </tbody>
@@ -1248,6 +1423,64 @@ alongside your own checkpoint. When loading, <code class="docutils literal notra
 <code class="docutils literal notranslate"><span class="pre">model.</span></code> prefix and any <code class="docutils literal notranslate"><span class="pre">._orig_mod.</span></code> (from <code class="docutils literal notranslate"><span class="pre">torch.compile</span></code>) from the
 parameter names, so Lightning-style checkpoints load unchanged.</p>
 </section>
+<section id="mesokit-model-tag">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">tag</span></code><a class="headerlink" href="#mesokit-model-tag" title="Link to this heading">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>tag<span class="w"> </span>NAME<span class="w"> </span><span class="o">[</span>--add<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--remove<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--notes<span class="w"> </span>TEXT<span class="o">]</span>
+</pre></div>
+</div>
+<p>Adds or drops tags on a run, or rewrites its notes; the registry entry and
+the run’s <code class="docutils literal notranslate"><span class="pre">run.json</span></code> are both updated (<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--tag</span></code> sets tags at
+training time).</p>
+</section>
+<section id="mesokit-model-remove">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">remove</span></code><a class="headerlink" href="#mesokit-model-remove" title="Link to this heading">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>remove<span class="w"> </span>NAME<span class="w"> </span><span class="o">[</span>--delete-files<span class="o">]</span>
+</pre></div>
+</div>
+<p>Drops the entry. With <code class="docutils literal notranslate"><span class="pre">--delete-files</span></code> the run directory <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code>
+wrote is deleted as well; an entry made by <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">register</span></code> has no run
+directory of its own, so its files are left where they are.</p>
+</section>
+<section id="mesokit-model-prune">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">prune</span></code><a class="headerlink" href="#mesokit-model-prune" title="Link to this heading">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>prune<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span>
+</pre></div>
+</div>
+<p>Reconciles the index with the disk: entries whose <code class="docutils literal notranslate"><span class="pre">model.pt</span></code> is gone are
+dropped, and run directories under <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/</span></code> (flat or inside an
+experiment) that hold no registered checkpoint — a <code class="docutils literal notranslate"><span class="pre">--no-registry</span></code> smoke
+run, a run whose entry was removed, a run that failed inside the trainer and
+left no <code class="docutils literal notranslate"><span class="pre">model.pt</span></code> — are deleted. Only directories holding a run’s files
+(<code class="docutils literal notranslate"><span class="pre">run.json</span></code>, <code class="docutils literal notranslate"><span class="pre">model.pt</span></code>, <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">history.json</span></code>, <code class="docutils literal notranslate"><span class="pre">*.ckpt</span></code>) are ever
+touched, and <code class="docutils literal notranslate"><span class="pre">runs.json</span></code> keeps its rows; <code class="docutils literal notranslate"><span class="pre">--dry-run</span></code> prints the plan and
+changes nothing.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>would remove entry &#39;son_old&#39;: checkpoint missing (/home/me/mesokit/checkpoints/allen_cahn_1d/son_old/model.pt)
+would remove run directory /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v4 (not registered)
+would remove run directory /home/me/mesokit/checkpoints/allen_cahn_1d/son_crashed (no model.pt)
+</pre></div>
+</div>
+</section>
+<section id="mesokit-model-sync">
+<h3><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">sync</span></code><a class="headerlink" href="#mesokit-model-sync" title="Link to this heading">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>sync<span class="w"> </span><span class="o">[</span>--import-sweeps<span class="o">]</span>
+</pre></div>
+</div>
+<p>Rebuilds the index from the run directories: every completed run (a
+<code class="docutils literal notranslate"><span class="pre">run.json</span></code> with <code class="docutils literal notranslate"><span class="pre">status:</span> <span class="pre">ok</span></code> next to a <code class="docutils literal notranslate"><span class="pre">model.pt</span></code>) gets an entry keyed by
+its location — <code class="docutils literal notranslate"><span class="pre">&lt;run&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code> — with the paths as found,
+so a project directory that was moved, a run directory moved into an
+experiment folder by hand, or an index that was deleted is put back
+together. Registered runs from before <code class="docutils literal notranslate"><span class="pre">run.json</span></code> existed get one written,
+with <code class="docutils literal notranslate"><span class="pre">metrics</span></code> read from <code class="docutils literal notranslate"><span class="pre">history.json</span></code> and <code class="docutils literal notranslate"><span class="pre">created</span></code> from <code class="docutils literal notranslate"><span class="pre">model.pt</span></code>’s
+modification time; each experiment’s <code class="docutils literal notranslate"><span class="pre">runs.json</span></code> is reconciled with its run
+directories (failed rows are kept). Entries without a run directory
+(<code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">register</span></code>) are left alone. <code class="docutils literal notranslate"><span class="pre">--import-sweeps</span></code> also reads the legacy
+<code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/sweeps/*.json</span></code> summaries into the matching entries
+(<code class="docutils literal notranslate"><span class="pre">data_params</span></code>, <code class="docutils literal notranslate"><span class="pre">train_loss</span></code>, a <code class="docutils literal notranslate"><span class="pre">sweep:&lt;stamp&gt;</span></code> tag).</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>synced 12 entries: 3 added, 1 updated, 4 backfilled from history.json, 2 experiment table(s) refreshed
+</pre></div>
+</div>
+</section>
 </section>
 <section id="mesokit-interpret">
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code><a class="headerlink" href="#mesokit-interpret" title="Link to this heading">¶</a></h2>
@@ -1255,6 +1488,12 @@ parameter names, so Lightning-style checkpoints load unchanged.</p>
 Every registered model implements <code class="docutils literal notranslate"><span class="pre">list_artifacts()</span></code> and <code class="docutils literal notranslate"><span class="pre">artifact(name)</span></code>;
 these commands are thin wrappers that rebuild the model from its registry
 record, load the weights, and call them.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--model</span></code> takes the registry key (<code class="docutils literal notranslate"><span class="pre">&lt;run&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>; a bare
+run name when only one experiment holds it). Data-backed artifacts read the
+dataset the checkpoint was trained on: the file recorded in its run record
+(<code class="docutils literal notranslate"><span class="pre">dataset_path</span></code>) while it exists — a dataset re-registered under the same
+name since then is reported and not used — else the dataset’s current
+registry entry, as for checkpoints from earlier versions.</p>
 <p>How a checkpoint is rebuilt: the registry record gives <code class="docutils literal notranslate"><span class="pre">config_path</span></code>; the
 <code class="docutils literal notranslate"><span class="pre">model</span></code> section of that YAML is instantiated; <code class="docutils literal notranslate"><span class="pre">model.pt</span></code> is loaded as a
 <code class="docutils literal notranslate"><span class="pre">state_dict</span></code> (strictly — every parameter must match); the model is put in
@@ -1493,9 +1732,18 @@ mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span cla
 </pre></div>
 </div>
 <p><strong>A parameter sweep with reproducible names</strong> (one dataset and one
-checkpoint per value, summarised in <code class="docutils literal notranslate"><span class="pre">checkpoints/allen_cahn_1d/sweeps/</span></code>):</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1,0.2
-mesokit<span class="w"> </span>model<span class="w"> </span>list
+checkpoint per value, grouped under <code class="docutils literal notranslate"><span class="pre">checkpoints/allen_cahn_1d/eps-scan/</span></code>
+with the table in its <code class="docutils literal notranslate"><span class="pre">runs.json</span></code>):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1,0.2<span class="w"> </span>--experiment<span class="w"> </span>eps-scan
+mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>eps-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
+</pre></div>
+</div>
+<p><strong>A learning-rate scan on one dataset</strong>, then the best run continued:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4,1e-5<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
+mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
+mesokit<span class="w"> </span>model<span class="w"> </span>show<span class="w"> </span>lr-scan/spectral_onsagernet_1d_lr0.0001
+mesokit<span class="w"> </span>train<span class="w"> </span>--from<span class="w"> </span>lr-scan/spectral_onsagernet_1d_lr0.0001<span class="w"> </span>--name<span class="w"> </span>lr-scan/son_long<span class="w"> </span>--epochs<span class="w"> </span><span class="m">200</span>
 </pre></div>
 </div>
 <p>The same thing by hand, if you need a step in between:</p>
@@ -1594,18 +1842,28 @@ mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class=
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;run&gt;/</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">train</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">interpret</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">model.pt</span></code>, <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">history.json</span></code>, Lightning <code class="docutils literal notranslate"><span class="pre">.ckpt</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">interpret</span></code>, <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">prune</span></code> / <code class="docutils literal notranslate"><span class="pre">sync</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">model.pt</span></code>, <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">history.json</span></code>, <code class="docutils literal notranslate"><span class="pre">run.json</span></code> (the run record), Lightning <code class="docutils literal notranslate"><span class="pre">.ckpt</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/&lt;run&gt;/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">train</span> <span class="pre">--experiment</span></code>, <code class="docutils literal notranslate"><span class="pre">sweep</span></code></p></td>
+<td><p>as above</p></td>
+<td><p>The same files; registered as <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/runs.json</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">train</span> <span class="pre">--experiment</span></code>, <code class="docutils literal notranslate"><span class="pre">sweep</span></code>, <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">sync</span></code></p></td>
+<td><p>you (notebooks)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{schema_version,</span> <span class="pre">experiment,</span> <span class="pre">dyn,</span> <span class="pre">model,</span> <span class="pre">created,</span> <span class="pre">updated,</span> <span class="pre">axes,</span> <span class="pre">data_axes,</span> <span class="pre">rows}</span></code>; one row per run (failed points included) with <code class="docutils literal notranslate"><span class="pre">run</span></code>, <code class="docutils literal notranslate"><span class="pre">checkpoint</span></code>, <code class="docutils literal notranslate"><span class="pre">dataset</span></code>, <code class="docutils literal notranslate"><span class="pre">params</span></code>, <code class="docutils literal notranslate"><span class="pre">data_params</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">data_status</span></code>, <code class="docutils literal notranslate"><span class="pre">wall_time_s</span></code>, <code class="docutils literal notranslate"><span class="pre">error</span></code>, the paths.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">sweep</span></code>, <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">register</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">interpret</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">→</span> <span class="pre">{path,</span> <span class="pre">config_path,</span> <span class="pre">model_name,</span> <span class="pre">trainer_name,</span> <span class="pre">dyn,</span> <span class="pre">dataset_name,</span> <span class="pre">data,</span> <span class="pre">run_id,</span> <span class="pre">training_config_hash,</span> <span class="pre">metadata}</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">sweep</span></code>, <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">register</span></code> / <code class="docutils literal notranslate"><span class="pre">tag</span></code> / <code class="docutils literal notranslate"><span class="pre">remove</span></code> / <code class="docutils literal notranslate"><span class="pre">prune</span></code> / <code class="docutils literal notranslate"><span class="pre">sync</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">list</span></code> / <code class="docutils literal notranslate"><span class="pre">show</span></code>, <code class="docutils literal notranslate"><span class="pre">interpret</span></code>, <code class="docutils literal notranslate"><span class="pre">train</span> <span class="pre">--from</span></code></p></td>
+<td><p>schema 2: <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">→</span> <span class="pre">{path,</span> <span class="pre">config_path,</span> <span class="pre">run_dir,</span> <span class="pre">experiment,</span> <span class="pre">run,</span> <span class="pre">model_name,</span> <span class="pre">trainer_name,</span> <span class="pre">dyn,</span> <span class="pre">dataset_name,</span> <span class="pre">data,</span> <span class="pre">dataset_path,</span> <span class="pre">recipe,</span> <span class="pre">overrides,</span> <span class="pre">params,</span> <span class="pre">data_params,</span> <span class="pre">metrics,</span> <span class="pre">created,</span> <span class="pre">status,</span> <span class="pre">tags,</span> <span class="pre">notes,</span> <span class="pre">from,</span> <span class="pre">run_id,</span> <span class="pre">training_config_hash,</span> <span class="pre">metadata}</span></code>; schema-1 files (paths and names only) are read unchanged.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/sweeps/&lt;timestamp&gt;.json</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">sweep</span></code></p></td>
-<td><p>you (notebooks)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">{dyn,</span> <span class="pre">model,</span> <span class="pre">params,</span> <span class="pre">created,</span> <span class="pre">rows}</span></code>; one row per grid point with the parameters, names, paths, <code class="docutils literal notranslate"><span class="pre">train_loss</span></code>, <code class="docutils literal notranslate"><span class="pre">wall_time_s</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p></td>
+<td><p>earlier versions of <code class="docutils literal notranslate"><span class="pre">sweep</span></code> (no longer written)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">sync</span> <span class="pre">--import-sweeps</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{dyn,</span> <span class="pre">model,</span> <span class="pre">params,</span> <span class="pre">created,</span> <span class="pre">rows}</span></code>; the legacy summary.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code>, <code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">init</span></code></p></td>
@@ -1621,8 +1879,8 @@ mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class=
 </table>
 </div>
 <p>Both registries are plain JSON with atomic writes; you can inspect or hand-edit
-them, and delete an entry by removing its key. Nothing under <code class="docutils literal notranslate"><span class="pre">data/</span></code>,
-<code class="docutils literal notranslate"><span class="pre">checkpoints/</span></code> or <code class="docutils literal notranslate"><span class="pre">.mesokit/</span></code> should be committed.</p>
+them (<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">remove</span></code> / <code class="docutils literal notranslate"><span class="pre">prune</span></code> do the deleting for checkpoints).
+Nothing under <code class="docutils literal notranslate"><span class="pre">data/</span></code>, <code class="docutils literal notranslate"><span class="pre">checkpoints/</span></code> or <code class="docutils literal notranslate"><span class="pre">.mesokit/</span></code> should be committed.</p>
 <p>A registry entry, for reference:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;schema_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
@@ -1702,7 +1960,23 @@ them, and delete an entry by removing its key. Nothing under <code class="docuti
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">checkpoint</span> <span class="pre">'x'</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">registered</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">interpret</span></code> needs a name from <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code>.</p></td>
-<td><p>Train, or <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">register</span></code>.</p></td>
+<td><p>Train, or <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">register</span></code>; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">sync</span></code> re-indexes runs that are on disk but not in the registry.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">checkpoint</span> <span class="pre">'x'</span> <span class="pre">is</span> <span class="pre">ambiguous;</span> <span class="pre">candidates:</span> <span class="pre">a/x,</span> <span class="pre">b/x</span></code></p></td>
+<td><p>Two experiments hold a run of that name.</p></td>
+<td><p>Pass the full <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code> key.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--data</span> <span class="pre">cannot</span> <span class="pre">be</span> <span class="pre">combined</span> <span class="pre">with</span> <span class="pre">--param</span></code> / <code class="docutils literal notranslate"><span class="pre">--data</span> <span class="pre">is</span> <span class="pre">required</span> <span class="pre">when</span> <span class="pre">only</span> <span class="pre">--train-param</span> <span class="pre">axes</span> <span class="pre">are</span> <span class="pre">given</span></code></p></td>
+<td><p>A sweep with data axes generates its datasets; one without needs to be told what to train on.</p></td>
+<td><p>Drop <code class="docutils literal notranslate"><span class="pre">--data</span></code>, or add it.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--from:</span> <span class="pre">the</span> <span class="pre">weights</span> <span class="pre">of</span> <span class="pre">'x'</span> <span class="pre">do</span> <span class="pre">not</span> <span class="pre">fit</span> <span class="pre">the</span> <span class="pre">model</span> <span class="pre">being</span> <span class="pre">trained</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--set</span></code> or <code class="docutils literal notranslate"><span class="pre">--config</span></code> changed the architecture.</p></td>
+<td><p>Keep the architecture keys as in the source checkpoint; <code class="docutils literal notranslate"><span class="pre">--set</span></code> only training keys.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">run</span> <span class="pre">directory</span> <span class="pre">…</span> <span class="pre">already</span> <span class="pre">holds</span> <span class="pre">a</span> <span class="pre">checkpoint</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">--name</span></code> (or the auto name) points at a directory with a <code class="docutils literal notranslate"><span class="pre">model.pt</span></code>, e.g. from a <code class="docutils literal notranslate"><span class="pre">--no-registry</span></code> run.</p></td>
+<td><p>Pick another <code class="docutils literal notranslate"><span class="pre">--name</span></code>, add <code class="docutils literal notranslate"><span class="pre">--force</span></code> to overwrite it, or <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">prune</span></code> the leftovers.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">a</span> <span class="pre">directory</span> <span class="pre">when</span> <span class="pre">--artifact</span> <span class="pre">all</span></code></p></td>
 <td><p>An extension was given with <code class="docutils literal notranslate"><span class="pre">--artifact</span> <span class="pre">all</span></code>.</p></td>
@@ -1753,10 +2027,10 @@ registries and the config lookup.</p>
 <td><p><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.load_hdf5(path)</span></code> → a <code class="docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code> adapter → <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> → <code class="docutils literal notranslate"><span class="pre">mesokit.trainers.get_trainer(name)(...).fit(model,</span> <span class="pre">loader)</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">mesokit.cli.sweep.run_sweep(&quot;X&quot;,</span> <span class="pre">&quot;arch&quot;,</span> <span class="pre">{&quot;eps&quot;:</span> <span class="pre">[0.05,</span> <span class="pre">0.1]})</span></code> — the registries and naming included; returns the table rows</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mesokit.cli.sweep.run_sweep(&quot;X&quot;,</span> <span class="pre">&quot;arch&quot;,</span> <span class="pre">{&quot;eps&quot;:</span> <span class="pre">[0.05,</span> <span class="pre">0.1]},</span> <span class="pre">train_params={&quot;trainer.lr&quot;:</span> <span class="pre">[1e-3,</span> <span class="pre">1e-4]},</span> <span class="pre">experiment=&quot;scan&quot;)</span></code> — the registries and naming included; returns the table rows</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code></p></td>
-<td><p>read <code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code></p></td>
+<td><p>read <code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code> (<code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">json</span></code> prints the same records), each run’s <code class="docutils literal notranslate"><span class="pre">run.json</span></code>, or an experiment’s <code class="docutils literal notranslate"><span class="pre">runs.json</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">list</span></code> / <code class="docutils literal notranslate"><span class="pre">extract</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">model.load_state_dict(torch.load(&quot;model.pt&quot;))</span></code>; <code class="docutils literal notranslate"><span class="pre">model.list_artifacts()</span></code>; <code class="docutils literal notranslate"><span class="pre">model.artifact(name).save(path)</span></code></p></td>
@@ -1841,11 +2115,19 @@ own.</p>
 <li><a class="reference internal" href="#mesokit-data-parse"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#mesokit-train"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-train"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code></a><ul>
+<li><a class="reference internal" href="#experiments">Experiments</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#mesokit-sweep"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code></a></li>
 <li><a class="reference internal" href="#mesokit-model"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span></code></a><ul>
 <li><a class="reference internal" href="#mesokit-model-list"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-model-show"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">show</span></code></a></li>
 <li><a class="reference internal" href="#mesokit-model-register"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">register</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-model-tag"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">tag</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-model-remove"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">remove</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-model-prune"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">prune</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-model-sync"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">sync</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#mesokit-interpret"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a><ul>

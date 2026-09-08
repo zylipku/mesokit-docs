@@ -360,6 +360,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._recipes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._recipes</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.sweep.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._runs.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._runs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
@@ -612,10 +613,23 @@ containing <code class="docutils literal notranslate"><span class="pre">model.pt
 <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, and <code class="docutils literal notranslate"><span class="pre">history.json</span></code>. Unless <code class="docutils literal notranslate"><span class="pre">--no-registry</span></code> is passed, the
 run is registered in <code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code> under <code class="docutils literal notranslate"><span class="pre">--name</span></code> or the
 next <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v&lt;n&gt;</span></code> slot.</p>
-<p>To list registered checkpoints:</p>
+<p>To list registered checkpoints, with the dataset, the <code class="docutils literal notranslate"><span class="pre">--set</span></code> keys and the
+final loss of each (<code class="docutils literal notranslate"><span class="pre">--sort</span> <span class="pre">train_loss</span></code> ranks them; <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">json</span></code> for a
+notebook):</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>list
 </pre></div>
 </div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>NAME                       MODEL                   DATASET           PARAMS             TRAIN_LOSS  EPOCHS  TIME   CREATED              TAGS
+spectral_onsagernet_1d_v0  spectral_onsagernet_1d  allen_cahn_1d_v0  -                  0.0004203   100     51.0s  2026-09-08T10:15:02  -
+spectral_onsagernet_1d_v1  spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.0001  0.0003117   5       2.6s   2026-09-08T10:21:40  -
+</pre></div>
+</div>
+<p>Runs that belong together — a learning-rate scan, say — go under one
+experiment with <code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">lr-scan</span></code> (the run directory becomes
+<code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/lr-scan/&lt;run&gt;/</span></code>, the name <code class="docutils literal notranslate"><span class="pre">lr-scan/&lt;run&gt;</span></code>), or through
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span> <span class="pre">--train-param</span> <span class="pre">trainer.lr=1e-3,1e-4,1e-5</span> <span class="pre">--data</span> <span class="pre">allen_cahn_1d_v0</span> <span class="pre">…</span></code>,
+which does the loop and writes the table; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">show</span> <span class="pre">&lt;name&gt;</span></code>
+prints one run’s record and the command that reproduces it.</p>
 <p>To register an externally trained checkpoint:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span>--model<span class="w"> </span>MODEL_NAME<span class="w"> </span>--file<span class="w"> </span>path/to/checkpoint.pt<span class="w"> </span>--config<span class="w"> </span>path/to/config.yaml
 </pre></div>

@@ -360,6 +360,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._recipes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._recipes</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.sweep.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._runs.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._runs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
@@ -441,10 +442,14 @@ parsed as YAML) changes any key on top of a recipe or of those defaults:</p>
 </div>
 <p>The completed configuration is written to
 <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;run&gt;/config.yaml</span></code>; it is itself a valid recipe, so
-<code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">checkpoints/&lt;dyn&gt;/&lt;run&gt;/config.yaml</span></code> reproduces a run, and
-copying it into <code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;model&gt;/&lt;stem&gt;.yaml</span></code> turns it into a
-named variant. Write a recipe by hand when a configuration is worth naming
-and sharing; otherwise <code class="docutils literal notranslate"><span class="pre">--set</span></code> is enough.</p>
+<code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">checkpoints/&lt;dyn&gt;/&lt;run&gt;/config.yaml</span></code> reproduces a run (the
+run-specific names it carries are dropped), <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">show</span> <span class="pre">&lt;run&gt;</span></code>
+prints the exact <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> line, and <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--from</span> <span class="pre">&lt;run&gt;</span></code>
+continues the run from its weights with that config as the recipe. Copying
+the file into <code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;model&gt;/&lt;stem&gt;.yaml</span></code> turns it into a
+named variant. The <code class="docutils literal notranslate"><span class="pre">--set</span></code> keys of a run are kept apart from the merged
+config, as <code class="docutils literal notranslate"><span class="pre">overrides</span></code> / <code class="docutils literal notranslate"><span class="pre">params</span></code> in its <code class="docutils literal notranslate"><span class="pre">run.json</span></code>, so <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code> can show what varied. Write a recipe by hand when a configuration is
+worth naming and sharing; otherwise <code class="docutils literal notranslate"><span class="pre">--set</span></code> is enough.</p>
 </section>
 <section id="layout">
 <h2>Layout<a class="headerlink" href="#layout" title="Link to this heading">¶</a></h2>

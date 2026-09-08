@@ -242,11 +242,26 @@ containing `model.pt` (plain `state_dict`, no Lightning required to load),
 run is registered in `.mesokit/checkpoints.json` under `--name` or the
 next `<model>_v<n>` slot.
 
-To list registered checkpoints:
+To list registered checkpoints, with the dataset, the `--set` keys and the
+final loss of each (`--sort train_loss` ranks them; `--format json` for a
+notebook):
 
 ```sh
 mesokit model list
 ```
+
+```text
+NAME                       MODEL                   DATASET           PARAMS             TRAIN_LOSS  EPOCHS  TIME   CREATED              TAGS
+spectral_onsagernet_1d_v0  spectral_onsagernet_1d  allen_cahn_1d_v0  -                  0.0004203   100     51.0s  2026-09-08T10:15:02  -
+spectral_onsagernet_1d_v1  spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.0001  0.0003117   5       2.6s   2026-09-08T10:21:40  -
+```
+
+Runs that belong together — a learning-rate scan, say — go under one
+experiment with `--experiment lr-scan` (the run directory becomes
+`checkpoints/<dyn>/lr-scan/<run>/`, the name `lr-scan/<run>`), or through
+`mesokit sweep --train-param trainer.lr=1e-3,1e-4,1e-5 --data allen_cahn_1d_v0 …`,
+which does the loop and writes the table; `mesokit model show <name>`
+prints one run's record and the command that reproduces it.
 
 To register an externally trained checkpoint:
 

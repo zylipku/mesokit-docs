@@ -39,10 +39,6 @@
   - ```{autodoc2-docstring} mesokit.cli.interpret._instantiate_model
     :summary:
     ```
-* - {py:obj}`_checkpoint_state_dict <mesokit.cli.interpret._checkpoint_state_dict>`
-  - ```{autodoc2-docstring} mesokit.cli.interpret._checkpoint_state_dict
-    :summary:
-    ```
 * - {py:obj}`_load_reference_dataset <mesokit.cli.interpret._load_reference_dataset>`
   - ```{autodoc2-docstring} mesokit.cli.interpret._load_reference_dataset
     :summary:
@@ -81,14 +77,14 @@
 
 ````
 
-````{py:function} list_(model: typing.Annotated[str, typer.Option('--model', help='Registered checkpoint name.')]) -> None
+````{py:function} list_(model: typing.Annotated[str, typer.Option('--model', help='Registered checkpoint name (`<experiment>/<run>`, or a unique run name).')]) -> None
 :canonical: mesokit.cli.interpret.list_
 
 ```{autodoc2-docstring} mesokit.cli.interpret.list_
 ```
 ````
 
-````{py:function} _extract_impl(model: typing.Annotated[str, typer.Option('--model', help='Registered checkpoint name.')], artifact: typing.Annotated[str, typer.Option('--artifact', help="Artifact name, or 'all'.")], output: typing.Annotated[pathlib.Path, typer.Option('--output', help='Output file, or directory when --artifact all.')], max_snapshots: typing.Annotated[int, typer.Option('--max-snapshots', help='Maximum reference snapshots used by data-backed artifacts.')] = 5000) -> None
+````{py:function} _extract_impl(model: typing.Annotated[str, typer.Option('--model', help='Registered checkpoint name (`<experiment>/<run>`, or a unique run name).')], artifact: typing.Annotated[str, typer.Option('--artifact', help="Artifact name, or 'all'.")], output: typing.Annotated[pathlib.Path, typer.Option('--output', help='Output file, or directory when --artifact all.')], max_snapshots: typing.Annotated[int, typer.Option('--max-snapshots', help='Maximum reference snapshots used by data-backed artifacts.')] = 5000) -> None
 :canonical: mesokit.cli.interpret._extract_impl
 
 ```{autodoc2-docstring} mesokit.cli.interpret._extract_impl
@@ -120,13 +116,6 @@
 :canonical: mesokit.cli.interpret._instantiate_model
 
 ```{autodoc2-docstring} mesokit.cli.interpret._instantiate_model
-```
-````
-
-````{py:function} _checkpoint_state_dict(path: pathlib.Path) -> dict[str, torch.Tensor]
-:canonical: mesokit.cli.interpret._checkpoint_state_dict
-
-```{autodoc2-docstring} mesokit.cli.interpret._checkpoint_state_dict
 ```
 ````
 

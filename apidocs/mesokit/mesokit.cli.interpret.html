@@ -360,6 +360,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._recipes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._recipes</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.sweep.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._runs.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._runs</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
@@ -409,7 +410,11 @@
           <section class="tex2jax_ignore mathjax_ignore" id="module-mesokit.cli.interpret">
 <span id="mesokit-cli-interpret"></span><h1><a class="reference internal" href="#module-mesokit.cli.interpret" title="mesokit.cli.interpret"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></a><a class="headerlink" href="#module-mesokit.cli.interpret" title="Link to this heading">¶</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">{list,</span> <span class="pre">extract}</span></code> — inspect registered checkpoint artifacts.</p>
-<p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">explain</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">extract</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">explain</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">extract</span></code>. <code class="docutils literal notranslate"><span class="pre">--model</span></code> takes a
+registry key (<code class="docutils literal notranslate"><span class="pre">&lt;run&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>); a bare run name is
+accepted when only one experiment holds it. Data-backed artifacts read the
+dataset the checkpoint was trained on: the path recorded in its run record
+when that file still exists, else the dataset’s current registry entry.</p>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
 <section id="functions">
@@ -417,10 +422,10 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-left">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret.list_" title="mesokit.cli.interpret.list_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_</span></code></a></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_</span></code></p></td>
 <td><p>List artifacts available for a registered checkpoint.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._extract_impl" title="mesokit.cli.interpret._extract_impl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_extract_impl</span></code></a></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_extract_impl</span></code></p></td>
 <td><p>Extract an interpretability artifact and write its visualization to disk.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._load_registered_model" title="mesokit.cli.interpret._load_registered_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_registered_model</span></code></a></p></td>
@@ -435,16 +440,13 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._instantiate_model" title="mesokit.cli.interpret._instantiate_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_model</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._checkpoint_state_dict" title="mesokit.cli.interpret._checkpoint_state_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_checkpoint_state_dict</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._load_reference_dataset" title="mesokit.cli.interpret._load_reference_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_reference_dataset</span></code></a></p></td>
+<td><p>The dataset the checkpoint was trained on.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._record_or_config_value" title="mesokit.cli.interpret._record_or_config_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_record_or_config_value</span></code></a></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._load_reference_dataset" title="mesokit.cli.interpret._load_reference_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_load_reference_dataset</span></code></a></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._record_or_config_value" title="mesokit.cli.interpret._record_or_config_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_record_or_config_value</span></code></a></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli.interpret._existing_file" title="mesokit.cli.interpret._existing_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_existing_file</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli.interpret._existing_file" title="mesokit.cli.interpret._existing_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_existing_file</span></code></a></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -471,18 +473,21 @@
 <dd><p>‘Typer(…)’</p>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="mesokit.cli.interpret.list_">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli.interpret.</span></span><span class="sig-name descname"><span class="pre">list_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--model'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Registered</span> <span class="pre">checkpoint</span> <span class="pre">name.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli.interpret.list_" title="Link to this definition">¶</a></dt>
-<dd><p>List artifacts available for a registered checkpoint.</p>
-</dd></dl>
+<p>````{py:function} list_(model: typing.Annotated[str, typer.Option(’–model’, help=’Registered checkpoint name (<code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>, or a unique run name).’)]) -&gt; None</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">canonical<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mesokit.cli.interpret.list_</p>
+</dd>
+</dl>
+<p>List artifacts available for a registered checkpoint.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+````{py:function} _extract_impl(model: typing.Annotated[str, typer.Option(&#39;--model&#39;, help=&#39;Registered checkpoint name (`&lt;experiment&gt;/&lt;run&gt;`, or a unique run name).&#39;)], artifact: typing.Annotated[str, typer.Option(&#39;--artifact&#39;, help=&quot;Artifact name, or &#39;all&#39;.&quot;)], output: typing.Annotated[pathlib.Path, typer.Option(&#39;--output&#39;, help=&#39;Output file, or directory when --artifact all.&#39;)], max_snapshots: typing.Annotated[int, typer.Option(&#39;--max-snapshots&#39;, help=&#39;Maximum reference snapshots used by data-backed artifacts.&#39;)] = 5000) -&gt; None
+:canonical: mesokit.cli.interpret._extract_impl
 
-<dl class="py function">
-<dt class="sig sig-object py" id="mesokit.cli.interpret._extract_impl">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli.interpret.</span></span><span class="sig-name descname"><span class="pre">_extract_impl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--model'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Registered</span> <span class="pre">checkpoint</span> <span class="pre">name.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artifact</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--artifact'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">&quot;Artifact</span> <span class="pre">name,</span> <span class="pre">or</span> <span class="pre">'all'.&quot;</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--output'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Output</span> <span class="pre">file,</span> <span class="pre">or</span> <span class="pre">directory</span> <span class="pre">when</span> <span class="pre">--artifact</span> <span class="pre">all.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_snapshots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">typer.Option</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'--max-snapshots'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'Maximum</span> <span class="pre">reference</span> <span class="pre">snapshots</span> <span class="pre">used</span> <span class="pre">by</span> <span class="pre">data-backed</span> <span class="pre">artifacts.'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli.interpret._extract_impl" title="Link to this definition">¶</a></dt>
-<dd><p>Extract an interpretability artifact and write its visualization to disk.</p>
-</dd></dl>
-
+```{autodoc2-docstring} mesokit.cli.interpret._extract_impl
+```
+</pre></div>
+</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="mesokit.cli.interpret._load_registered_model">
 <span class="sig-prename descclassname"><span class="pre">mesokit.cli.interpret.</span></span><span class="sig-name descname"><span class="pre">_load_registered_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_reference_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_snapshots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli.interpret._load_registered_model" title="Link to this definition">¶</a></dt>
@@ -508,14 +513,15 @@ the model was trained on.</p>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="mesokit.cli.interpret._checkpoint_state_dict">
-<span class="sig-prename descclassname"><span class="pre">mesokit.cli.interpret.</span></span><span class="sig-name descname"><span class="pre">_checkpoint_state_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">torch.Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli.interpret._checkpoint_state_dict" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="mesokit.cli.interpret._load_reference_dataset">
 <span class="sig-prename descclassname"><span class="pre">mesokit.cli.interpret.</span></span><span class="sig-name descname"><span class="pre">_load_reference_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">omegaconf.DictConfig</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">mesokit.data.TrajectoryDataset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.cli.interpret._load_reference_dataset" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The dataset the checkpoint was trained on.</p>
+<p>The path recorded at training time (<code class="docutils literal notranslate"><span class="pre">dataset_path</span></code>) wins while that
+file exists: a dataset re-registered under the same name since then
+would otherwise silently change what the artifacts are evaluated on
+(a warning says so). Older records fall back to the dataset’s current
+registry entry, then to <code class="docutils literal notranslate"><span class="pre">data</span></code> read as a path.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mesokit.cli.interpret._record_or_config_value">
@@ -592,13 +598,10 @@ the model was trained on.</p>
 <li><a class="reference internal" href="#data">Data</a></li>
 <li><a class="reference internal" href="#api">API</a><ul>
 <li><a class="reference internal" href="#mesokit.cli.interpret.app"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli.interpret.list_"><code class="docutils literal notranslate"><span class="pre">list_()</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli.interpret._extract_impl"><code class="docutils literal notranslate"><span class="pre">_extract_impl()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._load_registered_model"><code class="docutils literal notranslate"><span class="pre">_load_registered_model()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._view_channels"><code class="docutils literal notranslate"><span class="pre">_view_channels()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._load_config"><code class="docutils literal notranslate"><span class="pre">_load_config()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._instantiate_model"><code class="docutils literal notranslate"><span class="pre">_instantiate_model()</span></code></a></li>
-<li><a class="reference internal" href="#mesokit.cli.interpret._checkpoint_state_dict"><code class="docutils literal notranslate"><span class="pre">_checkpoint_state_dict()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._load_reference_dataset"><code class="docutils literal notranslate"><span class="pre">_load_reference_dataset()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._record_or_config_value"><code class="docutils literal notranslate"><span class="pre">_record_or_config_value()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli.interpret._existing_file"><code class="docutils literal notranslate"><span class="pre">_existing_file()</span></code></a></li>

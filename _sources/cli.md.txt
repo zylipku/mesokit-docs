@@ -39,8 +39,9 @@ the current working directory:
 | Registries | `.mesokit/datasets.json`, `.mesokit/checkpoints.json` | every command that takes a name |
 
 Outputs also land in the working directory: `data/<dyn>/` for generated
-HDF5 files, `checkpoints/<dyn>/<run>/` for training runs. All of these are
-gitignored.
+HDF5 files, `checkpoints/<dyn>/<run>/` for training runs —
+`checkpoints/<dyn>/<experiment>/<run>/` for runs grouped by `--experiment`,
+registered as `<experiment>/<run>`. All of these are gitignored.
 
 **Environment.** Prefix commands with `pixi run` (or run inside `pixi shell`)
 unless `mesokit` is already on your `PATH`:
@@ -51,15 +52,19 @@ pixi run mesokit data avail
 
 **Names versus paths.** Wherever a command takes a dataset (`--data`) it
 accepts either a registered name or a path to an HDF5 file; wherever it takes
-a checkpoint (`--model` in `interpret`) it needs a registered name. Registries
+a checkpoint (`--model` in `interpret`, `--from` in `train`, the `model`
+subcommands) it needs a registered name — `<run>` or `<experiment>/<run>`; a
+bare run name is accepted when only one experiment holds it. Registries
 store **pointers**, never copies, so deleting a file leaves a dangling entry
-(`mesokit data list` flags it as `MISSING`).
+(`mesokit data list` flags it as `MISSING`; `mesokit model prune` drops
+checkpoint entries whose file is gone).
 
 **Automatic versioned names.** When you do not pass `--name`, generated
 datasets are registered as `<dyn>_v0`, `<dyn>_v1`, … and trained checkpoints
-as `<model>_v0`, `<model>_v1`, … — always the next free slot, so repeated
-runs never overwrite each other. Passing an explicit `--name` that already
-exists is an error unless you add `--force`.
+as `<model>_v0`, `<model>_v1`, … — always the next free slot (free in the
+registry and on disk), so repeated runs never overwrite each other. Passing
+an explicit `--name` that is already registered, or whose run directory
+already holds a checkpoint, is an error unless you add `--force`.
 
 **Quiet by default.** Simulators and trainers print a single overwriting
 progress line on stderr; `--verbose` (where offered) restores the underlying
@@ -85,13 +90,15 @@ any_format.{npz,nc,pt,…} ────────► mesokit data parse ──
                                                                                        │
 configs/train/<dyn>/<model>/default.yaml ─────────────────► mesokit train ◄────────────┘
                                                                   │
-                                              checkpoints/<dyn>/<run>/{model.pt, config.yaml, history.json}
+                                        checkpoints/<dyn>/<run>/{model.pt, config.yaml, history.json, run.json}
+                                        checkpoints/<dyn>/<experiment>/<run>/…  + runs.json    (--experiment)
                                                                   │
-                                                      .mesokit/checkpoints.json ◄── mesokit model register
-                                                                  │
+                                                      .mesokit/checkpoints.json ◄── mesokit model register / sync
+                                                                  │          (mesokit model list / show / tag / remove / prune)
                                                        mesokit interpret list / extract ──► figs/*.png
 
-mesokit sweep --param KEY=V1,V2,… = data generate + train per grid point ──► checkpoints/<dyn>/sweeps/<stamp>.json
+mesokit sweep --param KEY=V1,V2,… [--train-param KEY.PATH=V1,V2,…] = data generate + train per grid point
+                                                            ──► checkpoints/<dyn>/<experiment>/{<run>/…, runs.json}
 ```
 
 ## `mesokit data`
@@ -429,6 +436,8 @@ PATH`, `output <path> already exists; pass --force to replace it, or
 --output for another path`, `agent exited with code N`, `agent finished
 but <output> was not written`.
 
+(mesokit-train)=
+
 ## `mesokit train`
 
 Train a registered model architecture on a dataset through the trainer
@@ -437,21 +446,26 @@ registered for that model, write a run directory, and index the checkpoint.
 ```sh
 mesokit train --model ARCH --data NAME_OR_PATH [--dyn DYN]
               [--config STEM|PATH] [--set KEY=VALUE ...] [--trainer NAME]
-              [--name NAME | --no-registry] [--force]
+              [--experiment E] [--name NAME | --no-registry] [--from CKPT]
+              [--tag T ...] [--notes TEXT] [--force]
               [--epochs N] [--batch-size N] [--device auto|cpu|gpu]
 ```
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `--model ARCH` | required | Architecture name from the model registry (`fno1d`, `spectral_onsagernet_1d`, …). |
-| `--data` | required | Registered dataset name **or** path to a v1 HDF5 file. |
+| `--model ARCH` | required (or from `--from`) | Architecture name from the model registry (`fno1d`, `spectral_onsagernet_1d`, …). |
+| `--data` | required (or from `--from`) | Registered dataset name **or** path to a v1 HDF5 file. |
 | `--dyn DYN` | the dataset's `dyn` | Dynamics name; selects the recipe tree `configs/train/DYN/ARCH/` and the run directory `checkpoints/DYN/`. |
 | `--config STEM\|PATH` | `default` | Recipe `configs/train/DYN/ARCH/STEM.yaml`, looked up in the working directory first, then in the installed package (then a checkout); or a path to any YAML file. With no recipe directory at all, built-in defaults are used. |
 | `--set KEY=VALUE` | none | Change one recipe key for this run (`trainer.lr=1e-4`, `model.potential.eps=0.05`, `dataset.stride=2`); repeatable. Values are parsed as YAML. |
 | `--trainer NAME` | `= --model` | Trainer registry name; every shipped model registers its own default. |
-| `--name NAME` | `ARCH_v<n>` | Checkpoint registry name; also the run directory name. |
+| `--experiment E` | none | Group the run: it lands in `checkpoints/DYN/E/<run>/`, is registered as `E/<run>`, and `E/runs.json` gets a row (see [Experiments](#experiments) below). |
+| `--name NAME` | `ARCH_v<n>`; in an experiment `ARCH_<key><value>…` from `--set`, else `ARCH_r<nn>` | Run name: the registry key and the run directory. `--name E/NAME` is `--experiment E --name NAME`. |
+| `--from CKPT` | none | Continue from a registered checkpoint: its weights are loaded into the new model, its saved `config.yaml` is the recipe (unless `--config`), and its dataset, model, trainer and dyn fill in whatever is not given; `--set` applies on top. The new record says `from: CKPT`. |
 | `--no-registry` | off | Train and write the run directory but do not index it. |
-| `--force` | off | Replace an existing checkpoint entry of the same name. |
+| `--tag T` | none | Tag recorded on the run (`run.json` and the registry); repeatable. `mesokit model list --tag T` filters on it. |
+| `--notes TEXT` | empty | Free-text note recorded on the run. |
+| `--force` | off | Replace an existing checkpoint entry of the same name and reuse its run directory (stale Lightning `.ckpt` files are cleared first). |
 
 The model's grid is read from the dataset: any of `Nx` / `Ny` / `Nz`,
 `Lx` / `Ly` / `Lz`, `grid_shape`, `domain` and `in_dim` that the model (or
@@ -485,6 +499,7 @@ mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_ca
 trained 'spectral_onsagernet_1d' with 'spectral_onsagernet_1d'
   checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/model.pt
   config:     /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/config.yaml
+  metrics:    train_loss=0.0004203 epochs=20 time=10.1s
   registered: spectral_onsagernet_1d_v0
 ```
 
@@ -495,6 +510,7 @@ The run directory contains:
 | `model.pt` | Plain `state_dict` — loadable with `torch.load` + `model.load_state_dict`, no Lightning needed. The canonical artifact. |
 | `config.yaml` | The fully resolved recipe plus `model_name`, `trainer_name`, `dyn`, `data`, `dataset_name`, `checkpoint_name`, `train_config`. This is what `mesokit interpret` reads to rebuild the model. |
 | `history.json` | Per-epoch metric series, e.g. `{"train_loss": [...]}`. |
+| `run.json` | The run's record: `name`, `created`, `status`, the `dyn` / `model_name` / `trainer_name`, the dataset (`data`, `dataset_name` and the resolved `dataset_path`), the `recipe` (`spec`, `source`, `path`), the `--set` list as `overrides` and the same keys with parsed values as `params`, the `cli` knobs (`epochs`, `batch_size`, `device`), the final `metrics` (`train_loss`, `train_loss_min`, `val_loss`, `epochs_run`, `wall_time_s`), `tags`, `notes` and the config hash. The registry entry is this record plus the paths; `mesokit model list` reads the entries. A run that raises inside the trainer leaves `run.json` with `status: failed` and the error, so `mesokit model prune` can find it. |
 | `last.ckpt`, `lit_epoch=NNN.ckpt` | Lightning checkpoints (optimizer state etc.) written by `LitTrainer`; not needed downstream. |
 
 More examples:
@@ -510,9 +526,55 @@ mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data ac_eps05
 # A hyper-parameter variant: copy default.yaml to configs/train/allen_cahn_1d/spectral_onsagernet_1d/lr1e-4.yaml, then
 mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 --config lr1e-4
 
-# Throw-away run that must not pollute the checkpoint index.
+# Throw-away run that must not pollute the checkpoint index (`mesokit model prune` deletes such run directories).
 mesokit train --model fno1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 --epochs 1 --device cpu --no-registry
+
+# Tag runs so `mesokit model list --tag paper` finds them later.
+mesokit train --model spectral_onsagernet_1d --data allen_cahn_1d_v0 --set trainer.lr=1e-4 --tag paper --notes "lr scan, best"
+
+# Three learning rates side by side, under one experiment: checkpoints/allen_cahn_1d/lr-scan/{…_lr0.001, …_lr0.0001, …_lr1e-05}/
+for lr in 1e-3 1e-4 1e-5; do
+  mesokit train --model spectral_onsagernet_1d --data allen_cahn_1d_v0 --experiment lr-scan --set trainer.lr=$lr --epochs 20
+done
+mesokit model list --experiment lr-scan --sort train_loss
+
+# Keep training the best one for 200 more epochs, at a lower rate.
+mesokit train --from lr-scan/spectral_onsagernet_1d_lr0.0001 --name lr-scan/son_long --epochs 200 --set trainer.lr=3e-5
 ```
+
+(experiments)=
+
+### Experiments
+
+`--experiment E` (on `train`, and always on `sweep`) adds one grouping
+level to the run layout:
+
+```text
+checkpoints/<dyn>/
+├── <run>/                       # runs without --experiment: model.pt, config.yaml, history.json, run.json, *.ckpt
+└── <experiment>/
+    ├── runs.json                # the experiment's table: one row per run, failed ones included
+    └── <run>/                   # the same files as a flat run
+```
+
+The registry key mirrors the path, `<experiment>/<run>`, so `ls`, `rm -r`
+and `du` group what the CLI groups; a bare `<run>` is accepted by every
+command that takes a name as long as only one experiment holds it. The
+default run name inside an experiment says what varied —
+`<model>_<key><value>[_…]` from the `--set` keys' last components
+(`spectral_onsagernet_1d_lr0.0001`), `<model>_r<nn>` when nothing was
+overridden; a taken name gets `_2`, `_3`, … unless `--force`, which reuses
+it. A run name cannot be an existing experiment's and vice versa.
+
+`runs.json` is the experiment's log (`schema_version`, `experiment`, `dyn`,
+`model`, `created`, `updated`, the training `axes` and simulator
+`data_axes` seen so far, and `rows`); every `train --experiment E` inserts or
+replaces its row, so does every point of a `sweep`. A row holds `run`,
+`checkpoint` (the registry key), `dataset`, `dataset_path`,
+`checkpoint_path`, `status`, `data_status` (`generated`, `reused` or
+`given`), `params`, `data_params`, `metrics`, `wall_time_s`, `error` and
+`created`; a point that failed has a row but no run directory or registry
+entry. `mesokit model sync` rebuilds the table from the run directories.
 
 Two things to know:
 
@@ -540,19 +602,24 @@ Invalid value: registered dataset 'old' points to missing file: /home/me/mesokit
 Invalid value: no config 'nope' under /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d; available: default, smoke
 Invalid value: --device must be one of: auto, cpu, gpu
 Invalid value: checkpoint 'spectral_onsagernet_1d_v0' already registered; pass --force to overwrite
+Invalid value: run directory checkpoints/allen_cahn_1d/son_a already holds a checkpoint; pass --force to overwrite it or choose another --name
 ```
 
 (mesokit-sweep)=
 
 ## `mesokit sweep`
 
-Run `data generate` and `train` once per point of a grid of physical
-parameters, name every dataset and checkpoint after its parameter values,
-and summarise the runs in a table and a JSON file. This is the built-in
-form of the "for eps in …" shell loop.
+Train one checkpoint per point of a parameter grid, as one experiment. Two
+kinds of axis combine: `--param` varies a **simulator** parameter (one
+dataset is generated per value, as `data generate --set` would), and
+`--train-param` varies a **training-recipe** key such as `trainer.lr`
+(several checkpoints on the same dataset, as `train --set` would). The runs
+land under `checkpoints/<dyn>/<experiment>/`, the table is that experiment's
+`runs.json`. This is the built-in form of the "for eps in …" shell loop.
 
 ```sh
-mesokit sweep --dyn DYN --model ARCH --param KEY=V1,V2,... [--param KEY=V1,V2,... ...]
+mesokit sweep --dyn DYN --model ARCH [--param KEY=V1,V2,... ...] [--train-param KEY.PATH=V1,V2,... ...]
+              [--data NAME_OR_PATH] [--experiment E] [--tag T ...]
               [--data-config STEM] [--config STEM] [--trainer NAME] [--name-prefix PREFIX]
               [--epochs N] [--batch-size N] [--device auto|cpu|gpu]
               [--reuse-data] [--force] [--dry-run]
@@ -562,21 +629,29 @@ mesokit sweep --dyn DYN --model ARCH --param KEY=V1,V2,... [--param KEY=V1,V2,..
 | --- | --- | --- |
 | `--dyn DYN` | required | Dynamics name; selects `configs/data/DYN/` and `configs/train/DYN/ARCH/`. |
 | `--model ARCH` | required | Architecture name from the model registry. |
-| `--param KEY=V1,V2,...` | required, repeatable | One grid axis. `KEY` is a keyword argument of the simulator (as for `data generate --set`); each value is read as int, float, bool or string. Several `--param` flags form the Cartesian product, in the order given. |
+| `--param KEY=V1,V2,...` | repeatable | A data axis. `KEY` is a keyword argument of the simulator (as for `data generate --set`); each value is read as int, float, bool or string. |
+| `--train-param KEY.PATH=V1,V2,...` | repeatable | A training axis over a recipe key (`trainer.lr`, `model.n_modes`, `dataset.stride`); values as above. At least one axis of either kind is required; all axes form one Cartesian product, data axes outermost. |
+| `--data NAME_OR_PATH` | none | The dataset every point trains on, when there is no `--param` axis (required then, refused otherwise). |
+| `--experiment E` | `ARCH_<axes>_<timestamp>` | The experiment the runs are grouped under. |
+| `--tag T` | none | Tag recorded on every run; repeatable. |
 | `--data-config STEM` | `default` | Data recipe `configs/data/DYN/STEM.yaml` the overrides are applied to. |
 | `--config STEM` | `default` | Training recipe `configs/train/DYN/ARCH/STEM.yaml`. |
 | `--trainer NAME` | `= --model` | Trainer registry name. |
-| `--name-prefix PREFIX` | `DYN` | Prefix of every generated name (see below). |
+| `--name-prefix PREFIX` | `DYN` | Prefix of every generated dataset name (see below). |
 | `--epochs N`, `--batch-size N`, `--device` | from config | Forwarded to every training run, as for `train`. |
 | `--reuse-data` | off | Skip generation for a point whose dataset name is already registered and whose file exists; train on it instead. |
 | `--force` | off | Replace existing dataset and checkpoint entries of the same names. |
 | `--dry-run` | off | Print the plan — names and overrides per point — and exit without running anything. |
 
-**Names.** A point `eps=0.05, T=0.5` gives the dataset
-`<prefix>_eps0.05_T0.5` and the checkpoint `<prefix>_<model>_eps0.05_T0.5`
-(floats are written compactly: `1.0` becomes `1`, `2e-5` becomes `2e-05`).
-The names are deterministic, so re-running the same sweep with
-`--reuse-data --force` retrains on the existing data.
+**Names.** A data point `eps=0.05, T=0.5` gives the dataset
+`<prefix>_eps0.05_T0.5`; a run is named `<model>_<key><value>[_…]` over both
+kinds of axis, training keys by their last component (`eps=0.05,
+trainer.lr=1e-3` → `spectral_onsagernet_1d_eps0.05_lr0.001`), and registered
+as `<experiment>/<run>`. Floats are written compactly: `1.0` becomes `1`,
+`2e-5` becomes `2e-05`. The names are deterministic, so re-running the same
+sweep with `--experiment E --reuse-data --force` retrains on the existing
+data and replaces the rows. A dataset is generated once per data point and
+shared by that point's training runs (`reused` in the table).
 
 **Failures.** Every point runs to the end of the grid: a point whose
 simulator or trainer raises is marked `FAILED` in the table with the error
@@ -586,52 +661,61 @@ parameter the simulator does not accept — are reported before anything runs.
 
 ```sh
 mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d --param eps=0.05,0.1,0.2 \
-  --data-config fdr --epochs 2 --device cpu
+  --experiment eps-scan --data-config fdr --epochs 2 --device cpu
 ```
 
 ```text
+experiment 'eps-scan': 3 point(s) under checkpoints/allen_cahn_1d/eps-scan
 [1/3] eps=0.05
   generating dataset 'allen_cahn_1d_eps0.05'
-  training checkpoint 'allen_cahn_1d_spectral_onsagernet_1d_eps0.05'
+  training checkpoint 'eps-scan/spectral_onsagernet_1d_eps0.05'
 … Lightning progress …
 [2/3] eps=0.1
 …
 [3/3] eps=0.2
 …
-PARAMS    DATASET                CHECKPOINT                                    TRAIN_LOSS  TIME   STATUS
-eps=0.05  allen_cahn_1d_eps0.05  allen_cahn_1d_spectral_onsagernet_1d_eps0.05  0.0004203   10.1s  ok
-eps=0.1   allen_cahn_1d_eps0.1   allen_cahn_1d_spectral_onsagernet_1d_eps0.1   0.000112    3.8s   ok
-eps=0.2   allen_cahn_1d_eps0.2   allen_cahn_1d_spectral_onsagernet_1d_eps0.2   5.324e-05   3.8s   ok
-wrote /home/me/mesokit/checkpoints/allen_cahn_1d/sweeps/20260903-192502.json
+PARAMS    DATASET                CHECKPOINT                               TRAIN_LOSS  TIME   STATUS
+eps=0.05  allen_cahn_1d_eps0.05  eps-scan/spectral_onsagernet_1d_eps0.05  0.0004203   10.1s  ok
+eps=0.1   allen_cahn_1d_eps0.1   eps-scan/spectral_onsagernet_1d_eps0.1   0.000112    3.8s   ok
+eps=0.2   allen_cahn_1d_eps0.2   eps-scan/spectral_onsagernet_1d_eps0.2   5.324e-05   3.8s   ok
+wrote /home/me/mesokit/checkpoints/allen_cahn_1d/eps-scan/runs.json
 ```
 
 `TRAIN_LOSS` is the last `train_loss` entry of the trainer's history (`-`
 when the trainer logs none); `TIME` is the wall time of generation plus
-training. The JSON file holds the same rows with a few more fields — the
-parameter dict, `data_status` (`generated` or `reused`), `error`,
-`dataset_path`, `checkpoint_path` — under `"rows"`, plus `"dyn"`,
-`"model"` and the `"params"` axes, so a notebook can load it directly:
+training. `runs.json` holds the same rows with a few more fields — `params`
+and `data_params`, `data_status` (`generated`, `reused` or `given`), the
+`metrics` dict, `error`, `dataset_path`, `checkpoint_path`, `created` —
+under `"rows"`, plus `"experiment"`, `"dyn"`, `"model"` and the `"axes"` /
+`"data_axes"`, so a notebook can load it directly (`mesokit model list
+--experiment eps-scan --format json` gives the registry's view of the same
+runs):
 
 ```python
 import json, pandas as pd
-rows = json.load(open("checkpoints/allen_cahn_1d/sweeps/20260903-192502.json"))["rows"]
-pd.DataFrame(rows)[["params", "checkpoint", "train_loss", "status"]]
+rows = json.load(open("checkpoints/allen_cahn_1d/eps-scan/runs.json"))["rows"]
+pd.DataFrame(rows)[["data_params", "checkpoint", "metrics", "status"]]
 ```
 
 The same loop is available from Python as
-`mesokit.cli.sweep.run_sweep(dyn, model, {"eps": [0.05, 0.1, 0.2]}, epochs=2, device="cpu")`,
+`mesokit.cli.sweep.run_sweep(dyn, model, {"eps": [0.05, 0.1, 0.2]}, train_params={"trainer.lr": [1e-3, 1e-4]}, experiment="scan", epochs=2, device="cpu")`,
 which returns the list of row dicts.
 
 More examples:
 
 ```sh
-# Two axes -> four points; see the names before committing to the runs.
-mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d \
-  --param eps=0.05,0.1 --param T=0.05,0.1 --dry-run
+# A learning-rate scan on an existing dataset: no generation, three checkpoints under lr-scan/.
+mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d --data allen_cahn_1d_v0 \
+  --train-param trainer.lr=1e-3,1e-4,1e-5 --experiment lr-scan --epochs 20
+mesokit model list --experiment lr-scan --sort train_loss
 
-# Retrain a grid whose datasets already exist, replacing the old checkpoints.
+# Data axes times training axes: 2 datasets, 4 checkpoints; see the names before committing to the runs.
+mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d \
+  --param eps=0.05,0.1 --train-param trainer.lr=1e-3,1e-4 --dry-run
+
+# Retrain a grid whose datasets already exist, replacing the old checkpoints and rows.
 mesokit sweep --dyn allen_cahn_1d --model fno1d --param eps=0.05,0.1,0.2 \
-  --reuse-data --force --epochs 50
+  --experiment eps-scan --reuse-data --force --epochs 50
 
 # Custom prefix, variant training recipe.
 mesokit sweep --dyn ising_2d --model spectral_onsagernet_2d --param T=1.5,2.0,2.5 \
@@ -643,6 +727,9 @@ Errors:
 ```text
 Invalid value: expected KEY=V1,V2,..., got 'eps'
 Invalid value: parameter 'eps' given more than once
+Invalid value: at least one --param or --train-param axis is required
+Invalid value: --data is required when only --train-param axes are given
+Invalid value: --train-param key 'lr' must be a recipe key such as trainer.lr
 Invalid value: unknown parameter 'epsilon' for simulator mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d; accepted: eps, n_traj, …
 Invalid value: no config 'nope' under /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d; available: default, smoke
 ```
@@ -651,10 +738,16 @@ A per-point failure looks like this in the table (the dataset of a point
 that failed during generation is not registered):
 
 ```text
-PARAMS    DATASET                CHECKPOINT                                    TRAIN_LOSS  TIME  STATUS
-eps=0     allen_cahn_1d_eps0     allen_cahn_1d_spectral_onsagernet_1d_eps0     -           0.0s  FAILED: ZeroDivisionError: float division by zero
-eps=0.1   allen_cahn_1d_eps0.1   allen_cahn_1d_spectral_onsagernet_1d_eps0.1   0.000112    3.8s  ok
+PARAMS    DATASET                CHECKPOINT                               TRAIN_LOSS  TIME  STATUS
+eps=0     allen_cahn_1d_eps0     eps-scan/spectral_onsagernet_1d_eps0     -           0.0s  FAILED: ZeroDivisionError: float division by zero
+eps=0.1   allen_cahn_1d_eps0.1   eps-scan/spectral_onsagernet_1d_eps0.1   0.000112    3.8s  ok
 ```
+
+Earlier versions wrote the summary to `checkpoints/<dyn>/sweeps/<stamp>.json`
+and registered the points as flat `<prefix>_<model>_<suffix>` names; those
+files are still read by `mesokit model sync --import-sweeps`, which copies
+their `params` and `train_loss` into the matching entries and tags them
+`sweep:<stamp>`.
 
 ## `mesokit model`
 
@@ -663,23 +756,72 @@ Manage the project-local index of **trained checkpoints**
 that one is populated by the package and inspected from Python with
 `mesokit.models.available()`.
 
+Every entry mirrors the run's `run.json` (see [`mesokit train`](#mesokit-train)):
+the model, dataset and recipe it came from, the `--set` overrides as
+`params`, the final `metrics`, `created`, `tags` and `notes`, plus the paths.
+Entries written by earlier versions (schema 1: paths and names only) are
+read as they are, with empty `params` / `metrics`, and the file is stamped
+schema 2 on its next write.
+
 ### `mesokit model list`
 
 ```sh
-mesokit model list
+mesokit model list [--dyn D] [--model ARCH] [--experiment E] [--dataset NAME] [--tag T ...]
+                   [--sort COLUMN] [--reverse] [--format table|json|csv] [--columns a,b,...]
 ```
 
 ```text
-son_eps05_long
-  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/son_eps05_long/model.pt
-  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/son_eps05_long/config.yaml
-spectral_onsagernet_1d_v0
-  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/model.pt
-  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/config.yaml
+NAME                                   MODEL                   DATASET           PARAMS             TRAIN_LOSS  EPOCHS  TIME   CREATED              TAGS
+lr-scan/spectral_onsagernet_1d_lr0.0001  spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.0001  0.0003117   20      10.3s  2026-09-08T10:21:40  -
+lr-scan/spectral_onsagernet_1d_lr0.001   spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.001   0.0004203   20      10.1s  2026-09-08T10:15:02  -
+son_eps05_long                         spectral_onsagernet_1d  ac_eps05          -                  0.0002950   200     97.4s  2026-09-08T09:12:40  paper
 ```
 
-Entries are sorted by name; with nothing registered it prints
-`(no checkpoints registered)`.
+| Option | Meaning |
+| --- | --- |
+| `--dyn`, `--model`, `--experiment`, `--dataset`, `--tag` | Keep only the matching runs (`--experiment -` keeps the runs outside any experiment; `--tag` is repeatable and every given tag must be present). |
+| `--sort COLUMN` | Any column name (`name`, `created`, `train_loss`, `train_loss_min`, `val_loss`, `epochs`, `time`, `model`, `dataset`, …); runs without a value sort last. `--reverse` descends. |
+| `--format` | `table` (default), `json` (the full records as one list, for `pandas.DataFrame`) or `csv` (the selected columns). |
+| `--columns` | Comma-separated columns; the default is `name,model,dataset,params,train_loss,epochs,time,created,tags`. Also available: `experiment`, `run`, `dyn`, `trainer`, `data_params`, `train_loss_min`, `val_loss`, `status`, `notes`, `recipe`, `path`, `config`. |
+
+`PARAMS` are the recipe keys the run changed with `--set` or a sweep's
+`--train-param` (a sweep's simulator axes are `data_params`); `TRAIN_LOSS`
+is the last epoch's training loss (`-` when the trainer logs none, and for
+entries made by `model register`). Rows are sorted by name unless `--sort`
+says otherwise; with nothing registered it prints `(no checkpoints registered)`.
+
+### `mesokit model show`
+
+```sh
+mesokit model show NAME
+```
+
+```text
+lr-scan/spectral_onsagernet_1d_lr0.0001
+  status:      ok
+  experiment:  lr-scan
+  run dir:     /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001
+  checkpoint:  /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001/model.pt
+  config:      /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001/config.yaml
+  dyn:         allen_cahn_1d
+  model:       spectral_onsagernet_1d (trainer spectral_onsagernet_1d)
+  dataset:     allen_cahn_1d_v0 (/home/me/mesokit/data/allen_cahn_1d/allen_cahn_1d_v0.h5)
+  recipe:      default (recipe: /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d/default.yaml)
+  overrides:   trainer.lr=1e-4
+  params:      trainer.lr=0.0001
+  data params: -
+  from:        -
+  created:     2026-09-08T10:21:40
+  tags:        -
+  notes:       -
+  metrics:     train_loss=0.0003117 train_loss_min=0.0003117 val_loss=- epochs=20 time=10.3s
+  reproduce:   mesokit train --model spectral_onsagernet_1d --data allen_cahn_1d_v0 --dyn allen_cahn_1d --set trainer.lr=1e-4 --epochs 20 --experiment lr-scan
+```
+
+The whole record, the metrics, and the `mesokit train` line that trains the
+same thing again as a new run of the same experiment (it carries no
+`--name`, so the run gets the next free name). A bare run name works when
+only one experiment holds it.
 
 ### `mesokit model register`
 
@@ -687,14 +829,15 @@ Index a checkpoint that was trained elsewhere (a notebook, a cluster job,
 another machine). Only pointers are stored; nothing is copied.
 
 ```sh
-mesokit model register --model NAME --file CKPT.pt --config CONFIG.yaml [--force]
+mesokit model register --model NAME --file CKPT.pt --config CONFIG.yaml [--tag T ...] [--force]
 ```
 
 | Option | Meaning |
 | --- | --- |
 | `--model NAME` | Registry name (required). |
 | `--file CKPT.pt` | Existing checkpoint file: a `state_dict`, or a dict with a `state_dict` key such as a Lightning checkpoint (required). |
-| `--config CONFIG.yaml` | The recipe used to train it; must contain a `model` section with a `_target_` so `interpret` can rebuild the architecture (required). |
+| `--config CONFIG.yaml` | The recipe used to train it; must contain a `model` section with a `_target_` so `interpret` can rebuild the architecture (required). `model_name`, `dyn` and `dataset_name` are copied from it into the entry when present, so the `list` columns are filled. |
+| `--tag T` | Tag recorded on the entry; repeatable. |
 | `--force` | Replace an existing entry. |
 
 ```sh
@@ -713,12 +856,83 @@ alongside your own checkpoint. When loading, `interpret` strips a leading
 `model.` prefix and any `._orig_mod.` (from `torch.compile`) from the
 parameter names, so Lightning-style checkpoints load unchanged.
 
+### `mesokit model tag`
+
+```sh
+mesokit model tag NAME [--add T ...] [--remove T ...] [--notes TEXT]
+```
+
+Adds or drops tags on a run, or rewrites its notes; the registry entry and
+the run's `run.json` are both updated (`mesokit train --tag` sets tags at
+training time).
+
+### `mesokit model remove`
+
+```sh
+mesokit model remove NAME [--delete-files]
+```
+
+Drops the entry. With `--delete-files` the run directory `mesokit train`
+wrote is deleted as well; an entry made by `model register` has no run
+directory of its own, so its files are left where they are.
+
+### `mesokit model prune`
+
+```sh
+mesokit model prune [--dry-run]
+```
+
+Reconciles the index with the disk: entries whose `model.pt` is gone are
+dropped, and run directories under `checkpoints/<dyn>/` (flat or inside an
+experiment) that hold no registered checkpoint — a `--no-registry` smoke
+run, a run whose entry was removed, a run that failed inside the trainer and
+left no `model.pt` — are deleted. Only directories holding a run's files
+(`run.json`, `model.pt`, `config.yaml`, `history.json`, `*.ckpt`) are ever
+touched, and `runs.json` keeps its rows; `--dry-run` prints the plan and
+changes nothing.
+
+```text
+would remove entry 'son_old': checkpoint missing (/home/me/mesokit/checkpoints/allen_cahn_1d/son_old/model.pt)
+would remove run directory /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v4 (not registered)
+would remove run directory /home/me/mesokit/checkpoints/allen_cahn_1d/son_crashed (no model.pt)
+```
+
+### `mesokit model sync`
+
+```sh
+mesokit model sync [--import-sweeps]
+```
+
+Rebuilds the index from the run directories: every completed run (a
+`run.json` with `status: ok` next to a `model.pt`) gets an entry keyed by
+its location — `<run>` or `<experiment>/<run>` — with the paths as found,
+so a project directory that was moved, a run directory moved into an
+experiment folder by hand, or an index that was deleted is put back
+together. Registered runs from before `run.json` existed get one written,
+with `metrics` read from `history.json` and `created` from `model.pt`'s
+modification time; each experiment's `runs.json` is reconciled with its run
+directories (failed rows are kept). Entries without a run directory
+(`model register`) are left alone. `--import-sweeps` also reads the legacy
+`checkpoints/<dyn>/sweeps/*.json` summaries into the matching entries
+(`data_params`, `train_loss`, a `sweep:<stamp>` tag).
+
+```text
+synced 12 entries: 3 added, 1 updated, 4 backfilled from history.json, 2 experiment table(s) refreshed
+```
+
 ## `mesokit interpret`
 
 Inspect the interpretability artifacts a trained checkpoint can produce.
 Every registered model implements `list_artifacts()` and `artifact(name)`;
 these commands are thin wrappers that rebuild the model from its registry
 record, load the weights, and call them.
+
+`--model` takes the registry key (`<run>` or `<experiment>/<run>`; a bare
+run name when only one experiment holds it). Data-backed artifacts read the
+dataset the checkpoint was trained on: the file recorded in its run record
+(`dataset_path`) while it exists — a dataset re-registered under the same
+name since then is reported and not used — else the dataset's current
+registry entry, as for checkpoints from earlier versions.
 
 How a checkpoint is rebuilt: the registry record gives `config_path`; the
 `model` section of that YAML is instantiated; `model.pt` is loaded as a
@@ -917,11 +1131,22 @@ mesokit interpret extract --model spectral_onsagernet_1d_v0 --artifact all --out
 ```
 
 **A parameter sweep with reproducible names** (one dataset and one
-checkpoint per value, summarised in `checkpoints/allen_cahn_1d/sweeps/`):
+checkpoint per value, grouped under `checkpoints/allen_cahn_1d/eps-scan/`
+with the table in its `runs.json`):
 
 ```sh
-mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d --param eps=0.05,0.1,0.2
-mesokit model list
+mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d --param eps=0.05,0.1,0.2 --experiment eps-scan
+mesokit model list --experiment eps-scan --sort train_loss
+```
+
+**A learning-rate scan on one dataset**, then the best run continued:
+
+```sh
+mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d --data allen_cahn_1d_v0 \
+  --train-param trainer.lr=1e-3,1e-4,1e-5 --experiment lr-scan --epochs 20
+mesokit model list --experiment lr-scan --sort train_loss
+mesokit model show lr-scan/spectral_onsagernet_1d_lr0.0001
+mesokit train --from lr-scan/spectral_onsagernet_1d_lr0.0001 --name lr-scan/son_long --epochs 200
 ```
 
 The same thing by hand, if you need a step in between:
@@ -1004,15 +1229,17 @@ mesokit interpret list --model nb_run
 | `data/<dyn>/<name>.h5` | `data generate` | `train`, `interpret` | v1 trajectory cache. |
 | `data/parsed/<stem>.h5` | `data parse` (via the agent) | `train`, `interpret` | Same layout. |
 | `.mesokit/datasets.json` | `data generate`, `data register`, `data parse` | `data list`, `train`, `interpret` | `name → {path, metadata}`; metadata holds shape, dtype, `dt`, the three groups. |
-| `checkpoints/<dyn>/<run>/` | `train` | `interpret` | `model.pt`, `config.yaml`, `history.json`, Lightning `.ckpt`. |
-| `.mesokit/checkpoints.json` | `train`, `sweep`, `model register` | `model list`, `interpret` | `name → {path, config_path, model_name, trainer_name, dyn, dataset_name, data, run_id, training_config_hash, metadata}`. |
-| `checkpoints/<dyn>/sweeps/<timestamp>.json` | `sweep` | you (notebooks) | `{dyn, model, params, created, rows}`; one row per grid point with the parameters, names, paths, `train_loss`, `wall_time_s`, `status`, `error`. |
+| `checkpoints/<dyn>/<run>/` | `train` | `interpret`, `model prune` / `sync` | `model.pt`, `config.yaml`, `history.json`, `run.json` (the run record), Lightning `.ckpt`. |
+| `checkpoints/<dyn>/<experiment>/<run>/` | `train --experiment`, `sweep` | as above | The same files; registered as `<experiment>/<run>`. |
+| `checkpoints/<dyn>/<experiment>/runs.json` | `train --experiment`, `sweep`, `model sync` | you (notebooks) | `{schema_version, experiment, dyn, model, created, updated, axes, data_axes, rows}`; one row per run (failed points included) with `run`, `checkpoint`, `dataset`, `params`, `data_params`, `metrics`, `status`, `data_status`, `wall_time_s`, `error`, the paths. |
+| `.mesokit/checkpoints.json` | `train`, `sweep`, `model register` / `tag` / `remove` / `prune` / `sync` | `model list` / `show`, `interpret`, `train --from` | schema 2: `name → {path, config_path, run_dir, experiment, run, model_name, trainer_name, dyn, dataset_name, data, dataset_path, recipe, overrides, params, data_params, metrics, created, status, tags, notes, from, run_id, training_config_hash, metadata}`; schema-1 files (paths and names only) are read unchanged. |
+| `checkpoints/<dyn>/sweeps/<timestamp>.json` | earlier versions of `sweep` (no longer written) | `model sync --import-sweeps` | `{dyn, model, params, created, rows}`; the legacy summary. |
 | `AGENTS.md`, `CLAUDE.md` | `agent init` | your coding agent | Conventions for using mesokit in the project; the mesokit section sits between `<!-- mesokit:begin -->` / `<!-- mesokit:end -->` markers. |
 | `.claude/skills/<name>/`, `.agents/skills/<name>/` | `skills install`, `agent init` | your coding agent | A copy of each shipped skill folder. |
 
 Both registries are plain JSON with atomic writes; you can inspect or hand-edit
-them, and delete an entry by removing its key. Nothing under `data/`,
-`checkpoints/` or `.mesokit/` should be committed.
+them (`mesokit model remove` / `prune` do the deleting for checkpoints).
+Nothing under `data/`, `checkpoints/` or `.mesokit/` should be committed.
 
 A registry entry, for reference:
 
@@ -1052,7 +1279,11 @@ A registry entry, for reference:
 | `unknown artifact 'x' for checkpoint 'y'; available: …` | `interpret extract` was given an artifact the model does not expose. | Pick one from the list (`mesokit interpret list --model y`). |
 | `dataset 'x' is not registered and is not an existing HDF5 path` | `--data` matched neither a name nor a file. | `mesokit data list`, or pass the path. |
 | `registered dataset 'x' points to missing file` | The file was moved or deleted after registration. | Re-register with the new path and `--force`, or regenerate. |
-| `checkpoint 'x' is not registered` | `interpret` needs a name from `mesokit model list`. | Train, or `mesokit model register`. |
+| `checkpoint 'x' is not registered` | `interpret` needs a name from `mesokit model list`. | Train, or `mesokit model register`; `mesokit model sync` re-indexes runs that are on disk but not in the registry. |
+| `checkpoint 'x' is ambiguous; candidates: a/x, b/x` | Two experiments hold a run of that name. | Pass the full `<experiment>/<run>` key. |
+| `--data cannot be combined with --param` / `--data is required when only --train-param axes are given` | A sweep with data axes generates its datasets; one without needs to be told what to train on. | Drop `--data`, or add it. |
+| `--from: the weights of 'x' do not fit the model being trained` | `--set` or `--config` changed the architecture. | Keep the architecture keys as in the source checkpoint; `--set` only training keys. |
+| `run directory … already holds a checkpoint` | `--name` (or the auto name) points at a directory with a `model.pt`, e.g. from a `--no-registry` run. | Pick another `--name`, add `--force` to overwrite it, or `mesokit model prune` the leftovers. |
 | `--output must be a directory when --artifact all` | An extension was given with `--artifact all`. | Pass a directory path. |
 | `agent 'claude' is not installed: no claude command on PATH` | The agent CLI is missing from the shell `mesokit` runs in; nothing was launched. | Follow the official installation guide the message names ([Claude Code](https://code.claude.com/docs/en/setup), [Codex CLI](https://developers.openai.com/codex/cli)), check `claude --version`, and re-run; or `--agent codex`. |
 | `AGENTS.md already has a mesokit section; pass --force to rewrite it` | `agent init` was run in this project before. | Add `--force` to refresh the section; text outside the markers is kept. |
@@ -1070,8 +1301,8 @@ registries and the config lookup.
 | `mesokit data generate --dyn X` | `ds = mesokit.data.simulate("X", **kwargs); ds.save_hdf5(path)` |
 | `mesokit data validate F` / `register --file F` | `report = mesokit.data.validate(F)` (no registry write) |
 | `mesokit train` | `TrajectoryDataset.load_hdf5(path)` → a `mesokit.data.datasets` adapter → `DataLoader` → `mesokit.trainers.get_trainer(name)(...).fit(model, loader)` |
-| `mesokit sweep` | `mesokit.cli.sweep.run_sweep("X", "arch", {"eps": [0.05, 0.1]})` — the registries and naming included; returns the table rows |
-| `mesokit model list` | read `.mesokit/checkpoints.json` |
+| `mesokit sweep` | `mesokit.cli.sweep.run_sweep("X", "arch", {"eps": [0.05, 0.1]}, train_params={"trainer.lr": [1e-3, 1e-4]}, experiment="scan")` — the registries and naming included; returns the table rows |
+| `mesokit model list` | read `.mesokit/checkpoints.json` (`--format json` prints the same records), each run's `run.json`, or an experiment's `runs.json` |
 | `mesokit interpret list` / `extract` | `model.load_state_dict(torch.load("model.pt"))`; `model.list_artifacts()`; `model.artifact(name).save(path)` |
 
 See [Training](training.md) and [Interpretability](interpretability.md) for
