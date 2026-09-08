@@ -100,6 +100,18 @@ Once the report is clean, register the file:
 mesokit data register --name external_demo_v0 --file data/external.h5
 ```
 
+The command re-runs the same check and says so on its first row, which is
+where to look if you are not sure whether the entry was written:
+
+```text
+registered 'external_demo_v0' -> /home/me/project/data/external.h5 (13.9 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        external_demo
+  shape:      2 traj x 11 steps x 1 channel, grid 64 (float32)
+  dt:         0.1
+  channels:   u
+```
+
 After registration, `mesokit data list` shows the entry, and downstream
 commands resolve `--data external_demo_v0` through the registry.
 

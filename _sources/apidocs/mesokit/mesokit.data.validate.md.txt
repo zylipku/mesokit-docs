@@ -27,6 +27,10 @@
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`uniform_dt <mesokit.data.validate.uniform_dt>`
+  - ```{autodoc2-docstring} mesokit.data.validate.uniform_dt
+    :summary:
+    ```
 * - {py:obj}`validate <mesokit.data.validate.validate>`
   - ```{autodoc2-docstring} mesokit.data.validate.validate
     :summary:
@@ -212,6 +216,13 @@
 ````
 
 `````
+
+````{py:function} uniform_dt(times: numpy.ndarray) -> float | None
+:canonical: mesokit.data.validate.uniform_dt
+
+```{autodoc2-docstring} mesokit.data.validate.uniform_dt
+```
+````
 
 ````{py:function} validate(path: str | pathlib.Path) -> mesokit.data.validate.ValidationReport
 :canonical: mesokit.data.validate.validate

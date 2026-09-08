@@ -1,0 +1,414 @@
+# {py:mod}`mesokit.cli._report`
+
+```{py:module} mesokit.cli._report
+```
+
+```{autodoc2-docstring} mesokit.cli._report
+:allowtitles:
+```
+
+## Module Contents
+
+### Classes
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`DatasetFacts <mesokit.cli._report.DatasetFacts>`
+  - ```{autodoc2-docstring} mesokit.cli._report.DatasetFacts
+    :summary:
+    ```
+````
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`check_output_path <mesokit.cli._report.check_output_path>`
+  - ```{autodoc2-docstring} mesokit.cli._report.check_output_path
+    :summary:
+    ```
+* - {py:obj}`human_size <mesokit.cli._report.human_size>`
+  - ```{autodoc2-docstring} mesokit.cli._report.human_size
+    :summary:
+    ```
+* - {py:obj}`size_suffix <mesokit.cli._report.size_suffix>`
+  - ```{autodoc2-docstring} mesokit.cli._report.size_suffix
+    :summary:
+    ```
+* - {py:obj}`detail_block <mesokit.cli._report.detail_block>`
+  - ```{autodoc2-docstring} mesokit.cli._report.detail_block
+    :summary:
+    ```
+* - {py:obj}`dataset_fields <mesokit.cli._report.dataset_fields>`
+  - ```{autodoc2-docstring} mesokit.cli._report.dataset_fields
+    :summary:
+    ```
+* - {py:obj}`echo_dataset <mesokit.cli._report.echo_dataset>`
+  - ```{autodoc2-docstring} mesokit.cli._report.echo_dataset
+    :summary:
+    ```
+* - {py:obj}`echo_failure <mesokit.cli._report.echo_failure>`
+  - ```{autodoc2-docstring} mesokit.cli._report.echo_failure
+    :summary:
+    ```
+* - {py:obj}`_check_text <mesokit.cli._report._check_text>`
+  - ```{autodoc2-docstring} mesokit.cli._report._check_text
+    :summary:
+    ```
+* - {py:obj}`_shape_text <mesokit.cli._report._shape_text>`
+  - ```{autodoc2-docstring} mesokit.cli._report._shape_text
+    :summary:
+    ```
+* - {py:obj}`_channels_text <mesokit.cli._report._channels_text>`
+  - ```{autodoc2-docstring} mesokit.cli._report._channels_text
+    :summary:
+    ```
+* - {py:obj}`_group_text <mesokit.cli._report._group_text>`
+  - ```{autodoc2-docstring} mesokit.cli._report._group_text
+    :summary:
+    ```
+* - {py:obj}`_value_text <mesokit.cli._report._value_text>`
+  - ```{autodoc2-docstring} mesokit.cli._report._value_text
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`_LABEL_W <mesokit.cli._report._LABEL_W>`
+  - ```{autodoc2-docstring} mesokit.cli._report._LABEL_W
+    :summary:
+    ```
+* - {py:obj}`_MAX_CHANNEL_NAMES <mesokit.cli._report._MAX_CHANNEL_NAMES>`
+  - ```{autodoc2-docstring} mesokit.cli._report._MAX_CHANNEL_NAMES
+    :summary:
+    ```
+* - {py:obj}`OUTPUT_HINT <mesokit.cli._report.OUTPUT_HINT>`
+  - ```{autodoc2-docstring} mesokit.cli._report.OUTPUT_HINT
+    :summary:
+    ```
+* - {py:obj}`CHECK_PASSED <mesokit.cli._report.CHECK_PASSED>`
+  - ```{autodoc2-docstring} mesokit.cli._report.CHECK_PASSED
+    :summary:
+    ```
+* - {py:obj}`CHECK_NOT_RUN <mesokit.cli._report.CHECK_NOT_RUN>`
+  - ```{autodoc2-docstring} mesokit.cli._report.CHECK_NOT_RUN
+    :summary:
+    ```
+* - {py:obj}`NOT_REGISTERED <mesokit.cli._report.NOT_REGISTERED>`
+  - ```{autodoc2-docstring} mesokit.cli._report.NOT_REGISTERED
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} _LABEL_W
+:canonical: mesokit.cli._report._LABEL_W
+:value: >
+   12
+
+```{autodoc2-docstring} mesokit.cli._report._LABEL_W
+```
+
+````
+
+````{py:data} _MAX_CHANNEL_NAMES
+:canonical: mesokit.cli._report._MAX_CHANNEL_NAMES
+:value: >
+   8
+
+```{autodoc2-docstring} mesokit.cli._report._MAX_CHANNEL_NAMES
+```
+
+````
+
+````{py:data} OUTPUT_HINT
+:canonical: mesokit.cli._report.OUTPUT_HINT
+:value: >
+   'pass --output to write elsewhere'
+
+```{autodoc2-docstring} mesokit.cli._report.OUTPUT_HINT
+```
+
+````
+
+````{py:data} CHECK_PASSED
+:canonical: mesokit.cli._report.CHECK_PASSED
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.CHECK_PASSED
+```
+
+````
+
+````{py:data} CHECK_NOT_RUN
+:canonical: mesokit.cli._report.CHECK_NOT_RUN
+:value: >
+   'not run'
+
+```{autodoc2-docstring} mesokit.cli._report.CHECK_NOT_RUN
+```
+
+````
+
+````{py:data} NOT_REGISTERED
+:canonical: mesokit.cli._report.NOT_REGISTERED
+:value: >
+   'not registered (--no-registry)'
+
+```{autodoc2-docstring} mesokit.cli._report.NOT_REGISTERED
+```
+
+````
+
+`````{py:class} DatasetFacts
+:canonical: mesokit.cli._report.DatasetFacts
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts
+```
+
+````{py:attribute} dyn
+:canonical: mesokit.cli._report.DatasetFacts.dyn
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.dyn
+```
+
+````
+
+````{py:attribute} n_traj
+:canonical: mesokit.cli._report.DatasetFacts.n_traj
+:type: int
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.n_traj
+```
+
+````
+
+````{py:attribute} n_time
+:canonical: mesokit.cli._report.DatasetFacts.n_time
+:type: int
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.n_time
+```
+
+````
+
+````{py:attribute} n_channel
+:canonical: mesokit.cli._report.DatasetFacts.n_channel
+:type: int
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.n_channel
+```
+
+````
+
+````{py:attribute} grid_shape
+:canonical: mesokit.cli._report.DatasetFacts.grid_shape
+:type: tuple[int, ...]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.grid_shape
+```
+
+````
+
+````{py:attribute} data_dtype
+:canonical: mesokit.cli._report.DatasetFacts.data_dtype
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.data_dtype
+```
+
+````
+
+````{py:attribute} times_dtype
+:canonical: mesokit.cli._report.DatasetFacts.times_dtype
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.times_dtype
+```
+
+````
+
+````{py:attribute} dt
+:canonical: mesokit.cli._report.DatasetFacts.dt
+:type: float | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.dt
+```
+
+````
+
+````{py:attribute} channel_names
+:canonical: mesokit.cli._report.DatasetFacts.channel_names
+:type: tuple[str, ...] | None
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.channel_names
+```
+
+````
+
+````{py:attribute} physical
+:canonical: mesokit.cli._report.DatasetFacts.physical
+:type: dict[str, typing.Any]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.physical
+```
+
+````
+
+````{py:attribute} numerical
+:canonical: mesokit.cli._report.DatasetFacts.numerical
+:type: dict[str, typing.Any]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.numerical
+```
+
+````
+
+````{py:attribute} provenance
+:canonical: mesokit.cli._report.DatasetFacts.provenance
+:type: dict[str, typing.Any]
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.provenance
+```
+
+````
+
+````{py:method} from_report(report: mesokit.data.validate.ValidationReport) -> mesokit.cli._report.DatasetFacts
+:canonical: mesokit.cli._report.DatasetFacts.from_report
+:classmethod:
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.from_report
+```
+
+````
+
+````{py:method} from_dataset(ds: mesokit.data.trajectory.TrajectoryDataset) -> mesokit.cli._report.DatasetFacts
+:canonical: mesokit.cli._report.DatasetFacts.from_dataset
+:classmethod:
+
+```{autodoc2-docstring} mesokit.cli._report.DatasetFacts.from_dataset
+```
+
+````
+
+`````
+
+````{py:function} check_output_path(path: pathlib.Path, *, hint: str = OUTPUT_HINT) -> None
+:canonical: mesokit.cli._report.check_output_path
+
+```{autodoc2-docstring} mesokit.cli._report.check_output_path
+```
+````
+
+````{py:function} human_size(n_bytes: int) -> str
+:canonical: mesokit.cli._report.human_size
+
+```{autodoc2-docstring} mesokit.cli._report.human_size
+```
+````
+
+````{py:function} size_suffix(path: pathlib.Path) -> str
+:canonical: mesokit.cli._report.size_suffix
+
+```{autodoc2-docstring} mesokit.cli._report.size_suffix
+```
+````
+
+````{py:function} detail_block(fields: collections.abc.Sequence[tuple[str, str]]) -> str
+:canonical: mesokit.cli._report.detail_block
+
+```{autodoc2-docstring} mesokit.cli._report.detail_block
+```
+````
+
+````{py:function} dataset_fields(facts: mesokit.cli._report.DatasetFacts, *, check: str, registry: str | None = None, path: pathlib.Path | None = None, verbose: bool = False) -> list[tuple[str, str]]
+:canonical: mesokit.cli._report.dataset_fields
+
+```{autodoc2-docstring} mesokit.cli._report.dataset_fields
+```
+````
+
+````{py:function} echo_dataset(header: str, facts: mesokit.cli._report.DatasetFacts, *, check: str, registry: str | None = None, path: pathlib.Path | None = None, verbose: bool = False) -> None
+:canonical: mesokit.cli._report.echo_dataset
+
+```{autodoc2-docstring} mesokit.cli._report.echo_dataset
+```
+````
+
+````{py:function} echo_failure(file: pathlib.Path, report: mesokit.data.validate.ValidationReport) -> None
+:canonical: mesokit.cli._report.echo_failure
+
+```{autodoc2-docstring} mesokit.cli._report.echo_failure
+```
+````
+
+````{py:function} _check_text(check: str) -> str
+:canonical: mesokit.cli._report._check_text
+
+```{autodoc2-docstring} mesokit.cli._report._check_text
+```
+````
+
+````{py:function} _shape_text(facts: mesokit.cli._report.DatasetFacts) -> str
+:canonical: mesokit.cli._report._shape_text
+
+```{autodoc2-docstring} mesokit.cli._report._shape_text
+```
+````
+
+````{py:function} _channels_text(names: collections.abc.Sequence[str]) -> str
+:canonical: mesokit.cli._report._channels_text
+
+```{autodoc2-docstring} mesokit.cli._report._channels_text
+```
+````
+
+````{py:function} _group_text(body: collections.abc.Mapping[str, typing.Any]) -> str
+:canonical: mesokit.cli._report._group_text
+
+```{autodoc2-docstring} mesokit.cli._report._group_text
+```
+````
+
+````{py:function} _value_text(value: typing.Any) -> str
+:canonical: mesokit.cli._report._value_text
+
+```{autodoc2-docstring} mesokit.cli._report._value_text
+```
+````

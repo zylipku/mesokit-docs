@@ -283,6 +283,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -365,6 +366,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
@@ -448,7 +450,10 @@ if not report.ok:
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-left">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.data.validate.validate" title="mesokit.data.validate.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.data.validate.uniform_dt" title="mesokit.data.validate.uniform_dt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uniform_dt</span></code></a></p></td>
+<td><p>The single step of <code class="docutils literal notranslate"><span class="pre">times</span></code> when its grid is uniform, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.data.validate.validate" title="mesokit.data.validate.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a></p></td>
 <td><p>Validate that an HDF5 file conforms to <code class="docutils literal notranslate"><span class="pre">TRAJECTORY_CACHE_V1</span></code>.</p></td>
 </tr>
 </tbody>
@@ -567,6 +572,17 @@ physical, numerical, provenance: Decoded contents of the three groups.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mesokit.data.validate.uniform_dt">
+<span class="sig-prename descclassname"><span class="pre">mesokit.data.validate.</span></span><span class="sig-name descname"><span class="pre">uniform_dt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.data.validate.uniform_dt" title="Link to this definition">¶</a></dt>
+<dd><p>The single step of <code class="docutils literal notranslate"><span class="pre">times</span></code> when its grid is uniform, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>The tolerances (<code class="docutils literal notranslate"><span class="pre">rtol=1e-6</span></code>, <code class="docutils literal notranslate"><span class="pre">atol=1e-12</span></code>) are the v1 contract’s
+definition of “uniform”; :func:<code class="docutils literal notranslate"><span class="pre">validate</span></code> and the CLI’s dataset renderer
+both read <code class="docutils literal notranslate"><span class="pre">dt</span></code> through here so the rule lives in one place. Returns
+<code class="docutils literal notranslate"><span class="pre">None</span></code> for fewer than two samples, for a non-finite grid, and for one
+that is not strictly increasing.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mesokit.data.validate.validate">
 <span class="sig-prename descclassname"><span class="pre">mesokit.data.validate.</span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mesokit.data.validate.ValidationReport" title="mesokit.data.validate.ValidationReport"><span class="pre">mesokit.data.validate.ValidationReport</span></a></span></span><a class="headerlink" href="#mesokit.data.validate.validate" title="Link to this definition">¶</a></dt>
 <dd><p>Validate that an HDF5 file conforms to <code class="docutils literal notranslate"><span class="pre">TRAJECTORY_CACHE_V1</span></code>.</p>
@@ -659,6 +675,7 @@ only on I/O errors that prevent reading the file at all.</p>
 <li><a class="reference internal" href="#mesokit.data.validate.ValidationReport.summary"><code class="docutils literal notranslate"><span class="pre">ValidationReport.summary()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#mesokit.data.validate.uniform_dt"><code class="docutils literal notranslate"><span class="pre">uniform_dt()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data.validate.validate"><code class="docutils literal notranslate"><span class="pre">validate()</span></code></a></li>
 </ul>
 </li>

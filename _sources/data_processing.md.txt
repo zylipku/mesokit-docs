@@ -52,7 +52,11 @@ Start with the page that matches your task:
   catalog of currently shipped simulators.
 - **Bringing your own HDF5 file** —
   [Custom Datasets](data_processing/custom.md) for the minimal writer,
-  `mesokit.data.validate(path)`, and `mesokit data register`.
+  `mesokit.data.validate(path)`, and `mesokit data register`. If your data is
+  in some other format, the same page covers `mesokit data parse`, which
+  hands the conversion to a coding agent; `mesokit data demo` writes a
+  deliberately non-conforming file to try that on before you point it at your
+  own.
 - **Generating from your own equation** —
   [Custom Simulators](data_processing/custom_simulator.md) for the simulator
   contract, `mesokit.data.register`, and wiring `mesokit data generate` to

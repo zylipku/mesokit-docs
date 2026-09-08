@@ -26,6 +26,7 @@ mesokit.cli._runs
 mesokit.cli.agent
 mesokit.cli._registry_store
 mesokit.cli.main
+mesokit.cli._report
 ```
 
 ## Package Contents

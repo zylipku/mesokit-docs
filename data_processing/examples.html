@@ -283,6 +283,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -365,6 +366,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../apidocs/mesokit/mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
@@ -497,6 +499,16 @@ explanation; see the common validator errors table in
 <a class="reference internal" href="custom.html"><span class="std std-doc">Custom Datasets</span></a> for representative fixes.</p>
 <p>Once the report is clean, register the file:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>external_demo_v0<span class="w"> </span>--file<span class="w"> </span>data/external.h5
+</pre></div>
+</div>
+<p>The command re-runs the same check and says so on its first row, which is
+where to look if you are not sure whether the entry was written:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;external_demo_v0&#39; -&gt; /home/me/project/data/external.h5 (13.9 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        external_demo
+  shape:      2 traj x 11 steps x 1 channel, grid 64 (float32)
+  dt:         0.1
+  channels:   u
 </pre></div>
 </div>
 <p>After registration, <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">list</span></code> shows the entry, and downstream

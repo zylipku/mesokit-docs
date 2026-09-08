@@ -283,6 +283,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -365,6 +366,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../apidocs/mesokit/mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
@@ -440,7 +442,9 @@ mechanism through <code class="docutils literal notranslate"><span class="pre">_
 <h2>The Contract<a class="headerlink" href="#the-contract" title="Link to this heading">¶</a></h2>
 <p>A simulator is any <strong>keyword-only</strong> callable that returns a
 <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code>. It must accept <code class="docutils literal notranslate"><span class="pre">verbose:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> (the CLI
-forwards <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> through it) and should echo its identifying parameters
+forwards <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> / <code class="docutils literal notranslate"><span class="pre">-v</span></code> through it: <code class="docutils literal notranslate"><span class="pre">False</span></code> means keep the solver’s own
+log quiet, <code class="docutils literal notranslate"><span class="pre">True</span></code> means leave it alone) and should echo its identifying
+parameters
 into the three metadata groups so the file is self-describing. Include the
 box lengths in <code class="docutils literal notranslate"><span class="pre">physical</span></code> and the stored frame spacing <code class="docutils literal notranslate"><span class="pre">dt</span></code> in <code class="docutils literal notranslate"><span class="pre">numerical</span></code>:
 <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> reads <code class="docutils literal notranslate"><span class="pre">dt</span></code> from there, and the shipped spectral models

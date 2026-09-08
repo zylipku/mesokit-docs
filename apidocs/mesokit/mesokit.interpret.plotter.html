@@ -283,6 +283,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -365,6 +366,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
@@ -480,6 +482,15 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="mesokit.interpret.plotter.ArtifactPlotter.target_paths">
+<span class="sig-name descname"><span class="pre">target_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'png'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.interpret.plotter.ArtifactPlotter.target_paths" title="Link to this definition">¶</a></dt>
+<dd><p>Where :meth:<code class="docutils literal notranslate"><span class="pre">save_all</span></code> would write, in the same order, without writing anything.</p>
+<p>A caller that has something to say about an existing file — the CLI
+warns before it replaces one — needs the names before the figures are
+drawn, and must not have to guess them.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="mesokit.interpret.plotter.ArtifactPlotter.save_all">
 <span class="sig-name descname"><span class="pre">save_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'png'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.interpret.plotter.ArtifactPlotter.save_all" title="Link to this definition">¶</a></dt>
 <dd><p>Save each artifact through its own <code class="docutils literal notranslate"><span class="pre">save()</span></code> implementation.</p>
@@ -569,6 +580,7 @@
 <li><a class="reference internal" href="#mesokit.interpret.plotter.ArtifactPlotter.names"><code class="docutils literal notranslate"><span class="pre">ArtifactPlotter.names()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.interpret.plotter.ArtifactPlotter.plot"><code class="docutils literal notranslate"><span class="pre">ArtifactPlotter.plot()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.interpret.plotter.ArtifactPlotter.save"><code class="docutils literal notranslate"><span class="pre">ArtifactPlotter.save()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.interpret.plotter.ArtifactPlotter.target_paths"><code class="docutils literal notranslate"><span class="pre">ArtifactPlotter.target_paths()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.interpret.plotter.ArtifactPlotter.save_all"><code class="docutils literal notranslate"><span class="pre">ArtifactPlotter.save_all()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.interpret.plotter.ArtifactPlotter.save_one"><code class="docutils literal notranslate"><span class="pre">ArtifactPlotter.save_one()</span></code></a></li>
 </ul>

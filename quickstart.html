@@ -283,6 +283,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -365,6 +366,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="apidocs/mesokit/mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
@@ -460,6 +462,29 @@ is a single concise progress line on stderr).</p>
 <p>Each dynamics has its own config folder under <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/</span></code>, with a
 <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> used when <code class="docutils literal notranslate"><span class="pre">--config</span></code> is not passed. To run a variant config,
 drop a sibling YAML next to <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> and select it by stem (no extension):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w">    </span><span class="c1"># reads configs/data/allen_cahn_1d/fdr.yaml</span>
+</pre></div>
+</div>
+<p>Each run prints what it wrote, whether the file passed the sanity check, and
+its shape. That last command, the seconds-long <code class="docutils literal notranslate"><span class="pre">fdr</span></code> recipe, prints:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>wrote data/allen_cahn_1d/allen_cahn_1d_v0.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  registry:   allen_cahn_1d_v0
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">default</span></code> recipe above is the full reference dataset — 1000 trajectories,
+about 99 MiB — so its block reads <code class="docutils literal notranslate"><span class="pre">1000</span> <span class="pre">traj</span></code> and takes minutes rather than
+seconds.</p>
+<p>Pass <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> (or <code class="docutils literal notranslate"><span class="pre">-v</span></code>) to add the full metadata and keep the solver’s own
+per-step logs. By default the solver is quiet and progress is shown only when
+stderr is a terminal, so a redirected run leaves a clean log. An <code class="docutils literal notranslate"><span class="pre">--output</span></code>
+that already exists is replaced, with a warning on stderr first; a <code class="docutils literal notranslate"><span class="pre">--name</span></code>
+that is already registered is refused before the solver runs, unless
+<code class="docutils literal notranslate"><span class="pre">--force</span></code>.</p>
 </section>
 <section id="registering-a-custom-dataset">
 <h3>Registering a Custom Dataset<a class="headerlink" href="#registering-a-custom-dataset" title="Link to this heading">¶</a></h3>
@@ -469,8 +494,12 @@ contract and register it under a name:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>DATASET_NAME<span class="w"> </span>--file<span class="w"> </span>data/my_data.h5
 </pre></div>
 </div>
-<p>This runs a sanity check to verify the file is in the expected format and
-prints the inferred metadata (state shape, time step, …) for confirmation.
+<p>This runs a sanity check to verify the file is in the expected format, then
+prints the same block as <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> — the <code class="docutils literal notranslate"><span class="pre">check:</span></code> row is the verdict,
+<code class="docutils literal notranslate"><span class="pre">passed</span> <span class="pre">(mesokit-trajectory</span> <span class="pre">v1)</span></code> when the file conforms, and nothing is
+registered otherwise. A failing file names each violated check on stderr, in
+red, and exits with status <code class="docutils literal notranslate"><span class="pre">2</span></code>. To run the check without registering
+anything, use <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">validate</span> <span class="pre">FILE</span></code>.
 The full cache-file contract — required datasets, root attributes, and
 metadata groups — is documented in <a class="reference internal" href="data_processing.html"><span class="std std-doc">Data Processing</span></a>, with
 end-to-end snippets in <a class="reference internal" href="data_processing/examples.html"><span class="std std-doc">Examples</span></a>.</p>
@@ -489,6 +518,12 @@ folder that is not a git checkout.</p>
 <span class="w">  </span>--hint<span class="w"> </span><span class="s2">&quot;time dim is `t`, var is `u`&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--agent<span class="w"> </span>claude<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--name<span class="w"> </span>from_agent
+</pre></div>
+</div>
+<p>To watch it work before trusting it with your own data, <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code>
+writes a small, deliberately non-conforming file for exactly that:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo<span class="w">                                                                    </span><span class="c1"># data/demo/allen_cahn_1d_demo.npz</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
 </pre></div>
 </div>
 <p>Flags:</p>

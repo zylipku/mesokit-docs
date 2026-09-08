@@ -283,6 +283,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -365,6 +366,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../apidocs/mesokit/mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
@@ -415,7 +417,8 @@ PDE solver, MD trajectory, finite-difference export, …) and then have
 <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> validate and register it. Once registered, a custom dataset is
 indistinguishable from a built-in one to the rest of the toolkit.</p>
 <p>This page walks through the conformance checklist, the minimal writer, the
-validator, and the registration command.</p>
+validator, the registration command, and — for data that is not HDF5 at all —
+the agent-driven conversion.</p>
 <section id="required-structure-at-a-glance">
 <h2>Required Structure At a Glance<a class="headerlink" href="#required-structure-at-a-glance" title="Link to this heading">¶</a></h2>
 <p>A conforming v1 file has:</p>
@@ -477,9 +480,22 @@ groups are created up-front so even a metadata-light export is conforming.</p>
 </section>
 <section id="validating">
 <h2>Validating<a class="headerlink" href="#validating" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">validate</span> <span class="pre">data/my_data.h5</span></code> prints the inferred metadata, or
-each failing check with a non-zero exit, without registering anything.
-From Python, <code class="docutils literal notranslate"><span class="pre">mesokit.data.validate(path)</span></code> runs the same checks and
+<p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">validate</span> <span class="pre">data/my_data.h5</span></code> prints the verdict and the inferred
+metadata, or each failing check with a non-zero exit, without registering
+anything:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>validated /home/me/project/data/my_data.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">check:</span></code> row is the answer; <code class="docutils literal notranslate"><span class="pre">dt</span></code> is <code class="docutils literal notranslate"><span class="pre">non-uniform</span></code> when the saved times do
+not sit on a single step to within the v1 tolerance, which is a statement
+about the file rather than a fault. Add <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> (<code class="docutils literal notranslate"><span class="pre">-v</span></code>) for the file path,
+the <code class="docutils literal notranslate"><span class="pre">times</span></code> dtype and the three metadata groups.</p>
+<p>From Python, <code class="docutils literal notranslate"><span class="pre">mesokit.data.validate(path)</span></code> runs the same checks and
 returns a <code class="docutils literal notranslate"><span class="pre">ValidationReport</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mesokit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate</span>
 
@@ -506,14 +522,63 @@ dataset is physically meaningful; that is the simulator’s responsibility.</p>
 <p>This re-runs <code class="docutils literal notranslate"><span class="pre">validate(path)</span></code>, then writes a record into the local
 <code class="docutils literal notranslate"><span class="pre">.mesokit/datasets.json</span></code> registry pointing at the file. From this point on,
 <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--data</span> <span class="pre">my_dataset</span> <span class="pre">...</span></code> and other CLI commands resolve the
-name through the registry.</p>
+name through the registry. The output is the same block <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">validate</span></code>
+prints, under a header naming the entry that was written:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;ac_scratch&#39; -&gt; /home/me/project/data/scratch.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+</pre></div>
+</div>
+<p>A file that does not conform is reported on stderr, in red, and nothing is
+written:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>sanity check FAILED: /home/me/project/data/bad.h5
+  missing required root attribute &#39;format&#39;
+Invalid value: sanity check failed for /home/me/project/data/bad.h5; not registered
+</pre></div>
+</div>
 <p>Useful flags:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--force</span></code> — overwrite an existing entry of the same name.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code> / <code class="docutils literal notranslate"><span class="pre">-v</span></code> — add the file path, the <code class="docutils literal notranslate"><span class="pre">times</span></code> dtype and the three
+metadata groups to the block.</p></li>
 </ul>
 <p>The registry record is <em>not</em> part of the HDF5 cache contract; it lives on
 disk under the project root and is project-local. Two checkouts of the
 same project can have different registries.</p>
+</section>
+<section id="converting-another-format">
+<h2>Converting Another Format<a class="headerlink" href="#converting-another-format" title="Link to this heading">¶</a></h2>
+<p>If the data is not HDF5 at all — a NumPy archive, a NetCDF file, torch
+tensors next to a JSON sidecar — <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code> hands the conversion to
+a coding agent you already have installed, then validates and (with <code class="docutils literal notranslate"><span class="pre">--name</span></code>)
+registers what it produced. The
+<a class="reference internal" href="../cli.html#mesokit-data-parse"><span class="std std-ref">Command-Line Reference</span></a> covers the flags and
+the permissions it grants.</p>
+<p>To see that work before pointing it at your own data,
+<a class="reference internal" href="../cli.html#mesokit-data-demo"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code></span></a> writes a small file that is
+deliberately <em>not</em> conforming — a real 1-D Allen-Cahn run stored with the axes
+in the wrong order, no channel axis, frame indices instead of times, and flat
+scalars instead of the three metadata groups:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
+mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;allen_cahn_demo_v0&#39; -&gt; /home/me/project/data/parsed/allen_cahn_1d_demo.h5 (213.7 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      4 traj x 51 steps x 1 channel, grid 128 (float64)
+  dt:         0.008
+  channels:   u
+</pre></div>
+</div>
+<p>Every fact the v1 cache needs is in the demo file, just stored the wrong way,
+so the conversion is a real one: the <code class="docutils literal notranslate"><span class="pre">(frame,</span> <span class="pre">x,</span> <span class="pre">run)</span></code> array has to be
+transposed and given a channel axis, and <code class="docutils literal notranslate"><span class="pre">frame_steps</span> <span class="pre">*</span> <span class="pre">dt</span></code> has to become
+<code class="docutils literal notranslate"><span class="pre">times</span></code>. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span> <span class="pre">--format</span> <span class="pre">h5</span></code> writes the same run as HDF5 instead,
+which <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">validate</span></code> can then pick apart check by check.</p>
 </section>
 <section id="common-validator-errors">
 <h2>Common Validator Errors<a class="headerlink" href="#common-validator-errors" title="Link to this heading">¶</a></h2>
@@ -633,6 +698,7 @@ failing message and a minimal reproducer.</p>
 <li><a class="reference internal" href="#minimal-writer">Minimal Writer</a></li>
 <li><a class="reference internal" href="#validating">Validating</a></li>
 <li><a class="reference internal" href="#registering">Registering</a></li>
+<li><a class="reference internal" href="#converting-another-format">Converting Another Format</a></li>
 <li><a class="reference internal" href="#common-validator-errors">Common Validator Errors</a></li>
 </ul>
 </li>

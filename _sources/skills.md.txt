@@ -165,12 +165,24 @@ writes `data/parsed/burgers.h5` with `dyn = "burgers_1d"`, `Lx = 2π`,
 and registers the name:
 
 ```text
-registered 'burgers_v0' -> /home/me/project/data/parsed/burgers.h5
-dyn=burgers_1d  data=(200, 101, 1, 256) float32  dt=0.01
+registered 'burgers_v0' -> /home/me/project/data/parsed/burgers.h5 (19.7 MiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        burgers_1d
+  shape:      200 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         0.01
+  channels:   u
 ```
 
 Had the hint been missing, it would have asked which axis is time before
 writing anything.
+
+To watch this happen without a file of your own, `mesokit data demo` writes
+a deliberately non-conforming one to practise on:
+
+```sh
+mesokit data demo
+mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
+```
 
 ### Generate data from your own equation
 

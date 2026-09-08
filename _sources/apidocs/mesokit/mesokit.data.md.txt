@@ -31,6 +31,7 @@ mesokit.data.ising
 mesokit.data.registry
 mesokit.data.simulator_base
 mesokit.data._optional
+mesokit.data.demo
 mesokit.data.trajectory
 mesokit.data._hdf5
 mesokit.data._progress

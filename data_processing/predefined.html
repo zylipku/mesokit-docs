@@ -283,6 +283,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -365,6 +366,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../apidocs/mesokit/mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
@@ -481,9 +483,12 @@ training script through the universal <code class="docutils literal notranslate"
 feature has both, a <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">mesokit</span></code> has neither. The simulators that
 need them import the back-end only when run, so <code class="docutils literal notranslate"><span class="pre">mesokit.data</span></code>, the CLI
 and the three NumPy/SciPy simulators work without it; running one of the
-four without its back-end stops with a message naming the package to add
-(<code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">add</span> <span class="pre">dedalus</span></code>, <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">add</span> <span class="pre">lammps</span></code>; see
-<a class="reference internal" href="../installation.html#solver-backends"><span class="std std-ref">Solver Back-Ends</span></a>).</p>
+four without its back-end stops with the exact command to run:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invalid value: allen_cahn_1d needs Dedalus, which is not installed (No module named &#39;dedalus&#39;). It is a conda-forge package, not a PyPI one: run `pixi add dedalus` in a pixi project or `conda install -c conda-forge dedalus` in a conda environment, then re-run.
+</pre></div>
+</div>
+<p>The same message names <code class="docutils literal notranslate"><span class="pre">lammps</span></code> for <code class="docutils literal notranslate"><span class="pre">peridynamics_fracture_2d</span></code>. See
+<a class="reference internal" href="../installation.html#solver-backends"><span class="std std-ref">Solver Back-Ends</span></a>.</p>
 <section id="listing-what-s-available">
 <h2>Listing What’s Available<a class="headerlink" href="#listing-what-s-available" title="Link to this heading">¶</a></h2>
 <p>From the CLI:</p>
@@ -521,16 +526,36 @@ that auto-generated name (<code class="docutils literal notranslate"><span class
 </div>
 <p>Useful flags:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">my_run</span></code> — explicit registry name instead of the auto <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v&lt;n&gt;</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">path/to/file.h5</span></code> — explicit output path instead of the default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">my_run</span></code> — explicit registry name instead of the auto <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v&lt;n&gt;</span></code>.
+A name that is already registered is refused before the solver starts,
+unless <code class="docutils literal notranslate"><span class="pre">--force</span></code>, so a long run is never spent on a dataset that cannot be
+recorded.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">path/to/file.h5</span></code> — explicit output path instead of the default.
+A file already there is replaced, with a warning on stderr before the
+solver starts.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--no-registry</span></code> — write the file but skip the registry (the <code class="docutils literal notranslate"><span class="pre">--name</span></code> flag
-is rejected in this mode).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code> — keep the underlying solver’s per-step logs visible. Default
-is quiet, with a single overwriting progress line on stderr.</p></li>
+is rejected in this mode). Nothing is validated either, and the printed
+block says so.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code> / <code class="docutils literal notranslate"><span class="pre">-v</span></code> — keep the underlying solver’s per-step logs visible,
+report progress as plain lines that survive a pipe, and print the full
+metadata at the end. Default is quiet: no solver log, and a single
+overwriting progress line on stderr only when stderr is a terminal, so a
+redirected or captured run stays silent.</p></li>
 </ul>
+<p>Each run prints what it wrote and what the validator made of it. For
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--dyn</span> <span class="pre">allen_cahn_1d</span> <span class="pre">--config</span> <span class="pre">fdr</span></code> in a fresh project:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>wrote data/allen_cahn_1d/allen_cahn_1d_v0.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  registry:   allen_cahn_1d_v0
+</pre></div>
+</div>
 <p>The simulator’s metadata (the <code class="docutils literal notranslate"><span class="pre">physical</span></code> / <code class="docutils literal notranslate"><span class="pre">numerical</span></code> / <code class="docutils literal notranslate"><span class="pre">provenance</span></code>
 groups described in <a class="reference internal" href="structure.html"><span class="std std-doc">Data Structure</span></a>) is filled in from the
-config and from generator-side facts like the random seed.</p>
+config and from generator-side facts like the random seed; <code class="docutils literal notranslate"><span class="pre">-v</span></code> prints it.</p>
 </section>
 <section id="generating-programmatically">
 <h2>Generating Programmatically<a class="headerlink" href="#generating-programmatically" title="Link to this heading">¶</a></h2>

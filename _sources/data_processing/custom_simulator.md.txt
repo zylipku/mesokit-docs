@@ -31,7 +31,9 @@ mechanism through `_target_` in a training recipe; see
 
 A simulator is any **keyword-only** callable that returns a
 `TrajectoryDataset`. It must accept `verbose: bool = False` (the CLI
-forwards `--verbose` through it) and should echo its identifying parameters
+forwards `--verbose` / `-v` through it: `False` means keep the solver's own
+log quiet, `True` means leave it alone) and should echo its identifying
+parameters
 into the three metadata groups so the file is self-describing. Include the
 box lengths in `physical` and the stored frame spacing `dt` in `numerical`:
 `mesokit train` reads `dt` from there, and the shipped spectral models

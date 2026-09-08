@@ -283,6 +283,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -365,6 +366,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="apidocs/mesokit/mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
@@ -619,12 +621,22 @@ skill, and what you get. Paths are illustrative.</p>
 writes <code class="docutils literal notranslate"><span class="pre">data/parsed/burgers.h5</span></code> with <code class="docutils literal notranslate"><span class="pre">dyn</span> <span class="pre">=</span> <span class="pre">&quot;burgers_1d&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">Lx</span> <span class="pre">=</span> <span class="pre">2π</span></code>,
 <code class="docutils literal notranslate"><span class="pre">dt</span> <span class="pre">=</span> <span class="pre">t[1]</span> <span class="pre">-</span> <span class="pre">t[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">source</span></code> pointing at your file, runs the validator,
 and registers the name:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;burgers_v0&#39; -&gt; /home/me/project/data/parsed/burgers.h5
-dyn=burgers_1d  data=(200, 101, 1, 256) float32  dt=0.01
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;burgers_v0&#39; -&gt; /home/me/project/data/parsed/burgers.h5 (19.7 MiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        burgers_1d
+  shape:      200 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         0.01
+  channels:   u
 </pre></div>
 </div>
 <p>Had the hint been missing, it would have asked which axis is time before
 writing anything.</p>
+<p>To watch this happen without a file of your own, <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code> writes
+a deliberately non-conforming one to practise on:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
+mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
+</pre></div>
+</div>
 </section>
 <section id="generate-data-from-your-own-equation">
 <h3>Generate data from your own equation<a class="headerlink" href="#generate-data-from-your-own-equation" title="Link to this heading">¶</a></h3>

@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="mesokit.data.trajectory" href="mesokit.data.trajectory.html"><link rel="prev" title="mesokit.data.simulator_base" href="mesokit.data.simulator_base.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="mesokit.data.demo" href="mesokit.data.demo.html"><link rel="prev" title="mesokit.data.simulator_base" href="mesokit.data.simulator_base.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>mesokit.data._optional - mesokit</title>
@@ -283,6 +283,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -365,6 +366,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
@@ -417,6 +419,17 @@ back-end through this module, inside the function that runs the solver,
 rather than at module level: <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">mesokit.data</span></code> (and with it every
 <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> command) works without them, the four simulators stay listed,
 and only running one of them reports what is missing and how to install it.</p>
+<p>Importing a back-end also has a side effect worth containing: Dedalus adds
+its own log handler to the root logger, writing to <strong>stdout</strong>, so its
+startup warnings, its per-step log and anything else logged afterwards
+(numexpr, for one) would land in the middle of what a command prints.</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">func<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">require</span></code> imports with stdout pointed at stderr and moves any
+stdout-bound root handler across, so the solver’s log stays on stderr and
+stdout keeps only the command’s own output.</p>
+</dd>
+</dl>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
 <section id="functions">
@@ -427,10 +440,13 @@ and only running one of them reports what is missing and how to install it.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.data._optional.require" title="mesokit.data._optional.require"><code class="xref py py-obj docutils literal notranslate"><span class="pre">require</span></code></a></p></td>
 <td><p>Import <code class="docutils literal notranslate"><span class="pre">module</span></code> for the simulator <code class="docutils literal notranslate"><span class="pre">needed_by</span></code> or raise :class:<code class="docutils literal notranslate"><span class="pre">MissingDependencyError</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.data._optional.require_dedalus" title="mesokit.data._optional.require_dedalus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">require_dedalus</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.data._optional.log_stdout_to_stderr" title="mesokit.data._optional.log_stdout_to_stderr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_stdout_to_stderr</span></code></a></p></td>
+<td><p>Point every root log handler that writes to <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code> at <code class="docutils literal notranslate"><span class="pre">sys.stderr</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.data._optional.require_dedalus" title="mesokit.data._optional.require_dedalus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">require_dedalus</span></code></a></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">dedalus.public</span></code> for the simulator <code class="docutils literal notranslate"><span class="pre">needed_by</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.data._optional.require_lammps" title="mesokit.data._optional.require_lammps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">require_lammps</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.data._optional.require_lammps" title="mesokit.data._optional.require_lammps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">require_lammps</span></code></a></p></td>
 <td><p>The <code class="docutils literal notranslate"><span class="pre">lammps</span></code> Python module for the simulator <code class="docutils literal notranslate"><span class="pre">needed_by</span></code>.</p></td>
 </tr>
 </tbody>
@@ -453,7 +469,25 @@ and only running one of them reports what is missing and how to install it.</p>
 <span class="sig-prename descclassname"><span class="pre">mesokit.data._optional.</span></span><span class="sig-name descname"><span class="pre">require</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">package</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">needed_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">types.ModuleType</span></span></span><a class="headerlink" href="#mesokit.data._optional.require" title="Link to this definition">¶</a></dt>
 <dd><p>Import <code class="docutils literal notranslate"><span class="pre">module</span></code> for the simulator <code class="docutils literal notranslate"><span class="pre">needed_by</span></code> or raise :class:<code class="docutils literal notranslate"><span class="pre">MissingDependencyError</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">package</span></code> is the conda-forge package that provides the module and
-<code class="docutils literal notranslate"><span class="pre">label</span></code> its display name.</p>
+<code class="docutils literal notranslate"><span class="pre">label</span></code> its display name. The import runs with stdout redirected to
+stderr, so a back-end that configures logging on the way in (Dedalus
+does) configures it around stderr.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.data._optional.log_stdout_to_stderr">
+<span class="sig-prename descclassname"><span class="pre">mesokit.data._optional.</span></span><span class="sig-name descname"><span class="pre">log_stdout_to_stderr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mesokit.data._optional.log_stdout_to_stderr" title="Link to this definition">¶</a></dt>
+<dd><p>Point every root log handler that writes to <code class="docutils literal notranslate"><span class="pre">sys.stdout</span></code> at <code class="docutils literal notranslate"><span class="pre">sys.stderr</span></code>.</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">Func<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">require</span></code> imports with stdout already redirected, so a handler the
+back-end installs on the way in is built around stderr to begin with.
+This is for the other order: something else imported the back-end first
+(a user’s script, a notebook, an earlier <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">dedalus</span></code>), leaving a
+handler on stdout that would otherwise interleave the solver’s log with
+the command’s output.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -477,12 +511,12 @@ and only running one of them reports what is missing and how to install it.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="mesokit.data.trajectory.html">
+          <a class="next-page" href="mesokit.data.demo.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></div>
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -533,6 +567,7 @@ and only running one of them reports what is missing and how to install it.</p>
 <li><a class="reference internal" href="#api">API</a><ul>
 <li><a class="reference internal" href="#mesokit.data._optional.MissingDependencyError"><code class="docutils literal notranslate"><span class="pre">MissingDependencyError</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data._optional.require"><code class="docutils literal notranslate"><span class="pre">require()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.data._optional.log_stdout_to_stderr"><code class="docutils literal notranslate"><span class="pre">log_stdout_to_stderr()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data._optional.require_dedalus"><code class="docutils literal notranslate"><span class="pre">require_dedalus()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data._optional.require_lammps"><code class="docutils literal notranslate"><span class="pre">require_lammps()</span></code></a></li>
 </ul>

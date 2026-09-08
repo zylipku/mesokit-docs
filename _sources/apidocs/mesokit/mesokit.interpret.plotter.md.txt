@@ -94,6 +94,14 @@
 
 ````
 
+````{py:method} target_paths(output_dir: str | pathlib.Path, *, extension: str = 'png') -> list[pathlib.Path]
+:canonical: mesokit.interpret.plotter.ArtifactPlotter.target_paths
+
+```{autodoc2-docstring} mesokit.interpret.plotter.ArtifactPlotter.target_paths
+```
+
+````
+
 ````{py:method} save_all(output_dir: str | pathlib.Path, *, extension: str = 'png') -> list[pathlib.Path]
 :canonical: mesokit.interpret.plotter.ArtifactPlotter.save_all
 

@@ -63,6 +63,33 @@ Each dynamics has its own config folder under `configs/data/<dyn>/`, with a
 `default.yaml` used when `--config` is not passed. To run a variant config,
 drop a sibling YAML next to `default.yaml` and select it by stem (no extension):
 
+```sh
+mesokit data generate --dyn allen_cahn_1d --config fdr    # reads configs/data/allen_cahn_1d/fdr.yaml
+```
+
+Each run prints what it wrote, whether the file passed the sanity check, and
+its shape. That last command, the seconds-long `fdr` recipe, prints:
+
+```text
+wrote data/allen_cahn_1d/allen_cahn_1d_v0.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  registry:   allen_cahn_1d_v0
+```
+
+The `default` recipe above is the full reference dataset — 1000 trajectories,
+about 99 MiB — so its block reads `1000 traj` and takes minutes rather than
+seconds.
+
+Pass `--verbose` (or `-v`) to add the full metadata and keep the solver's own
+per-step logs. By default the solver is quiet and progress is shown only when
+stderr is a terminal, so a redirected run leaves a clean log. An `--output`
+that already exists is replaced, with a warning on stderr first; a `--name`
+that is already registered is refused before the solver runs, unless
+`--force`.
 
 ### Registering a Custom Dataset
 
@@ -74,8 +101,12 @@ contract and register it under a name:
 mesokit data register --name DATASET_NAME --file data/my_data.h5
 ```
 
-This runs a sanity check to verify the file is in the expected format and
-prints the inferred metadata (state shape, time step, …) for confirmation.
+This runs a sanity check to verify the file is in the expected format, then
+prints the same block as `data generate` — the `check:` row is the verdict,
+`passed (mesokit-trajectory v1)` when the file conforms, and nothing is
+registered otherwise. A failing file names each violated check on stderr, in
+red, and exits with status `2`. To run the check without registering
+anything, use `mesokit data validate FILE`.
 The full cache-file contract — required datasets, root attributes, and
 metadata groups — is documented in [Data Processing](data_processing.md), with
 end-to-end snippets in [Examples](data_processing/examples.md).
@@ -97,6 +128,14 @@ mesokit data parse --file path/to/raw_data.nc \
   --hint "time dim is `t`, var is `u`" \
   --agent claude \
   --name from_agent
+```
+
+To watch it work before trusting it with your own data, `mesokit data demo`
+writes a small, deliberately non-conforming file for exactly that:
+
+```sh
+mesokit data demo                                                                    # data/demo/allen_cahn_1d_demo.npz
+mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
 ```
 
 Flags:

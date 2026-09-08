@@ -283,6 +283,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -365,6 +366,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
@@ -414,12 +416,22 @@
 <p>Every simulator must accept <code class="docutils literal notranslate"><span class="pre">verbose:</span> <span class="pre">bool</span></code> (see</p>
 <dl class="myst field-list simple">
 <dt class="field-odd">class<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">mesokit.data.simulator_base.Simulator</span></code>). This module standardises
-how that flag is honoured: when <code class="docutils literal notranslate"><span class="pre">verbose=False</span></code> we mute Dedalus’s noisy
-per-step INFO loggers and emit a single overwriting <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;:</span> <span class="pre">m/n</span> <span class="pre">trajectories</span></code> line on stderr; when <code class="docutils literal notranslate"><span class="pre">verbose=True</span></code> we leave logging
-alone and emit no progress line of our own.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">mesokit.data.simulator_base.Simulator</span></code>). This module standardises how
+that flag is honoured. Progress goes to stderr in both modes, and</p>
+</dd>
+<dt class="field-even">func<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">mesokit.data._optional.require</span></code> keeps the solver’s own log there too,
+so stdout stays the parseable part of a command’s output.</p>
 </dd>
 </dl>
+<p>Quiet (<code class="docutils literal notranslate"><span class="pre">verbose=False</span></code>, the default) mutes Dedalus’s noisy per-step INFO
+loggers and emits a single overwriting <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;:</span> <span class="pre">m/n</span> <span class="pre">trajectories</span></code> line — but
+only when stderr is a terminal. Piped, redirected or captured output gets
+nothing at all, because a carriage return does not collapse there and a long
+run would otherwise leave thousands of lines in a log.</p>
+<p>Verbose (<code class="docutils literal notranslate"><span class="pre">verbose=True</span></code>) leaves the solver’s own logging alone and reports
+progress as plain newline-terminated lines at ten-percent milestones, at most
+eleven of them for any run, which survive a pipe.</p>
 <p>Usage::</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>with solver_progress(dyn=&quot;kdv_1d&quot;, total=n_traj, verbose=verbose) as report:
     while len(accepted) &lt; n_traj:
@@ -435,8 +447,11 @@ alone and emit no progress line of our own.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-left">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.data._progress.solver_progress" title="mesokit.data._progress.solver_progress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solver_progress</span></code></a></p></td>
-<td><p>Yield a <code class="docutils literal notranslate"><span class="pre">report(done)</span></code> callable that surfaces simulator progress.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.data._progress._is_tty" title="mesokit.data._progress._is_tty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_is_tty</span></code></a></p></td>
+<td><p>Whether <code class="docutils literal notranslate"><span class="pre">stream</span></code> is an interactive terminal, false for anything that cannot say.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.data._progress.solver_progress" title="mesokit.data._progress.solver_progress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">solver_progress</span></code></a></p></td>
+<td><p>Yield a <code class="docutils literal notranslate"><span class="pre">report(done)</span></code> callable that surfaces simulator progress on stderr.</p></td>
 </tr>
 </tbody>
 </table>
@@ -448,6 +463,9 @@ alone and emit no progress line of our own.</p>
 <table class="autosummary longtable docutils align-left">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.data._progress._DEDALUS_NOISY_LOGGERS" title="mesokit.data._progress._DEDALUS_NOISY_LOGGERS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_DEDALUS_NOISY_LOGGERS</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.data._progress._MILESTONES" title="mesokit.data._progress._MILESTONES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_MILESTONES</span></code></a></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -462,19 +480,34 @@ alone and emit no progress line of our own.</p>
 <dd><p>(‘subsystems’, ‘solvers’, ‘solvers.solver’, ‘subsystems.subsystem’)</p>
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="mesokit.data._progress._MILESTONES">
+<span class="sig-prename descclassname"><span class="pre">mesokit.data._progress.</span></span><span class="sig-name descname"><span class="pre">_MILESTONES</span></span><a class="headerlink" href="#mesokit.data._progress._MILESTONES" title="Link to this definition">¶</a></dt>
+<dd><p>10</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.data._progress._is_tty">
+<span class="sig-prename descclassname"><span class="pre">mesokit.data._progress.</span></span><span class="sig-name descname"><span class="pre">_is_tty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#mesokit.data._progress._is_tty" title="Link to this definition">¶</a></dt>
+<dd><p>Whether <code class="docutils literal notranslate"><span class="pre">stream</span></code> is an interactive terminal, false for anything that cannot say.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="mesokit.data._progress.solver_progress">
 <span class="sig-prename descclassname"><span class="pre">mesokit.data._progress.</span></span><span class="sig-name descname"><span class="pre">solver_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">dyn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'trajectories'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">collections.abc.Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">collections.abc.Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.data._progress.solver_progress" title="Link to this definition">¶</a></dt>
-<dd><p>Yield a <code class="docutils literal notranslate"><span class="pre">report(done)</span></code> callable that surfaces simulator progress.</p>
+<dd><p>Yield a <code class="docutils literal notranslate"><span class="pre">report(done)</span></code> callable that surfaces simulator progress on stderr.</p>
 <p><code class="docutils literal notranslate"><span class="pre">unit</span></code> names what <code class="docutils literal notranslate"><span class="pre">done</span></code> / <code class="docutils literal notranslate"><span class="pre">total</span></code> count. Per-trajectory solvers
 (Dedalus) keep the default <code class="docutils literal notranslate"><span class="pre">&quot;trajectories&quot;</span></code>; simulators that advance
 every trajectory in one vectorised batch report <code class="docutils literal notranslate"><span class="pre">&quot;sweeps&quot;</span></code> or
 <code class="docutils literal notranslate"><span class="pre">&quot;steps&quot;</span></code> instead.</p>
-<p>With <code class="docutils literal notranslate"><span class="pre">verbose=True</span></code> the yielded callable is a no-op and Dedalus’s
-loggers are not touched, so the underlying solver’s chatter is visible.
-With <code class="docutils literal notranslate"><span class="pre">verbose=False</span></code> (the default for <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code>) the
-Dedalus loggers are temporarily raised to <code class="docutils literal notranslate"><span class="pre">WARNING</span></code> and the callable
-overwrites a single stderr line each time it is called.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">verbose=True</span></code> the solver’s own loggers are left alone and the
+callable writes <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;:</span> <span class="pre">done/total</span> <span class="pre">&lt;unit&gt;</span></code> followed by a newline at
+<code class="docutils literal notranslate"><span class="pre">done=0</span></code>, at each ten-percent crossing and at <code class="docutils literal notranslate"><span class="pre">done</span> <span class="pre">==</span> <span class="pre">total</span></code> — at
+most eleven lines, safe to pipe.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">verbose=False</span></code> (the default for <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code>) the
+Dedalus loggers are temporarily raised to <code class="docutils literal notranslate"><span class="pre">WARNING</span></code>. The callable then
+overwrites a single stderr line when stderr is a terminal, and does
+nothing at all otherwise, so redirected and captured output stays silent.</p>
 </dd></dl>
 
 </section>
@@ -542,6 +575,8 @@ overwrites a single stderr line each time it is called.</p>
 <li><a class="reference internal" href="#data">Data</a></li>
 <li><a class="reference internal" href="#api">API</a><ul>
 <li><a class="reference internal" href="#mesokit.data._progress._DEDALUS_NOISY_LOGGERS"><code class="docutils literal notranslate"><span class="pre">_DEDALUS_NOISY_LOGGERS</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.data._progress._MILESTONES"><code class="docutils literal notranslate"><span class="pre">_MILESTONES</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.data._progress._is_tty"><code class="docutils literal notranslate"><span class="pre">_is_tty()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.data._progress.solver_progress"><code class="docutils literal notranslate"><span class="pre">solver_progress()</span></code></a></li>
 </ul>
 </li>

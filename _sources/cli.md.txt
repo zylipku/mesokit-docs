@@ -67,15 +67,28 @@ registry and on disk), so repeated runs never overwrite each other. Passing
 an explicit `--name` that is already registered, or whose run directory
 already holds a checkpoint, is an error unless you add `--force`.
 
-**Quiet by default.** Simulators and trainers print a single overwriting
-progress line on stderr; `--verbose` (where offered) restores the underlying
-solver's full log.
+**Quiet by default.** A simulator keeps the underlying solver's log to itself
+and reports progress on stderr, so stdout carries only the command's own
+output. The progress line overwrites itself and is written only when stderr
+is a terminal: a redirected, piped or captured run prints nothing but the
+result, instead of thousands of carriage-return records in a log file.
+`--verbose` / `-v` (`data generate`, `sweep`, and, for the metadata rows
+alone, `data register` / `validate` / `parse`) leaves the solver's own log in
+place — on stderr, where mesokit puts it even for a back-end that logs to
+stdout by default — reports progress as plain newline-terminated lines that
+survive a pipe, and prints the full metadata. Training is the exception:
+Lightning's progress bar is a recipe key, `trainer.enable_progress_bar`, not
+a CLI flag, and it writes to stdout.
 
 **Errors and exit codes.** Argument and lookup problems (unknown dynamics,
-missing file, name collision, failed validation) are reported as
-`Invalid value: …` and exit with status `2`; the offending file or name is
-never registered. Unexpected failures inside a simulator or trainer surface
-as a Python traceback with status `1`.
+missing file, name collision, failed validation, a simulator that rejects its
+parameters) are reported as `Invalid value: …` and exit with status `2`; the
+offending file or name is never registered. Everything else surfaces as a
+Python traceback with status `1`, including a failure of mesokit's own code:
+only the simulator's own exceptions are summarised, and `data generate
+--verbose` restores the traceback for those. A missing solver back-end is the
+one error that is never a traceback, `-v` included — the install command is
+the whole answer.
 
 **Shell completion.** `mesokit --install-completion` installs completion for
 the current shell; `mesokit --show-completion` prints it instead.
@@ -86,7 +99,7 @@ the current shell; `mesokit --show-completion` prints it instead.
 configs/data/<dyn>/default.yaml ──► mesokit data generate ──► data/<dyn>/<name>.h5 ──┐
 your_solver.h5 ──────────────────► mesokit data register ──────────────────────────────┤
 any_format.{npz,nc,pt,…} ────────► mesokit data parse ────► data/parsed/<stem>.h5 ─────┤
-                                                                                       ▼
+   ▲ mesokit data demo writes one to practise on                                       ▼
                                                                           .mesokit/datasets.json
                                                                                        │
 configs/train/<dyn>/<model>/default.yaml ─────────────────► mesokit train ◄────────────┘
@@ -106,7 +119,15 @@ mesokit sweep --param KEY=V1,V2,… [--train-param KEY.PATH=V1,V2,…] = data ge
 
 Produce or catalog trajectory datasets. The on-disk contract every
 subcommand reads or writes is the v1 HDF5 cache described in
-[Data Processing](data_processing.md).
+[Data Processing](data_processing.md). `generate`, `register`, `validate`
+and `parse` all answer the same question about the file they touched — what
+is in it, and does it conform — so they all print the same block: one header
+line naming what the command did, then an aligned `label: value` list whose
+first row is the sanity-check verdict. All four take `--verbose` / `-v`,
+which adds the resolved path, the `times` dtype and the three metadata
+groups. `demo` is the odd one
+out: it writes a file that deliberately does *not* conform, to practise
+`parse` on.
 
 ### `mesokit data avail`
 
@@ -165,48 +186,95 @@ validate the file and register it.
 
 ```sh
 mesokit data generate --dyn DYN [--config STEM] [--name NAME | --no-registry]
-                      [--output PATH] [--force] [--verbose] [--set KEY=VALUE ...]
+                      [--output PATH] [--force] [--verbose|-v] [--set KEY=VALUE ...]
 ```
 
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `--dyn DYN` | required | Predefined dynamics name (one of `mesokit data avail`). |
 | `--config STEM\|PATH` | `default` | Recipe `configs/data/DYN/STEM.yaml` (working directory, then the installed package), or a path to any YAML file. |
-| `--name NAME` | `DYN_v<n>` | Registry name for the result. |
+| `--name NAME` | `DYN_v<n>` | Registry name for the result. A name that is already registered is refused before the solver runs, unless `--force`. |
 | `--no-registry` | off | Write the file but do not register it. Mutually exclusive with `--name`. |
-| `--output PATH` | `data/DYN/<name>.h5` | Where to write the HDF5 file. Parent directories are created. |
-| `--force` | off | Replace an existing registry entry of the same name. |
-| `--verbose` | off | Show the solver's own per-step output instead of the progress line. |
+| `--output PATH` | `data/DYN/<name>.h5` | Where to write the HDF5 file. Parent directories are created. An existing file is replaced, with a warning on stderr; a directory is refused. |
+| `--force` | off | Replace an existing registry entry of the same name. It says nothing about the file on disk, which is replaced either way. |
+| `--verbose`, `-v` | off | Leave the solver's own log in place, report progress as plain lines that survive a pipe, print the full metadata, and show the traceback if the simulator fails. |
 | `--set KEY=VALUE` | none | Override one recipe key for this run; repeatable. `KEY` must be a keyword argument of the simulator; `VALUE` is read as int, float, bool (`true` / `false`) or string, in that order. |
 
 What happens, in order: the recipe is loaded with Hydra, the `--set`
 overrides are merged on top (an unknown key is rejected before anything
-runs), and the result is instantiated (every key in the YAML is a keyword
-argument of the simulator, and `verbose` is forwarded); the returned
-`TrajectoryDataset` is saved; the saved file is run through the same
-validator as `data register`; on success the registry entry is written and
-the validation summary is printed.
+runs), the registry name and the output path are checked (a taken name is
+refused, a directory is refused, an existing file warned about) so that a
+long solve cannot be spent on a run that cannot be recorded and cannot
+silently clobber a file, and the
+result is instantiated (every key in the YAML is a keyword argument of the
+simulator, and `verbose` is forwarded); the returned `TrajectoryDataset` is
+saved; the saved file is run through the same validator as `data register`;
+on success the registry entry is written and the summary is printed.
 
 ```sh
 mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_smoke
 ```
 
 ```text
-allen_cahn_1d: 10/10 trajectories
-wrote data/allen_cahn_1d/ac_smoke.h5: shape=(10, 101, 1, 256)
-registered 'ac_smoke' -> /home/me/mesokit/data/allen_cahn_1d/ac_smoke.h5
-dyn=allen_cahn_1d
-n_traj=10
-n_time=101
-n_channel=1
-grid_shape=(256,)
-data_dtype=float32
-dt=0.001
-channel_names=('u',)
-physical: {'Lx': 6.283185307179586, 'T': 0.1, 'eps': 0.1}
-numerical: {'Nk': 3, 'Nx': 256, 'T_save_steps': 25, 'dealias': 2, 'dt': 4e-05, 'dx': 0.02454369260617026, 'max_k': 10}
-provenance: {'seed': 0, 'u_bound': 10.0}
+wrote data/allen_cahn_1d/ac_smoke.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  registry:   ac_smoke
 ```
+
+`dt` is the one step of a uniform time grid, or `non-uniform` when the
+saved times do not sit on one to within the v1 tolerance — as here, where
+101 `float32` times a millisecond apart drift in the seventh digit. It is a
+statement about the file, not a fault; models read `times` itself.
+
+`-v` keeps Dedalus's per-step log and reports progress as one line per ten
+percent of the run. Both go to stderr — mesokit points the solver's own log
+handler there — so the block below is still all of stdout, and the two
+streams stay separable in a log. It adds the rest of what the validator
+inferred:
+
+```sh
+mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_smoke --force -v
+```
+
+```text
+wrote data/allen_cahn_1d/ac_smoke.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  registry:   ac_smoke
+  path:       /home/me/project/data/allen_cahn_1d/ac_smoke.h5
+  times:      float32
+  physical:   Lx=6.283185307179586  T=0.1  eps=0.1
+  numerical:  Nk=3  Nx=256  T_save_steps=25  dealias=2  dt=4e-05  dx=0.02454369260617026  max_k=10
+  provenance: seed=0  u_bound=10.0
+```
+
+With `--no-registry` nothing is validated, because that would mean reading
+the whole `data` array back for six printed lines; the block says so and
+names the command that does check it. Here on a second run onto the same
+`--output`, so the overwrite warning is there too:
+
+```text
+warning: overwriting data/scratch.h5 (pass --output to write elsewhere)
+wrote data/scratch.h5 (1019.3 KiB)
+  check:      not run
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  registry:   not registered (--no-registry)
+run `mesokit data validate data/scratch.h5` to check the file against the v1 contract.
+```
+
+The `warning:` line goes to stderr, before the simulator starts. Overwriting
+is allowed — sweeps and re-runs depend on it — so this is a warning, not the
+refusal `data parse` makes.
 
 More examples:
 
@@ -223,8 +291,8 @@ mesokit data generate --dyn cahn_hilliard_2d --config fdr --output /tmp/ch_test.
 # Re-run a recipe you changed and replace the previous entry of the same name.
 mesokit data generate --dyn kdv_1d --name kdv_long --force
 
-# Watch Dedalus's per-step log instead of the progress line.
-mesokit data generate --dyn kdv_1d --config fdr --verbose
+# Watch Dedalus's per-step log, and print the full metadata at the end.
+mesokit data generate --dyn kdv_1d --config fdr -v
 
 # One-off parameter change without a new recipe file.
 mesokit data generate --dyn allen_cahn_1d --set eps=0.05 --set seed=1 --name ac_eps0.05_s1
@@ -249,10 +317,20 @@ Invalid value: --name and --no-registry are mutually exclusive
 Invalid value: dataset 'ac_smoke' already registered; pass --force to overwrite
 Invalid value: expected KEY=VALUE, got 'eps'
 Invalid value: unknown parameter 'epsilon' for simulator mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d; accepted: eps, n_traj, Nx, Lx, T, T_save_steps, timestep, Nk, max_k, u_bound, dealias, seed, verbose
+Invalid value: output data is a directory; pass --output with a file path
+Invalid value: cahn_hilliard_2d: round(T/dt)=10 must be a positive multiple of save_every=20
 ```
 
 The first one also appears when you run from the wrong directory: recipes
 are looked up in `./configs/data/`, not inside the package.
+
+The last one is the simulator itself rejecting the parameters it was given,
+prefixed with the `dyn` it came from; a `--set` that a recipe accepts but the
+solver cannot honour surfaces here rather than as a Hydra traceback, and the
+message ends with `re-run with -v for the traceback`. Only exceptions raised
+inside the simulator are summarised this way: a failure of the registry, the
+writer or mesokit itself keeps its stack rather than being reported as your
+parameters being wrong.
 
 ### `mesokit data register`
 
@@ -260,7 +338,7 @@ Validate an HDF5 file you produced yourself against the v1 cache contract
 and register it under a name.
 
 ```sh
-mesokit data register --name NAME --file FILE.h5 [--force]
+mesokit data register --name NAME --file FILE.h5 [--force] [--verbose|-v]
 ```
 
 | Option | Default | Meaning |
@@ -268,43 +346,58 @@ mesokit data register --name NAME --file FILE.h5 [--force]
 | `--name NAME` | required | Registry name. |
 | `--file FILE` | required | Existing HDF5 file; the absolute path is stored. |
 | `--force` | off | Replace an existing entry of the same name. |
+| `--verbose`, `-v` | off | Also print the file path, the `times` dtype and the three metadata groups. |
 
 The validator checks the closed set of root attributes, the `data` /
 `times` datasets and their shapes and dtypes, finiteness, monotone times,
-the three metadata groups and the optional `channel_names`. On success it
-prints the inferred summary shown above for `data generate`; on failure
-each failing check is printed and nothing is registered.
+the three metadata groups and the optional `channel_names`. Its verdict is
+the `check:` row: `passed` (in green on a terminal) naming the contract the
+file was checked against, and nothing is registered unless it says so.
 
 ```sh
-mesokit data register --name md_slab --file /scratch/md/slab_density.h5
+mesokit data register --name ac_scratch --file data/scratch.h5
 ```
 
 ```text
-registered 'md_slab' -> /scratch/md/slab_density.h5
-dyn=binary_lj_slab
-n_traj=3
-n_time=2001
-n_channel=1
-grid_shape=(50, 50, 200)
-data_dtype=float32
-dt=1
-channel_names=('x_A',)
-physical: {'T': 1.1, 'xA': 0.5, 'Lx': 9.52, 'Ly': 9.52, 'Lz': 38.1}
-numerical: {'dx': 0.19, 'sigma_kde': 1.5}
-provenance: {'source': 'lammps', 'seed': 42}
+registered 'ac_scratch' -> /home/me/project/data/scratch.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
 ```
 
-A file that is not a v1 cache fails like this:
+With `-v` the same call adds what the validator read out of the file:
 
 ```text
-  cannot open /tmp/bad.h5 as HDF5: Unable to synchronously open file (file signature not found)
-Invalid value: sanity check failed for /tmp/bad.h5; not registered
+registered 'ac_scratch' -> /home/me/project/data/scratch.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  path:       /home/me/project/data/scratch.h5
+  times:      float32
+  physical:   Lx=6.283185307179586  T=0.1  eps=0.1
+  numerical:  Nk=3  Nx=256  T_save_steps=25  dealias=2  dt=4e-05  dx=0.02454369260617026  max_k=10
+  provenance: seed=0  u_bound=10.0
+```
+
+A file that is not a v1 cache fails on stderr, in red, with status `2` — the
+verdict first, then every failing check, then the reason nothing was written:
+
+```text
+sanity check FAILED: /home/me/project/data/demo/allen_cahn_1d_demo.npz
+  cannot open /home/me/project/data/demo/allen_cahn_1d_demo.npz as HDF5: Unable to synchronously open file (file signature not found)
+Invalid value: sanity check failed for /home/me/project/data/demo/allen_cahn_1d_demo.npz; not registered
 ```
 
 Writing a conforming file is a few lines of `h5py`; see
 [Custom Datasets](data_processing/custom.md). To check a file without
 registering it, use `mesokit data validate` below (or the Python helper
 `mesokit.data.validate(path)`).
+
+(mesokit-data-validate)=
 
 ### `mesokit data validate`
 
@@ -313,22 +406,91 @@ without touching the registry. `register` runs the same check before it
 writes an entry, and the agent behind `parse` runs it on its own output.
 
 ```sh
-mesokit data validate FILE
+mesokit data validate FILE [--verbose|-v]
 ```
 
 ```text
-validated /scratch/md/slab_density.h5
-dyn=binary_lj_slab
-n_traj=3
-…
+validated /home/me/project/data/scratch.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
 ```
 
-A non-conforming file prints each failing check and exits with status `2`:
+`-v` adds the `path`, `times`, `physical`, `numerical` and `provenance` rows
+shown under `register` above.
+
+A non-conforming file names every failing check and exits with status `2`.
+For the HDF5 form of the practice file `mesokit data demo` writes, that is:
 
 ```text
-  cannot open /tmp/bad.h5 as HDF5: Unable to synchronously open file (file signature not found)
-Invalid value: validation failed for /tmp/bad.h5
+sanity check FAILED: /home/me/project/data/demo/allen_cahn_1d_demo.h5
+  missing required root attribute 'format'
+  missing required root attribute 'version'
+  missing required root attribute 'dyn'
+  missing required root attribute 'data_dtype'
+  missing required dataset 'data'
+  missing required dataset 'times'
+  missing required metadata group 'physical'
+  missing required metadata group 'numerical'
+  missing required metadata group 'provenance'
+Invalid value: validation failed for /home/me/project/data/demo/allen_cahn_1d_demo.h5
 ```
+
+(mesokit-data-demo)=
+
+### `mesokit data demo`
+
+Write a small, deliberately non-conforming dataset to practise
+[`mesokit data parse`](#mesokit-data-parse) on, so you can see the
+conversion work without one of your own files.
+
+```sh
+mesokit data demo [--output PATH] [--format npz|h5]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--output PATH` | `data/demo/allen_cahn_1d_demo.<format>` | Where to write the file. Parent directories are created; an existing file is replaced with a warning. |
+| `--format` | `npz` | `npz` for a NumPy archive (not HDF5 at all, so `data validate` cannot even open it), `h5` for an HDF5 file that opens but is not a v1 cache, so the validator can list what it is missing. |
+
+The file holds a real 1-D Allen-Cahn run — four trajectories, 51 frames, 128
+grid points, plain NumPy, fixed seed, no solver back-end — stored the way an
+outside code would leave it: axes in the order `(frame, x, run)` with no
+channel axis, integer frame indices instead of times, and flat scalars
+instead of the three metadata groups. Every fact the v1 cache needs is in the
+file; none of it is where the schema wants it. The content is a fixed-seed
+constant, so re-running writes the same arrays.
+
+```sh
+mesokit data demo
+```
+
+```text
+wrote data/demo/allen_cahn_1d_demo.npz (npz, 208.5 KiB)
+  u            float64  (51, 128, 4)   field, axes (frame, x, run)
+  x            float64  (128,)         grid coordinates
+  frame_steps  int64    (51,)          solver iteration of each frame
+  dt=0.001 eps=0.15 Lx=6.283185307179586 seed=0
+not a v1 cache file: no root attributes, no 'times', no metadata groups.
+convert it with an agent:
+  mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
+```
+
+Two strings the block does not print are in the file as well: `equation`
+(`u_t = u_xx + (u - u**3) / eps**2, periodic in x`) and `notes`, which spells
+out that frame times are `frame_steps * dt` — the one fact the arrays alone
+do not give away.
+
+`--format h5` writes the same run into an HDF5 container and adds a line
+pointing at `mesokit data validate`, which then names all nine violations
+(the block is under [`data validate`](#mesokit-data-validate) above).
+
+Errors: `unknown format 'nc'; available: npz, h5`, and the same
+`output … is a directory` refusal `data generate` makes.
+
+(mesokit-data-parse)=
 
 ### `mesokit data parse`
 
@@ -403,22 +565,43 @@ is an error. A file that already sits at the output path is refused before
 the agent is launched (with `--force` it is removed first), so what gets
 validated is always the agent's own work.
 
+If you have no file of your own to hand, `mesokit data demo` writes one to
+practise on; the run below is exactly that, start to finish:
+
 ```sh
-mesokit data parse --file ~/runs/burgers.npz \
-  --hint "arrays u (traj, time, x) and t; domain is [0, 2π) periodic; call it burgers_1d" \
-  --name burgers_v0
+mesokit data demo
+mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
 ```
 
 ```text
 launching agent 'claude' via backend 'foreground'
   skill : /home/me/.venv/lib/python3.12/site-packages/mesokit/skills/mesokit_convert_data/SKILL.md (embedded in the prompt)
-  input : /home/me/runs/burgers.npz
-  output: /home/me/project/data/parsed/burgers.h5
-  argv  : claude -p --permission-mode acceptEdits --allowedTools 'Bash(python:*),…' --add-dir /home/me/runs -- <prompt>
+  input : /home/me/project/data/demo/allen_cahn_1d_demo.npz
+  output: /home/me/project/data/parsed/allen_cahn_1d_demo.h5
+  argv  : claude -p --permission-mode acceptEdits --allowedTools 'Bash(python:*),…' -- <prompt>
 … agent transcript …
-registered 'burgers_v0' -> /home/me/project/data/parsed/burgers.h5
-dyn=burgers_1d
-…
+registered 'allen_cahn_demo_v0' -> /home/me/project/data/parsed/allen_cahn_1d_demo.h5 (213.7 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      4 traj x 51 steps x 1 channel, grid 128 (float64)
+  dt:         0.008
+  channels:   u
+```
+
+The agent transposed `(frame, x, run)` into `(traj, time, channel, x)`,
+inserted the channel axis, turned `frame_steps * dt` into `times`, and split
+the flat scalars across `physical` / `numerical` / `provenance`. The exact
+choices vary between runs; the `check:` row is what says the result conforms.
+Without `--name` the tail reads `validated <path>` instead, followed by
+`pass --name to also register this dataset.`
+
+Your own file works the same way, with `--hint` carrying whatever the arrays
+do not say for themselves:
+
+```sh
+mesokit data parse --file ~/runs/burgers.npz \
+  --hint "arrays u (traj, time, x) and t; domain is [0, 2π) periodic; call it burgers_1d" \
+  --name burgers_v0
 ```
 
 With `--backend tmux` the command returns immediately and tells you how to
@@ -628,7 +811,7 @@ mesokit sweep --dyn DYN --model ARCH [--param KEY=V1,V2,... ...] [--train-param 
               [--data NAME_OR_PATH] [--experiment E] [--tag T ...]
               [--data-config STEM] [--config STEM] [--trainer NAME] [--name-prefix PREFIX]
               [--epochs N] [--batch-size N] [--device auto|cpu|gpu]
-              [--reuse-data] [--force] [--dry-run]
+              [--reuse-data] [--force] [--dry-run] [--verbose|-v]
 ```
 
 | Option | Default | Meaning |
@@ -645,9 +828,10 @@ mesokit sweep --dyn DYN --model ARCH [--param KEY=V1,V2,... ...] [--train-param 
 | `--trainer NAME` | `= --model` | Trainer registry name. |
 | `--name-prefix PREFIX` | `DYN` | Prefix of every generated dataset name (see below). |
 | `--epochs N`, `--batch-size N`, `--device` | from config | Forwarded to every training run, as for `train`. |
-| `--reuse-data` | off | Skip generation for a point whose dataset name is already registered and whose file exists; train on it instead. |
+| `--reuse-data` | off | Skip generation for a point whose dataset name is already registered and whose file exists; train on it instead. Without it, a point whose name is registered fails before its solve (`already registered; pass --force`), and with `--force` the file is replaced and said so on stderr, one `warning: overwriting …` line per point. |
 | `--force` | off | Replace existing dataset and checkpoint entries of the same names. |
 | `--dry-run` | off | Print the plan — names and overrides per point — and exit without running anything. |
+| `--verbose`, `-v` | off | Forwarded to each point's data generation, as for `data generate`: the solver's own log stays, progress is reported in a pipe-safe form. |
 
 **Names.** A data point `eps=0.05, T=0.5` gives the dataset
 `<prefix>_eps0.05_T0.5`; a run is named `<model>_<key><value>[_…]` over both
@@ -978,7 +1162,7 @@ mesokit interpret extract --model CKPT_NAME --artifact all  --output DIR/     [-
 | --- | --- | --- |
 | `--model` | required | Registered checkpoint name. |
 | `--artifact` | required | An entry from `interpret list`, or `all` (also `*`). |
-| `--output` | required | Target file; the extension selects the matplotlib format (`.png`, `.pdf`, `.svg`, …). With `--artifact all` it must be a directory — a path with an extension is rejected — and one PNG per artifact, named `<model>_<artifact>.png`, is written inside it. |
+| `--output` | required | Target file; the extension selects the matplotlib format (`.png`, `.pdf`, `.svg`, …). An existing figure is replaced, with a `warning: overwriting …` line on stderr. With `--artifact all` it must be a directory — a path with an extension is rejected — and one PNG per artifact, named `<model>_<artifact>.png`, is written inside it. |
 | `--max-snapshots N` | `5000` | Cap on the number of reference snapshots handed to data-backed artifacts. Lower it to speed up extraction on large datasets. |
 
 ```sh
@@ -1183,6 +1367,14 @@ mesokit data parse --file ~/runs/field.nc --hint "variable phi, dims (member, ti
 mesokit data list
 ```
 
+**Try that conversion without a file of your own:**
+
+```sh
+mesokit data demo                                                                    # a messy .npz, on purpose
+mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
+mesokit train --model spectral_onsagernet_1d --data allen_cahn_demo_v0 --config smoke --name demo_son
+```
+
 **Two-dimensional pipeline**, including the physics check that the model
 family reproduces the data-generating equation:
 
@@ -1232,8 +1424,9 @@ mesokit interpret list --model nb_run
 | --- | --- | --- | --- |
 | `configs/data/<dyn>/*.yaml` | you | `data generate` | Hydra recipe; keys are simulator kwargs. |
 | `configs/train/<dyn>/<model>/*.yaml` | you | `train` | Sections `model`, `dataset`, `dataloader`, `trainer`. |
-| `data/<dyn>/<name>.h5` | `data generate` | `train`, `interpret` | v1 trajectory cache. |
+| `data/<dyn>/<name>.h5` | `data generate` | `train`, `interpret` | v1 trajectory cache. An existing file is replaced, with a warning. |
 | `data/parsed/<stem>.h5` | `data parse` (via the agent) | `train`, `interpret` | Same layout. |
+| `data/demo/allen_cahn_1d_demo.{npz,h5}` | `data demo` | `data parse` | Deliberately *not* a v1 cache; a practice input for `parse`. |
 | `.mesokit/datasets.json` | `data generate`, `data register`, `data parse` | `data list`, `train`, `interpret` | `name → {path, metadata}`; metadata holds shape, dtype, `dt`, the three groups. |
 | `checkpoints/<dyn>/<run>/` | `train` | `interpret`, `model prune` / `sync` | `model.pt`, `config.yaml`, `history.json`, `run.json` (the run record), Lightning `.ckpt`. |
 | `checkpoints/<dyn>/<experiment>/<run>/` | `train --experiment`, `sweep` | as above | The same files; registered as `<experiment>/<run>`. |
@@ -1279,9 +1472,13 @@ A registry entry, for reference:
 | `--name and --no-registry are mutually exclusive` | Both flags given. | Pick one. |
 | `dataset 'x' already registered; pass --force to overwrite` | Name collision. | Choose another `--name`, or add `--force`. In a `sweep`, `--reuse-data` trains on the existing dataset instead. |
 | `unknown parameter 'x' for simulator …; accepted: …` | A `--set` / `--param` key is not a keyword argument of the simulator. | Pick a key from the `accepted` list (they are the keys of the data recipe). |
-| `allen_cahn_1d needs Dedalus, which is not installed` (or `… needs LAMMPS …`) | The simulator's solver back-end is a conda-forge package that `pip install mesokit` cannot bring in. | `pixi add dedalus` / `pixi add lammps` (or `conda install -c conda-forge …`) in the environment `mesokit` runs in; see [Solver Back-Ends](#solver-backends). |
-| `sanity check failed for …; not registered` (or `validation failed for …`) | The file violates the v1 contract; the specific checks are printed above the message. | Fix the writer — see [Data Structure](data_processing/structure.md) — and re-check with `mesokit data validate FILE`. |
-| `output … already exists; pass --force to replace it` | `data parse` found a file at the output path before launching the agent. | Add `--force` to replace it, or pick another `--output`. |
+| `<dyn>: <message>; re-run with -v for the traceback` after a `data generate` | The simulator rejected the parameters it was given, e.g. a `T` that is not a whole number of save intervals. | Fix the `--set` or the recipe the message names; `-v` shows the traceback if you need the line it came from. |
+| `<dyn> needs Dedalus, which is not installed` (or `… needs LAMMPS …`); `It is a conda-forge package, not a PyPI one` | The simulator's solver back-end is a conda-forge package that `pip install mesokit` cannot bring in. | Run the `pixi add dedalus` / `conda install -c conda-forge dedalus` the message spells out (`lammps` for `peridynamics_fracture_2d`) in the environment `mesokit` runs in; a checkout gets both from the `sim` Pixi feature. See [Solver Back-Ends](#solver-backends). |
+| `sanity check FAILED: <file>` then `sanity check failed for …; not registered` (or `validation failed for …`) | The file violates the v1 contract; every failing check is listed between the two lines. | Fix the writer — see [Data Structure](data_processing/structure.md) — and re-check with `mesokit data validate FILE`. |
+| `warning: overwriting <path> (pass --output to write elsewhere)` | Not an error: `data generate`, `data demo` or `interpret extract` is about to replace a file that is already there. | Nothing, if that was the intent. Otherwise interrupt and pass `--output`, or `--reuse-data` in a `sweep`. |
+| `output <path> is a directory; pass --output with a file path` | `--output` named a folder, so there is no file to write. | Give the full file path, `data/mine.h5` rather than `data`. |
+| `output … already exists; pass --force to replace it` | `data parse` found a file at the output path before launching the agent. Unlike `generate`, `parse` refuses rather than warns, so what is validated is always the agent's own work. | Add `--force` to replace it, or pick another `--output`. |
+| `unknown format 'nc'; available: npz, h5` | `data demo --format` takes one of the two containers it can write. | Pick `npz` or `h5`. |
 | `unknown artifact 'x' for checkpoint 'y'; available: …` | `interpret extract` was given an artifact the model does not expose. | Pick one from the list (`mesokit interpret list --model y`). |
 | `dataset 'x' is not registered and is not an existing HDF5 path` | `--data` matched neither a name nor a file. | `mesokit data list`, or pass the path. |
 | `registered dataset 'x' points to missing file` | The file was moved or deleted after registration. | Re-register with the new path and `--force`, or regenerate. |
@@ -1306,6 +1503,7 @@ registries and the config lookup.
 | `mesokit data avail` | `mesokit.data.available()` |
 | `mesokit data generate --dyn X` | `ds = mesokit.data.simulate("X", **kwargs); ds.save_hdf5(path)` |
 | `mesokit data validate F` / `register --file F` | `report = mesokit.data.validate(F)` (no registry write) |
+| `mesokit data demo --output P` | `mesokit.data.write_demo_dataset(P, container="npz")`, or `mesokit.data.demo_arrays()` for the arrays alone |
 | `mesokit train` | `TrajectoryDataset.load_hdf5(path)` → a `mesokit.data.datasets` adapter → `DataLoader` → `mesokit.trainers.get_trainer(name)(...).fit(model, loader)` |
 | `mesokit sweep` | `mesokit.cli.sweep.run_sweep("X", "arch", {"eps": [0.05, 0.1]}, train_params={"trainer.lr": [1e-3, 1e-4]}, experiment="scan")` — the registries and naming included; returns the table rows |
 | `mesokit model list` | read `.mesokit/checkpoints.json` (`--format json` prints the same records), each run's `run.json`, or an experiment's `runs.json` |

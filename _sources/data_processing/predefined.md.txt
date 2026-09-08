@@ -27,9 +27,14 @@ Dedalus and LAMMPS are conda-forge packages: the checkout's `sim` Pixi
 feature has both, a `pip install mesokit` has neither. The simulators that
 need them import the back-end only when run, so `mesokit.data`, the CLI
 and the three NumPy/SciPy simulators work without it; running one of the
-four without its back-end stops with a message naming the package to add
-(`pixi add dedalus`, `pixi add lammps`; see
-[Solver Back-Ends](#solver-backends)).
+four without its back-end stops with the exact command to run:
+
+```text
+Invalid value: allen_cahn_1d needs Dedalus, which is not installed (No module named 'dedalus'). It is a conda-forge package, not a PyPI one: run `pixi add dedalus` in a pixi project or `conda install -c conda-forge dedalus` in a conda environment, then re-run.
+```
+
+The same message names `lammps` for `peridynamics_fracture_2d`. See
+[Solver Back-Ends](#solver-backends).
 
 ## Listing What's Available
 
@@ -78,15 +83,37 @@ mesokit data generate --dyn ising_2d --config kac
 Useful flags:
 
 - `--name my_run` — explicit registry name instead of the auto `<dyn>_v<n>`.
+  A name that is already registered is refused before the solver starts,
+  unless `--force`, so a long run is never spent on a dataset that cannot be
+  recorded.
 - `--output path/to/file.h5` — explicit output path instead of the default.
+  A file already there is replaced, with a warning on stderr before the
+  solver starts.
 - `--no-registry` — write the file but skip the registry (the `--name` flag
-  is rejected in this mode).
-- `--verbose` — keep the underlying solver's per-step logs visible. Default
-  is quiet, with a single overwriting progress line on stderr.
+  is rejected in this mode). Nothing is validated either, and the printed
+  block says so.
+- `--verbose` / `-v` — keep the underlying solver's per-step logs visible,
+  report progress as plain lines that survive a pipe, and print the full
+  metadata at the end. Default is quiet: no solver log, and a single
+  overwriting progress line on stderr only when stderr is a terminal, so a
+  redirected or captured run stays silent.
+
+Each run prints what it wrote and what the validator made of it. For
+`mesokit data generate --dyn allen_cahn_1d --config fdr` in a fresh project:
+
+```text
+wrote data/allen_cahn_1d/allen_cahn_1d_v0.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  registry:   allen_cahn_1d_v0
+```
 
 The simulator's metadata (the `physical` / `numerical` / `provenance`
 groups described in [Data Structure](structure.md)) is filled in from the
-config and from generator-side facts like the random seed.
+config and from generator-side facts like the random seed; `-v` prints it.
 
 ## Generating Programmatically
 

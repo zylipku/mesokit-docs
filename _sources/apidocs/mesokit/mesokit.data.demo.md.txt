@@ -1,0 +1,246 @@
+# {py:mod}`mesokit.data.demo`
+
+```{py:module} mesokit.data.demo
+```
+
+```{autodoc2-docstring} mesokit.data.demo
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`demo_arrays <mesokit.data.demo.demo_arrays>`
+  - ```{autodoc2-docstring} mesokit.data.demo.demo_arrays
+    :summary:
+    ```
+* - {py:obj}`write_demo_dataset <mesokit.data.demo.write_demo_dataset>`
+  - ```{autodoc2-docstring} mesokit.data.demo.write_demo_dataset
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`DEMO_STEM <mesokit.data.demo.DEMO_STEM>`
+  - ```{autodoc2-docstring} mesokit.data.demo.DEMO_STEM
+    :summary:
+    ```
+* - {py:obj}`DEMO_NAME <mesokit.data.demo.DEMO_NAME>`
+  - ```{autodoc2-docstring} mesokit.data.demo.DEMO_NAME
+    :summary:
+    ```
+* - {py:obj}`DEMO_CONTAINERS <mesokit.data.demo.DEMO_CONTAINERS>`
+  - ```{autodoc2-docstring} mesokit.data.demo.DEMO_CONTAINERS
+    :summary:
+    ```
+* - {py:obj}`DEMO_EQUATION <mesokit.data.demo.DEMO_EQUATION>`
+  - ```{autodoc2-docstring} mesokit.data.demo.DEMO_EQUATION
+    :summary:
+    ```
+* - {py:obj}`DEMO_NOTES <mesokit.data.demo.DEMO_NOTES>`
+  - ```{autodoc2-docstring} mesokit.data.demo.DEMO_NOTES
+    :summary:
+    ```
+* - {py:obj}`_EPS <mesokit.data.demo._EPS>`
+  - ```{autodoc2-docstring} mesokit.data.demo._EPS
+    :summary:
+    ```
+* - {py:obj}`_LX <mesokit.data.demo._LX>`
+  - ```{autodoc2-docstring} mesokit.data.demo._LX
+    :summary:
+    ```
+* - {py:obj}`_NX <mesokit.data.demo._NX>`
+  - ```{autodoc2-docstring} mesokit.data.demo._NX
+    :summary:
+    ```
+* - {py:obj}`_DT <mesokit.data.demo._DT>`
+  - ```{autodoc2-docstring} mesokit.data.demo._DT
+    :summary:
+    ```
+* - {py:obj}`_N_STEPS <mesokit.data.demo._N_STEPS>`
+  - ```{autodoc2-docstring} mesokit.data.demo._N_STEPS
+    :summary:
+    ```
+* - {py:obj}`_SAVE_EVERY <mesokit.data.demo._SAVE_EVERY>`
+  - ```{autodoc2-docstring} mesokit.data.demo._SAVE_EVERY
+    :summary:
+    ```
+* - {py:obj}`_N_TRAJ <mesokit.data.demo._N_TRAJ>`
+  - ```{autodoc2-docstring} mesokit.data.demo._N_TRAJ
+    :summary:
+    ```
+* - {py:obj}`_N_MODES <mesokit.data.demo._N_MODES>`
+  - ```{autodoc2-docstring} mesokit.data.demo._N_MODES
+    :summary:
+    ```
+* - {py:obj}`_SEED <mesokit.data.demo._SEED>`
+  - ```{autodoc2-docstring} mesokit.data.demo._SEED
+    :summary:
+    ```
+````
+
+### API
+
+````{py:data} DEMO_STEM
+:canonical: mesokit.data.demo.DEMO_STEM
+:value: >
+   'allen_cahn_1d_demo'
+
+```{autodoc2-docstring} mesokit.data.demo.DEMO_STEM
+```
+
+````
+
+````{py:data} DEMO_NAME
+:canonical: mesokit.data.demo.DEMO_NAME
+:value: >
+   'allen_cahn_demo_v0'
+
+```{autodoc2-docstring} mesokit.data.demo.DEMO_NAME
+```
+
+````
+
+````{py:data} DEMO_CONTAINERS
+:canonical: mesokit.data.demo.DEMO_CONTAINERS
+:value: >
+   ('npz', 'h5')
+
+```{autodoc2-docstring} mesokit.data.demo.DEMO_CONTAINERS
+```
+
+````
+
+````{py:data} DEMO_EQUATION
+:canonical: mesokit.data.demo.DEMO_EQUATION
+:value: >
+   'u_t = u_xx + (u - u**3) / eps**2, periodic in x'
+
+```{autodoc2-docstring} mesokit.data.demo.DEMO_EQUATION
+```
+
+````
+
+````{py:data} DEMO_NOTES
+:canonical: mesokit.data.demo.DEMO_NOTES
+:value: >
+   '1D Allen-Cahn. Written by `mesokit data demo` as a deliberately non-conforming example for `mesokit ...'
+
+```{autodoc2-docstring} mesokit.data.demo.DEMO_NOTES
+```
+
+````
+
+````{py:data} _EPS
+:canonical: mesokit.data.demo._EPS
+:value: >
+   0.15
+
+```{autodoc2-docstring} mesokit.data.demo._EPS
+```
+
+````
+
+````{py:data} _LX
+:canonical: mesokit.data.demo._LX
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.data.demo._LX
+```
+
+````
+
+````{py:data} _NX
+:canonical: mesokit.data.demo._NX
+:value: >
+   128
+
+```{autodoc2-docstring} mesokit.data.demo._NX
+```
+
+````
+
+````{py:data} _DT
+:canonical: mesokit.data.demo._DT
+:value: >
+   0.001
+
+```{autodoc2-docstring} mesokit.data.demo._DT
+```
+
+````
+
+````{py:data} _N_STEPS
+:canonical: mesokit.data.demo._N_STEPS
+:value: >
+   400
+
+```{autodoc2-docstring} mesokit.data.demo._N_STEPS
+```
+
+````
+
+````{py:data} _SAVE_EVERY
+:canonical: mesokit.data.demo._SAVE_EVERY
+:value: >
+   8
+
+```{autodoc2-docstring} mesokit.data.demo._SAVE_EVERY
+```
+
+````
+
+````{py:data} _N_TRAJ
+:canonical: mesokit.data.demo._N_TRAJ
+:value: >
+   4
+
+```{autodoc2-docstring} mesokit.data.demo._N_TRAJ
+```
+
+````
+
+````{py:data} _N_MODES
+:canonical: mesokit.data.demo._N_MODES
+:value: >
+   4
+
+```{autodoc2-docstring} mesokit.data.demo._N_MODES
+```
+
+````
+
+````{py:data} _SEED
+:canonical: mesokit.data.demo._SEED
+:value: >
+   0
+
+```{autodoc2-docstring} mesokit.data.demo._SEED
+```
+
+````
+
+````{py:function} demo_arrays() -> dict[str, typing.Any]
+:canonical: mesokit.data.demo.demo_arrays
+
+```{autodoc2-docstring} mesokit.data.demo.demo_arrays
+```
+````
+
+````{py:function} write_demo_dataset(path: str | pathlib.Path, *, container: str = 'npz') -> dict[str, typing.Any]
+:canonical: mesokit.data.demo.write_demo_dataset
+
+```{autodoc2-docstring} mesokit.data.demo.write_demo_dataset
+```
+````

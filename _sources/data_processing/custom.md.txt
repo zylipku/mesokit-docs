@@ -6,7 +6,8 @@ PDE solver, MD trajectory, finite-difference export, …) and then have
 indistinguishable from a built-in one to the rest of the toolkit.
 
 This page walks through the conformance checklist, the minimal writer, the
-validator, and the registration command.
+validator, the registration command, and — for data that is not HDF5 at all —
+the agent-driven conversion.
 
 ## Required Structure At a Glance
 
@@ -71,8 +72,24 @@ groups are created up-front so even a metadata-light export is conforming.
 
 ## Validating
 
-`mesokit data validate data/my_data.h5` prints the inferred metadata, or
-each failing check with a non-zero exit, without registering anything.
+`mesokit data validate data/my_data.h5` prints the verdict and the inferred
+metadata, or each failing check with a non-zero exit, without registering
+anything:
+
+```text
+validated /home/me/project/data/my_data.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+```
+
+The `check:` row is the answer; `dt` is `non-uniform` when the saved times do
+not sit on a single step to within the v1 tolerance, which is a statement
+about the file rather than a fault. Add `--verbose` (`-v`) for the file path,
+the `times` dtype and the three metadata groups.
+
 From Python, `mesokit.data.validate(path)` runs the same checks and
 returns a `ValidationReport`:
 
@@ -104,15 +121,71 @@ mesokit data register --name my_dataset --file data/my_data.h5
 This re-runs `validate(path)`, then writes a record into the local
 `.mesokit/datasets.json` registry pointing at the file. From this point on,
 `mesokit train --data my_dataset ...` and other CLI commands resolve the
-name through the registry.
+name through the registry. The output is the same block `data validate`
+prints, under a header naming the entry that was written:
+
+```text
+registered 'ac_scratch' -> /home/me/project/data/scratch.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+```
+
+A file that does not conform is reported on stderr, in red, and nothing is
+written:
+
+```text
+sanity check FAILED: /home/me/project/data/bad.h5
+  missing required root attribute 'format'
+Invalid value: sanity check failed for /home/me/project/data/bad.h5; not registered
+```
 
 Useful flags:
 
 - `--force` — overwrite an existing entry of the same name.
+- `--verbose` / `-v` — add the file path, the `times` dtype and the three
+  metadata groups to the block.
 
 The registry record is *not* part of the HDF5 cache contract; it lives on
 disk under the project root and is project-local. Two checkouts of the
 same project can have different registries.
+
+## Converting Another Format
+
+If the data is not HDF5 at all — a NumPy archive, a NetCDF file, torch
+tensors next to a JSON sidecar — `mesokit data parse` hands the conversion to
+a coding agent you already have installed, then validates and (with `--name`)
+registers what it produced. The
+[Command-Line Reference](#mesokit-data-parse) covers the flags and
+the permissions it grants.
+
+To see that work before pointing it at your own data,
+[`mesokit data demo`](#mesokit-data-demo) writes a small file that is
+deliberately *not* conforming — a real 1-D Allen-Cahn run stored with the axes
+in the wrong order, no channel axis, frame indices instead of times, and flat
+scalars instead of the three metadata groups:
+
+```sh
+mesokit data demo
+mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
+```
+
+```text
+registered 'allen_cahn_demo_v0' -> /home/me/project/data/parsed/allen_cahn_1d_demo.h5 (213.7 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      4 traj x 51 steps x 1 channel, grid 128 (float64)
+  dt:         0.008
+  channels:   u
+```
+
+Every fact the v1 cache needs is in the demo file, just stored the wrong way,
+so the conversion is a real one: the `(frame, x, run)` array has to be
+transposed and given a channel axis, and `frame_steps * dt` has to become
+`times`. `mesokit data demo --format h5` writes the same run as HDF5 instead,
+which `mesokit data validate` can then pick apart check by check.
 
 ## Common Validator Errors
 

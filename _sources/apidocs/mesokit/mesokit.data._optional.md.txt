@@ -19,6 +19,10 @@
   - ```{autodoc2-docstring} mesokit.data._optional.require
     :summary:
     ```
+* - {py:obj}`log_stdout_to_stderr <mesokit.data._optional.log_stdout_to_stderr>`
+  - ```{autodoc2-docstring} mesokit.data._optional.log_stdout_to_stderr
+    :summary:
+    ```
 * - {py:obj}`require_dedalus <mesokit.data._optional.require_dedalus>`
   - ```{autodoc2-docstring} mesokit.data._optional.require_dedalus
     :summary:
@@ -51,6 +55,13 @@ Bases: {py:obj}`ImportError`
 :canonical: mesokit.data._optional.require
 
 ```{autodoc2-docstring} mesokit.data._optional.require
+```
+````
+
+````{py:function} log_stdout_to_stderr() -> None
+:canonical: mesokit.data._optional.log_stdout_to_stderr
+
+```{autodoc2-docstring} mesokit.data._optional.log_stdout_to_stderr
 ```
 ````
 

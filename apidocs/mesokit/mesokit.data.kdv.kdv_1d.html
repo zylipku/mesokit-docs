@@ -283,6 +283,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
@@ -365,6 +366,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
@@ -463,8 +465,9 @@ u_bound: reject trajectories whose <code class="docutils literal notranslate"><s
 dealias: Dedalus de-aliasing factor.
 seed: master RNG seed; <code class="docutils literal notranslate"><span class="pre">-1</span></code> for non-deterministic.
 verbose: if <code class="docutils literal notranslate"><span class="pre">True</span></code>, leave Dedalus’s per-step INFO logs in place and
-don’t print our own progress line. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code> (quiet:
-mute Dedalus chatter, print <code class="docutils literal notranslate"><span class="pre">m/n</span> <span class="pre">trajectories</span></code> to stderr).</p>
+report progress as newline-terminated milestone lines. Defaults to
+<code class="docutils literal notranslate"><span class="pre">False</span></code> (quiet: mute Dedalus chatter and overwrite a single
+<code class="docutils literal notranslate"><span class="pre">m/n</span> <span class="pre">trajectories</span></code> line, printed only when stderr is a terminal).</p>
 <p>Returns:
 TrajectoryDataset of shape <code class="docutils literal notranslate"><span class="pre">(n_traj,</span> <span class="pre">n_frames,</span> <span class="pre">1,</span> <span class="pre">Nx)</span></code> with
 <code class="docutils literal notranslate"><span class="pre">channel_names=(&quot;u&quot;,)</span></code>.</p>

@@ -43,6 +43,10 @@
   - ```{autodoc2-docstring} mesokit.cli.data.run_generate
     :summary:
     ```
+* - {py:obj}`_check_registry_name <mesokit.cli.data._check_registry_name>`
+  - ```{autodoc2-docstring} mesokit.cli.data._check_registry_name
+    :summary:
+    ```
 * - {py:obj}`_unwrap_instantiation <mesokit.cli.data._unwrap_instantiation>`
   - ```{autodoc2-docstring} mesokit.cli.data._unwrap_instantiation
     :summary:
@@ -91,6 +95,10 @@
   - ```{autodoc2-docstring} mesokit.cli.data._validate_file
     :summary:
     ```
+* - {py:obj}`demo <mesokit.cli.data.demo>`
+  - ```{autodoc2-docstring} mesokit.cli.data.demo
+    :summary:
+    ```
 * - {py:obj}`parse <mesokit.cli.data.parse>`
   - ```{autodoc2-docstring} mesokit.cli.data.parse
     :summary:
@@ -113,6 +121,22 @@
     ```
 * - {py:obj}`_BACKEND_HELP <mesokit.cli.data._BACKEND_HELP>`
   - ```{autodoc2-docstring} mesokit.cli.data._BACKEND_HELP
+    :summary:
+    ```
+* - {py:obj}`_DEMO_OUTPUT_HELP <mesokit.cli.data._DEMO_OUTPUT_HELP>`
+  - ```{autodoc2-docstring} mesokit.cli.data._DEMO_OUTPUT_HELP
+    :summary:
+    ```
+* - {py:obj}`_DEMO_FORMAT_HELP <mesokit.cli.data._DEMO_FORMAT_HELP>`
+  - ```{autodoc2-docstring} mesokit.cli.data._DEMO_FORMAT_HELP
+    :summary:
+    ```
+* - {py:obj}`_SIMULATOR_ERRORS <mesokit.cli.data._SIMULATOR_ERRORS>`
+  - ```{autodoc2-docstring} mesokit.cli.data._SIMULATOR_ERRORS
+    :summary:
+    ```
+* - {py:obj}`_DEMO_ARRAY_NOTES <mesokit.cli.data._DEMO_ARRAY_NOTES>`
+  - ```{autodoc2-docstring} mesokit.cli.data._DEMO_ARRAY_NOTES
     :summary:
     ```
 ````
@@ -149,6 +173,52 @@
 
 ````
 
+````{py:data} _DEMO_OUTPUT_HELP
+:canonical: mesokit.cli.data._DEMO_OUTPUT_HELP
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.data._DEMO_OUTPUT_HELP
+```
+
+````
+
+````{py:data} _DEMO_FORMAT_HELP
+:canonical: mesokit.cli.data._DEMO_FORMAT_HELP
+:value: >
+   "Container to write: 'npz' (a NumPy archive) or 'h5' (an HDF5 file that is not a v1 cache)."
+
+```{autodoc2-docstring} mesokit.cli.data._DEMO_FORMAT_HELP
+```
+
+````
+
+````{py:data} _SIMULATOR_ERRORS
+:canonical: mesokit.cli.data._SIMULATOR_ERRORS
+:value: >
+   ()
+
+```{autodoc2-docstring} mesokit.cli.data._SIMULATOR_ERRORS
+```
+
+````
+
+````{py:exception} SimulatorFailedError(dyn: str, cause: BaseException)
+:canonical: mesokit.cli.data.SimulatorFailedError
+
+Bases: {py:obj}`RuntimeError`
+
+```{autodoc2-docstring} mesokit.cli.data.SimulatorFailedError
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} mesokit.cli.data.SimulatorFailedError.__init__
+```
+
+````
+
 ````{py:function} list_() -> None
 :canonical: mesokit.cli.data.list_
 
@@ -163,7 +233,7 @@
 ```
 ````
 
-````{py:function} generate(dyn: typing.Annotated[str, typer.Option('--dyn', help='Registered dynamics name, e.g. allen_cahn_1d.')], output: typing.Annotated[pathlib.Path | None, typer.Option('--output', help='HDF5 path to write. Defaults to data/<dyn>/<name>.h5.')] = None, config: typing.Annotated[str | None, typer.Option('--config', help="Recipe stem under configs/data/<dyn>/ (working directory, then the installed package), or a path to a YAML file. Defaults to 'default'.")] = None, name: typing.Annotated[str | None, typer.Option('--name', help='Register the generated file under this name. Defaults to <dyn>_v<n>.')] = None, no_registry: typing.Annotated[bool, typer.Option('--no-registry', help='Skip auto-registration. Mutually exclusive with --name.')] = False, force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing registry entry.')] = False, verbose: typing.Annotated[bool, typer.Option('--verbose', help="Show the simulator's full chatter (e.g. Dedalus per-step logs).")] = False, set_: typing.Annotated[list[str] | None, typer.Option('--set', metavar='KEY=VALUE', help='Override one recipe key (a simulator kwarg) for this run; repeatable. The value is read as int, float, bool or string, in that order.')] = None) -> None
+````{py:function} generate(dyn: typing.Annotated[str, typer.Option('--dyn', help='Registered dynamics name, e.g. allen_cahn_1d.')], output: typing.Annotated[pathlib.Path | None, typer.Option('--output', help='HDF5 path to write. Defaults to data/<dyn>/<name>.h5.')] = None, config: typing.Annotated[str | None, typer.Option('--config', help="Recipe stem under configs/data/<dyn>/ (working directory, then the installed package), or a path to a YAML file. Defaults to 'default'.")] = None, name: typing.Annotated[str | None, typer.Option('--name', help='Register the generated file under this name. Defaults to <dyn>_v<n>.')] = None, no_registry: typing.Annotated[bool, typer.Option('--no-registry', help='Skip auto-registration. Mutually exclusive with --name.')] = False, force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing registry entry.')] = False, verbose: typing.Annotated[bool, typer.Option('--verbose', '-v', help="Leave the solver's own log alone, report progress in a pipe-safe form, print the full metadata, and show the traceback if the simulator fails.")] = False, set_: typing.Annotated[list[str] | None, typer.Option('--set', metavar='KEY=VALUE', help='Override one recipe key (a simulator kwarg) for this run; repeatable. The value is read as int, float, bool or string, in that order.')] = None) -> None
 :canonical: mesokit.cli.data.generate
 
 ```{autodoc2-docstring} mesokit.cli.data.generate
@@ -220,12 +290,30 @@
 
 ````
 
+````{py:attribute} facts
+:canonical: mesokit.cli.data.GenerateResult.facts
+:type: mesokit.cli._report.DatasetFacts
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli.data.GenerateResult.facts
+```
+
+````
+
 `````
 
-````{py:function} run_generate(dyn: str, *, config: str | None = None, name: str | None = None, output: pathlib.Path | None = None, register: bool = True, force: bool = False, verbose: bool = False, overrides: collections.abc.Mapping[str, typing.Any] | None = None) -> mesokit.cli.data.GenerateResult
+````{py:function} run_generate(dyn: str, *, config: str | None = None, name: str | None = None, output: pathlib.Path | None = None, register: bool = True, force: bool = False, verbose: bool = False, overrides: collections.abc.Mapping[str, typing.Any] | None = None, overwrite_hint: str = OUTPUT_HINT) -> mesokit.cli.data.GenerateResult
 :canonical: mesokit.cli.data.run_generate
 
 ```{autodoc2-docstring} mesokit.cli.data.run_generate
+```
+````
+
+````{py:function} _check_registry_name(name: str, *, force: bool) -> None
+:canonical: mesokit.cli.data._check_registry_name
+
+```{autodoc2-docstring} mesokit.cli.data._check_registry_name
 ```
 ````
 
@@ -278,7 +366,7 @@
 ```
 ````
 
-````{py:function} register(name: typing.Annotated[str, typer.Option('--name', help='Name to register the dataset under.')], file: typing.Annotated[pathlib.Path, typer.Option('--file', help='Existing HDF5 file to register.')], force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing entry.')] = False) -> None
+````{py:function} register(name: typing.Annotated[str, typer.Option('--name', help='Name to register the dataset under.')], file: typing.Annotated[pathlib.Path, typer.Option('--file', help='Existing HDF5 file to register.')], force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing entry.')] = False, verbose: typing.Annotated[bool, typer.Option('--verbose', '-v', help='Also print the file path, the times dtype and the full metadata.')] = False) -> None
 :canonical: mesokit.cli.data.register
 
 ```{autodoc2-docstring} mesokit.cli.data.register
@@ -299,7 +387,7 @@
 ```
 ````
 
-````{py:function} validate_(file: typing.Annotated[pathlib.Path, typer.Argument(help='HDF5 file to check against the v1 cache contract.')]) -> None
+````{py:function} validate_(file: typing.Annotated[pathlib.Path, typer.Argument(help='HDF5 file to check against the v1 cache contract.')], verbose: typing.Annotated[bool, typer.Option('--verbose', '-v', help='Also print the file path, the times dtype and the full metadata.')] = False) -> None
 :canonical: mesokit.cli.data.validate_
 
 ```{autodoc2-docstring} mesokit.cli.data.validate_
@@ -313,7 +401,24 @@
 ```
 ````
 
-````{py:function} parse(file: typing.Annotated[pathlib.Path, typer.Option('--file', help='Input dataset to convert (any format).')], output: typing.Annotated[pathlib.Path | None, typer.Option('--output', help='HDF5 path to write. Defaults to data/parsed/<stem>.h5.')] = None, hint: typing.Annotated[str | None, typer.Option('--hint', help="Extra instructions for the agent (e.g. 'time dim is t, var is u').")] = None, agent: typing.Annotated[str, typer.Option('--agent', help=_AGENT_HELP)] = 'claude', backend: typing.Annotated[str, typer.Option('--backend', help=_BACKEND_HELP)] = 'foreground', agent_args: typing.Annotated[str | None, typer.Option('--agent-args', help="Extra flags for the agent command, appended verbatim (split like a shell), e.g. '--model opus' or '--allowedTools Bash(uv run:*)'.")] = None, name: typing.Annotated[str | None, typer.Option('--name', help='If given, register the produced HDF5 under this name on success.')] = None, force: typing.Annotated[bool, typer.Option('--force', help='Replace an existing output file and an existing registry entry.')] = False) -> None
+````{py:data} _DEMO_ARRAY_NOTES
+:canonical: mesokit.cli.data._DEMO_ARRAY_NOTES
+:value: >
+   (('u', 'field, axes (frame, x, run)'), ('x', 'grid coordinates'), ('frame_steps', 'solver iteration ...
+
+```{autodoc2-docstring} mesokit.cli.data._DEMO_ARRAY_NOTES
+```
+
+````
+
+````{py:function} demo(output: typing.Annotated[pathlib.Path | None, typer.Option('--output', help=_DEMO_OUTPUT_HELP)] = None, format_: typing.Annotated[str, typer.Option('--format', help=_DEMO_FORMAT_HELP)] = 'npz') -> None
+:canonical: mesokit.cli.data.demo
+
+```{autodoc2-docstring} mesokit.cli.data.demo
+```
+````
+
+````{py:function} parse(file: typing.Annotated[pathlib.Path, typer.Option('--file', help='Input dataset to convert (any format).')], output: typing.Annotated[pathlib.Path | None, typer.Option('--output', help='HDF5 path to write. Defaults to data/parsed/<stem>.h5.')] = None, hint: typing.Annotated[str | None, typer.Option('--hint', help="Extra instructions for the agent (e.g. 'time dim is t, var is u').")] = None, agent: typing.Annotated[str, typer.Option('--agent', help=_AGENT_HELP)] = 'claude', backend: typing.Annotated[str, typer.Option('--backend', help=_BACKEND_HELP)] = 'foreground', agent_args: typing.Annotated[str | None, typer.Option('--agent-args', help="Extra flags for the agent command, appended verbatim (split like a shell), e.g. '--model opus' or '--allowedTools Bash(uv run:*)'.")] = None, name: typing.Annotated[str | None, typer.Option('--name', help='If given, register the produced HDF5 under this name on success.')] = None, force: typing.Annotated[bool, typer.Option('--force', help='Replace an existing output file and an existing registry entry.')] = False, verbose: typing.Annotated[bool, typer.Option('--verbose', '-v', help='Also print the file path, the times dtype and the full metadata.')] = False) -> None
 :canonical: mesokit.cli.data.parse
 
 ```{autodoc2-docstring} mesokit.cli.data.parse
