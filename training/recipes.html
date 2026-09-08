@@ -457,7 +457,7 @@ synthesises one: the model’s constructor defaults plus the dataset’s grid,
 <code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset</span></code> with <code class="docutils literal notranslate"><span class="pre">stride:</span> <span class="pre">1</span></code>, dataloader defaults, and the
 registered trainer’s defaults. <code class="docutils literal notranslate"><span class="pre">--set</span> <span class="pre">key.path=value</span></code> (repeatable, values
 parsed as YAML) changes any key on top of a recipe or of those defaults:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--data<span class="w"> </span>my_data<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span>1e-4<span class="w"> </span><span class="se">\</span>
@@ -569,7 +569,7 @@ dimension, for example
 <code class="docutils literal notranslate"><span class="pre">configs/train/allen_cahn_1d/spectral_onsagernet_1d/default.yaml</span></code> to
 <code class="docutils literal notranslate"><span class="pre">configs/train/decay_1d/spectral_onsagernet_1d/default.yaml</span></code> (nothing in
 it depends on the grid), then:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--data<span class="w"> </span>decay_1d_v0<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--epochs<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="se">\</span>

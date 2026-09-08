@@ -9,8 +9,8 @@ is configured for Linux (`linux-64`); CPU training is available with
 
 ## Install from a clone
 
-```console
-$ git clone https://github.com/MLDS-NUS/mesokit.git
+```sh
+git clone https://github.com/MLDS-NUS/mesokit.git
 ```
 
 Choose the setup that matches where you want to work.
@@ -20,9 +20,9 @@ Choose the setup that matches where you want to work.
 The checkout's default environment includes mesokit, training and plotting
 dependencies, and the Dedalus and LAMMPS solvers:
 
-```console
-$ cd mesokit
-$ pixi install
+```sh
+cd mesokit
+pixi install
 ```
 
 ### Install into your own project
@@ -30,11 +30,13 @@ $ pixi install
 Use the absolute path to the clone in the examples below.
 
 **Pixi:** from your project directory, run
+
 ```sh
-$ pixi init
-$ pixi add "python>=3.12"
-$ pixi install # optional
+pixi init
+pixi add "python>=3.12"
+pixi install # optional
 ```
+
 if the project is
 not initialized.
 Add this entry to its `pixi.toml` (or to the existing
@@ -47,14 +49,14 @@ mesokit = { path = "/path/to/mesokit", editable = true }
 
 **uv:** from your project directory, run `uv init` if needed, then:
 
-```console
-$ uv add --editable /path/to/mesokit
+```sh
+uv add --editable /path/to/mesokit
 ```
 
 **pip:** activate your Python environment, then:
 
-```console
-$ pip install -e /path/to/mesokit
+```sh
+pip install -e /path/to/mesokit
 ```
 
 These installations include training and interpretation dependencies.
@@ -81,9 +83,9 @@ available with the installation, so this can be any folder.
 The checkout's default Pixi environment includes both solvers. For a
 separate Pixi project, add the solver you need to that project:
 
-```console
-$ pixi add dedalus
-$ pixi add lammps
+```sh
+pixi add dedalus
+pixi add lammps
 ```
 
 In a conda environment, use `conda install -c conda-forge dedalus` or

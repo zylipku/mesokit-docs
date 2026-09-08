@@ -7,10 +7,10 @@ and `path` show what is installed and where; `install` copies skills into
 the folder a coding agent scans so they can be invoked conversationally
 outside the mesokit checkout.
 
-```console
-$ mesokit skills list
-$ mesokit skills path NAME
-$ mesokit skills install [NAME ...] \
+```sh
+mesokit skills list
+mesokit skills path NAME
+mesokit skills install [NAME ...] \
   [--all] \
   [--agent claude|codex] \
   [--scope project|user] \
@@ -28,9 +28,6 @@ $ mesokit skills install [NAME ...] \
 
 ```console
 $ mesokit skills list
-```
-
-```text
 mesokit-add-artifact  Read an interpretable quantity off a trained mesokit model by building a custom interpretability artifact — a plot, a number, a fitted law, a spectrum — either wired into a custom model's `artifact(name)` or computed post hoc from a loaded checkpoint of a shipped model, and compare it side by side with the shipped `potential` artifact
 mesokit-add-model     Write and register a custom dynamics model for mesokit from the user's own module — a new architecture, a physics-structured parameterisation, or a new potential / operator block for the shipped Onsager families — and verify it structurally before any training
 mesokit-add-simulator Register the user's own equation, solver or data generator as a mesokit simulator so that `mesokit data generate` (or a Python call) produces registered, validated trajectory datasets from it
@@ -41,9 +38,6 @@ mesokit-train         Train one of mesokit's shipped model families (fno, spectr
 
 ```console
 $ mesokit skills install --agent codex --scope user
-```
-
-```text
 installed 'mesokit-add-artifact' -> /home/me/.codex/skills/mesokit-add-artifact
 installed 'mesokit-add-model' -> /home/me/.codex/skills/mesokit-add-model
 installed 'mesokit-add-simulator' -> /home/me/.codex/skills/mesokit-add-simulator

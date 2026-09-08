@@ -13,9 +13,9 @@ The examples in this guide assume `mesokit` is available in your shell.
 In a Pixi or uv project, prefix each command with `pixi run` or `uv run`,
 respectively:
 
-```console
-$ pixi run mesokit --help
-$ uv run mesokit --help
+```sh
+pixi run mesokit --help
+uv run mesokit --help
 ```
 
 Choose the command for your environment. With an activated environment

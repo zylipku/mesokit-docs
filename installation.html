@@ -431,7 +431,7 @@ is configured for Linux (<code class="docutils literal notranslate"><span class=
 <code class="docutils literal notranslate"><span class="pre">--device</span> <span class="pre">cpu</span></code>.</p>
 <section id="install-from-a-clone">
 <h2>Install from a clone<a class="headerlink" href="#install-from-a-clone" title="Link to this heading">¶</a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MLDS-NUS/mesokit.git
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MLDS-NUS/mesokit.git
 </pre></div>
 </div>
 <p>Choose the setup that matches where you want to work.</p>
@@ -439,8 +439,8 @@ is configured for Linux (<code class="docutils literal notranslate"><span class=
 <h3>Work in the checkout with Pixi<a class="headerlink" href="#work-in-the-checkout-with-pixi" title="Link to this heading">¶</a></h3>
 <p>The checkout’s default environment includes mesokit, training and plotting
 dependencies, and the Dedalus and LAMMPS solvers:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>mesokit
-<span class="gp">$ </span>pixi<span class="w"> </span>install
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>mesokit
+pixi<span class="w"> </span>install
 </pre></div>
 </div>
 </section>
@@ -448,9 +448,9 @@ dependencies, and the Dedalus and LAMMPS solvers:</p>
 <h3>Install into your own project<a class="headerlink" href="#install-into-your-own-project" title="Link to this heading">¶</a></h3>
 <p>Use the absolute path to the clone in the examples below.</p>
 <p><strong>Pixi:</strong> from your project directory, run</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pixi<span class="w"> </span>init
-$<span class="w"> </span>pixi<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;python&gt;=3.12&quot;</span>
-$<span class="w"> </span>pixi<span class="w"> </span>install<span class="w"> </span><span class="c1"># optional</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>init
+pixi<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;python&gt;=3.12&quot;</span>
+pixi<span class="w"> </span>install<span class="w"> </span><span class="c1"># optional</span>
 </pre></div>
 </div>
 <p>if the project is
@@ -462,11 +462,11 @@ Add this entry to its <code class="docutils literal notranslate"><span class="pr
 </pre></div>
 </div>
 <p><strong>uv:</strong> from your project directory, run <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">init</span></code> if needed, then:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>uv<span class="w"> </span>add<span class="w"> </span>--editable<span class="w"> </span>/path/to/mesokit
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>add<span class="w"> </span>--editable<span class="w"> </span>/path/to/mesokit
 </pre></div>
 </div>
 <p><strong>pip:</strong> activate your Python environment, then:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>/path/to/mesokit
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>/path/to/mesokit
 </pre></div>
 </div>
 <p>These installations include training and interpretation dependencies.
@@ -504,8 +504,8 @@ available with the installation, so this can be any folder.</p>
 </div>
 <p>The checkout’s default Pixi environment includes both solvers. For a
 separate Pixi project, add the solver you need to that project:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pixi<span class="w"> </span>add<span class="w"> </span>dedalus
-<span class="gp">$ </span>pixi<span class="w"> </span>add<span class="w"> </span>lammps
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>add<span class="w"> </span>dedalus
+pixi<span class="w"> </span>add<span class="w"> </span>lammps
 </pre></div>
 </div>
 <p>In a conda environment, use <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">dedalus</span></code> or

@@ -17,7 +17,8 @@ See {ref}`how to use CLI <running-the-cli>`.
 ## 1. Generate data
 
 To list all available simulators, run:
-```sh
+
+```console
 $ mesokit data avail
 DYN                       SIMULATOR
 allen_cahn_1d             mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d
@@ -31,9 +32,9 @@ parameters, and solver requirements.
 
 For a quick demonstration, generate a small Allen–Cahn dataset with the `fdr` (fast dev run) recipe.
 
-```console
-$ pixi add dedalus && pixi install
-$ mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_demo
+```sh
+pixi add dedalus && pixi install
+mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_demo
 ```
 
 The `fdr` recipe generates ten trajectories with 101 saved
@@ -43,13 +44,13 @@ validates its format, and registers it as `ac_demo`.
 Only registered datasets are accepted for model training, and `mesokit data generate` has automatically done so. To manually register a dataset, use
 
 ```sh
-$ mesokit data register --name ac_demo_manually_registered --file data/allen_cahn_1d/ac_demo.h5
+mesokit data register --name ac_demo_manually_registered --file data/allen_cahn_1d/ac_demo.h5
 ```
 
 To check all registered datasets, run:
 
 
-```sh
+```console
 $ mesokit data list
 allen_cahn_1d:
   ac_demo                      yes  /path/to/project/data/allen_cahn_1d/ac_demo.h5
@@ -65,7 +66,7 @@ name if you have already run this example.
 To train with a predefined model, run
 
 ```sh
-$ mesokit train \
+mesokit train \
   --model spectral_onsagernet_1d \
   --data ac_demo \
   --name son_demo \
@@ -75,7 +76,7 @@ $ mesokit train \
 For hyperparameter sweeps, we use
 
 ```sh
-$ mesokit sweep \
+mesokit sweep \
   --model onsagernet_1d \
   --data ac_demo \
   --config fdr \
@@ -84,7 +85,7 @@ $ mesokit sweep \
 
 Show all trained checkpoints with
 
-```sh
+```console
 $ mesokit model list
 NAME                                                     MODEL                   DATASET  PARAMS             TRAIN_LOSS  EPOCHS  TIME  CREATED              TAGS
 onsagernet_1d_lr_20260908-230905/onsagernet_1d_lr0.0001  onsagernet_1d           ac_demo  trainer.lr=0.0001  0.000112    5       7.6s  2026-09-08T23:09:17  -
@@ -95,14 +96,14 @@ son_demo                                                 spectral_onsagernet_1d 
 Inspect a single saved run with:
 
 ```sh
-$ mesokit model show son_demo
+mesokit model show son_demo
 ```
 
 To start a new
 run from these weights:
 
 ```sh
-$ mesokit train --from son_demo --name son_long --epochs 100 # 5+100 epochs in total
+mesokit train --from son_demo --name son_long --epochs 100 # 5+100 epochs in total
 ```
 
 The flag `--from` loads the weights
@@ -111,11 +112,14 @@ the previous optimizer state.
 
 ## 3. Plot the learned potential
 
-```sh
+```console
 $ mesokit interpret list --model son_demo
 son_demo:
   potential
-$ mesokit interpret extract --model son_demo --artifact potential --output figs/son_demo.png
+```
+
+```sh
+mesokit interpret extract --model son_demo --artifact potential --output figs/son_demo.png
 ```
 
 The second command prints a summary and saves a figure. The `potential`
@@ -133,7 +137,7 @@ not yet match the physical free energy. To inspect the longer fit, replace
 If you already have a file in mesokit's HDF5 format, validate and register it:
 
 ```sh
-$ mesokit data register --name my_data --file data/my_data.h5
+mesokit data register --name my_data --file data/my_data.h5
 ```
 
 For other formats, [Custom Datasets](data_processing/custom.md) shows how
@@ -143,26 +147,26 @@ uses an installed coding agent to convert a file for you.
 For demonstration, we use
 
 ```sh
-$ mesokit data demo --format npz --output my_dataset.npz
+mesokit data demo --format npz --output my_dataset.npz
 ```
 
 to generate a test dataset without the correct HDF5 structure. Then we convert it to HDF5 with
 
 
 ```sh
-$ mesokit data parse --file my_dataset.npz # use claude by default
-$ mesokit data register --file data/parsed/my_dataset.h5 --name my_npz_data
+mesokit data parse --file my_dataset.npz # use claude by default
+mesokit data register --file data/parsed/my_dataset.h5 --name my_npz_data
 ```
 
 or a single line:
 
 ```sh
-$ mesokit data parse --file my_dataset.npz --name my_npz_data
+mesokit data parse --file my_dataset.npz --name my_npz_data
 ```
 
 Then check the file and register it:
 
-```sh
+```console
 $ mesokit data list
 allen_cahn_1d:
   ac_demo                      yes  /home/zhuoyuan/tmp/Projects/mesokit-project/data/allen_cahn_1d/ac_demo.h5

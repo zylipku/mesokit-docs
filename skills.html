@@ -438,7 +438,7 @@ the <a class="reference internal" href="quickstart.html"><span class="std std-do
 <a class="reference external" href="https://developers.openai.com/codex/cli">Codex CLI</a>.
 See <a class="reference internal" href="cli.html#running-the-cli"><span class="std std-ref">how to use CLI</span></a>.</p>
 <p>From your project directory, set up the agent you use:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>agent<span class="w"> </span>init<span class="w"> </span>--agent<span class="w"> </span>claude
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>agent<span class="w"> </span>init<span class="w"> </span>--agent<span class="w"> </span>claude
 </pre></div>
 </div>
 <p>For Codex, use <code class="docutils literal notranslate"><span class="pre">--agent</span> <span class="pre">codex</span></code>; for both, use <code class="docutils literal notranslate"><span class="pre">--agent</span> <span class="pre">both</span></code>. This writes
@@ -543,15 +543,15 @@ assumptions, metrics, and plots when deciding what to run next.</p>
 <h2>Convert a file directly from the command line<a class="headerlink" href="#convert-a-file-directly-from-the-command-line" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code> launches an installed agent for a single conversion,
 then validates the output and optionally registers it:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--file<span class="w"> </span>runs/field.nc<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--hint<span class="w"> </span><span class="s2">&quot;variable phi, dimensions (member, time, x)&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--name<span class="w"> </span>phi_v0
 </pre></div>
 </div>
 <p>To try it with a supplied practice file:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
-<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>ac_imported
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
+mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>ac_imported
 </pre></div>
 </div>
 <p>This runs without an interactive conversation. The command prints the
@@ -561,9 +561,9 @@ output paths, and foreground or detached execution.</p>
 </section>
 <section id="inspect-or-refresh-installed-skills">
 <h2>Inspect or refresh installed skills<a class="headerlink" href="#inspect-or-refresh-installed-skills" title="Link to this heading">¶</a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>skills<span class="w"> </span>list
-<span class="gp">$ </span>mesokit<span class="w"> </span>skills<span class="w"> </span>path<span class="w"> </span>mesokit-train
-<span class="gp">$ </span>mesokit<span class="w"> </span>skills<span class="w"> </span>install<span class="w"> </span>--agent<span class="w"> </span>codex<span class="w"> </span>--force
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>skills<span class="w"> </span>list
+mesokit<span class="w"> </span>skills<span class="w"> </span>path<span class="w"> </span>mesokit-train
+mesokit<span class="w"> </span>skills<span class="w"> </span>install<span class="w"> </span>--agent<span class="w"> </span>codex<span class="w"> </span>--force
 </pre></div>
 </div>
 <p>Installed skills are copies of the version bundled with mesokit. Refresh

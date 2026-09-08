@@ -584,8 +584,8 @@ loops that run under inference mode still work.</p>
 <section id="training-it-through-the-cli">
 <h2>Training It Through the CLI<a class="headerlink" href="#training-it-through-the-cli" title="Link to this heading">¶</a></h2>
 <p>With <code class="docutils literal notranslate"><span class="pre">plugins/my_models.py</span></code> in place, the registered name is enough:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>linear_decay_1d<span class="w"> </span>--data<span class="w"> </span>decay_1d_v0<span class="w"> </span>--set<span class="w"> </span>trainer.max_epochs<span class="o">=</span><span class="m">50</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>linear_decay_1d_v0<span class="w"> </span>--artifact<span class="w"> </span>rate<span class="w"> </span>--output<span class="w"> </span>figs/rate.png
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>linear_decay_1d<span class="w"> </span>--data<span class="w"> </span>decay_1d_v0<span class="w"> </span>--set<span class="w"> </span>trainer.max_epochs<span class="o">=</span><span class="m">50</span>
+mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>linear_decay_1d_v0<span class="w"> </span>--artifact<span class="w"> </span>rate<span class="w"> </span>--output<span class="w"> </span>figs/rate.png
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Nx</span></code> is filled from the dataset, <code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code> is the trainer, and <code class="docutils literal notranslate"><span class="pre">--set</span></code>
@@ -614,7 +614,7 @@ the class:</p>
 <span class="w">  </span><span class="nt">accelerator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpu</span>
 </pre></div>
 </div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>linear_decay_1d<span class="w"> </span>--data<span class="w"> </span>decay_1d_v0
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>linear_decay_1d<span class="w"> </span>--data<span class="w"> </span>decay_1d_v0
 </pre></div>
 </div>
 <p>The shipped <code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code> trains any <code class="docutils literal notranslate"><span class="pre">DynamicsModel</span></code>; a trainer of your own

@@ -489,11 +489,11 @@ with <code class="docutils literal notranslate"><span class="pre">artifact(name)
 </section>
 <section id="from-the-command-line">
 <h2>From the Command Line<a class="headerlink" href="#from-the-command-line" title="Link to this heading">¶</a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># names from list_artifacts()</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;
-<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/potential.png
-<span class="gp">$ </span><span class="c1"># one PNG per artifact</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;<span class="w"> </span>--artifact<span class="w"> </span>all<span class="w"> </span>--output<span class="w"> </span>figs/&lt;checkpoint&gt;/
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># names from list_artifacts()</span>
+mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;
+mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/potential.png
+<span class="c1"># one PNG per artifact</span>
+mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;<span class="w"> </span>--artifact<span class="w"> </span>all<span class="w"> </span>--output<span class="w"> </span>figs/&lt;checkpoint&gt;/
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">extract</span></code> (alias <code class="docutils literal notranslate"><span class="pre">explain</span></code>) rebuilds the model from the checkpoint’s saved

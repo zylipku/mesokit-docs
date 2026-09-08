@@ -40,8 +40,8 @@ The same message names `lammps` for `peridynamics_fracture_2d`. See
 
 From the CLI:
 
-```console
-$ mesokit data avail
+```sh
+mesokit data avail
 ```
 
 prints the registered simulators along with the Python target each one
@@ -62,8 +62,8 @@ workflow.
 
 The most common entry point is the `data generate` subcommand:
 
-```console
-$ mesokit data generate --dyn allen_cahn_1d --config default
+```sh
+mesokit data generate --dyn allen_cahn_1d --config default
 ```
 
 This runs the registered simulator with the parameters from
@@ -76,8 +76,8 @@ Every simulator ships a `default.yaml` (the reference dataset) and an
 `configs/data/<dyn>/`; some ship further variants (for example
 `configs/data/ising_2d/kac.yaml`). Select one by stem:
 
-```console
-$ mesokit data generate --dyn ising_2d --config kac
+```sh
+mesokit data generate --dyn ising_2d --config kac
 ```
 
 Useful flags:

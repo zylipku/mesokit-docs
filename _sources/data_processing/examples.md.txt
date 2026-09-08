@@ -96,8 +96,8 @@ explanation; see the common validator errors table in
 
 Once the report is clean, register the file:
 
-```console
-$ mesokit data register --name external_demo_v0 --file data/external.h5
+```sh
+mesokit data register --name external_demo_v0 --file data/external.h5
 ```
 
 The command re-runs the same check and says so on its first row, which is

@@ -10,8 +10,8 @@ dataset is generated per value, as `data generate --set` would), and
 land under `checkpoints/<dyn>/<experiment>/`, the table is that experiment's
 `runs.json`. This is the built-in form of the "for eps in …" shell loop.
 
-```console
-$ mesokit sweep \
+```sh
+mesokit sweep \
   --model ARCH \
   [--dyn DYN] \
   [--param KEY=V1,V2,... ...] \
@@ -96,9 +96,6 @@ $ mesokit sweep \
   --data-config fdr \
   --epochs 2 \
   --device cpu
-```
-
-```text
 experiment 'eps-scan': 3 point(s) under checkpoints/allen_cahn_1d/eps-scan
 [1/3] eps=0.05
   generating dataset 'allen_cahn_1d_eps0.05'
@@ -137,27 +134,27 @@ which returns the list of row dicts.
 
 More examples:
 
-```console
-$ # A learning-rate scan on an existing dataset: no generation, three checkpoints under lr-scan/.
-$ mesokit sweep \
+```sh
+# A learning-rate scan on an existing dataset: no generation, three checkpoints under lr-scan/.
+mesokit sweep \
   --model spectral_onsagernet_1d \
   --data allen_cahn_1d_v0 \
   --set dataset.stride=2 \
   --train-param trainer.lr=1e-3,1e-4,1e-5 \
   --experiment lr-scan \
   --epochs 20
-$ mesokit model list --experiment lr-scan --sort train_loss
+mesokit model list --experiment lr-scan --sort train_loss
 
-$ # Data axes times training axes: 2 datasets, 4 checkpoints; see the names before committing to the runs.
-$ mesokit sweep \
+# Data axes times training axes: 2 datasets, 4 checkpoints; see the names before committing to the runs.
+mesokit sweep \
   --dyn allen_cahn_1d \
   --model spectral_onsagernet_1d \
   --param eps=0.05,0.1 \
   --train-param trainer.lr=1e-3,1e-4 \
   --dry-run
 
-$ # Retrain a grid whose datasets already exist, replacing the old checkpoints and rows.
-$ mesokit sweep \
+# Retrain a grid whose datasets already exist, replacing the old checkpoints and rows.
+mesokit sweep \
   --dyn allen_cahn_1d \
   --model fno1d \
   --param eps=0.05,0.1,0.2 \
@@ -166,8 +163,8 @@ $ mesokit sweep \
   --force \
   --epochs 50
 
-$ # Custom prefix, variant training recipe.
-$ mesokit sweep \
+# Custom prefix, variant training recipe.
+mesokit sweep \
   --dyn ising_2d \
   --model spectral_onsagernet_2d \
   --param T=1.5,2.0,2.5 \

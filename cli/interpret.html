@@ -445,11 +445,12 @@ snapshots (a learned potential is evaluated along real states, for
 instance).</p>
 <section id="mesokit-interpret-list">
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">list</span></code><a class="headerlink" href="#mesokit-interpret-list" title="Link to this heading">¶</a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>CKPT_NAME
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>CKPT_NAME
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>spectral_onsagernet_1d_v0:
-  potential
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d_v0
+<span class="go">spectral_onsagernet_1d_v0:</span>
+<span class="go">  potential</span>
 </pre></div>
 </div>
 <p>FNO checkpoints list <code class="docutils literal notranslate"><span class="pre">spectrum</span></code>, the per-mode response / one-step error
@@ -460,12 +461,12 @@ it needs the checkpoint’s dataset for the grid and the error spectrum.</p>
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">extract</span></code><a class="headerlink" href="#mesokit-interpret-extract" title="Link to this heading">¶</a></h2>
 <p>Build one artifact (or all of them), print its one-paragraph summary, and
 save its figure. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span> <span class="pre">explain</span></code> is an exact alias.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>CKPT_NAME<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--artifact<span class="w"> </span>NAME<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--output<span class="w"> </span>FILE.png<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--max-snapshots<span class="w"> </span>N<span class="o">]</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span><span class="se">\</span>
+mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>CKPT_NAME<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--artifact<span class="w"> </span>all<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--output<span class="w"> </span>DIR/<span class="w"> </span><span class="se">\</span>
@@ -504,17 +505,15 @@ save its figure. <code class="docutils literal notranslate"><span class="pre">me
 <span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d_v0<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--artifact<span class="w"> </span>potential<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--output<span class="w"> </span>figs/potential.png
+<span class="go">spectral_onsagernet_1d on allen_cahn_1d exposes a PolynomialPotential potential. The constant-field slice over u in [-2, 2] has V range [-0.0197, 23.4]. The largest learned mobility multiplier is 0.07; the largest reactive multiplier magnitude is 0.0293.</span>
+<span class="go">saved: /home/me/mesokit/figs/potential.png</span>
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>spectral_onsagernet_1d on allen_cahn_1d exposes a PolynomialPotential potential. The constant-field slice over u in [-2, 2] has V range [-0.0197, 23.4]. The largest learned mobility multiplier is 0.07; the largest reactive multiplier magnitude is 0.0293.
-saved: /home/me/mesokit/figs/potential.png
-</pre></div>
-</div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># Everything the model offers, one file each, into a directory.</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>explain<span class="w"> </span>--model<span class="w"> </span>son_eps05_long<span class="w"> </span>--artifact<span class="w"> </span>all<span class="w"> </span>--output<span class="w"> </span>figs/son_eps05_long/
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Everything the model offers, one file each, into a directory.</span>
+mesokit<span class="w"> </span>interpret<span class="w"> </span>explain<span class="w"> </span>--model<span class="w"> </span>son_eps05_long<span class="w"> </span>--artifact<span class="w"> </span>all<span class="w"> </span>--output<span class="w"> </span>figs/son_eps05_long/
 
-<span class="gp">$ </span><span class="c1"># Vector output for a paper, fewer reference snapshots.</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span><span class="se">\</span>
+<span class="c1"># Vector output for a paper, fewer reference snapshots.</span>
+mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>son_eps05_long<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--artifact<span class="w"> </span>potential<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--output<span class="w"> </span>figs/potential.pdf<span class="w"> </span><span class="se">\</span>

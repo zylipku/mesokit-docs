@@ -35,12 +35,12 @@ with `artifact(name)`. What the shipped families provide:
 
 ## From the Command Line
 
-```console
-$ # names from list_artifacts()
-$ mesokit interpret list --model <checkpoint>
-$ mesokit interpret extract --model <checkpoint> --artifact potential --output figs/potential.png
-$ # one PNG per artifact
-$ mesokit interpret extract --model <checkpoint> --artifact all --output figs/<checkpoint>/
+```sh
+# names from list_artifacts()
+mesokit interpret list --model <checkpoint>
+mesokit interpret extract --model <checkpoint> --artifact potential --output figs/potential.png
+# one PNG per artifact
+mesokit interpret extract --model <checkpoint> --artifact all --output figs/<checkpoint>/
 ```
 
 `extract` (alias `explain`) rebuilds the model from the checkpoint's saved

@@ -461,7 +461,7 @@ value by <code class="docutils literal notranslate"><span class="pre">stride</sp
 <code class="docutils literal notranslate"><span class="pre">numerical[&quot;dt&quot;]</span></code>, so inspect the saved times and set <code class="docutils literal notranslate"><span class="pre">trainer.dt</span></code>
 explicitly when necessary. The Allen–Cahn <code class="docutils literal notranslate"><span class="pre">fdr</span></code> recipe, for example,
 saves frames every <code class="docutils literal notranslate"><span class="pre">0.001</span></code> time units:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>ac_demo<span class="w"> </span>--set<span class="w"> </span>trainer.dt<span class="o">=</span><span class="m">0</span>.001
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>ac_demo<span class="w"> </span>--set<span class="w"> </span>trainer.dt<span class="o">=</span><span class="m">0</span>.001
 </pre></div>
 </div>
 <p>For non-uniform saved times, a single fixed <code class="docutils literal notranslate"><span class="pre">dt</span></code> cannot represent every
@@ -523,7 +523,7 @@ a notebook, and the only one when the data or the loop do not fit a recipe:</p>
 <p>The grid comes from the dataset (<code class="docutils literal notranslate"><span class="pre">ds.grid_shape</span></code>, <code class="docutils literal notranslate"><span class="pre">ds.physical</span></code>), never
 typed by hand; that is the mismatch the command guards against with its
 recipe. Register the checkpoint afterwards so the CLI can find it:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>son_nb<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--file<span class="w"> </span>checkpoints/allen_cahn_1d/son_nb/model.pt<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--config<span class="w"> </span>&lt;your<span class="w"> </span>config.yaml&gt;

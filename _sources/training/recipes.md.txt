@@ -34,8 +34,8 @@ synthesises one: the model's constructor defaults plus the dataset's grid,
 registered trainer's defaults. `--set key.path=value` (repeatable, values
 parsed as YAML) changes any key on top of a recipe or of those defaults:
 
-```console
-$ mesokit train \
+```sh
+mesokit train \
   --model spectral_onsagernet_1d \
   --data my_data \
   --set trainer.lr=1e-4 \
@@ -151,8 +151,8 @@ dimension, for example
 `configs/train/decay_1d/spectral_onsagernet_1d/default.yaml` (nothing in
 it depends on the grid), then:
 
-```console
-$ mesokit train \
+```sh
+mesokit train \
   --model spectral_onsagernet_1d \
   --data decay_1d_v0 \
   --epochs 5 \

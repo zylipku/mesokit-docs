@@ -114,8 +114,8 @@ dataset is physically meaningful; that is the simulator's responsibility.
 
 Once a file validates, register it under a name:
 
-```console
-$ mesokit data register --name my_dataset --file data/my_data.h5
+```sh
+mesokit data register --name my_dataset --file data/my_data.h5
 ```
 
 This re-runs `validate(path)`, then writes a record into the local
@@ -170,9 +170,6 @@ scalars instead of the three metadata groups:
 ```console
 $ mesokit data demo
 $ mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
-```
-
-```text
 registered 'allen_cahn_demo_v0' -> /home/me/project/data/parsed/allen_cahn_1d_demo.h5 (213.7 KiB)
   check:      passed (mesokit-trajectory v1)
   dyn:        allen_cahn_1d

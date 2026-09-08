@@ -17,8 +17,8 @@ See {ref}`how to use CLI <running-the-cli>`.
 
 From your project directory, set up the agent you use:
 
-```console
-$ mesokit agent init --agent claude
+```sh
+mesokit agent init --agent claude
 ```
 
 For Codex, use `--agent codex`; for both, use `--agent both`. This writes
@@ -102,8 +102,8 @@ assumptions, metrics, and plots when deciding what to run next.
 `mesokit data parse` launches an installed agent for a single conversion,
 then validates the output and optionally registers it:
 
-```console
-$ mesokit data parse \
+```sh
+mesokit data parse \
   --file runs/field.nc \
   --hint "variable phi, dimensions (member, time, x)" \
   --name phi_v0
@@ -111,9 +111,9 @@ $ mesokit data parse \
 
 To try it with a supplied practice file:
 
-```console
-$ mesokit data demo
-$ mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name ac_imported
+```sh
+mesokit data demo
+mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name ac_imported
 ```
 
 This runs without an interactive conversation. The command prints the
@@ -123,10 +123,10 @@ output paths, and foreground or detached execution.
 
 ## Inspect or refresh installed skills
 
-```console
-$ mesokit skills list
-$ mesokit skills path mesokit-train
-$ mesokit skills install --agent codex --force
+```sh
+mesokit skills list
+mesokit skills path mesokit-train
+mesokit skills install --agent codex --force
 ```
 
 Installed skills are copies of the version bundled with mesokit. Refresh

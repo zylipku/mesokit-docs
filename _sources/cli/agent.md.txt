@@ -7,8 +7,8 @@ the procedures; `agent init` gives it the project conventions — an
 project's own code goes in `plugins/`, to start from smoke-sized settings,
 and which skill does what — and installs the skills in the same step.
 
-```console
-$ mesokit agent init \
+```sh
+mesokit agent init \
   [--dir PATH] \
   [--agent claude|codex|both] \
   [--no-skills] \
@@ -37,9 +37,6 @@ What it writes:
 ```console
 $ cd my-project
 $ mesokit agent init
-```
-
-```text
 created   /home/me/my-project/AGENTS.md
 created   /home/me/my-project/CLAUDE.md
 skills    6 installed, 0 kept -> /home/me/my-project/.claude/skills

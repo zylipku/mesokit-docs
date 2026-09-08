@@ -440,33 +440,33 @@ and figures. It does not have to be the mesokit repository.</p>
 <section id="generate-data">
 <h2>1. Generate data<a class="headerlink" href="#generate-data" title="Link to this heading">¶</a></h2>
 <p>To list all available simulators, run:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
-DYN<span class="w">                       </span>SIMULATOR
-allen_cahn_1d<span class="w">             </span>mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d
-allen_cahn_2d<span class="w">             </span>mesokit.data.allen_cahn.allen_cahn_2d.simulate_allen_cahn_2d
-cahn_hilliard_2d<span class="w">          </span>mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
-...<span class="w"> </span>&lt;truncated&gt;<span class="w"> </span>...
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
+<span class="go">DYN                       SIMULATOR</span>
+<span class="go">allen_cahn_1d             mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d</span>
+<span class="go">allen_cahn_2d             mesokit.data.allen_cahn.allen_cahn_2d.simulate_allen_cahn_2d</span>
+<span class="go">cahn_hilliard_2d          mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d</span>
+<span class="go">... &lt;truncated&gt; ...</span>
 </pre></div>
 </div>
 <p>The section <a class="reference internal" href="data_processing/predefined.html"><span class="std std-doc">Predefined Datasets</span></a> describes the equations,
 parameters, and solver requirements.</p>
 <p>For a quick demonstration, generate a small Allen–Cahn dataset with the <code class="docutils literal notranslate"><span class="pre">fdr</span></code> (fast dev run) recipe.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pixi<span class="w"> </span>add<span class="w"> </span>dedalus<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pixi<span class="w"> </span>install
-<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_demo
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>add<span class="w"> </span>dedalus<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pixi<span class="w"> </span>install
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_demo
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">fdr</span></code> recipe generates ten trajectories with 101 saved
 frames and 256 grid points. The command writes <code class="docutils literal notranslate"><span class="pre">data/allen_cahn_1d/ac_demo.h5</span></code>,
 validates its format, and registers it as <code class="docutils literal notranslate"><span class="pre">ac_demo</span></code>.</p>
 <p>Only registered datasets are accepted for model training, and <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code> has automatically done so. To manually register a dataset, use</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>ac_demo_manually_registered<span class="w"> </span>--file<span class="w"> </span>data/allen_cahn_1d/ac_demo.h5
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>ac_demo_manually_registered<span class="w"> </span>--file<span class="w"> </span>data/allen_cahn_1d/ac_demo.h5
 </pre></div>
 </div>
 <p>To check all registered datasets, run:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>list
-allen_cahn_1d:
-<span class="w">  </span>ac_demo<span class="w">                      </span>yes<span class="w">  </span>/path/to/project/data/allen_cahn_1d/ac_demo.h5
-<span class="w">  </span>ac_demo_manually_registered<span class="w">  </span>yes<span class="w">  </span>/path/to/project/data/allen_cahn_1d/ac_demo.h5
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>list
+<span class="go">allen_cahn_1d:</span>
+<span class="go">  ac_demo                      yes  /path/to/project/data/allen_cahn_1d/ac_demo.h5</span>
+<span class="go">  ac_demo_manually_registered  yes  /path/to/project/data/allen_cahn_1d/ac_demo.h5</span>
 </pre></div>
 </div>
 <p>A registered name is a shortcut to a file in this project. You can pass
@@ -476,7 +476,7 @@ name if you have already run this example.</p>
 <section id="train-a-model">
 <h2>2. Train a model<a class="headerlink" href="#train-a-model" title="Link to this heading">¶</a></h2>
 <p>To train with a predefined model, run</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--data<span class="w"> </span>ac_demo<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--name<span class="w"> </span>son_demo<span class="w"> </span><span class="se">\</span>
@@ -484,7 +484,7 @@ name if you have already run this example.</p>
 </pre></div>
 </div>
 <p>For hyperparameter sweeps, we use</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>onsagernet_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--data<span class="w"> </span>ac_demo<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--config<span class="w"> </span>fdr<span class="w"> </span><span class="se">\</span>
@@ -492,20 +492,20 @@ name if you have already run this example.</p>
 </pre></div>
 </div>
 <p>Show all trained checkpoints with</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>model<span class="w"> </span>list
-NAME<span class="w">                                                     </span>MODEL<span class="w">                   </span>DATASET<span class="w">  </span>PARAMS<span class="w">             </span>TRAIN_LOSS<span class="w">  </span>EPOCHS<span class="w">  </span>TIME<span class="w">  </span>CREATED<span class="w">              </span>TAGS
-onsagernet_1d_lr_20260908-230905/onsagernet_1d_lr0.0001<span class="w">  </span>onsagernet_1d<span class="w">           </span>ac_demo<span class="w">  </span>trainer.lr<span class="o">=</span><span class="m">0</span>.0001<span class="w">  </span><span class="m">0</span>.000112<span class="w">    </span><span class="m">5</span><span class="w">       </span><span class="m">7</span>.6s<span class="w">  </span><span class="m">2026</span>-09-08T23:09:17<span class="w">  </span>-
-onsagernet_1d_lr_20260908-230905/onsagernet_1d_lr0.001<span class="w">   </span>onsagernet_1d<span class="w">           </span>ac_demo<span class="w">  </span>trainer.lr<span class="o">=</span><span class="m">0</span>.001<span class="w">   </span><span class="m">0</span>.000112<span class="w">    </span><span class="m">5</span><span class="w">       </span><span class="m">9</span>.2s<span class="w">  </span><span class="m">2026</span>-09-08T23:09:06<span class="w">  </span>-
-son_demo<span class="w">                                                 </span>spectral_onsagernet_1d<span class="w">  </span>ac_demo<span class="w">  </span>-<span class="w">                  </span><span class="m">0</span>.000112<span class="w">    </span><span class="m">5</span><span class="w">       </span><span class="m">8</span>.1s<span class="w">  </span><span class="m">2026</span>-09-08T22:32:17<span class="w">  </span>-
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>list
+<span class="go">NAME                                                     MODEL                   DATASET  PARAMS             TRAIN_LOSS  EPOCHS  TIME  CREATED              TAGS</span>
+<span class="go">onsagernet_1d_lr_20260908-230905/onsagernet_1d_lr0.0001  onsagernet_1d           ac_demo  trainer.lr=0.0001  0.000112    5       7.6s  2026-09-08T23:09:17  -</span>
+<span class="go">onsagernet_1d_lr_20260908-230905/onsagernet_1d_lr0.001   onsagernet_1d           ac_demo  trainer.lr=0.001   0.000112    5       9.2s  2026-09-08T23:09:06  -</span>
+<span class="go">son_demo                                                 spectral_onsagernet_1d  ac_demo  -                  0.000112    5       8.1s  2026-09-08T22:32:17  -</span>
 </pre></div>
 </div>
 <p>Inspect a single saved run with:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>model<span class="w"> </span>show<span class="w"> </span>son_demo
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>show<span class="w"> </span>son_demo
 </pre></div>
 </div>
 <p>To start a new
 run from these weights:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>train<span class="w"> </span>--from<span class="w"> </span>son_demo<span class="w"> </span>--name<span class="w"> </span>son_long<span class="w"> </span>--epochs<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="c1"># 5+100 epochs in total</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--from<span class="w"> </span>son_demo<span class="w"> </span>--name<span class="w"> </span>son_long<span class="w"> </span>--epochs<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="c1"># 5+100 epochs in total</span>
 </pre></div>
 </div>
 <p>The flag <code class="docutils literal notranslate"><span class="pre">--from</span></code> loads the weights
@@ -514,10 +514,12 @@ the previous optimizer state.</p>
 </section>
 <section id="plot-the-learned-potential">
 <h2>3. Plot the learned potential<a class="headerlink" href="#plot-the-learned-potential" title="Link to this heading">¶</a></h2>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>son_demo
-son_demo:
-<span class="w">  </span>potential
-$<span class="w"> </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>son_demo<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/son_demo.png
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>son_demo
+<span class="go">son_demo:</span>
+<span class="go">  potential</span>
+</pre></div>
+</div>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>son_demo<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/son_demo.png
 </pre></div>
 </div>
 <p>The second command prints a summary and saves a figure. The <code class="docutils literal notranslate"><span class="pre">potential</span></code>
@@ -532,31 +534,31 @@ not yet match the physical free energy. To inspect the longer fit, replace
 <section id="use-your-own-data">
 <h2>Use your own data<a class="headerlink" href="#use-your-own-data" title="Link to this heading">¶</a></h2>
 <p>If you already have a file in mesokit’s HDF5 format, validate and register it:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>my_data<span class="w"> </span>--file<span class="w"> </span>data/my_data.h5
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>my_data<span class="w"> </span>--file<span class="w"> </span>data/my_data.h5
 </pre></div>
 </div>
 <p>For other formats, <a class="reference internal" href="data_processing/custom.html"><span class="std std-doc">Custom Datasets</span></a> shows how
 to write a compatible file. It also covers <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code>, which
 uses an installed coding agent to convert a file for you.</p>
 <p>For demonstration, we use</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>demo<span class="w"> </span>--format<span class="w"> </span>npz<span class="w"> </span>--output<span class="w"> </span>my_dataset.npz
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo<span class="w"> </span>--format<span class="w"> </span>npz<span class="w"> </span>--output<span class="w"> </span>my_dataset.npz
 </pre></div>
 </div>
 <p>to generate a test dataset without the correct HDF5 structure. Then we convert it to HDF5 with</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>my_dataset.npz<span class="w"> </span><span class="c1"># use claude by default</span>
-$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--file<span class="w"> </span>data/parsed/my_dataset.h5<span class="w"> </span>--name<span class="w"> </span>my_npz_data
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>my_dataset.npz<span class="w"> </span><span class="c1"># use claude by default</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--file<span class="w"> </span>data/parsed/my_dataset.h5<span class="w"> </span>--name<span class="w"> </span>my_npz_data
 </pre></div>
 </div>
 <p>or a single line:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>my_dataset.npz<span class="w"> </span>--name<span class="w"> </span>my_npz_data
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>my_dataset.npz<span class="w"> </span>--name<span class="w"> </span>my_npz_data
 </pre></div>
 </div>
 <p>Then check the file and register it:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>list
-allen_cahn_1d:
-<span class="w">  </span>ac_demo<span class="w">                      </span>yes<span class="w">  </span>/home/zhuoyuan/tmp/Projects/mesokit-project/data/allen_cahn_1d/ac_demo.h5
-<span class="w">  </span>ac_demo_manually_registered<span class="w">  </span>yes<span class="w">  </span>/home/zhuoyuan/tmp/Projects/mesokit-project/data/allen_cahn_1d/ac_demo.h5
-<span class="w">  </span>my_npz_dataset<span class="w">               </span>yes<span class="w">  </span>/home/zhuoyuan/tmp/Projects/mesokit-project/data/parsed/my_dataset.h5<span class="w"> </span><span class="c1"># newly registered</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>list
+<span class="go">allen_cahn_1d:</span>
+<span class="go">  ac_demo                      yes  /home/zhuoyuan/tmp/Projects/mesokit-project/data/allen_cahn_1d/ac_demo.h5</span>
+<span class="go">  ac_demo_manually_registered  yes  /home/zhuoyuan/tmp/Projects/mesokit-project/data/allen_cahn_1d/ac_demo.h5</span>
+<span class="go">  my_npz_dataset               yes  /home/zhuoyuan/tmp/Projects/mesokit-project/data/parsed/my_dataset.h5 # newly registered</span>
 </pre></div>
 </div>
 </section>

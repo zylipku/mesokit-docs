@@ -109,9 +109,9 @@ rate: 1.0
 seed: 0
 ```
 
-```console
-$ # writes + registers decay_1d_v0
-$ mesokit data generate --dyn decay_1d
+```sh
+# writes + registers decay_1d_v0
+mesokit data generate --dyn decay_1d
 ```
 
 Sibling files under `configs/data/decay_1d/` are variants selected by stem

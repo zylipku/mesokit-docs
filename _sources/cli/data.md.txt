@@ -20,9 +20,6 @@ run, independent of what has been generated on this machine.
 
 ```console
 $ mesokit data avail
-```
-
-```text
 DYN                       SIMULATOR
 allen_cahn_1d             mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d
 cahn_hilliard_2d          mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
@@ -46,9 +43,6 @@ points at something that has been moved or deleted (`MISSING`).
 
 ```console
 $ mesokit data list
-```
-
-```text
 allen_cahn_1d:
   allen_cahn_1d_v0  yes  /home/me/mesokit/data/allen_cahn_1d/allen_cahn_1d_v0.h5
   ac_eps05          yes  /home/me/mesokit/data/allen_cahn_1d/ac_eps05.h5
@@ -67,8 +61,8 @@ With nothing registered it prints `(no datasets)`.
 Run a predefined simulator from a recipe, write the trajectories to HDF5,
 validate the file and register it.
 
-```console
-$ mesokit data generate \
+```sh
+mesokit data generate \
   --dyn DYN \
   [--config STEM] \
   [--name NAME \
@@ -103,9 +97,6 @@ on success the registry entry is written and the summary is printed.
 
 ```console
 $ mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_smoke
-```
-
-```text
 wrote data/allen_cahn_1d/ac_smoke.h5 (1019.3 KiB)
   check:      passed (mesokit-trajectory v1)
   dyn:        allen_cahn_1d
@@ -134,9 +125,6 @@ $ mesokit data generate \
   --name ac_smoke \
   --force \
   -v
-```
-
-```text
 wrote data/allen_cahn_1d/ac_smoke.h5 (1019.3 KiB)
   check:      passed (mesokit-trajectory v1)
   dyn:        allen_cahn_1d
@@ -174,28 +162,28 @@ refusal `data parse` makes.
 
 More examples:
 
-```console
-$ # The reference dataset, auto-named allen_cahn_1d_v0 (then _v1, _v2, … on repeats).
-$ mesokit data generate --dyn allen_cahn_1d
+```sh
+# The reference dataset, auto-named allen_cahn_1d_v0 (then _v1, _v2, … on repeats).
+mesokit data generate --dyn allen_cahn_1d
 
-$ # A variant recipe: configs/data/ising_2d/kac.yaml (Kac interaction).
-$ mesokit data generate --dyn ising_2d --config kac --name ising_kac_T07
+# A variant recipe: configs/data/ising_2d/kac.yaml (Kac interaction).
+mesokit data generate --dyn ising_2d --config kac --name ising_kac_T07
 
-$ # Write somewhere else and keep it out of the registry (scratch experiments).
-$ mesokit data generate \
+# Write somewhere else and keep it out of the registry (scratch experiments).
+mesokit data generate \
   --dyn cahn_hilliard_2d \
   --config fdr \
   --output /tmp/ch_test.h5 \
   --no-registry
 
-$ # Re-run a recipe you changed and replace the previous entry of the same name.
-$ mesokit data generate --dyn kdv_1d --name kdv_long --force
+# Re-run a recipe you changed and replace the previous entry of the same name.
+mesokit data generate --dyn kdv_1d --name kdv_long --force
 
-$ # Watch Dedalus's per-step log, and print the full metadata at the end.
-$ mesokit data generate --dyn kdv_1d --config fdr -v
+# Watch Dedalus's per-step log, and print the full metadata at the end.
+mesokit data generate --dyn kdv_1d --config fdr -v
 
-$ # One-off parameter change without a new recipe file.
-$ mesokit data generate \
+# One-off parameter change without a new recipe file.
+mesokit data generate \
   --dyn allen_cahn_1d \
   --set eps=0.05 \
   --set seed=1 \
@@ -242,8 +230,8 @@ parameters being wrong.
 Validate an HDF5 file you produced yourself against the v1 cache contract
 and register it under a name.
 
-```console
-$ mesokit data register \
+```sh
+mesokit data register \
   --name NAME \
   --file FILE.h5 \
   [--force] \
@@ -265,9 +253,6 @@ file was checked against, and nothing is registered unless it says so.
 
 ```console
 $ mesokit data register --name ac_scratch --file data/scratch.h5
-```
-
-```text
 registered 'ac_scratch' -> /home/me/project/data/scratch.h5 (1019.3 KiB)
   check:      passed (mesokit-trajectory v1)
   dyn:        allen_cahn_1d
@@ -314,11 +299,12 @@ Check a file against the v1 contract and print the inferred metadata,
 without touching the registry. `register` runs the same check before it
 writes an entry, and the agent behind `parse` runs it on its own output.
 
-```console
-$ mesokit data validate FILE [--verbose|-v]
+```sh
+mesokit data validate FILE [--verbose|-v]
 ```
 
-```text
+```console
+$ mesokit data validate data/scratch.h5
 validated /home/me/project/data/scratch.h5 (1019.3 KiB)
   check:      passed (mesokit-trajectory v1)
   dyn:        allen_cahn_1d
@@ -355,8 +341,8 @@ Write a small, deliberately non-conforming dataset to practise
 {ref}`mesokit data parse <mesokit-data-parse>` on, so you can see the
 conversion work without one of your own files.
 
-```console
-$ mesokit data demo [--output PATH] [--format npz|h5]
+```sh
+mesokit data demo [--output PATH] [--format npz|h5]
 ```
 
 | Option | Default | Meaning |
@@ -374,9 +360,6 @@ constant, so re-running writes the same arrays.
 
 ```console
 $ mesokit data demo
-```
-
-```text
 wrote data/demo/allen_cahn_1d_demo.npz (npz, 208.5 KiB)
   u            float64  (51, 128, 4)   field, axes (frame, x, run)
   x            float64  (128,)         grid coordinates
@@ -410,8 +393,8 @@ itself, and the five others that cover training and extending, are
 described in [Agent Skills](../skills.md); [`mesokit skills`](skills.md)
 installs them into an agent for conversational use.
 
-```console
-$ mesokit data parse \
+```sh
+mesokit data parse \
   --file FILE \
   [--output PATH] \
   [--hint TEXT] \
@@ -486,9 +469,6 @@ practise on; the run below is exactly that, start to finish:
 ```console
 $ mesokit data demo
 $ mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
-```
-
-```text
 launching agent 'claude' via backend 'foreground'
   skill : /home/me/.venv/lib/python3.12/site-packages/mesokit/skills/mesokit_convert_data/SKILL.md (embedded in the prompt)
   input : /home/me/project/data/demo/allen_cahn_1d_demo.npz
@@ -513,8 +493,8 @@ Without `--name` the tail reads `validated <path>` instead, followed by
 Your own file works the same way, with `--hint` carrying whatever the arrays
 do not say for themselves:
 
-```console
-$ mesokit data parse \
+```sh
+mesokit data parse \
   --file ~/runs/burgers.npz \
   --hint "arrays u (traj, time, x) and t; domain is [0, 2π) periodic; call it burgers_1d" \
   --name burgers_v0

@@ -40,8 +40,8 @@ value by `stride`. Some generators store the smaller **solver step** in
 explicitly when necessary. The Allen–Cahn `fdr` recipe, for example,
 saves frames every `0.001` time units:
 
-```console
-$ mesokit train --model spectral_onsagernet_1d --data ac_demo --set trainer.dt=0.001
+```sh
+mesokit train --model spectral_onsagernet_1d --data ac_demo --set trainer.dt=0.001
 ```
 
 For non-uniform saved times, a single fixed `dt` cannot represent every
@@ -109,8 +109,8 @@ The grid comes from the dataset (`ds.grid_shape`, `ds.physical`), never
 typed by hand; that is the mismatch the command guards against with its
 recipe. Register the checkpoint afterwards so the CLI can find it:
 
-```console
-$ mesokit model register \
+```sh
+mesokit model register \
   --model son_nb \
   --file checkpoints/allen_cahn_1d/son_nb/model.pt \
   --config <your config.yaml>

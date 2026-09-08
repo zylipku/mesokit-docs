@@ -432,7 +432,7 @@ dataset is generated per value, as <code class="docutils literal notranslate"><s
 (several checkpoints on the same dataset, as <code class="docutils literal notranslate"><span class="pre">train</span> <span class="pre">--set</span></code> would). The runs
 land under <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/</span></code>, the table is that experiment’s
 <code class="docutils literal notranslate"><span class="pre">runs.json</span></code>. This is the built-in form of the “for eps in …” shell loop.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>ARCH<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--dyn<span class="w"> </span>DYN<span class="o">]</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--param<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>V1,V2,...<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="se">\</span>
@@ -571,22 +571,20 @@ parameter the simulator does not accept — are reported before anything runs.</
 <span class="w">  </span>--data-config<span class="w"> </span>fdr<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--epochs<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--device<span class="w"> </span>cpu
-</pre></div>
-</div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>experiment &#39;eps-scan&#39;: 3 point(s) under checkpoints/allen_cahn_1d/eps-scan
-[1/3] eps=0.05
-  generating dataset &#39;allen_cahn_1d_eps0.05&#39;
-  training checkpoint &#39;eps-scan/spectral_onsagernet_1d_eps0.05&#39;
-… Lightning progress …
-[2/3] eps=0.1
-…
-[3/3] eps=0.2
-…
-PARAMS    DATASET                CHECKPOINT                               TRAIN_LOSS  TIME   STATUS
-eps=0.05  allen_cahn_1d_eps0.05  eps-scan/spectral_onsagernet_1d_eps0.05  0.0004203   10.1s  ok
-eps=0.1   allen_cahn_1d_eps0.1   eps-scan/spectral_onsagernet_1d_eps0.1   0.000112    3.8s   ok
-eps=0.2   allen_cahn_1d_eps0.2   eps-scan/spectral_onsagernet_1d_eps0.2   5.324e-05   3.8s   ok
-wrote /home/me/mesokit/checkpoints/allen_cahn_1d/eps-scan/runs.json
+<span class="go">experiment &#39;eps-scan&#39;: 3 point(s) under checkpoints/allen_cahn_1d/eps-scan</span>
+<span class="go">[1/3] eps=0.05</span>
+<span class="go">  generating dataset &#39;allen_cahn_1d_eps0.05&#39;</span>
+<span class="go">  training checkpoint &#39;eps-scan/spectral_onsagernet_1d_eps0.05&#39;</span>
+<span class="go">… Lightning progress …</span>
+<span class="go">[2/3] eps=0.1</span>
+<span class="go">…</span>
+<span class="go">[3/3] eps=0.2</span>
+<span class="go">…</span>
+<span class="go">PARAMS    DATASET                CHECKPOINT                               TRAIN_LOSS  TIME   STATUS</span>
+<span class="go">eps=0.05  allen_cahn_1d_eps0.05  eps-scan/spectral_onsagernet_1d_eps0.05  0.0004203   10.1s  ok</span>
+<span class="go">eps=0.1   allen_cahn_1d_eps0.1   eps-scan/spectral_onsagernet_1d_eps0.1   0.000112    3.8s   ok</span>
+<span class="go">eps=0.2   allen_cahn_1d_eps0.2   eps-scan/spectral_onsagernet_1d_eps0.2   5.324e-05   3.8s   ok</span>
+<span class="go">wrote /home/me/mesokit/checkpoints/allen_cahn_1d/eps-scan/runs.json</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">TRAIN_LOSS</span></code> is the last <code class="docutils literal notranslate"><span class="pre">train_loss</span></code> entry of the trainer’s history (<code class="docutils literal notranslate"><span class="pre">-</span></code>
@@ -606,26 +604,26 @@ runs):</p>
 <code class="docutils literal notranslate"><span class="pre">mesokit.cli.sweep.run_sweep(dyn,</span> <span class="pre">model,</span> <span class="pre">{&quot;eps&quot;:</span> <span class="pre">[0.05,</span> <span class="pre">0.1,</span> <span class="pre">0.2]},</span> <span class="pre">train_params={&quot;trainer.lr&quot;:</span> <span class="pre">[1e-3,</span> <span class="pre">1e-4]},</span> <span class="pre">experiment=&quot;scan&quot;,</span> <span class="pre">epochs=2,</span> <span class="pre">device=&quot;cpu&quot;)</span></code>,
 which returns the list of row dicts.</p>
 <p>More examples:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># A learning-rate scan on an existing dataset: no generation, three checkpoints under lr-scan/.</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># A learning-rate scan on an existing dataset: no generation, three checkpoints under lr-scan/.</span>
+mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--set<span class="w"> </span>dataset.stride<span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4,1e-5<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--epochs<span class="w"> </span><span class="m">20</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
+mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
 
-<span class="gp">$ </span><span class="c1"># Data axes times training axes: 2 datasets, 4 checkpoints; see the names before committing to the runs.</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="c1"># Data axes times training axes: 2 datasets, 4 checkpoints; see the names before committing to the runs.</span>
+mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--dry-run
 
-<span class="gp">$ </span><span class="c1"># Retrain a grid whose datasets already exist, replacing the old checkpoints and rows.</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="c1"># Retrain a grid whose datasets already exist, replacing the old checkpoints and rows.</span>
+mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>fno1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1,0.2<span class="w"> </span><span class="se">\</span>
@@ -634,8 +632,8 @@ which returns the list of row dicts.</p>
 <span class="w">  </span>--force<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--epochs<span class="w"> </span><span class="m">50</span>
 
-<span class="gp">$ </span><span class="c1"># Custom prefix, variant training recipe.</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="c1"># Custom prefix, variant training recipe.</span>
+mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_2d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--param<span class="w"> </span><span class="nv">T</span><span class="o">=</span><span class="m">1</span>.5,2.0,2.5<span class="w"> </span><span class="se">\</span>

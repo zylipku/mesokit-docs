@@ -14,8 +14,8 @@ schema 2 on its next write.
 
 ## `mesokit model list`
 
-```console
-$ mesokit model list \
+```sh
+mesokit model list \
   [--dyn D] \
   [--model ARCH] \
   [--experiment E] \
@@ -27,7 +27,8 @@ $ mesokit model list \
   [--columns a,b,...]
 ```
 
-```text
+```console
+$ mesokit model list
 NAME                                   MODEL                   DATASET           PARAMS             TRAIN_LOSS  EPOCHS  TIME   CREATED              TAGS
 lr-scan/spectral_onsagernet_1d_lr0.0001  spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.0001  0.0003117   20      10.3s  2026-09-08T10:21:40  -
 lr-scan/spectral_onsagernet_1d_lr0.001   spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.001   0.0004203   20      10.1s  2026-09-08T10:15:02  -
@@ -49,11 +50,12 @@ says otherwise; with nothing registered it prints `(no checkpoints registered)`.
 
 ## `mesokit model show`
 
-```console
-$ mesokit model show NAME
+```sh
+mesokit model show NAME
 ```
 
-```text
+```console
+$ mesokit model show lr-scan/spectral_onsagernet_1d_lr0.0001
 lr-scan/spectral_onsagernet_1d_lr0.0001
   status:      ok
   experiment:  lr-scan
@@ -85,8 +87,8 @@ only one experiment holds it.
 Index a checkpoint that was trained elsewhere (a notebook, a cluster job,
 another machine). Only pointers are stored; nothing is copied.
 
-```console
-$ mesokit model register \
+```sh
+mesokit model register \
   --model NAME \
   --file CKPT.pt \
   --config CONFIG.yaml \
@@ -107,9 +109,6 @@ $ mesokit model register \
   --model son_cluster_run \
   --file ~/jobs/1234/model.pt \
   --config ~/jobs/1234/config.yaml
-```
-
-```text
 registered 'son_cluster_run'
   checkpoint: /home/me/jobs/1234/model.pt
   config:     /home/me/jobs/1234/config.yaml
@@ -123,8 +122,8 @@ parameter names, so Lightning-style checkpoints load unchanged.
 
 ## `mesokit model tag`
 
-```console
-$ mesokit model tag NAME [--add T ...] [--remove T ...] [--notes TEXT]
+```sh
+mesokit model tag NAME [--add T ...] [--remove T ...] [--notes TEXT]
 ```
 
 Adds or drops tags on a run, or rewrites its notes; the registry entry and
@@ -133,8 +132,8 @@ training time).
 
 ## `mesokit model remove`
 
-```console
-$ mesokit model remove NAME [--delete-files]
+```sh
+mesokit model remove NAME [--delete-files]
 ```
 
 Drops the entry. With `--delete-files` the run directory `mesokit train`
@@ -143,8 +142,8 @@ directory of its own, so its files are left where they are.
 
 ## `mesokit model prune`
 
-```console
-$ mesokit model prune [--dry-run]
+```sh
+mesokit model prune [--dry-run]
 ```
 
 Reconciles the index with the disk: entries whose `model.pt` is gone are
@@ -164,8 +163,8 @@ would remove run directory /home/me/mesokit/checkpoints/allen_cahn_1d/son_crashe
 
 ## `mesokit model sync`
 
-```console
-$ mesokit model sync [--import-sweeps]
+```sh
+mesokit model sync [--import-sweeps]
 ```
 
 Rebuilds the index from the run directories: every completed run (a

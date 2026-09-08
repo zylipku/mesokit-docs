@@ -427,7 +427,7 @@
 <span id="id1"></span><h1><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code><a class="headerlink" href="#mesokit-train" title="Link to this heading">¶</a></h1>
 <p>Train a registered model architecture on a dataset through the trainer
 registered for that model, write a run directory, and index the checkpoint.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>ARCH<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--data<span class="w"> </span>NAME_OR_PATH<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--dyn<span class="w"> </span>DYN<span class="o">]</span><span class="w"> </span><span class="se">\</span>
@@ -547,14 +547,12 @@ before training starts, so a duplicate <code class="docutils literal notranslate
 <span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--epochs<span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--device<span class="w"> </span>cpu
-</pre></div>
-</div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>… Lightning progress …
-trained &#39;spectral_onsagernet_1d&#39; with &#39;spectral_onsagernet_1d&#39;
-  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/model.pt
-  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/config.yaml
-  metrics:    train_loss=0.0004203 epochs=20 time=10.1s
-  registered: spectral_onsagernet_1d_v0
+<span class="go">… Lightning progress …</span>
+<span class="go">trained &#39;spectral_onsagernet_1d&#39; with &#39;spectral_onsagernet_1d&#39;</span>
+<span class="go">  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/model.pt</span>
+<span class="go">  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/config.yaml</span>
+<span class="go">  metrics:    train_loss=0.0004203 epochs=20 time=10.1s</span>
+<span class="go">  registered: spectral_onsagernet_1d_v0</span>
 </pre></div>
 </div>
 <p>The run directory contains:</p>
@@ -585,16 +583,16 @@ trained &#39;spectral_onsagernet_1d&#39; with &#39;spectral_onsagernet_1d&#39;
 </table>
 </div>
 <p>More examples:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># Train on a file that was never registered (registry name stays empty in the record).</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Train on a file that was never registered (registry name stays empty in the record).</span>
+mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>fno1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--data<span class="w"> </span>/tmp/kdv_scratch.h5<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--config<span class="w"> </span>default<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--epochs<span class="w"> </span><span class="m">5</span>
 
-<span class="gp">$ </span><span class="c1"># Give the run a meaningful name and overwrite a previous attempt.</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="c1"># Give the run a meaningful name and overwrite a previous attempt.</span>
+mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--data<span class="w"> </span>ac_eps05<span class="w"> </span><span class="se">\</span>
@@ -602,15 +600,15 @@ trained &#39;spectral_onsagernet_1d&#39; with &#39;spectral_onsagernet_1d&#39;
 <span class="w">  </span>--epochs<span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--force
 
-<span class="gp">$ </span><span class="c1"># A hyper-parameter variant: copy default.yaml to configs/train/allen_cahn_1d/spectral_onsagernet_1d/lr1e-4.yaml, then</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="c1"># A hyper-parameter variant: copy default.yaml to configs/train/allen_cahn_1d/spectral_onsagernet_1d/lr1e-4.yaml, then</span>
+mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--config<span class="w"> </span>lr1e-4
 
-<span class="gp">$ </span><span class="c1"># Throw-away run that must not pollute the checkpoint index (`mesokit model prune` deletes such run directories).</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="c1"># Throw-away run that must not pollute the checkpoint index (`mesokit model prune` deletes such run directories).</span>
+mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>fno1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
@@ -618,27 +616,27 @@ trained &#39;spectral_onsagernet_1d&#39; with &#39;spectral_onsagernet_1d&#39;
 <span class="w">  </span>--device<span class="w"> </span>cpu<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--no-registry
 
-<span class="gp">$ </span><span class="c1"># Tag runs so `mesokit model list --tag paper` finds them later.</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="c1"># Tag runs so `mesokit model list --tag paper` finds them later.</span>
+mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span>1e-4<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--tag<span class="w"> </span>paper<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--notes<span class="w"> </span><span class="s2">&quot;lr scan, best&quot;</span>
 
-<span class="gp">$ </span><span class="c1"># Three learning rates side by side, under one experiment: checkpoints/allen_cahn_1d/lr-scan/{…_lr0.001, …_lr0.0001, …_lr1e-05}/</span>
-<span class="gp">$ </span><span class="k">for</span><span class="w"> </span>lr<span class="w"> </span><span class="k">in</span><span class="w"> </span>1e-3<span class="w"> </span>1e-4<span class="w"> </span>1e-5<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="go">  mesokit train \</span>
-<span class="go">    --model spectral_onsagernet_1d \</span>
-<span class="go">    --data allen_cahn_1d_v0 \</span>
-<span class="go">    --experiment lr-scan \</span>
-<span class="go">    --set trainer.lr=$lr \</span>
-<span class="go">    --epochs 20</span>
-<span class="go">done</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
+<span class="c1"># Three learning rates side by side, under one experiment: checkpoints/allen_cahn_1d/lr-scan/{…_lr0.001, …_lr0.0001, …_lr1e-05}/</span>
+<span class="k">for</span><span class="w"> </span>lr<span class="w"> </span><span class="k">in</span><span class="w"> </span>1e-3<span class="w"> </span>1e-4<span class="w"> </span>1e-5<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span><span class="nv">$lr</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--epochs<span class="w"> </span><span class="m">20</span>
+<span class="k">done</span>
+mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
 
-<span class="gp">$ </span><span class="c1"># Keep training the best one for 200 more epochs, at a lower rate.</span>
-<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="c1"># Keep training the best one for 200 more epochs, at a lower rate.</span>
+mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--from<span class="w"> </span>lr-scan/spectral_onsagernet_1d_lr0.0001<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--name<span class="w"> </span>lr-scan/son_long<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--epochs<span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="se">\</span>

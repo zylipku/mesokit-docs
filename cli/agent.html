@@ -431,7 +431,7 @@ the procedures; <code class="docutils literal notranslate"><span class="pre">age
 <code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code> saying where the registries and outputs live, that the
 project’s own code goes in <code class="docutils literal notranslate"><span class="pre">plugins/</span></code>, to start from smoke-sized settings,
 and which skill does what — and installs the skills in the same step.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>agent<span class="w"> </span>init<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>agent<span class="w"> </span>init<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--dir<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--agent<span class="w"> </span>claude<span class="p">|</span>codex<span class="p">|</span>both<span class="o">]</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--no-skills<span class="o">]</span><span class="w"> </span><span class="se">\</span>
@@ -480,12 +480,10 @@ skipping folders that already exist unless <code class="docutils literal notrans
 </ul>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>my-project
 <span class="gp">$ </span>mesokit<span class="w"> </span>agent<span class="w"> </span>init
-</pre></div>
-</div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>created   /home/me/my-project/AGENTS.md
-created   /home/me/my-project/CLAUDE.md
-skills    6 installed, 0 kept -&gt; /home/me/my-project/.claude/skills
-start your agent in /home/me/my-project and describe the task; re-run with --force after upgrading mesokit
+<span class="go">created   /home/me/my-project/AGENTS.md</span>
+<span class="go">created   /home/me/my-project/CLAUDE.md</span>
+<span class="go">skills    6 installed, 0 kept -&gt; /home/me/my-project/.claude/skills</span>
+<span class="go">start your agent in /home/me/my-project and describe the task; re-run with --force after upgrading mesokit</span>
 </pre></div>
 </div>
 <p>A second run without <code class="docutils literal notranslate"><span class="pre">--force</span></code> is refused rather than duplicating the

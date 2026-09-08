@@ -431,9 +431,9 @@
 and <code class="docutils literal notranslate"><span class="pre">path</span></code> show what is installed and where; <code class="docutils literal notranslate"><span class="pre">install</span></code> copies skills into
 the folder a coding agent scans so they can be invoked conversationally
 outside the mesokit checkout.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>skills<span class="w"> </span>list
-<span class="gp">$ </span>mesokit<span class="w"> </span>skills<span class="w"> </span>path<span class="w"> </span>NAME
-<span class="gp">$ </span>mesokit<span class="w"> </span>skills<span class="w"> </span>install<span class="w"> </span><span class="o">[</span>NAME<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>skills<span class="w"> </span>list
+mesokit<span class="w"> </span>skills<span class="w"> </span>path<span class="w"> </span>NAME
+mesokit<span class="w"> </span>skills<span class="w"> </span>install<span class="w"> </span><span class="o">[</span>NAME<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--all<span class="o">]</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--agent<span class="w"> </span>claude<span class="p">|</span>codex<span class="o">]</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--scope<span class="w"> </span>project<span class="p">|</span>user<span class="o">]</span><span class="w"> </span><span class="se">\</span>
@@ -474,26 +474,22 @@ outside the mesokit checkout.</p>
 </table>
 </div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>skills<span class="w"> </span>list
-</pre></div>
-</div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>mesokit-add-artifact  Read an interpretable quantity off a trained mesokit model by building a custom interpretability artifact — a plot, a number, a fitted law, a spectrum — either wired into a custom model&#39;s `artifact(name)` or computed post hoc from a loaded checkpoint of a shipped model, and compare it side by side with the shipped `potential` artifact
-mesokit-add-model     Write and register a custom dynamics model for mesokit from the user&#39;s own module — a new architecture, a physics-structured parameterisation, or a new potential / operator block for the shipped Onsager families — and verify it structurally before any training
-mesokit-add-simulator Register the user&#39;s own equation, solver or data generator as a mesokit simulator so that `mesokit data generate` (or a Python call) produces registered, validated trajectory datasets from it
-mesokit-add-trainer   Give a mesokit model a different training procedure — a custom loss (multi-step rollout, weighted, physics-informed), optimiser schedule, curriculum, or a plain-PyTorch loop — by configuring the shipped LitTrainer or writing and registering a custom trainer from the user&#39;s own module
-mesokit-convert-data  Convert a user&#39;s dataset (numpy, xarray, torch, externally-produced HDF5, ...) into the mesokit-trajectory HDF5 v1 cache, and optionally register it as a named dataset
-mesokit-train         Train one of mesokit&#39;s shipped model families (fno, spectral_onsagernet, onsagernet) on a registered mesokit dataset and read the resulting interpretability artifact
+<span class="go">mesokit-add-artifact  Read an interpretable quantity off a trained mesokit model by building a custom interpretability artifact — a plot, a number, a fitted law, a spectrum — either wired into a custom model&#39;s `artifact(name)` or computed post hoc from a loaded checkpoint of a shipped model, and compare it side by side with the shipped `potential` artifact</span>
+<span class="go">mesokit-add-model     Write and register a custom dynamics model for mesokit from the user&#39;s own module — a new architecture, a physics-structured parameterisation, or a new potential / operator block for the shipped Onsager families — and verify it structurally before any training</span>
+<span class="go">mesokit-add-simulator Register the user&#39;s own equation, solver or data generator as a mesokit simulator so that `mesokit data generate` (or a Python call) produces registered, validated trajectory datasets from it</span>
+<span class="go">mesokit-add-trainer   Give a mesokit model a different training procedure — a custom loss (multi-step rollout, weighted, physics-informed), optimiser schedule, curriculum, or a plain-PyTorch loop — by configuring the shipped LitTrainer or writing and registering a custom trainer from the user&#39;s own module</span>
+<span class="go">mesokit-convert-data  Convert a user&#39;s dataset (numpy, xarray, torch, externally-produced HDF5, ...) into the mesokit-trajectory HDF5 v1 cache, and optionally register it as a named dataset</span>
+<span class="go">mesokit-train         Train one of mesokit&#39;s shipped model families (fno, spectral_onsagernet, onsagernet) on a registered mesokit dataset and read the resulting interpretability artifact</span>
 </pre></div>
 </div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>skills<span class="w"> </span>install<span class="w"> </span>--agent<span class="w"> </span>codex<span class="w"> </span>--scope<span class="w"> </span>user
-</pre></div>
-</div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>installed &#39;mesokit-add-artifact&#39; -&gt; /home/me/.codex/skills/mesokit-add-artifact
-installed &#39;mesokit-add-model&#39; -&gt; /home/me/.codex/skills/mesokit-add-model
-installed &#39;mesokit-add-simulator&#39; -&gt; /home/me/.codex/skills/mesokit-add-simulator
-installed &#39;mesokit-add-trainer&#39; -&gt; /home/me/.codex/skills/mesokit-add-trainer
-installed &#39;mesokit-convert-data&#39; -&gt; /home/me/.codex/skills/mesokit-convert-data
-installed &#39;mesokit-train&#39; -&gt; /home/me/.codex/skills/mesokit-train
-the skills are picked up on the agent&#39;s next session (Claude Code: type / to see them)
+<span class="go">installed &#39;mesokit-add-artifact&#39; -&gt; /home/me/.codex/skills/mesokit-add-artifact</span>
+<span class="go">installed &#39;mesokit-add-model&#39; -&gt; /home/me/.codex/skills/mesokit-add-model</span>
+<span class="go">installed &#39;mesokit-add-simulator&#39; -&gt; /home/me/.codex/skills/mesokit-add-simulator</span>
+<span class="go">installed &#39;mesokit-add-trainer&#39; -&gt; /home/me/.codex/skills/mesokit-add-trainer</span>
+<span class="go">installed &#39;mesokit-convert-data&#39; -&gt; /home/me/.codex/skills/mesokit-convert-data</span>
+<span class="go">installed &#39;mesokit-train&#39; -&gt; /home/me/.codex/skills/mesokit-train</span>
+<span class="go">the skills are picked up on the agent&#39;s next session (Claude Code: type / to see them)</span>
 </pre></div>
 </div>
 <p>An existing skill folder is never overwritten silently:</p>

@@ -437,7 +437,7 @@ read as they are, with empty <code class="docutils literal notranslate"><span cl
 schema 2 on its next write.</p>
 <section id="mesokit-model-list">
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">list</span></code><a class="headerlink" href="#mesokit-model-list" title="Link to this heading">¶</a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--dyn<span class="w"> </span>D<span class="o">]</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--model<span class="w"> </span>ARCH<span class="o">]</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="o">[</span>--experiment<span class="w"> </span>E<span class="o">]</span><span class="w"> </span><span class="se">\</span>
@@ -449,10 +449,11 @@ schema 2 on its next write.</p>
 <span class="w">  </span><span class="o">[</span>--columns<span class="w"> </span>a,b,...<span class="o">]</span>
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>NAME                                   MODEL                   DATASET           PARAMS             TRAIN_LOSS  EPOCHS  TIME   CREATED              TAGS
-lr-scan/spectral_onsagernet_1d_lr0.0001  spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.0001  0.0003117   20      10.3s  2026-09-08T10:21:40  -
-lr-scan/spectral_onsagernet_1d_lr0.001   spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.001   0.0004203   20      10.1s  2026-09-08T10:15:02  -
-son_eps05_long                         spectral_onsagernet_1d  ac_eps05          -                  0.0002950   200     97.4s  2026-09-08T09:12:40  paper
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>list
+<span class="go">NAME                                   MODEL                   DATASET           PARAMS             TRAIN_LOSS  EPOCHS  TIME   CREATED              TAGS</span>
+<span class="go">lr-scan/spectral_onsagernet_1d_lr0.0001  spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.0001  0.0003117   20      10.3s  2026-09-08T10:21:40  -</span>
+<span class="go">lr-scan/spectral_onsagernet_1d_lr0.001   spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.001   0.0004203   20      10.1s  2026-09-08T10:15:02  -</span>
+<span class="go">son_eps05_long                         spectral_onsagernet_1d  ac_eps05          -                  0.0002950   200     97.4s  2026-09-08T09:12:40  paper</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -486,28 +487,29 @@ says otherwise; with nothing registered it prints <code class="docutils literal 
 </section>
 <section id="mesokit-model-show">
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">show</span></code><a class="headerlink" href="#mesokit-model-show" title="Link to this heading">¶</a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>show<span class="w"> </span>NAME
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>show<span class="w"> </span>NAME
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>lr-scan/spectral_onsagernet_1d_lr0.0001
-  status:      ok
-  experiment:  lr-scan
-  run dir:     /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001
-  checkpoint:  /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001/model.pt
-  config:      /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001/config.yaml
-  dyn:         allen_cahn_1d
-  model:       spectral_onsagernet_1d (trainer spectral_onsagernet_1d)
-  dataset:     allen_cahn_1d_v0 (/home/me/mesokit/data/allen_cahn_1d/allen_cahn_1d_v0.h5)
-  recipe:      default (recipe: /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d/default.yaml)
-  overrides:   trainer.lr=1e-4
-  params:      trainer.lr=0.0001
-  data params: -
-  from:        -
-  created:     2026-09-08T10:21:40
-  tags:        -
-  notes:       -
-  metrics:     train_loss=0.0003117 train_loss_min=0.0003117 val_loss=- epochs=20 time=10.3s
-  reproduce:   mesokit train --model spectral_onsagernet_1d --data allen_cahn_1d_v0 --dyn allen_cahn_1d --set trainer.lr=1e-4 --epochs 20 --experiment lr-scan
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>show<span class="w"> </span>lr-scan/spectral_onsagernet_1d_lr0.0001
+<span class="go">lr-scan/spectral_onsagernet_1d_lr0.0001</span>
+<span class="go">  status:      ok</span>
+<span class="go">  experiment:  lr-scan</span>
+<span class="go">  run dir:     /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001</span>
+<span class="go">  checkpoint:  /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001/model.pt</span>
+<span class="go">  config:      /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001/config.yaml</span>
+<span class="go">  dyn:         allen_cahn_1d</span>
+<span class="go">  model:       spectral_onsagernet_1d (trainer spectral_onsagernet_1d)</span>
+<span class="go">  dataset:     allen_cahn_1d_v0 (/home/me/mesokit/data/allen_cahn_1d/allen_cahn_1d_v0.h5)</span>
+<span class="go">  recipe:      default (recipe: /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d/default.yaml)</span>
+<span class="go">  overrides:   trainer.lr=1e-4</span>
+<span class="go">  params:      trainer.lr=0.0001</span>
+<span class="go">  data params: -</span>
+<span class="go">  from:        -</span>
+<span class="go">  created:     2026-09-08T10:21:40</span>
+<span class="go">  tags:        -</span>
+<span class="go">  notes:       -</span>
+<span class="go">  metrics:     train_loss=0.0003117 train_loss_min=0.0003117 val_loss=- epochs=20 time=10.3s</span>
+<span class="go">  reproduce:   mesokit train --model spectral_onsagernet_1d --data allen_cahn_1d_v0 --dyn allen_cahn_1d --set trainer.lr=1e-4 --epochs 20 --experiment lr-scan</span>
 </pre></div>
 </div>
 <p>The whole record, the metrics, and the <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> line that trains the
@@ -519,7 +521,7 @@ only one experiment holds it.</p>
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">register</span></code><a class="headerlink" href="#mesokit-model-register" title="Link to this heading">¶</a></h2>
 <p>Index a checkpoint that was trained elsewhere (a notebook, a cluster job,
 another machine). Only pointers are stored; nothing is copied.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span><span class="se">\</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>NAME<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--file<span class="w"> </span>CKPT.pt<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--config<span class="w"> </span>CONFIG.yaml<span class="w"> </span><span class="se">\</span>
@@ -557,11 +559,9 @@ another machine). Only pointers are stored; nothing is copied.</p>
 <span class="w">  </span>--model<span class="w"> </span>son_cluster_run<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--file<span class="w"> </span>~/jobs/1234/model.pt<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--config<span class="w"> </span>~/jobs/1234/config.yaml
-</pre></div>
-</div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;son_cluster_run&#39;
-  checkpoint: /home/me/jobs/1234/model.pt
-  config:     /home/me/jobs/1234/config.yaml
+<span class="go">registered &#39;son_cluster_run&#39;</span>
+<span class="go">  checkpoint: /home/me/jobs/1234/model.pt</span>
+<span class="go">  config:     /home/me/jobs/1234/config.yaml</span>
 </pre></div>
 </div>
 <p>The simplest way to obtain a valid pair is to train once with
@@ -572,7 +572,7 @@ parameter names, so Lightning-style checkpoints load unchanged.</p>
 </section>
 <section id="mesokit-model-tag">
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">tag</span></code><a class="headerlink" href="#mesokit-model-tag" title="Link to this heading">¶</a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>tag<span class="w"> </span>NAME<span class="w"> </span><span class="o">[</span>--add<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--remove<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--notes<span class="w"> </span>TEXT<span class="o">]</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>tag<span class="w"> </span>NAME<span class="w"> </span><span class="o">[</span>--add<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--remove<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--notes<span class="w"> </span>TEXT<span class="o">]</span>
 </pre></div>
 </div>
 <p>Adds or drops tags on a run, or rewrites its notes; the registry entry and
@@ -581,7 +581,7 @@ training time).</p>
 </section>
 <section id="mesokit-model-remove">
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">remove</span></code><a class="headerlink" href="#mesokit-model-remove" title="Link to this heading">¶</a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>remove<span class="w"> </span>NAME<span class="w"> </span><span class="o">[</span>--delete-files<span class="o">]</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>remove<span class="w"> </span>NAME<span class="w"> </span><span class="o">[</span>--delete-files<span class="o">]</span>
 </pre></div>
 </div>
 <p>Drops the entry. With <code class="docutils literal notranslate"><span class="pre">--delete-files</span></code> the run directory <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code>
@@ -590,7 +590,7 @@ directory of its own, so its files are left where they are.</p>
 </section>
 <section id="mesokit-model-prune">
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">prune</span></code><a class="headerlink" href="#mesokit-model-prune" title="Link to this heading">¶</a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>prune<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>prune<span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span>
 </pre></div>
 </div>
 <p>Reconciles the index with the disk: entries whose <code class="docutils literal notranslate"><span class="pre">model.pt</span></code> is gone are
@@ -609,7 +609,7 @@ would remove run directory /home/me/mesokit/checkpoints/allen_cahn_1d/son_crashe
 </section>
 <section id="mesokit-model-sync">
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">sync</span></code><a class="headerlink" href="#mesokit-model-sync" title="Link to this heading">¶</a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>sync<span class="w"> </span><span class="o">[</span>--import-sweeps<span class="o">]</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>sync<span class="w"> </span><span class="o">[</span>--import-sweeps<span class="o">]</span>
 </pre></div>
 </div>
 <p>Rebuilds the index from the run directories: every completed run (a

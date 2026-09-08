@@ -148,9 +148,9 @@ assert model.rollout(u, 3, 1e-2).shape == (4, 4, 64)
 
 With `plugins/my_models.py` in place, the registered name is enough:
 
-```console
-$ mesokit train --model linear_decay_1d --data decay_1d_v0 --set trainer.max_epochs=50
-$ mesokit interpret extract --model linear_decay_1d_v0 --artifact rate --output figs/rate.png
+```sh
+mesokit train --model linear_decay_1d --data decay_1d_v0 --set trainer.max_epochs=50
+mesokit interpret extract --model linear_decay_1d_v0 --artifact rate --output figs/rate.png
 ```
 
 `Nx` is filled from the dataset, `LitTrainer` is the trainer, and `--set`
@@ -181,8 +181,8 @@ trainer:
   accelerator: cpu
 ```
 
-```console
-$ mesokit train --model linear_decay_1d --data decay_1d_v0
+```sh
+mesokit train --model linear_decay_1d --data decay_1d_v0
 ```
 
 The shipped `LitTrainer` trains any `DynamicsModel`; a trainer of your own
