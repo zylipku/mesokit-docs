@@ -47,7 +47,7 @@ the dataset the checkpoint was trained on (`--max-snapshots`, default
 name it prints `summary()` and writes `--output` as a file; with `all` (or
 `*`) `--output` must be a **directory** (no suffix) and one
 `<artifact_name>.png` is written per artifact, without summaries. Every
-option is in the [Command-Line Reference](cli.md).
+option is in the [Command-Line Reference](cli/interpret.md).
 
 ## From Python
 

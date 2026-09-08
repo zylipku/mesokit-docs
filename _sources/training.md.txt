@@ -40,7 +40,7 @@ shipped model on any registered dataset. `--epochs`, `--batch-size` and
 `--device` override the common knobs. A model or trainer of your own, placed
 under `plugins/`, is used by its registered name like a shipped one, or
 named by `_target_` in the recipe ([Custom Models](models/custom_model.md)). Every option is in the
-[Command-Line Reference](cli.md); the recipe format and lookup order are on
+[Command-Line Reference](cli/train.md); the recipe format and lookup order are on
 [Training Recipes](training/recipes.md).
 
 **The grid.** `mesokit sweep --dyn <dyn> --model <name> --param eps=0.05,0.1,0.2`
@@ -50,7 +50,7 @@ same data (`--data <dataset>` when there is no simulator axis; the two kinds
 combine). Each run is named after its parameter values and grouped, with
 the summary table `runs.json`, under `checkpoints/<dyn>/<experiment>/`;
 `mesokit train --experiment E` puts hand-made runs in the same place. See
-`mesokit sweep` in the [Command-Line Reference](cli.md). The same loop is
+`mesokit sweep` in the [Command-Line Reference](cli/sweep.md). The same loop is
 `mesokit.cli.sweep.run_sweep(...)` from Python.
 
 **The Python API.** The same pieces, called directly — the natural path in
@@ -111,7 +111,7 @@ varied keys, final loss, when — with `--experiment`, `--sort train_loss`,
 `--tag`, `--format json` and friends; `mesokit model show` prints one
 record with the command that reproduces it; `mesokit train --from NAME`
 continues a run from its weights; `mesokit model tag` / `remove` / `prune`
-/ `sync` keep the index tidy ([Command-Line Reference](cli.md)).
+/ `sync` keep the index tidy ([Command-Line Reference](cli/model.md)).
 [Interpretability](interpretability.md) is what to do with them next.
 
 ## How to Use This Section

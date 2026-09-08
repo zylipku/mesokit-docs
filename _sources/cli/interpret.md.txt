@@ -1,0 +1,81 @@
+# `mesokit interpret`
+
+Inspect the interpretability artifacts a trained checkpoint can produce.
+Every registered model implements `list_artifacts()` and `artifact(name)`;
+these commands are thin wrappers that rebuild the model from its registry
+record, load the weights, and call them.
+
+`--model` takes the registry key (`<run>` or `<experiment>/<run>`; a bare
+run name when only one experiment holds it). Data-backed artifacts read the
+dataset the checkpoint was trained on: the file recorded in its run record
+(`dataset_path`) while it exists — a dataset re-registered under the same
+name since then is reported and not used — else the dataset's current
+registry entry, as for checkpoints from earlier versions.
+
+How a checkpoint is rebuilt: the registry record gives `config_path`; the
+`model` section of that YAML is instantiated; `model.pt` is loaded as a
+`state_dict` (strictly — every parameter must match); the model is put in
+`eval()` mode. For `extract`, the dataset the checkpoint was trained on is
+located too (by its registered name, else by the path recorded in the
+config) and handed to the model as reference data for artifacts that need
+snapshots (a learned potential is evaluated along real states, for
+instance).
+
+## `mesokit interpret list`
+
+```sh
+mesokit interpret list --model CKPT_NAME
+```
+
+```text
+spectral_onsagernet_1d_v0:
+  potential
+```
+
+FNO checkpoints list `spectrum`, the per-mode response / one-step error
+diagnostics described in [Fourier Neural Operator](../models/fno.md);
+it needs the checkpoint's dataset for the grid and the error spectrum.
+
+## `mesokit interpret extract`
+
+Build one artifact (or all of them), print its one-paragraph summary, and
+save its figure. `mesokit interpret explain` is an exact alias.
+
+```sh
+mesokit interpret extract --model CKPT_NAME --artifact NAME --output FILE.png [--max-snapshots N]
+mesokit interpret extract --model CKPT_NAME --artifact all  --output DIR/     [--max-snapshots N]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--model` | required | Registered checkpoint name. |
+| `--artifact` | required | An entry from `interpret list`, or `all` (also `*`). |
+| `--output` | required | Target file; the extension selects the matplotlib format (`.png`, `.pdf`, `.svg`, …). An existing figure is replaced, with a `warning: overwriting …` line on stderr. With `--artifact all` it must be a directory — a path with an extension is rejected — and one PNG per artifact, named `<model>_<artifact>.png`, is written inside it. |
+| `--max-snapshots N` | `5000` | Cap on the number of reference snapshots handed to data-backed artifacts. Lower it to speed up extraction on large datasets. |
+
+```sh
+mesokit interpret extract --model spectral_onsagernet_1d_v0 --artifact potential --output figs/potential.png
+```
+
+```text
+spectral_onsagernet_1d on allen_cahn_1d exposes a PolynomialPotential potential. The constant-field slice over u in [-2, 2] has V range [-0.0197, 23.4]. The largest learned mobility multiplier is 0.07; the largest reactive multiplier magnitude is 0.0293.
+saved: /home/me/mesokit/figs/potential.png
+```
+
+```sh
+# Everything the model offers, one file each, into a directory.
+mesokit interpret explain --model son_eps05_long --artifact all --output figs/son_eps05_long/
+
+# Vector output for a paper, fewer reference snapshots.
+mesokit interpret extract --model son_eps05_long --artifact potential --output figs/potential.pdf --max-snapshots 500
+```
+
+Errors:
+
+```text
+Invalid value: checkpoint 'nope' is not registered
+Invalid value: registered checkpoint path does not exist: /home/me/mesokit/checkpoints/allen_cahn_1d/old/model.pt
+Invalid value: --output must be a directory when --artifact all
+Invalid value: checkpoint 'x' has no model config and no model_name; register a config produced by `mesokit train`
+KeyError: "unknown artifact(s) ['x']; available: ['potential']"      # a traceback, exit status 1
+```

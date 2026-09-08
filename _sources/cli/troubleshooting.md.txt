@@ -1,0 +1,29 @@
+# Troubleshooting
+
+| Message | Cause | Fix |
+| --- | --- | --- |
+| `config dir not found: …/configs/data/<dyn>` | Not running from the repository root, or `<dyn>` has no recipe folder. | `cd` to the root; check `mesokit data avail`; create `configs/data/<dyn>/default.yaml` for a custom simulator. |
+| `no config 'x' under …; available: default, fdr` | `--config` takes a stem, not a filename or path. | Drop the `.yaml` and any directory. |
+| `--name and --no-registry are mutually exclusive` | Both flags given. | Pick one. |
+| `dataset 'x' already registered; pass --force to overwrite` | Name collision. | Choose another `--name`, or add `--force`. In a `sweep`, `--reuse-data` trains on the existing dataset instead. |
+| `unknown parameter 'x' for simulator …; accepted: …` | A `--set` / `--param` key is not a keyword argument of the simulator. | Pick a key from the `accepted` list (they are the keys of the data recipe). |
+| `<dyn>: <message>; re-run with -v for the traceback` after a `data generate` | The simulator rejected the parameters it was given, e.g. a `T` that is not a whole number of save intervals. | Fix the `--set` or the recipe the message names; `-v` shows the traceback if you need the line it came from. |
+| `<dyn> needs Dedalus, which is not installed` (or `… needs LAMMPS …`); `It is a conda-forge package, not a PyPI one` | The simulator's solver back-end is a conda-forge package that `pip install mesokit` cannot bring in. | Run the `pixi add dedalus` / `conda install -c conda-forge dedalus` the message spells out (`lammps` for `peridynamics_fracture_2d`) in the environment `mesokit` runs in; a checkout gets both from the `sim` Pixi feature. See [Solver Back-Ends](#solver-backends). |
+| `sanity check FAILED: <file>` then `sanity check failed for …; not registered` (or `validation failed for …`) | The file violates the v1 contract; every failing check is listed between the two lines. | Fix the writer — see [Data Structure](../data_processing/structure.md) — and re-check with `mesokit data validate FILE`. |
+| `warning: overwriting <path> (pass --output to write elsewhere)` | Not an error: `data generate`, `data demo` or `interpret extract` is about to replace a file that is already there. | Nothing, if that was the intent. Otherwise interrupt and pass `--output`, or `--reuse-data` in a `sweep`. |
+| `output <path> is a directory; pass --output with a file path` | `--output` named a folder, so there is no file to write. | Give the full file path, `data/mine.h5` rather than `data`. |
+| `output … already exists; pass --force to replace it` | `data parse` found a file at the output path before launching the agent. Unlike `generate`, `parse` refuses rather than warns, so what is validated is always the agent's own work. | Add `--force` to replace it, or pick another `--output`. |
+| `unknown format 'nc'; available: npz, h5` | `data demo --format` takes one of the two containers it can write. | Pick `npz` or `h5`. |
+| `unknown artifact 'x' for checkpoint 'y'; available: …` | `interpret extract` was given an artifact the model does not expose. | Pick one from the list (`mesokit interpret list --model y`). |
+| `dataset 'x' is not registered and is not an existing HDF5 path` | `--data` matched neither a name nor a file. | `mesokit data list`, or pass the path. |
+| `registered dataset 'x' points to missing file` | The file was moved or deleted after registration. | Re-register with the new path and `--force`, or regenerate. |
+| `checkpoint 'x' is not registered` | `interpret` needs a name from `mesokit model list`. | Train, or `mesokit model register`; `mesokit model sync` re-indexes runs that are on disk but not in the registry. |
+| `checkpoint 'x' is ambiguous; candidates: a/x, b/x` | Two experiments hold a run of that name. | Pass the full `<experiment>/<run>` key. |
+| `--data cannot be combined with --param` / `--data is required when only --train-param axes are given` | A sweep with data axes generates its datasets; one without needs to be told what to train on. | Drop `--data`, or add it. |
+| `--from: the weights of 'x' do not fit the model being trained` | `--set` or `--config` changed the architecture. | Keep the architecture keys as in the source checkpoint; `--set` only training keys. |
+| `run directory … already holds a checkpoint` | `--name` (or the auto name) points at a directory with a `model.pt`, e.g. from a `--no-registry` run. | Pick another `--name`, add `--force` to overwrite it, or `mesokit model prune` the leftovers. |
+| `--output must be a directory when --artifact all` | An extension was given with `--artifact all`. | Pass a directory path. |
+| `agent 'claude' is not installed: no claude command on PATH` | The agent CLI is missing from the shell `mesokit` runs in; nothing was launched. | Follow the official installation guide the message names ([Claude Code](https://code.claude.com/docs/en/setup), [Codex CLI](https://developers.openai.com/codex/cli)), check `claude --version`, and re-run; or `--agent codex`. |
+| `AGENTS.md already has a mesokit section; pass --force to rewrite it` | `agent init` was run in this project before. | Add `--force` to refresh the section; text outside the markers is kept. |
+| A tensor size mismatch inside the model during `train` | A recipe of your own under `configs/train/` writes a grid key (`Nx`, `grid_shape`, ...) that the dataset contradicts. | Delete the key and let `train` read the grid from the dataset; the shipped recipes write none. |
+| Training is slow or out of memory | Default recipes assume a GPU. | `--device cpu --batch-size 8 --epochs 1` for a smoke run. |

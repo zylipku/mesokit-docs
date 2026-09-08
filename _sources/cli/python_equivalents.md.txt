@@ -1,0 +1,23 @@
+# Python Equivalents
+
+Everything the CLI does is available from Python; the CLI only adds the
+registries and the config lookup.
+
+| CLI | Python |
+| --- | --- |
+| `mesokit data avail` | `mesokit.data.available()` |
+| `mesokit data generate --dyn X` | `ds = mesokit.data.simulate("X", **kwargs); ds.save_hdf5(path)` |
+| `mesokit data validate F` / `register --file F` | `report = mesokit.data.validate(F)` (no registry write) |
+| `mesokit data demo --output P` | `mesokit.data.write_demo_dataset(P, container="npz")`, or `mesokit.data.demo_arrays()` for the arrays alone |
+| `mesokit train` | `TrajectoryDataset.load_hdf5(path)` → a `mesokit.data.datasets` adapter → `DataLoader` → `mesokit.trainers.get_trainer(name)(...).fit(model, loader)` |
+| `mesokit sweep` | `mesokit.cli.sweep.run_sweep("X", "arch", {"eps": [0.05, 0.1]}, train_params={"trainer.lr": [1e-3, 1e-4]}, experiment="scan")` — the registries and naming included; returns the table rows |
+| `mesokit model list` | read `.mesokit/checkpoints.json` (`--format json` prints the same records), each run's `run.json`, or an experiment's `runs.json` |
+| `mesokit interpret list` / `extract` | `model.load_state_dict(torch.load("model.pt"))`; `model.list_artifacts()`; `model.artifact(name).save(path)` |
+
+See [Training](../training.md) and [Interpretability](../interpretability.md) for
+the full Python surface, and the custom pages of each section
+([Custom Simulators](../data_processing/custom_simulator.md),
+[Custom Models](../models/custom_model.md),
+[Custom Trainers](../training/custom_trainer.md),
+[Custom Artifacts](../interpretability/custom_artifact.md)) for registering your
+own.

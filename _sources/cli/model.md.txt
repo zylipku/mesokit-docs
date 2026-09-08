@@ -1,0 +1,170 @@
+# `mesokit model`
+
+Manage the project-local index of **trained checkpoints**
+(`.mesokit/checkpoints.json`). This is not the registry of architectures —
+that one is populated by the package and inspected from Python with
+`mesokit.models.available()`.
+
+Every entry mirrors the run's `run.json` (see [`mesokit train`](#mesokit-train)):
+the model, dataset and recipe it came from, the `--set` overrides as
+`params`, the final `metrics`, `created`, `tags` and `notes`, plus the paths.
+Entries written by earlier versions (schema 1: paths and names only) are
+read as they are, with empty `params` / `metrics`, and the file is stamped
+schema 2 on its next write.
+
+## `mesokit model list`
+
+```sh
+mesokit model list [--dyn D] [--model ARCH] [--experiment E] [--dataset NAME] [--tag T ...]
+                   [--sort COLUMN] [--reverse] [--format table|json|csv] [--columns a,b,...]
+```
+
+```text
+NAME                                   MODEL                   DATASET           PARAMS             TRAIN_LOSS  EPOCHS  TIME   CREATED              TAGS
+lr-scan/spectral_onsagernet_1d_lr0.0001  spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.0001  0.0003117   20      10.3s  2026-09-08T10:21:40  -
+lr-scan/spectral_onsagernet_1d_lr0.001   spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.001   0.0004203   20      10.1s  2026-09-08T10:15:02  -
+son_eps05_long                         spectral_onsagernet_1d  ac_eps05          -                  0.0002950   200     97.4s  2026-09-08T09:12:40  paper
+```
+
+| Option | Meaning |
+| --- | --- |
+| `--dyn`, `--model`, `--experiment`, `--dataset`, `--tag` | Keep only the matching runs (`--experiment -` keeps the runs outside any experiment; `--tag` is repeatable and every given tag must be present). |
+| `--sort COLUMN` | Any column name (`name`, `created`, `train_loss`, `train_loss_min`, `val_loss`, `epochs`, `time`, `model`, `dataset`, …); runs without a value sort last. `--reverse` descends. |
+| `--format` | `table` (default), `json` (the full records as one list, for `pandas.DataFrame`) or `csv` (the selected columns). |
+| `--columns` | Comma-separated columns; the default is `name,model,dataset,params,train_loss,epochs,time,created,tags`. Also available: `experiment`, `run`, `dyn`, `trainer`, `data_params`, `train_loss_min`, `val_loss`, `status`, `notes`, `recipe`, `path`, `config`. |
+
+`PARAMS` are the recipe keys the run changed with `--set` or a sweep's
+`--train-param` (a sweep's simulator axes are `data_params`); `TRAIN_LOSS`
+is the last epoch's training loss (`-` when the trainer logs none, and for
+entries made by `model register`). Rows are sorted by name unless `--sort`
+says otherwise; with nothing registered it prints `(no checkpoints registered)`.
+
+## `mesokit model show`
+
+```sh
+mesokit model show NAME
+```
+
+```text
+lr-scan/spectral_onsagernet_1d_lr0.0001
+  status:      ok
+  experiment:  lr-scan
+  run dir:     /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001
+  checkpoint:  /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001/model.pt
+  config:      /home/me/mesokit/checkpoints/allen_cahn_1d/lr-scan/spectral_onsagernet_1d_lr0.0001/config.yaml
+  dyn:         allen_cahn_1d
+  model:       spectral_onsagernet_1d (trainer spectral_onsagernet_1d)
+  dataset:     allen_cahn_1d_v0 (/home/me/mesokit/data/allen_cahn_1d/allen_cahn_1d_v0.h5)
+  recipe:      default (recipe: /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d/default.yaml)
+  overrides:   trainer.lr=1e-4
+  params:      trainer.lr=0.0001
+  data params: -
+  from:        -
+  created:     2026-09-08T10:21:40
+  tags:        -
+  notes:       -
+  metrics:     train_loss=0.0003117 train_loss_min=0.0003117 val_loss=- epochs=20 time=10.3s
+  reproduce:   mesokit train --model spectral_onsagernet_1d --data allen_cahn_1d_v0 --dyn allen_cahn_1d --set trainer.lr=1e-4 --epochs 20 --experiment lr-scan
+```
+
+The whole record, the metrics, and the `mesokit train` line that trains the
+same thing again as a new run of the same experiment (it carries no
+`--name`, so the run gets the next free name). A bare run name works when
+only one experiment holds it.
+
+## `mesokit model register`
+
+Index a checkpoint that was trained elsewhere (a notebook, a cluster job,
+another machine). Only pointers are stored; nothing is copied.
+
+```sh
+mesokit model register --model NAME --file CKPT.pt --config CONFIG.yaml [--tag T ...] [--force]
+```
+
+| Option | Meaning |
+| --- | --- |
+| `--model NAME` | Registry name (required). |
+| `--file CKPT.pt` | Existing checkpoint file: a `state_dict`, or a dict with a `state_dict` key such as a Lightning checkpoint (required). |
+| `--config CONFIG.yaml` | The recipe used to train it; must contain a `model` section with a `_target_` so `interpret` can rebuild the architecture (required). `model_name`, `dyn` and `dataset_name` are copied from it into the entry when present, so the `list` columns are filled. |
+| `--tag T` | Tag recorded on the entry; repeatable. |
+| `--force` | Replace an existing entry. |
+
+```sh
+mesokit model register --model son_cluster_run --file ~/jobs/1234/model.pt --config ~/jobs/1234/config.yaml
+```
+
+```text
+registered 'son_cluster_run'
+  checkpoint: /home/me/jobs/1234/model.pt
+  config:     /home/me/jobs/1234/config.yaml
+```
+
+The simplest way to obtain a valid pair is to train once with
+`mesokit train` (even with `--no-registry`) and copy its `config.yaml`
+alongside your own checkpoint. When loading, `interpret` strips a leading
+`model.` prefix and any `._orig_mod.` (from `torch.compile`) from the
+parameter names, so Lightning-style checkpoints load unchanged.
+
+## `mesokit model tag`
+
+```sh
+mesokit model tag NAME [--add T ...] [--remove T ...] [--notes TEXT]
+```
+
+Adds or drops tags on a run, or rewrites its notes; the registry entry and
+the run's `run.json` are both updated (`mesokit train --tag` sets tags at
+training time).
+
+## `mesokit model remove`
+
+```sh
+mesokit model remove NAME [--delete-files]
+```
+
+Drops the entry. With `--delete-files` the run directory `mesokit train`
+wrote is deleted as well; an entry made by `model register` has no run
+directory of its own, so its files are left where they are.
+
+## `mesokit model prune`
+
+```sh
+mesokit model prune [--dry-run]
+```
+
+Reconciles the index with the disk: entries whose `model.pt` is gone are
+dropped, and run directories under `checkpoints/<dyn>/` (flat or inside an
+experiment) that hold no registered checkpoint — a `--no-registry` smoke
+run, a run whose entry was removed, a run that failed inside the trainer and
+left no `model.pt` — are deleted. Only directories holding a run's files
+(`run.json`, `model.pt`, `config.yaml`, `history.json`, `*.ckpt`) are ever
+touched, and `runs.json` keeps its rows; `--dry-run` prints the plan and
+changes nothing.
+
+```text
+would remove entry 'son_old': checkpoint missing (/home/me/mesokit/checkpoints/allen_cahn_1d/son_old/model.pt)
+would remove run directory /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v4 (not registered)
+would remove run directory /home/me/mesokit/checkpoints/allen_cahn_1d/son_crashed (no model.pt)
+```
+
+## `mesokit model sync`
+
+```sh
+mesokit model sync [--import-sweeps]
+```
+
+Rebuilds the index from the run directories: every completed run (a
+`run.json` with `status: ok` next to a `model.pt`) gets an entry keyed by
+its location — `<run>` or `<experiment>/<run>` — with the paths as found,
+so a project directory that was moved, a run directory moved into an
+experiment folder by hand, or an index that was deleted is put back
+together. Registered runs from before `run.json` existed get one written,
+with `metrics` read from `history.json` and `created` from `model.pt`'s
+modification time; each experiment's `runs.json` is reconciled with its run
+directories (failed rows are kept). Entries without a run directory
+(`model register`) are left alone. `--import-sweeps` also reads the legacy
+`checkpoints/<dyn>/sweeps/*.json` summaries into the matching entries
+(`data_params`, `train_loss`, a `sweep:<stamp>` tag).
+
+```text
+synced 12 entries: 3 added, 1 updated, 4 backfilled from history.json, 2 experiment table(s) refreshed
+```

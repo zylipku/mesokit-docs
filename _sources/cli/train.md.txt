@@ -1,0 +1,173 @@
+(mesokit-train)=
+
+# `mesokit train`
+
+Train a registered model architecture on a dataset through the trainer
+registered for that model, write a run directory, and index the checkpoint.
+
+```sh
+mesokit train --model ARCH --data NAME_OR_PATH [--dyn DYN]
+              [--config STEM|PATH] [--set KEY=VALUE ...] [--trainer NAME]
+              [--experiment E] [--name NAME | --no-registry] [--from CKPT]
+              [--tag T ...] [--notes TEXT] [--force]
+              [--epochs N] [--batch-size N] [--device auto|cpu|gpu]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--model ARCH` | required (or from `--from`) | Architecture name from the model registry (`fno1d`, `spectral_onsagernet_1d`, …). |
+| `--data` | required (or from `--from`) | Registered dataset name **or** path to a v1 HDF5 file. |
+| `--dyn DYN` | the dataset's `dyn` | Dynamics name; selects the recipe tree `configs/train/DYN/ARCH/` and the run directory `checkpoints/DYN/`. |
+| `--config STEM\|PATH` | `default` | Recipe `configs/train/DYN/ARCH/STEM.yaml`, looked up in the working directory first, then in the installed package (then a checkout); or a path to any YAML file. With no recipe directory at all, built-in defaults are used. |
+| `--set KEY=VALUE` | none | Change one recipe key for this run (`trainer.lr=1e-4`, `model.potential.eps=0.05`, `dataset.stride=2`); repeatable. Values are parsed as YAML. |
+| `--trainer NAME` | `= --model` | Trainer registry name; every shipped model registers its own default. |
+| `--experiment E` | none | Group the run: it lands in `checkpoints/DYN/E/<run>/`, is registered as `E/<run>`, and `E/runs.json` gets a row (see [Experiments](#experiments) below). |
+| `--name NAME` | `ARCH_v<n>`; in an experiment `ARCH_<key><value>…` from `--set`, else `ARCH_r<nn>` | Run name: the registry key and the run directory. `--name E/NAME` is `--experiment E --name NAME`. |
+| `--from CKPT` | none | Continue from a registered checkpoint: its weights are loaded into the new model, its saved `config.yaml` is the recipe (unless `--config`), and its dataset, model, trainer and dyn fill in whatever is not given; `--set` applies on top. The new record says `from: CKPT`. |
+| `--no-registry` | off | Train and write the run directory but do not index it. |
+| `--tag T` | none | Tag recorded on the run (`run.json` and the registry); repeatable. `mesokit model list --tag T` filters on it. |
+| `--notes TEXT` | empty | Free-text note recorded on the run. |
+| `--force` | off | Replace an existing checkpoint entry of the same name and reuse its run directory (stale Lightning `.ckpt` files are cleared first). |
+
+The model's grid is read from the dataset: any of `Nx` / `Ny` / `Nz`,
+`Lx` / `Ly` / `Lz`, `grid_shape`, `domain` and `in_dim` that the model (or
+a nested potential / block) accepts and the recipe leaves out is filled
+from the dataset's `grid_shape` and `physical` box lengths (`2π` when
+absent). A box length written in the recipe or passed with `--set` is
+kept; a written `Nx` / `grid_shape` / `in_dim` that contradicts the
+dataset is refused before training, naming the key. The shipped recipes
+carry no grid keys. The saved `config.yaml` records the completed
+configuration.
+| `--epochs N` | from config | Override `trainer.max_epochs`. |
+| `--batch-size N` | from config | Override `dataloader.batch_size`. |
+| `--device` | from config | Override `trainer.accelerator`: `auto`, `cpu` or `gpu`. |
+
+A training recipe has four sections — `model` (constructor kwargs),
+`dataset` (which `torch.utils.data.Dataset` view of the trajectories to
+train on, e.g. `SnapshotPairDataset` with a `stride`), `dataloader`, and
+`trainer` (epochs, optimiser, scheduler, accelerator, rollout steps, …).
+If the recipe leaves `trainer.dt` unset, the step is taken from the
+dataset's `numerical/dt` attribute, or else from the spacing of `times`.
+The name collision check runs **before** training starts, so a duplicate
+`--name` fails fast.
+
+```sh
+mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 \
+  --epochs 20 --device cpu
+```
+
+```text
+… Lightning progress …
+trained 'spectral_onsagernet_1d' with 'spectral_onsagernet_1d'
+  checkpoint: /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/model.pt
+  config:     /home/me/mesokit/checkpoints/allen_cahn_1d/spectral_onsagernet_1d_v0/config.yaml
+  metrics:    train_loss=0.0004203 epochs=20 time=10.1s
+  registered: spectral_onsagernet_1d_v0
+```
+
+The run directory contains:
+
+| File | Contents |
+| --- | --- |
+| `model.pt` | Plain `state_dict` — loadable with `torch.load` + `model.load_state_dict`, no Lightning needed. The canonical artifact. |
+| `config.yaml` | The fully resolved recipe plus `model_name`, `trainer_name`, `dyn`, `data`, `dataset_name`, `checkpoint_name`, `train_config`. This is what `mesokit interpret` reads to rebuild the model. |
+| `history.json` | Per-epoch metric series, e.g. `{"train_loss": [...]}`. |
+| `run.json` | The run's record: `name`, `created`, `status`, the `dyn` / `model_name` / `trainer_name`, the dataset (`data`, `dataset_name` and the resolved `dataset_path`), the `recipe` (`spec`, `source`, `path`), the `--set` list as `overrides` and the same keys with parsed values as `params`, the `cli` knobs (`epochs`, `batch_size`, `device`), the final `metrics` (`train_loss`, `train_loss_min`, `val_loss`, `epochs_run`, `wall_time_s`), `tags`, `notes` and the config hash. The registry entry is this record plus the paths; `mesokit model list` reads the entries. A run that raises inside the trainer leaves `run.json` with `status: failed` and the error, so `mesokit model prune` can find it. |
+| `last.ckpt`, `lit_epoch=NNN.ckpt` | Lightning checkpoints (optimizer state etc.) written by `LitTrainer`; not needed downstream. |
+
+More examples:
+
+```sh
+# Train on a file that was never registered (registry name stays empty in the record).
+mesokit train --model fno1d --dyn kdv_1d --data /tmp/kdv_scratch.h5 --config default --epochs 5
+
+# Give the run a meaningful name and overwrite a previous attempt.
+mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data ac_eps05 \
+  --name son_eps05_long --epochs 200 --force
+
+# A hyper-parameter variant: copy default.yaml to configs/train/allen_cahn_1d/spectral_onsagernet_1d/lr1e-4.yaml, then
+mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 --config lr1e-4
+
+# Throw-away run that must not pollute the checkpoint index (`mesokit model prune` deletes such run directories).
+mesokit train --model fno1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 --epochs 1 --device cpu --no-registry
+
+# Tag runs so `mesokit model list --tag paper` finds them later.
+mesokit train --model spectral_onsagernet_1d --data allen_cahn_1d_v0 --set trainer.lr=1e-4 --tag paper --notes "lr scan, best"
+
+# Three learning rates side by side, under one experiment: checkpoints/allen_cahn_1d/lr-scan/{…_lr0.001, …_lr0.0001, …_lr1e-05}/
+for lr in 1e-3 1e-4 1e-5; do
+  mesokit train --model spectral_onsagernet_1d --data allen_cahn_1d_v0 --experiment lr-scan --set trainer.lr=$lr --epochs 20
+done
+mesokit model list --experiment lr-scan --sort train_loss
+
+# Keep training the best one for 200 more epochs, at a lower rate.
+mesokit train --from lr-scan/spectral_onsagernet_1d_lr0.0001 --name lr-scan/son_long --epochs 200 --set trainer.lr=3e-5
+```
+
+(experiments)=
+
+## Experiments
+
+`--experiment E` (on `train`, and always on `sweep`) adds one grouping
+level to the run layout:
+
+```text
+checkpoints/<dyn>/
+├── <run>/                       # runs without --experiment: model.pt, config.yaml, history.json, run.json, *.ckpt
+└── <experiment>/
+    ├── runs.json                # the experiment's table: one row per run, failed ones included
+    └── <run>/                   # the same files as a flat run
+```
+
+The registry key mirrors the path, `<experiment>/<run>`, so `ls`, `rm -r`
+and `du` group what the CLI groups; a bare `<run>` is accepted by every
+command that takes a name as long as only one experiment holds it. The
+default run name inside an experiment says what varied —
+`<model>_<key><value>[_…]` from the `--set` keys' last components
+(`spectral_onsagernet_1d_lr0.0001`), `<model>_r<nn>` when nothing was
+overridden; a taken name gets `_2`, `_3`, … unless `--force`, which reuses
+it. A run name cannot be an existing experiment's and vice versa.
+
+`runs.json` is the experiment's log (`schema_version`, `experiment`, `dyn`,
+`model`, `created`, `updated`, the training `axes` and simulator
+`data_axes` seen so far, and `rows`); every `train --experiment E` inserts or
+replaces its row, so does every point of a `sweep`. A row holds `run`,
+`checkpoint` (the registry key), `dataset`, `dataset_path`,
+`checkpoint_path`, `status`, `data_status` (`generated`, `reused` or
+`given`), `params`, `data_params`, `metrics`, `wall_time_s`, `error` and
+`created`; a point that failed has a row but no run directory or registry
+entry. `mesokit model sync` rebuilds the table from the run directories.
+
+Two things to know:
+
+- Stems differ in how long a recipe trains, not in the grid it fits: no
+  shipped recipe writes a grid key, so every stem runs on any grid of its
+  dynamics. `configs/train/allen_cahn_1d/spectral_onsagernet_1d/` ships
+  `fdr.yaml`, the training-side counterpart of the data recipe of the same
+  name: `default.yaml` with the epoch budget cut, so
+  `mesokit train --model spectral_onsagernet_1d --data ac_fdr --config fdr`
+  finishes in seconds on the `fdr` dataset. Its `smoke.yaml` is the test
+  fixture instead, pinned to one CPU epoch with no progress bar.
+- Every shipped architecture is registered once per dimension — `fno1d` /
+  `fno2d` / `fno3d`, `spectral_onsagernet_1d` / `_2d` / `_3d` and
+  `onsagernet_1d` / `_2d` / `_3d` — pick the suffix that matches the
+  dataset's grid. What the model sees of a multi-channel dataset
+  (`llg_lattice_2d`, `peridynamics_fracture_2d`) is the recipe's
+  `dataset.channel` key: an integer for one field, `null` for every
+  channel, a list for some; the model's channel count follows
+  ([Models](../models.md)). A model (or trainer) of your own under `./plugins/` is imported
+  before every command, so its registered name works like a shipped one
+  (a model without a trainer of its own trains with `LitTrainer`); a recipe
+  may also name any class by `model._target_` / `trainer._target_`. See
+  [Custom Models](../models/custom_model.md).
+
+Errors:
+
+```text
+Invalid value: dataset 'nope' is not registered and is not an existing HDF5 path
+Invalid value: registered dataset 'old' points to missing file: /home/me/mesokit/data/allen_cahn_1d/old.h5
+Invalid value: no config 'nope' under /home/me/mesokit/configs/train/allen_cahn_1d/spectral_onsagernet_1d; available: default, smoke
+Invalid value: --device must be one of: auto, cpu, gpu
+Invalid value: checkpoint 'spectral_onsagernet_1d_v0' already registered; pass --force to overwrite
+Invalid value: run directory checkpoints/allen_cahn_1d/son_a already holds a checkpoint; pass --force to overwrite it or choose another --name
+```

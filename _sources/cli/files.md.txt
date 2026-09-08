@@ -1,0 +1,44 @@
+# Files the CLI Reads and Writes
+
+| Path | Written by | Read by | Notes |
+| --- | --- | --- | --- |
+| `configs/data/<dyn>/*.yaml` | you | `data generate` | Hydra recipe; keys are simulator kwargs. |
+| `configs/train/<dyn>/<model>/*.yaml` | you | `train` | Sections `model`, `dataset`, `dataloader`, `trainer`. |
+| `data/<dyn>/<name>.h5` | `data generate` | `train`, `interpret` | v1 trajectory cache. An existing file is replaced, with a warning. |
+| `data/parsed/<stem>.h5` | `data parse` (via the agent) | `train`, `interpret` | Same layout. |
+| `data/demo/allen_cahn_1d_demo.{npz,h5}` | `data demo` | `data parse` | Deliberately *not* a v1 cache; a practice input for `parse`. |
+| `.mesokit/datasets.json` | `data generate`, `data register`, `data parse` | `data list`, `train`, `interpret` | `name → {path, metadata}`; metadata holds shape, dtype, `dt`, the three groups. |
+| `checkpoints/<dyn>/<run>/` | `train` | `interpret`, `model prune` / `sync` | `model.pt`, `config.yaml`, `history.json`, `run.json` (the run record), Lightning `.ckpt`. |
+| `checkpoints/<dyn>/<experiment>/<run>/` | `train --experiment`, `sweep` | as above | The same files; registered as `<experiment>/<run>`. |
+| `checkpoints/<dyn>/<experiment>/runs.json` | `train --experiment`, `sweep`, `model sync` | you (notebooks) | `{schema_version, experiment, dyn, model, created, updated, axes, data_axes, rows}`; one row per run (failed points included) with `run`, `checkpoint`, `dataset`, `params`, `data_params`, `metrics`, `status`, `data_status`, `wall_time_s`, `error`, the paths. |
+| `.mesokit/checkpoints.json` | `train`, `sweep`, `model register` / `tag` / `remove` / `prune` / `sync` | `model list` / `show`, `interpret`, `train --from` | schema 2: `name → {path, config_path, run_dir, experiment, run, model_name, trainer_name, dyn, dataset_name, data, dataset_path, recipe, overrides, params, data_params, metrics, created, status, tags, notes, from, run_id, training_config_hash, metadata}`; schema-1 files (paths and names only) are read unchanged. |
+| `checkpoints/<dyn>/sweeps/<timestamp>.json` | earlier versions of `sweep` (no longer written) | `model sync --import-sweeps` | `{dyn, model, params, created, rows}`; the legacy summary. |
+| `AGENTS.md`, `CLAUDE.md` | `agent init` | your coding agent | Conventions for using mesokit in the project; the mesokit section sits between `<!-- mesokit:begin -->` / `<!-- mesokit:end -->` markers. |
+| `.claude/skills/<name>/`, `.agents/skills/<name>/` | `skills install`, `agent init` | your coding agent | A copy of each shipped skill folder. |
+
+Both registries are plain JSON with atomic writes; you can inspect or hand-edit
+them (`mesokit model remove` / `prune` do the deleting for checkpoints).
+Nothing under `data/`, `checkpoints/` or `.mesokit/` should be committed.
+
+A registry entry, for reference:
+
+```json
+{
+  "schema_version": 1,
+  "entries": {
+    "ac_fdr": {
+      "path": "/home/me/mesokit/data/allen_cahn_1d/ac_fdr.h5",
+      "metadata": {
+        "dyn": "allen_cahn_1d",
+        "shape": [10, 101, 1, 256],
+        "data_dtype": "float32",
+        "channel_names": ["u"],
+        "dt": 0.001,
+        "physical": {"Lx": 6.283185307179586, "T": 0.1, "eps": 0.1},
+        "numerical": {"Nx": 256, "dx": 0.02454369260617026, "dt": 4e-05, "T_save_steps": 25, "Nk": 3, "max_k": 10, "dealias": 2},
+        "provenance": {"seed": 0, "u_bound": 10.0}
+      }
+    }
+  }
+}
+```

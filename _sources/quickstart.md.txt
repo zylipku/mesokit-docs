@@ -159,7 +159,7 @@ conversion needs up front — file writes in the working directory (and in
 the output's directory), Python and the `mesokit` command, read access to
 the input's directory — and prints the command line it launches. The
 exact grants per agent are in the
-[Command-Line Reference](cli.md) under `mesokit data parse`.
+[Command-Line Reference](cli/data.md) under `mesokit data parse`.
 
 The same skill, plus five more for training and extending, can be used
 conversationally in your agent; see [Agent Skills](skills.md).

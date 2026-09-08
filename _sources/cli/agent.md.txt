@@ -1,0 +1,53 @@
+# `mesokit agent`
+
+Set up a coding agent (Claude Code, Codex CLI) for a project that uses
+mesokit as an installed package. `mesokit skills install` gives the agent
+the procedures; `agent init` gives it the project conventions — an
+`AGENTS.md` saying where the registries and outputs live, that the
+project's own code goes in `plugins/`, to start from smoke-sized settings,
+and which skill does what — and installs the skills in the same step.
+
+```sh
+mesokit agent init [--dir PATH] [--agent claude|codex|both] [--no-skills] [--force]
+```
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--dir PATH` | `.` | Project root to write into. |
+| `--agent` | `claude` | Whose project skill folder to fill: `claude` (`.claude/skills/`), `codex` (`.agents/skills/`) or `both`. `AGENTS.md` and `CLAUDE.md` are written regardless. |
+| `--skills` / `--no-skills` | on | Also copy the shipped skills, as `mesokit skills install` would. |
+| `--force` | off | Rewrite an existing mesokit section and replace installed skill folders (how to refresh after upgrading mesokit). |
+
+What it writes:
+
+- `AGENTS.md` — the mesokit section between `<!-- mesokit:begin -->` and
+  `<!-- mesokit:end -->` markers. A new file holds only that section; an
+  existing file gets it appended, and nothing outside the markers is ever
+  changed. Codex reads this file directly.
+- `CLAUDE.md` — a one-line `@AGENTS.md` import so Claude Code reads the
+  same text; an existing `CLAUDE.md` only gains the import line if it is
+  missing.
+- `.claude/skills/<name>/` and / or `.agents/skills/<name>/` — the skills,
+  skipping folders that already exist unless `--force`.
+
+```sh
+cd my-project
+mesokit agent init
+```
+
+```text
+created   /home/me/my-project/AGENTS.md
+created   /home/me/my-project/CLAUDE.md
+skills    6 installed, 0 kept -> /home/me/my-project/.claude/skills
+start your agent in /home/me/my-project and describe the task; re-run with --force after upgrading mesokit
+```
+
+A second run without `--force` is refused rather than duplicating the
+section:
+
+```text
+Invalid value: /home/me/my-project/AGENTS.md already has a mesokit section; pass --force to rewrite it
+```
+
+Inside the mesokit checkout the command is not needed: the repository's
+own `AGENTS.md` covers both using and developing the toolkit.

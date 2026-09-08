@@ -71,7 +71,7 @@ In a project of your own, `mesokit agent init` does the whole setup in one
 step: it writes an `AGENTS.md` with the conventions for using mesokit from
 that directory (plus a `CLAUDE.md` import shim so Claude Code reads the
 same text) and installs the skills — see `mesokit agent` in the
-[Command-Line Reference](cli.md). The commands below install the skills
+[Command-Line Reference](cli/agent.md). The commands below install the skills
 alone.
 
 Inside the mesokit checkout, Claude Code already sees the skills
@@ -125,7 +125,7 @@ worker mode; the others are interactive by nature. Because a worker cannot
 answer permission prompts, `parse` grants what the conversion needs on the
 agent's command line (writes in your project directory, Python and
 `mesokit`) and prints that command line. The options and the exact grants
-are in the [Command-Line Reference](cli.md) under `mesokit data parse`.
+are in the [Command-Line Reference](cli/data.md) under `mesokit data parse`.
 
 ## What to expect
 

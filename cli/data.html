@@ -1,0 +1,1046 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="mesokit train" href="train.html"><link rel="prev" title="Command-Line Reference" href="../cli.html">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>mesokit data - mesokit</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">mesokit</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">mesokit</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../data_processing.html">Data Processing</a><input aria-label="Toggle navigation of Data Processing" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../data_processing/structure.html">Data Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_processing/predefined.html">Predefined Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_processing/custom.html">Custom Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_processing/custom_simulator.html">Custom Simulators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_processing/examples.html">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_processing/versioning.html">Versioning and Compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../models.html">Models</a><input aria-label="Toggle navigation of Models" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../models/spectral_onsagernet.html">Spectral OnsagerNet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/onsagernet.html">OnsagerNet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/fno.html">Fourier Neural Operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/custom_model.html">Custom Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../training.html">Training</a><input aria-label="Toggle navigation of Training" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../training/recipes.html">Training Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../training/training_views.html">Training Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../training/lit_trainer.html">LitTrainer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../training/custom_trainer.html">Custom Trainers</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../interpretability.html">Interpretability</a><input aria-label="Toggle navigation of Interpretability" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interpretability/potential.html">The Potential Artifact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interpretability/custom_artifact.html">Custom Artifacts</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../cli.html">Command-Line Reference</a><input aria-label="Toggle navigation of Command-Line Reference" checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="train.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sweep.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files.html">Files the CLI Reads and Writes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_equivalents.html">Python Equivalents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../skills.html">Agent Skills</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit</span></code></a><input aria-label="Toggle navigation of mesokit" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills</span></code></a><input aria-label="Toggle navigation of mesokit.skills" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.skills.mesokit_add_simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_simulator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.skills.mesokit_convert_data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_convert_data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.skills.mesokit_add_artifact.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_artifact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.skills.mesokit_train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_train</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.skills.mesokit_add_model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.skills.mesokit_add_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.skills.mesokit_add_trainer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.trainers.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers</span></code></a><input aria-label="Toggle navigation of mesokit.trainers" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.trainers.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer</span></code></a><input aria-label="Toggle navigation of mesokit.trainers.lit_trainer" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.trainers.lit_trainer.lit_trainer.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer.lit_trainer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.lit_trainer._lit_module</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.trainers.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.trainers.trainer_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.trainers.trainer_base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data</span></code></a><input aria-label="Toggle navigation of mesokit.data" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.peridynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics</span></code></a><input aria-label="Toggle navigation of mesokit.data.peridynamics" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.peridynamics.peridynamics_fracture_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.peridynamics.peridynamics_fracture_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets</span></code></a><input aria-label="Toggle navigation of mesokit.data.datasets" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.lookback_window_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.lookback_window_dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets._channels.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets._channels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.datasets.snapshot_pair_dataset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.datasets.snapshot_pair_dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.llg.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg</span></code></a><input aria-label="Toggle navigation of mesokit.data.llg" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.llg.llg_lattice_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.llg.llg_lattice_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.kdv.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv</span></code></a><input aria-label="Toggle navigation of mesokit.data.kdv" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.kdv.kdv_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.kdv.kdv_1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn</span></code></a><input aria-label="Toggle navigation of mesokit.data.allen_cahn" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.allen_cahn.allen_cahn_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn.allen_cahn_2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.allen_cahn.allen_cahn_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.allen_cahn.allen_cahn_1d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.cahn_hilliard.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard</span></code></a><input aria-label="Toggle navigation of mesokit.data.cahn_hilliard" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.cahn_hilliard.cahn_hilliard_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.cahn_hilliard.cahn_hilliard_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.ising.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising</span></code></a><input aria-label="Toggle navigation of mesokit.data.ising" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.ising.ising_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.ising.ising_2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.simulator_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.simulator_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._optional.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._optional</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.demo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.demo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.trajectory.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.trajectory</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._hdf5.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._hdf5</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data._progress.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data._progress</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.validate.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.validate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.data.format.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.data.format</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils</span></code></a><input aria-label="Toggle navigation of mesokit.utils" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.utils.mlp.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.mlp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.utils.activation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.utils.activation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.tutorial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.tutorial.training.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.training" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.tutorial.training.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.training.train</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.tutorial.viz.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz</span></code></a><input aria-label="Toggle navigation of mesokit.tutorial.viz" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.tutorial.viz.plots.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.tutorial.viz.plots</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret</span></code></a><input aria-label="Toggle navigation of mesokit.interpret" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.interpret.plotter.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.plotter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.interpret.compare.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.compare</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.interpret.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.interpret.base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models</span></code></a><input aria-label="Toggle navigation of mesokit.models" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.deeponet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.deeponet</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.onsagernet" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.onsagernet.onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.onsagernet.onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.onsagernet.onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.onsagernet.onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.onsagernet_3d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.onsagernet.components.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.onsagernet.components</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.sindy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.sindy</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential</span></code></a><input aria-label="Toggle navigation of mesokit.models.spectral_onsagernet.potential" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.polynomial.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.polynomial</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.coercive_autograd.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.coercive_autograd</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.allen_cahn.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.allen_cahn</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.spectral_onsagernet.potential.base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.potential.base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.artifacts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_2d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.spectral_onsagernet.spectral_onsagernet_3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.spectral_onsagernet.spectral_onsagernet_3d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.fno.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno</span></code></a><input aria-label="Toggle navigation of mesokit.models.fno" class="toctree-checkbox" id="toctree-checkbox-27" name="toctree-checkbox-27" role="switch" type="checkbox"/><label for="toctree-checkbox-27"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.fno.fno3d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno3d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.fno.fno1d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno1d</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.fno.fno_dynamics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno_dynamics</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.fno.artifacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.artifacts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.fno.fno2d.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.fno.fno2d</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.models._spectral.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models._spectral</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.registry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.registry</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.models.dynamics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.models.dynamics_base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli</span></code></a><input aria-label="Toggle navigation of mesokit.cli" class="toctree-checkbox" id="toctree-checkbox-28" name="toctree-checkbox-28" role="switch" type="checkbox"/><label for="toctree-checkbox-28"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.train.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.train</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._agent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.interpret.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.interpret</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.skills.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.skills</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._plugins.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._plugins</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.model.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._recipes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._recipes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.data.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.sweep.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.sweep</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._runs.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._runs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.agent.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.agent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._registry_store.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._registry_store</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli._report.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli._report</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../apidocs/mesokit/mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/cli/data.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="mesokit-data">
+<h1><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span></code><a class="headerlink" href="#mesokit-data" title="Link to this heading">¶</a></h1>
+<p>Produce or catalog trajectory datasets. The on-disk contract every
+subcommand reads or writes is the v1 HDF5 cache described in
+<a class="reference internal" href="../data_processing.html"><span class="std std-doc">Data Processing</span></a>. <code class="docutils literal notranslate"><span class="pre">generate</span></code>, <code class="docutils literal notranslate"><span class="pre">register</span></code>, <code class="docutils literal notranslate"><span class="pre">validate</span></code>
+and <code class="docutils literal notranslate"><span class="pre">parse</span></code> all answer the same question about the file they touched — what
+is in it, and does it conform — so they all print the same block: one header
+line naming what the command did, then an aligned <code class="docutils literal notranslate"><span class="pre">label:</span> <span class="pre">value</span></code> list whose
+first row is the sanity-check verdict. All four take <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> / <code class="docutils literal notranslate"><span class="pre">-v</span></code>,
+which adds the resolved path, the <code class="docutils literal notranslate"><span class="pre">times</span></code> dtype and the three metadata
+groups. <code class="docutils literal notranslate"><span class="pre">demo</span></code> is the odd one
+out: it writes a file that deliberately does <em>not</em> conform, to practise
+<code class="docutils literal notranslate"><span class="pre">parse</span></code> on.</p>
+<section id="mesokit-data-avail">
+<h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">avail</span></code><a class="headerlink" href="#mesokit-data-avail" title="Link to this heading">¶</a></h2>
+<p>List the predefined simulator recipes compiled into the package (alias:
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">available</span></code>). This is the catalog of what <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> can
+run, independent of what has been generated on this machine.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>DYN                       SIMULATOR
+allen_cahn_1d             mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d
+cahn_hilliard_2d          mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
+ising_2d                  mesokit.data.ising.ising_2d.simulate_ising_2d
+kdv_1d                    mesokit.data.kdv.kdv_1d.simulate_kdv_1d
+llg_lattice_2d            mesokit.data.llg.llg_lattice_2d.simulate_llg_lattice_2d
+peridynamics_fracture_2d  mesokit.data.peridynamics.peridynamics_fracture_2d.simulate_peridynamics_fracture_2d
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">SIMULATOR</span></code> column is the Python callable each recipe dispatches to; the
+physics, numerical scheme and parameters of every entry are documented in
+<a class="reference internal" href="../data_processing/predefined.html"><span class="std std-doc">Predefined Datasets</span></a>.</p>
+</section>
+<section id="mesokit-data-list">
+<h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">list</span></code><a class="headerlink" href="#mesokit-data-list" title="Link to this heading">¶</a></h2>
+<p>List the datasets registered in <code class="docutils literal notranslate"><span class="pre">.mesokit/datasets.json</span></code>, grouped by
+dynamics. A dataset whose <code class="docutils literal notranslate"><span class="pre">dyn</span></code> attribute matches a predefined simulator is
+listed under that name; anything else lands in a trailing <code class="docutils literal notranslate"><span class="pre">custom:</span></code> group.
+The second column says whether the file still exists (<code class="docutils literal notranslate"><span class="pre">yes</span></code>) or the registry
+points at something that has been moved or deleted (<code class="docutils literal notranslate"><span class="pre">MISSING</span></code>).</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>list
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>allen_cahn_1d:
+  allen_cahn_1d_v0  yes  /home/me/mesokit/data/allen_cahn_1d/allen_cahn_1d_v0.h5
+  ac_eps05          yes  /home/me/mesokit/data/allen_cahn_1d/ac_eps05.h5
+
+kdv_1d:
+  kdv_1d_v0         yes  /home/me/mesokit/data/kdv_1d/kdv_1d_v0.h5
+
+custom:
+  md_slab           MISSING  /scratch/md/slab_density.h5
+</pre></div>
+</div>
+<p>With nothing registered it prints <code class="docutils literal notranslate"><span class="pre">(no</span> <span class="pre">datasets)</span></code>.</p>
+</section>
+<section id="mesokit-data-generate">
+<h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code><a class="headerlink" href="#mesokit-data-generate" title="Link to this heading">¶</a></h2>
+<p>Run a predefined simulator from a recipe, write the trajectories to HDF5,
+validate the file and register it.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>DYN<span class="w"> </span><span class="o">[</span>--config<span class="w"> </span>STEM<span class="o">]</span><span class="w"> </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="w"> </span><span class="p">|</span><span class="w"> </span>--no-registry<span class="o">]</span>
+<span class="w">                      </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span><span class="w"> </span><span class="o">[</span>--set<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="w"> </span>...<span class="o">]</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dyn</span> <span class="pre">DYN</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Predefined dynamics name (one of <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">avail</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">STEM|PATH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">default</span></code></p></td>
+<td><p>Recipe <code class="docutils literal notranslate"><span class="pre">configs/data/DYN/STEM.yaml</span></code> (working directory, then the installed package), or a path to any YAML file.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">NAME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DYN_v&lt;n&gt;</span></code></p></td>
+<td><p>Registry name for the result. A name that is already registered is refused before the solver runs, unless <code class="docutils literal notranslate"><span class="pre">--force</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--no-registry</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Write the file but do not register it. Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">--name</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">PATH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data/DYN/&lt;name&gt;.h5</span></code></p></td>
+<td><p>Where to write the HDF5 file. Parent directories are created. An existing file is replaced, with a warning on stderr; a directory is refused.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Replace an existing registry entry of the same name. It says nothing about the file on disk, which is replaced either way.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code>, <code class="docutils literal notranslate"><span class="pre">-v</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Leave the solver’s own log in place, report progress as plain lines that survive a pipe, print the full metadata, and show the traceback if the simulator fails.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--set</span> <span class="pre">KEY=VALUE</span></code></p></td>
+<td><p>none</p></td>
+<td><p>Override one recipe key for this run; repeatable. <code class="docutils literal notranslate"><span class="pre">KEY</span></code> must be a keyword argument of the simulator; <code class="docutils literal notranslate"><span class="pre">VALUE</span></code> is read as int, float, bool (<code class="docutils literal notranslate"><span class="pre">true</span></code> / <code class="docutils literal notranslate"><span class="pre">false</span></code>) or string, in that order.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>What happens, in order: the recipe is loaded with Hydra, the <code class="docutils literal notranslate"><span class="pre">--set</span></code>
+overrides are merged on top (an unknown key is rejected before anything
+runs), the registry name and the output path are checked (a taken name is
+refused, a directory is refused, an existing file warned about) so that a
+long solve cannot be spent on a run that cannot be recorded and cannot
+silently clobber a file, and the
+result is instantiated (every key in the YAML is a keyword argument of the
+simulator, and <code class="docutils literal notranslate"><span class="pre">verbose</span></code> is forwarded); the returned <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code> is
+saved; the saved file is run through the same validator as <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">register</span></code>;
+on success the registry entry is written and the summary is printed.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_smoke
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>wrote data/allen_cahn_1d/ac_smoke.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  registry:   ac_smoke
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dt</span></code> is the one step of a uniform time grid, or <code class="docutils literal notranslate"><span class="pre">non-uniform</span></code> when the
+saved times do not sit on one to within the v1 tolerance — as here, where
+101 <code class="docutils literal notranslate"><span class="pre">float32</span></code> times a millisecond apart drift in the seventh digit. It is a
+statement about the file, not a fault; models read <code class="docutils literal notranslate"><span class="pre">times</span></code> itself.</p>
+<p><code class="docutils literal notranslate"><span class="pre">-v</span></code> keeps Dedalus’s per-step log and reports progress as one line per ten
+percent of the run. Both go to stderr — mesokit points the solver’s own log
+handler there — so the block below is still all of stdout, and the two
+streams stay separable in a log. It adds the rest of what the validator
+inferred:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_smoke<span class="w"> </span>--force<span class="w"> </span>-v
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>wrote data/allen_cahn_1d/ac_smoke.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  registry:   ac_smoke
+  path:       /home/me/project/data/allen_cahn_1d/ac_smoke.h5
+  times:      float32
+  physical:   Lx=6.283185307179586  T=0.1  eps=0.1
+  numerical:  Nk=3  Nx=256  T_save_steps=25  dealias=2  dt=4e-05  dx=0.02454369260617026  max_k=10
+  provenance: seed=0  u_bound=10.0
+</pre></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">--no-registry</span></code> nothing is validated, because that would mean reading
+the whole <code class="docutils literal notranslate"><span class="pre">data</span></code> array back for six printed lines; the block says so and
+names the command that does check it. Here on a second run onto the same
+<code class="docutils literal notranslate"><span class="pre">--output</span></code>, so the overwrite warning is there too:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>warning: overwriting data/scratch.h5 (pass --output to write elsewhere)
+wrote data/scratch.h5 (1019.3 KiB)
+  check:      not run
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  registry:   not registered (--no-registry)
+run `mesokit data validate data/scratch.h5` to check the file against the v1 contract.
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">warning:</span></code> line goes to stderr, before the simulator starts. Overwriting
+is allowed — sweeps and re-runs depend on it — so this is a warning, not the
+refusal <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">parse</span></code> makes.</p>
+<p>More examples:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># The reference dataset, auto-named allen_cahn_1d_v0 (then _v1, _v2, … on repeats).</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d
+
+<span class="c1"># A variant recipe: configs/data/ising_2d/kac.yaml (Kac interaction).</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--config<span class="w"> </span>kac<span class="w"> </span>--name<span class="w"> </span>ising_kac_T07
+
+<span class="c1"># Write somewhere else and keep it out of the registry (scratch experiments).</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>cahn_hilliard_2d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--output<span class="w"> </span>/tmp/ch_test.h5<span class="w"> </span>--no-registry
+
+<span class="c1"># Re-run a recipe you changed and replace the previous entry of the same name.</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span>--name<span class="w"> </span>kdv_long<span class="w"> </span>--force
+
+<span class="c1"># Watch Dedalus&#39;s per-step log, and print the full metadata at the end.</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>-v
+
+<span class="c1"># One-off parameter change without a new recipe file.</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--set<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05<span class="w"> </span>--set<span class="w"> </span><span class="nv">seed</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>--name<span class="w"> </span>ac_eps0.05_s1
+</pre></div>
+</div>
+<p>To change parameters for good, add a sibling YAML under <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/</span></code>
+(copy <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code>, edit, pick it with <code class="docutils literal notranslate"><span class="pre">--config</span></code>); for a one-off run use
+<code class="docutils literal notranslate"><span class="pre">--set</span></code>, and for a whole grid of values use <a class="reference internal" href="sweep.html#mesokit-sweep"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code></span></a>.
+Every predefined recipe also ships <code class="docutils literal notranslate"><span class="pre">fdr.yaml</span></code>, a seconds-long “fast dev run”
+for trying the pipeline.
+Some recipes are heavy — the default <code class="docutils literal notranslate"><span class="pre">cahn_hilliard_2d</span></code> takes about ten
+minutes and <code class="docutils literal notranslate"><span class="pre">peridynamics_fracture_2d</span></code> about twenty-five; the per-dataset
+sections of <a class="reference internal" href="../data_processing/predefined.html"><span class="std std-doc">Predefined Datasets</span></a> give sizes
+and timings.</p>
+<p>Errors you may see:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invalid value: config dir not found: /home/me/mesokit/configs/data/nope
+Invalid value: no config &#39;nope&#39; under /home/me/mesokit/configs/data/allen_cahn_1d; available: default, fdr
+Invalid value: --name and --no-registry are mutually exclusive
+Invalid value: dataset &#39;ac_smoke&#39; already registered; pass --force to overwrite
+Invalid value: expected KEY=VALUE, got &#39;eps&#39;
+Invalid value: unknown parameter &#39;epsilon&#39; for simulator mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d; accepted: eps, n_traj, Nx, Lx, T, T_save_steps, timestep, Nk, max_k, u_bound, dealias, seed, verbose
+Invalid value: output data is a directory; pass --output with a file path
+Invalid value: cahn_hilliard_2d: round(T/dt)=10 must be a positive multiple of save_every=20
+</pre></div>
+</div>
+<p>The first one also appears when you run from the wrong directory: recipes
+are looked up in <code class="docutils literal notranslate"><span class="pre">./configs/data/</span></code>, not inside the package.</p>
+<p>The last one is the simulator itself rejecting the parameters it was given,
+prefixed with the <code class="docutils literal notranslate"><span class="pre">dyn</span></code> it came from; a <code class="docutils literal notranslate"><span class="pre">--set</span></code> that a recipe accepts but the
+solver cannot honour surfaces here rather than as a Hydra traceback, and the
+message ends with <code class="docutils literal notranslate"><span class="pre">re-run</span> <span class="pre">with</span> <span class="pre">-v</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">traceback</span></code>. Only exceptions raised
+inside the simulator are summarised this way: a failure of the registry, the
+writer or mesokit itself keeps its stack rather than being reported as your
+parameters being wrong.</p>
+</section>
+<section id="mesokit-data-register">
+<h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code><a class="headerlink" href="#mesokit-data-register" title="Link to this heading">¶</a></h2>
+<p>Validate an HDF5 file you produced yourself against the v1 cache contract
+and register it under a name.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>NAME<span class="w"> </span>--file<span class="w"> </span>FILE.h5<span class="w"> </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">NAME</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Registry name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--file</span> <span class="pre">FILE</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Existing HDF5 file; the absolute path is stored.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Replace an existing entry of the same name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code>, <code class="docutils literal notranslate"><span class="pre">-v</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Also print the file path, the <code class="docutils literal notranslate"><span class="pre">times</span></code> dtype and the three metadata groups.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The validator checks the closed set of root attributes, the <code class="docutils literal notranslate"><span class="pre">data</span></code> /
+<code class="docutils literal notranslate"><span class="pre">times</span></code> datasets and their shapes and dtypes, finiteness, monotone times,
+the three metadata groups and the optional <code class="docutils literal notranslate"><span class="pre">channel_names</span></code>. Its verdict is
+the <code class="docutils literal notranslate"><span class="pre">check:</span></code> row: <code class="docutils literal notranslate"><span class="pre">passed</span></code> (in green on a terminal) naming the contract the
+file was checked against, and nothing is registered unless it says so.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>ac_scratch<span class="w"> </span>--file<span class="w"> </span>data/scratch.h5
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;ac_scratch&#39; -&gt; /home/me/project/data/scratch.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+</pre></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">-v</span></code> the same call adds what the validator read out of the file:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;ac_scratch&#39; -&gt; /home/me/project/data/scratch.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+  path:       /home/me/project/data/scratch.h5
+  times:      float32
+  physical:   Lx=6.283185307179586  T=0.1  eps=0.1
+  numerical:  Nk=3  Nx=256  T_save_steps=25  dealias=2  dt=4e-05  dx=0.02454369260617026  max_k=10
+  provenance: seed=0  u_bound=10.0
+</pre></div>
+</div>
+<p>A file that is not a v1 cache fails on stderr, in red, with status <code class="docutils literal notranslate"><span class="pre">2</span></code> — the
+verdict first, then every failing check, then the reason nothing was written:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>sanity check FAILED: /home/me/project/data/demo/allen_cahn_1d_demo.npz
+  cannot open /home/me/project/data/demo/allen_cahn_1d_demo.npz as HDF5: Unable to synchronously open file (file signature not found)
+Invalid value: sanity check failed for /home/me/project/data/demo/allen_cahn_1d_demo.npz; not registered
+</pre></div>
+</div>
+<p>Writing a conforming file is a few lines of <code class="docutils literal notranslate"><span class="pre">h5py</span></code>; see
+<a class="reference internal" href="../data_processing/custom.html"><span class="std std-doc">Custom Datasets</span></a>. To check a file without
+registering it, use <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">validate</span></code> below (or the Python helper
+<code class="docutils literal notranslate"><span class="pre">mesokit.data.validate(path)</span></code>).</p>
+</section>
+<section id="mesokit-data-validate">
+<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">validate</span></code><a class="headerlink" href="#mesokit-data-validate" title="Link to this heading">¶</a></h2>
+<p>Check a file against the v1 contract and print the inferred metadata,
+without touching the registry. <code class="docutils literal notranslate"><span class="pre">register</span></code> runs the same check before it
+writes an entry, and the agent behind <code class="docutils literal notranslate"><span class="pre">parse</span></code> runs it on its own output.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>validate<span class="w"> </span>FILE<span class="w"> </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>validated /home/me/project/data/scratch.h5 (1019.3 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
+  dt:         non-uniform
+  channels:   u
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">-v</span></code> adds the <code class="docutils literal notranslate"><span class="pre">path</span></code>, <code class="docutils literal notranslate"><span class="pre">times</span></code>, <code class="docutils literal notranslate"><span class="pre">physical</span></code>, <code class="docutils literal notranslate"><span class="pre">numerical</span></code> and <code class="docutils literal notranslate"><span class="pre">provenance</span></code> rows
+shown under <code class="docutils literal notranslate"><span class="pre">register</span></code> above.</p>
+<p>A non-conforming file names every failing check and exits with status <code class="docutils literal notranslate"><span class="pre">2</span></code>.
+For the HDF5 form of the practice file <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code> writes, that is:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>sanity check FAILED: /home/me/project/data/demo/allen_cahn_1d_demo.h5
+  missing required root attribute &#39;format&#39;
+  missing required root attribute &#39;version&#39;
+  missing required root attribute &#39;dyn&#39;
+  missing required root attribute &#39;data_dtype&#39;
+  missing required dataset &#39;data&#39;
+  missing required dataset &#39;times&#39;
+  missing required metadata group &#39;physical&#39;
+  missing required metadata group &#39;numerical&#39;
+  missing required metadata group &#39;provenance&#39;
+Invalid value: validation failed for /home/me/project/data/demo/allen_cahn_1d_demo.h5
+</pre></div>
+</div>
+</section>
+<section id="mesokit-data-demo">
+<span id="id2"></span><h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code><a class="headerlink" href="#mesokit-data-demo" title="Link to this heading">¶</a></h2>
+<p>Write a small, deliberately non-conforming dataset to practise
+<a class="reference internal" href="#mesokit-data-parse"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code></a> on, so you can see the
+conversion work without one of your own files.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo<span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--format<span class="w"> </span>npz<span class="p">|</span>h5<span class="o">]</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">PATH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data/demo/allen_cahn_1d_demo.&lt;format&gt;</span></code></p></td>
+<td><p>Where to write the file. Parent directories are created; an existing file is replaced with a warning.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--format</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">npz</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">npz</span></code> for a NumPy archive (not HDF5 at all, so <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">validate</span></code> cannot even open it), <code class="docutils literal notranslate"><span class="pre">h5</span></code> for an HDF5 file that opens but is not a v1 cache, so the validator can list what it is missing.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The file holds a real 1-D Allen-Cahn run — four trajectories, 51 frames, 128
+grid points, plain NumPy, fixed seed, no solver back-end — stored the way an
+outside code would leave it: axes in the order <code class="docutils literal notranslate"><span class="pre">(frame,</span> <span class="pre">x,</span> <span class="pre">run)</span></code> with no
+channel axis, integer frame indices instead of times, and flat scalars
+instead of the three metadata groups. Every fact the v1 cache needs is in the
+file; none of it is where the schema wants it. The content is a fixed-seed
+constant, so re-running writes the same arrays.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>wrote data/demo/allen_cahn_1d_demo.npz (npz, 208.5 KiB)
+  u            float64  (51, 128, 4)   field, axes (frame, x, run)
+  x            float64  (128,)         grid coordinates
+  frame_steps  int64    (51,)          solver iteration of each frame
+  dt=0.001 eps=0.15 Lx=6.283185307179586 seed=0
+not a v1 cache file: no root attributes, no &#39;times&#39;, no metadata groups.
+convert it with an agent:
+  mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
+</pre></div>
+</div>
+<p>Two strings the block does not print are in the file as well: <code class="docutils literal notranslate"><span class="pre">equation</span></code>
+(<code class="docutils literal notranslate"><span class="pre">u_t</span> <span class="pre">=</span> <span class="pre">u_xx</span> <span class="pre">+</span> <span class="pre">(u</span> <span class="pre">-</span> <span class="pre">u**3)</span> <span class="pre">/</span> <span class="pre">eps**2,</span> <span class="pre">periodic</span> <span class="pre">in</span> <span class="pre">x</span></code>) and <code class="docutils literal notranslate"><span class="pre">notes</span></code>, which spells
+out that frame times are <code class="docutils literal notranslate"><span class="pre">frame_steps</span> <span class="pre">*</span> <span class="pre">dt</span></code> — the one fact the arrays alone
+do not give away.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">h5</span></code> writes the same run into an HDF5 container and adds a line
+pointing at <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">validate</span></code>, which then names all nine violations
+(the block is under <a class="reference internal" href="#mesokit-data-validate"><code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">validate</span></code></a> above).</p>
+<p>Errors: <code class="docutils literal notranslate"><span class="pre">unknown</span> <span class="pre">format</span> <span class="pre">'nc';</span> <span class="pre">available:</span> <span class="pre">npz,</span> <span class="pre">h5</span></code>, and the same
+<code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">…</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">directory</span></code> refusal <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> makes.</p>
+</section>
+<section id="mesokit-data-parse">
+<span id="id3"></span><h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code><a class="headerlink" href="#mesokit-data-parse" title="Link to this heading">¶</a></h2>
+<p>Hand an arbitrary dataset to a coding agent installed on your machine, let
+it convert the file with the <code class="docutils literal notranslate"><span class="pre">mesokit-convert-data</span></code> skill shipped in the
+package, then validate (and optionally register) the result. The skill
+itself, and the five others that cover training and extending, are
+described in <a class="reference internal" href="../skills.html"><span class="std std-doc">Agent Skills</span></a>; <a class="reference internal" href="skills.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></span></a>
+installs them into an agent for conversational use.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>FILE<span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--hint<span class="w"> </span>TEXT<span class="o">]</span>
+<span class="w">                   </span><span class="o">[</span>--agent<span class="w"> </span>claude<span class="p">|</span>codex<span class="o">]</span><span class="w"> </span><span class="o">[</span>--backend<span class="w"> </span>foreground<span class="p">|</span>tmux<span class="o">]</span>
+<span class="w">                   </span><span class="o">[</span>--agent-args<span class="w"> </span><span class="s2">&quot;FLAGS&quot;</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
+</pre></div>
+</div>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--file</span> <span class="pre">FILE</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Input in any format (<code class="docutils literal notranslate"><span class="pre">.npz</span></code>, <code class="docutils literal notranslate"><span class="pre">.npy</span></code>, <code class="docutils literal notranslate"><span class="pre">.nc</span></code>, <code class="docutils literal notranslate"><span class="pre">.pt</span></code>, non-conforming <code class="docutils literal notranslate"><span class="pre">.h5</span></code>, …). It may live outside the working directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">PATH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data/parsed/&lt;stem&gt;.h5</span></code></p></td>
+<td><p>Where the agent must write the v1 file. Must not exist yet, unless <code class="docutils literal notranslate"><span class="pre">--force</span></code> is given.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--hint</span> <span class="pre">TEXT</span></code></p></td>
+<td><p>none</p></td>
+<td><p>Free-form instructions appended to the agent’s prompt (axis names, units, which variable is the field, …).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--agent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">claude</span></code></p></td>
+<td><p>Agent CLI: <code class="docutils literal notranslate"><span class="pre">claude</span></code> (runs <code class="docutils literal notranslate"><span class="pre">claude</span> <span class="pre">-p</span> <span class="pre">…</span></code>) or <code class="docutils literal notranslate"><span class="pre">codex</span></code> (runs <code class="docutils literal notranslate"><span class="pre">codex</span> <span class="pre">exec</span> <span class="pre">…</span></code>). Checked first: if the command is not installed, <code class="docutils literal notranslate"><span class="pre">parse</span></code> stops and prints the official installation guide to follow.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--backend</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">foreground</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">foreground</span></code> blocks and streams the agent’s output; <code class="docutils literal notranslate"><span class="pre">tmux</span></code> detaches into a session.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--agent-args</span> <span class="pre">&quot;FLAGS&quot;</span></code></p></td>
+<td><p>none</p></td>
+<td><p>Extra flags for the agent command, split like a shell and appended after the built-in ones: <code class="docutils literal notranslate"><span class="pre">&quot;--model</span> <span class="pre">opus&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;--allowedTools</span> <span class="pre">Bash(uv</span> <span class="pre">run:*)&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;-c</span> <span class="pre">model=o3&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">NAME</span></code></p></td>
+<td><p>none</p></td>
+<td><p>Register the produced file under this name on success. Without it the file is only validated.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
+<td><p>off</p></td>
+<td><p>Replace an existing output file, and an existing registry entry of the same name.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Before anything is created or launched, the command checks that the
+agent’s CLI (<code class="docutils literal notranslate"><span class="pre">claude</span></code> or <code class="docutils literal notranslate"><span class="pre">codex</span></code>) is installed in the shell it runs in. If
+it is not, it exits at once and names the official installation guide:
+<a class="reference external" href="https://code.claude.com/docs/en/setup">Claude Code</a> or the
+<a class="reference external" href="https://developers.openai.com/codex/cli">Codex CLI</a>. Install the agent
+there, confirm <code class="docutils literal notranslate"><span class="pre">claude</span> <span class="pre">--version</span></code> (or <code class="docutils literal notranslate"><span class="pre">codex</span> <span class="pre">--version</span></code>) works, and re-run.</p>
+<p><strong>What the agent may do.</strong> The agent runs non-interactively (<code class="docutils literal notranslate"><span class="pre">claude</span> <span class="pre">-p</span></code>,
+<code class="docutils literal notranslate"><span class="pre">codex</span> <span class="pre">exec</span></code>), so nothing can be approved once it has started: <code class="docutils literal notranslate"><span class="pre">parse</span></code>
+grants what a conversion needs on the command line, no more, and prints
+that command line (the <code class="docutils literal notranslate"><span class="pre">argv</span></code> line below) so the grants are visible. It
+works from any directory, a plain folder that is not a git checkout
+included; the agent’s working directory is the one you run <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> in.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">claude</span></code>: <code class="docutils literal notranslate"><span class="pre">--permission-mode</span> <span class="pre">acceptEdits</span></code>, which auto-approves file
+writes inside the working directory and nothing else; <code class="docutils literal notranslate"><span class="pre">--allowedTools</span></code>
+listing the Bash commands <code class="docutils literal notranslate"><span class="pre">python</span></code>, <code class="docutils literal notranslate"><span class="pre">python3</span></code>, the interpreter <code class="docutils literal notranslate"><span class="pre">mesokit</span></code>
+itself runs in, <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> and <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">run</span></code>; and <code class="docutils literal notranslate"><span class="pre">--add-dir</span></code> for the input’s
+and the output’s directories when they lie outside the working
+directory. Neither <code class="docutils literal notranslate"><span class="pre">--dangerously-skip-permissions</span></code> nor
+<code class="docutils literal notranslate"><span class="pre">bypassPermissions</span></code> is used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">codex</span></code>: the <code class="docutils literal notranslate"><span class="pre">workspace-write</span></code> sandbox (commands may write under the
+working directory and read anywhere; no network), set as
+<code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">sandbox_mode=workspace-write</span></code> so that a <code class="docutils literal notranslate"><span class="pre">--sandbox</span></code> given through
+<code class="docutils literal notranslate"><span class="pre">--agent-args</span></code> overrides it; <code class="docutils literal notranslate"><span class="pre">--add-dir</span></code> for an output directory outside
+the working directory; and <code class="docutils literal notranslate"><span class="pre">--skip-git-repo-check</span></code>.</p></li>
+</ul>
+<p>For both, stdin is closed (<code class="docutils literal notranslate"><span class="pre">/dev/null</span></code>; each CLI would otherwise read a
+piped stdin as more prompt). A different model, a wider allowlist or
+another sandbox go through <code class="docutils literal notranslate"><span class="pre">--agent-args</span></code>, for example
+<code class="docutils literal notranslate"><span class="pre">--agent-args</span> <span class="pre">&quot;--sandbox</span> <span class="pre">danger-full-access&quot;</span></code> on a machine where Codex’s
+bubblewrap sandbox cannot start.</p>
+<p><strong>The prompt.</strong> The skill’s text is embedded in the prompt — nothing
+outside the project has to be readable — together with the input and
+output paths, the interpreter to use (the one <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> runs in, so a
+<code class="docutils literal notranslate"><span class="pre">pipx</span></code> install works too), the self-check
+<code class="docutils literal notranslate"><span class="pre">&lt;python&gt;</span> <span class="pre">-m</span> <span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">validate</span> <span class="pre">&lt;output&gt;</span></code> to repeat until it passes,
+and your <code class="docutils literal notranslate"><span class="pre">--hint</span></code>. The agent is told not to register anything; <code class="docutils literal notranslate"><span class="pre">parse</span></code>
+does that itself on return.</p>
+<p><strong>On return.</strong> In the foreground backend the command returns when the
+agent exits. A non-zero exit, or an output file the agent did not write,
+is an error. A file that already sits at the output path is refused before
+the agent is launched (with <code class="docutils literal notranslate"><span class="pre">--force</span></code> it is removed first), so what gets
+validated is always the agent’s own work.</p>
+<p>If you have no file of your own to hand, <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code> writes one to
+practise on; the run below is exactly that, start to finish:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
+mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>launching agent &#39;claude&#39; via backend &#39;foreground&#39;
+  skill : /home/me/.venv/lib/python3.12/site-packages/mesokit/skills/mesokit_convert_data/SKILL.md (embedded in the prompt)
+  input : /home/me/project/data/demo/allen_cahn_1d_demo.npz
+  output: /home/me/project/data/parsed/allen_cahn_1d_demo.h5
+  argv  : claude -p --permission-mode acceptEdits --allowedTools &#39;Bash(python:*),…&#39; -- &lt;prompt&gt;
+… agent transcript …
+registered &#39;allen_cahn_demo_v0&#39; -&gt; /home/me/project/data/parsed/allen_cahn_1d_demo.h5 (213.7 KiB)
+  check:      passed (mesokit-trajectory v1)
+  dyn:        allen_cahn_1d
+  shape:      4 traj x 51 steps x 1 channel, grid 128 (float64)
+  dt:         0.008
+  channels:   u
+</pre></div>
+</div>
+<p>The agent transposed <code class="docutils literal notranslate"><span class="pre">(frame,</span> <span class="pre">x,</span> <span class="pre">run)</span></code> into <code class="docutils literal notranslate"><span class="pre">(traj,</span> <span class="pre">time,</span> <span class="pre">channel,</span> <span class="pre">x)</span></code>,
+inserted the channel axis, turned <code class="docutils literal notranslate"><span class="pre">frame_steps</span> <span class="pre">*</span> <span class="pre">dt</span></code> into <code class="docutils literal notranslate"><span class="pre">times</span></code>, and split
+the flat scalars across <code class="docutils literal notranslate"><span class="pre">physical</span></code> / <code class="docutils literal notranslate"><span class="pre">numerical</span></code> / <code class="docutils literal notranslate"><span class="pre">provenance</span></code>. The exact
+choices vary between runs; the <code class="docutils literal notranslate"><span class="pre">check:</span></code> row is what says the result conforms.
+Without <code class="docutils literal notranslate"><span class="pre">--name</span></code> the tail reads <code class="docutils literal notranslate"><span class="pre">validated</span> <span class="pre">&lt;path&gt;</span></code> instead, followed by
+<code class="docutils literal notranslate"><span class="pre">pass</span> <span class="pre">--name</span> <span class="pre">to</span> <span class="pre">also</span> <span class="pre">register</span> <span class="pre">this</span> <span class="pre">dataset.</span></code></p>
+<p>Your own file works the same way, with <code class="docutils literal notranslate"><span class="pre">--hint</span></code> carrying whatever the arrays
+do not say for themselves:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>~/runs/burgers.npz<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--hint<span class="w"> </span><span class="s2">&quot;arrays u (traj, time, x) and t; domain is [0, 2π) periodic; call it burgers_1d&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>burgers_v0
+</pre></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">--backend</span> <span class="pre">tmux</span></code> the command returns immediately and tells you how to
+follow up:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>agent launched detached (handle: mesokit-parse-1756800000)
+  attach: tmux attach -t mesokit-parse-1756800000
+when the agent finishes, validate / register with:
+  mesokit data register --name burgers_v0 --file /home/me/mesokit/data/parsed/burgers.h5
+</pre></div>
+</div>
+<p>Errors: <code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">'claude'</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">installed</span></code> (with the official installation
+guide to follow), <code class="docutils literal notranslate"><span class="pre">unknown</span> <span class="pre">agent</span> <span class="pre">'x';</span> <span class="pre">available:</span> <span class="pre">claude,</span> <span class="pre">codex</span></code>, <code class="docutils literal notranslate"><span class="pre">backend</span> <span class="pre">'tmux'</span> <span class="pre">requires</span> <span class="pre">the</span> <span class="pre">tmux</span> <span class="pre">binary</span> <span class="pre">on</span> <span class="pre">PATH</span></code>, <code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">&lt;path&gt;</span> <span class="pre">already</span> <span class="pre">exists;</span> <span class="pre">pass</span> <span class="pre">--force</span> <span class="pre">to</span> <span class="pre">replace</span> <span class="pre">it,</span> <span class="pre">or</span> <span class="pre">--output</span> <span class="pre">for</span> <span class="pre">another</span> <span class="pre">path</span></code>, <code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">exited</span> <span class="pre">with</span> <span class="pre">code</span> <span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">agent</span> <span class="pre">finished</span> <span class="pre">but</span> <span class="pre">&lt;output&gt;</span> <span class="pre">was</span> <span class="pre">not</span> <span class="pre">written</span></code>.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="train.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code></div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../cli.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Command-Line Reference</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Zhuoyuan Li
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit-data-avail"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">avail</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-data-list"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">list</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-data-generate"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-data-register"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-data-validate"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">validate</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-data-demo"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code></a></li>
+<li><a class="reference internal" href="#mesokit-data-parse"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    </body>
+</html>
