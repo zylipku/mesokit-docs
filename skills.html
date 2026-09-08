@@ -365,6 +365,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="apidocs/mesokit/mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -571,8 +572,11 @@ and your file, and validates the result when the agent exits:</p>
 </div>
 <p>The skill detects which mode it is in from the prompt: with a pinned input
 and output path it skips the interview. Only the conversion skill has a
-worker mode; the others are interactive by nature. The options are in the
-<a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a> under <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code>.</p>
+worker mode; the others are interactive by nature. Because a worker cannot
+answer permission prompts, <code class="docutils literal notranslate"><span class="pre">parse</span></code> grants what the conversion needs on the
+agent’s command line (writes in your project directory, Python and
+<code class="docutils literal notranslate"><span class="pre">mesokit</span></code>) and prints that command line. The options and the exact grants
+are in the <a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a> under <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code>.</p>
 </section>
 <section id="what-to-expect">
 <h2>What to expect<a class="headerlink" href="#what-to-expect" title="Link to this heading">¶</a></h2>
@@ -580,7 +584,8 @@ worker mode; the others are interactive by nature. The options are in the
 <li><p><strong>The agent runs real commands.</strong> It will read your files, write under
 <code class="docutils literal notranslate"><span class="pre">data/</span></code>, <code class="docutils literal notranslate"><span class="pre">checkpoints/</span></code>, <code class="docutils literal notranslate"><span class="pre">figs/</span></code>, <code class="docutils literal notranslate"><span class="pre">.mesokit/</span></code> and the <code class="docutils literal notranslate"><span class="pre">configs/</span></code> recipe
 folders, and launch <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> commands — your agent will show its usual
-permission prompts. Nothing it produces there should be committed.</p></li>
+permission prompts (the <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code> worker gets its grants up
+front instead). Nothing it produces there should be committed.</p></li>
 <li><p><strong>Small before large.</strong> Every skill starts with a smoke-sized run (a few
 trajectories, one epoch on CPU) and tells you before something will run
 long or use the GPU.</p></li>

@@ -365,6 +365,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -448,8 +449,8 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_dataset</span></code></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_instantiate_loader</span></code></p></td>
-<td></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_dataloader_config</span></code></p></td>
+<td><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">dataloader</span></code> section over the built-in defaults, with <code class="docutils literal notranslate"><span class="pre">--batch-size</span></code> applied.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_trainer_config</span></code></p></td>
 <td><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">trainer</span></code> section with its <code class="docutils literal notranslate"><span class="pre">_target_</span></code> resolved.</p></td>
@@ -615,10 +616,10 @@
 ```
 ````
 
-````{py:function} _instantiate_loader(cfg: omegaconf.DictConfig, torch_dataset: object, *, batch_size: int | None) -&gt; torch.utils.data.DataLoader
-:canonical: mesokit.cli.train._instantiate_loader
+````{py:function} _dataloader_config(cfg: omegaconf.DictConfig, *, batch_size: int | None) -&gt; omegaconf.DictConfig
+:canonical: mesokit.cli.train._dataloader_config
 
-```{autodoc2-docstring} mesokit.cli.train._instantiate_loader
+```{autodoc2-docstring} mesokit.cli.train._dataloader_config
 ```
 ````
 

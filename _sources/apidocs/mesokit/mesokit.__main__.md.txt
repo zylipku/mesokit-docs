@@ -1,0 +1,8 @@
+# {py:mod}`mesokit.__main__`
+
+```{py:module} mesokit.__main__
+```
+
+```{autodoc2-docstring} mesokit.__main__
+:allowtitles:
+```

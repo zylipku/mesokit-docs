@@ -365,6 +365,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="apidocs/mesokit/mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -542,11 +543,11 @@ end-to-end snippets in <a class="reference internal" href="data_processing/examp
 <p>If your data is in a format that does not already match the cache
 contract (xarray, raw numpy, torch tensors + JSON/YAML metadata, …), you
 can hand the conversion off to an LLM coding agent you already have
-installed. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code> points the agent at the cache-contract
-skill shipped with the package, plus your file, and (optionally) any
-extra hints; on success it validates the produced HDF5 and — when
-<code class="docutils literal notranslate"><span class="pre">--name</span></code> is given — registers it the same way <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code>
-would.</p>
+installed. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code> hands the agent the cache-contract skill
+shipped with the package (embedded in its prompt), your file, and
+(optionally) any extra hints; on success it validates the produced HDF5
+and — when <code class="docutils literal notranslate"><span class="pre">--name</span></code> is given — registers it the same way <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code> would. It works from any directory, including a plain project
+folder that is not a git checkout.</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>path/to/raw_data.nc<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--hint<span class="w"> </span><span class="s2">&quot;time dim is `t`, var is `u`&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--agent<span class="w"> </span>claude<span class="w"> </span><span class="se">\</span>
@@ -564,9 +565,17 @@ stops and points you at the official installation guide
 blocks) or <code class="docutils literal notranslate"><span class="pre">tmux</span></code> (detaches into a session you can attach to later).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--hint</span></code>: free-form prompt fragment appended to the task.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: where to write the converted HDF5; defaults to
-<code class="docutils literal notranslate"><span class="pre">data/parsed/&lt;input_stem&gt;.h5</span></code>.</p></li>
+<code class="docutils literal notranslate"><span class="pre">data/parsed/&lt;input_stem&gt;.h5</span></code>. An existing file there is refused
+unless you pass <code class="docutils literal notranslate"><span class="pre">--force</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code>: register the output under this name on success.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--agent-args</span></code>: extra flags for the agent command (<code class="docutils literal notranslate"><span class="pre">&quot;--model</span> <span class="pre">opus&quot;</span></code>).</p></li>
 </ul>
+<p>The agent runs non-interactively, so <code class="docutils literal notranslate"><span class="pre">parse</span></code> grants the permissions the
+conversion needs up front — file writes in the working directory (and in
+the output’s directory), Python and the <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> command, read access to
+the input’s directory — and prints the command line it launches. The
+exact grants per agent are in the
+<a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a> under <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code>.</p>
 <p>The same skill, plus five more for training and extending, can be used
 conversationally in your agent; see <a class="reference internal" href="skills.html"><span class="std std-doc">Agent Skills</span></a>.</p>
 </section>

@@ -71,7 +71,9 @@ groups are created up-front so even a metadata-light export is conforming.
 
 ## Validating
 
-`mesokit.data.validate(path)` runs the full set of schema checks and
+`mesokit data validate data/my_data.h5` prints the inferred metadata, or
+each failing check with a non-zero exit, without registering anything.
+From Python, `mesokit.data.validate(path)` runs the same checks and
 returns a `ValidationReport`:
 
 ```python

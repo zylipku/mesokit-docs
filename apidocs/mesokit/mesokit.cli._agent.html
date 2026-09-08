@@ -365,6 +365,7 @@
 <li class="toctree-l3"><a class="reference internal" href="mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -413,6 +414,11 @@
 <code class="docutils literal notranslate"><span class="pre">tmux</span></code>) the <code class="docutils literal notranslate"><span class="pre">parse</span></code> command knows how to launch, plus small helpers
 that build the prompt, resolve the shipped skill file by name, and check
 that an agent’s CLI is installed before anything is launched.</p>
+<p>Both agents run non-interactively, so nothing can be approved once they
+start: every permission the conversion needs is granted on the command
+line, and the skill text travels inside the prompt rather than as a path
+the agent would have to be allowed to read. See :data:<code class="docutils literal notranslate"><span class="pre">AGENTS</span></code> for the
+exact grants and why they are what they are.</p>
 <p>Adding a new agent or backend is one entry in :data:<code class="docutils literal notranslate"><span class="pre">AGENTS</span></code> or</p>
 <dl class="myst field-list simple">
 <dt class="field-odd">data<span class="colon">:</span></dt>
@@ -427,13 +433,16 @@ business logic so the CLI command stays the obvious place to read.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-left">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.AgentSpec" title="mesokit.cli._agent.AgentSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AgentSpec</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.Launch" title="mesokit.cli._agent.Launch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Launch</span></code></a></p></td>
+<td><p>What an agent’s argv is built from.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent.AgentSpec" title="mesokit.cli._agent.AgentSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AgentSpec</span></code></a></p></td>
 <td><p>How to invoke a given agent CLI in non-interactive mode.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent.BackendSpec" title="mesokit.cli._agent.BackendSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BackendSpec</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.BackendSpec" title="mesokit.cli._agent.BackendSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BackendSpec</span></code></a></p></td>
 <td><p>How to launch the agent argv inside a chosen workspace.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.BackendResult" title="mesokit.cli._agent.BackendResult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BackendResult</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent.BackendResult" title="mesokit.cli._agent.BackendResult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BackendResult</span></code></a></p></td>
 <td><p>Outcome of a backend run.</p></td>
 </tr>
 </tbody>
@@ -446,10 +455,22 @@ business logic so the CLI command stays the obvious place to read.</p>
 <table class="autosummary longtable docutils align-left">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent._run_foreground" title="mesokit.cli._agent._run_foreground"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_run_foreground</span></code></a></p></td>
-<td><p>Run <code class="docutils literal notranslate"><span class="pre">argv</span></code> synchronously with inherited stdio.</p></td>
+<td><p>Run <code class="docutils literal notranslate"><span class="pre">argv</span></code> synchronously; stdout / stderr stream to the terminal, stdin is <code class="docutils literal notranslate"><span class="pre">/dev/null</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent._run_tmux" title="mesokit.cli._agent._run_tmux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_run_tmux</span></code></a></p></td>
 <td><p>Spawn <code class="docutils literal notranslate"><span class="pre">argv</span></code> inside a detached tmux session and return its name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.tmux_command" title="mesokit.cli._agent.tmux_command"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmux_command</span></code></a></p></td>
+<td><p>The shell line a tmux session runs: <code class="docutils literal notranslate"><span class="pre">argv</span></code> quoted, stdin from <code class="docutils literal notranslate"><span class="pre">/dev/null</span></code> (see above).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent.claude_allowed_tools" title="mesokit.cli._agent.claude_allowed_tools"><code class="xref py py-obj docutils literal notranslate"><span class="pre">claude_allowed_tools</span></code></a></p></td>
+<td><p>Permission rules handed to <code class="docutils literal notranslate"><span class="pre">claude</span> <span class="pre">-p</span></code> (<code class="docutils literal notranslate"><span class="pre">--allowedTools</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent._claude_argv" title="mesokit.cli._agent._claude_argv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_claude_argv</span></code></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent._codex_argv" title="mesokit.cli._agent._codex_argv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_codex_argv</span></code></a></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.installed" title="mesokit.cli._agent.installed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">installed</span></code></a></p></td>
 <td><p>Whether the agent’s CLI (<code class="docutils literal notranslate"><span class="pre">spec.binary</span></code>) resolves on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p></td>
@@ -460,7 +481,16 @@ business logic so the CLI command stays the obvious place to read.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.skill_path" title="mesokit.cli._agent.skill_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skill_path</span></code></a></p></td>
 <td><p>Return the on-disk path to a shipped skill’s <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code> (default: the conversion skill).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent.build_prompt" title="mesokit.cli._agent.build_prompt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_prompt</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent.skill_body" title="mesokit.cli._agent.skill_body"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skill_body</span></code></a></p></td>
+<td><p>The instructions of <code class="docutils literal notranslate"><span class="pre">skill</span></code> without the YAML frontmatter (name, description, allowed-tools).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.outside" title="mesokit.cli._agent.outside"><code class="xref py py-obj docutils literal notranslate"><span class="pre">outside</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">path</span></code>’s directory when it is not under <code class="docutils literal notranslate"><span class="pre">cwd</span></code> (else nothing) — the directories an agent needs granted.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mesokit.cli._agent.parse_extra_args" title="mesokit.cli._agent.parse_extra_args"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_extra_args</span></code></a></p></td>
+<td><p>Split <code class="docutils literal notranslate"><span class="pre">--agent-args</span></code> like a shell would; <code class="docutils literal notranslate"><span class="pre">None</span></code> or blank means no extra flags.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mesokit.cli._agent.build_prompt" title="mesokit.cli._agent.build_prompt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_prompt</span></code></a></p></td>
 <td><p>Compose the prompt handed to the agent.</p></td>
 </tr>
 </tbody>
@@ -494,11 +524,54 @@ business logic so the CLI command stays the obvious place to read.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="mesokit.cli._agent.Launch">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">Launch</span></span><a class="headerlink" href="#mesokit.cli._agent.Launch" title="Link to this definition">¶</a></dt>
+<dd><p>What an agent’s argv is built from.</p>
+<p><code class="docutils literal notranslate"><span class="pre">read_dirs</span></code> are directories outside the working directory the agent
+must be able to read (the input file’s, when it lives elsewhere);
+<code class="docutils literal notranslate"><span class="pre">write_dirs</span></code> the ones it must be able to write (the output’s). Both
+are empty when everything sits under <code class="docutils literal notranslate"><span class="pre">cwd</span></code>. <code class="docutils literal notranslate"><span class="pre">extra_args</span></code> are raw
+flags from <code class="docutils literal notranslate"><span class="pre">--agent-args</span></code>, appended verbatim before the prompt.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.Launch.prompt">
+<span class="sig-name descname"><span class="pre">prompt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.cli._agent.Launch.prompt" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.Launch.cwd">
+<span class="sig-name descname"><span class="pre">cwd</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span><a class="headerlink" href="#mesokit.cli._agent.Launch.cwd" title="Link to this definition">¶</a></dt>
+<dd><p>None</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.Launch.read_dirs">
+<span class="sig-name descname"><span class="pre">read_dirs</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.cli._agent.Launch.read_dirs" title="Link to this definition">¶</a></dt>
+<dd><p>()</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.Launch.write_dirs">
+<span class="sig-name descname"><span class="pre">write_dirs</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.cli._agent.Launch.write_dirs" title="Link to this definition">¶</a></dt>
+<dd><p>()</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mesokit.cli._agent.Launch.extra_args">
+<span class="sig-name descname"><span class="pre">extra_args</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.cli._agent.Launch.extra_args" title="Link to this definition">¶</a></dt>
+<dd><p>()</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="mesokit.cli._agent.AgentSpec">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">AgentSpec</span></span><a class="headerlink" href="#mesokit.cli._agent.AgentSpec" title="Link to this definition">¶</a></dt>
 <dd><p>How to invoke a given agent CLI in non-interactive mode.</p>
 <p><code class="docutils literal notranslate"><span class="pre">label</span></code> is the product name used in messages; <code class="docutils literal notranslate"><span class="pre">install_url</span></code> is its
-official installation guide, shown when <code class="docutils literal notranslate"><span class="pre">binary</span></code> is not on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+official installation guide, shown when <code class="docutils literal notranslate"><span class="pre">binary</span></code> is not on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.
+<code class="docutils literal notranslate"><span class="pre">argv</span></code> turns a :class:<code class="docutils literal notranslate"><span class="pre">Launch</span></code> into the full command line; every
+agent puts the prompt last, after a <code class="docutils literal notranslate"><span class="pre">--</span></code> that ends option parsing.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mesokit.cli._agent.AgentSpec.binary">
 <span class="sig-name descname"><span class="pre">binary</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#mesokit.cli._agent.AgentSpec.binary" title="Link to this definition">¶</a></dt>
@@ -507,7 +580,7 @@ official installation guide, shown when <code class="docutils literal notranslat
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mesokit.cli._agent.AgentSpec.argv">
-<span class="sig-name descname"><span class="pre">argv</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">collections.abc.Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.cli._agent.AgentSpec.argv" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">argv</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">collections.abc.Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#mesokit.cli._agent.Launch" title="mesokit.cli._agent.Launch"><span class="pre">mesokit.cli._agent.Launch</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#mesokit.cli._agent.AgentSpec.argv" title="Link to this definition">¶</a></dt>
 <dd><p>None</p>
 </dd></dl>
 
@@ -574,7 +647,7 @@ a user can re-attach to (e.g. a tmux session name).</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mesokit.cli._agent._run_foreground">
 <span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">_run_foreground</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mesokit.cli._agent.BackendResult" title="mesokit.cli._agent.BackendResult"><span class="pre">mesokit.cli._agent.BackendResult</span></a></span></span><a class="headerlink" href="#mesokit.cli._agent._run_foreground" title="Link to this definition">¶</a></dt>
-<dd><p>Run <code class="docutils literal notranslate"><span class="pre">argv</span></code> synchronously with inherited stdio.</p>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">argv</span></code> synchronously; stdout / stderr stream to the terminal, stdin is <code class="docutils literal notranslate"><span class="pre">/dev/null</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -582,6 +655,37 @@ a user can re-attach to (e.g. a tmux session name).</p>
 <span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">_run_tmux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mesokit.cli._agent.BackendResult" title="mesokit.cli._agent.BackendResult"><span class="pre">mesokit.cli._agent.BackendResult</span></a></span></span><a class="headerlink" href="#mesokit.cli._agent._run_tmux" title="Link to this definition">¶</a></dt>
 <dd><p>Spawn <code class="docutils literal notranslate"><span class="pre">argv</span></code> inside a detached tmux session and return its name.</p>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli._agent.tmux_command">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">tmux_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.cli._agent.tmux_command" title="Link to this definition">¶</a></dt>
+<dd><p>The shell line a tmux session runs: <code class="docutils literal notranslate"><span class="pre">argv</span></code> quoted, stdin from <code class="docutils literal notranslate"><span class="pre">/dev/null</span></code> (see above).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli._agent.claude_allowed_tools">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">claude_allowed_tools</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli._agent.claude_allowed_tools" title="Link to this definition">¶</a></dt>
+<dd><p>Permission rules handed to <code class="docutils literal notranslate"><span class="pre">claude</span> <span class="pre">-p</span></code> (<code class="docutils literal notranslate"><span class="pre">--allowedTools</span></code>).</p>
+<p>Only the commands the conversion needs: Python for the writer script,
+the <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> CLI for the validator, and <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">run</span></code> for a project
+managed by Pixi. The interpreter running <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code> is
+allowed by its absolute path, so the agent can use it even when plain
+<code class="docutils literal notranslate"><span class="pre">python</span></code> on PATH is a different environment (a pipx install, say).
+File reads and writes are not listed here: reads inside the allowed
+directories never prompt, and writes there are covered by
+<code class="docutils literal notranslate"><span class="pre">--permission-mode</span> <span class="pre">acceptEdits</span></code>, which keeps them confined to those
+directories. Extend the set with <code class="docutils literal notranslate"><span class="pre">--agent-args</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli._agent._claude_argv">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">_claude_argv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">launch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mesokit.cli._agent.Launch" title="mesokit.cli._agent.Launch"><span class="pre">mesokit.cli._agent.Launch</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli._agent._claude_argv" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli._agent._codex_argv">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">_codex_argv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">launch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mesokit.cli._agent.Launch" title="mesokit.cli._agent.Launch"><span class="pre">mesokit.cli._agent.Launch</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli._agent._codex_argv" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="mesokit.cli._agent.AGENTS">
@@ -616,9 +720,32 @@ package is installed from a wheel or in editable mode.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli._agent.skill_body">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">skill_body</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skill</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.cli._agent.skill_body" title="Link to this definition">¶</a></dt>
+<dd><p>The instructions of <code class="docutils literal notranslate"><span class="pre">skill</span></code> without the YAML frontmatter (name, description, allowed-tools).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli._agent.outside">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">outside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cwd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli._agent.outside" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">path</span></code>’s directory when it is not under <code class="docutils literal notranslate"><span class="pre">cwd</span></code> (else nothing) — the directories an agent needs granted.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mesokit.cli._agent.parse_extra_args">
+<span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">parse_extra_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#mesokit.cli._agent.parse_extra_args" title="Link to this definition">¶</a></dt>
+<dd><p>Split <code class="docutils literal notranslate"><span class="pre">--agent-args</span></code> like a shell would; <code class="docutils literal notranslate"><span class="pre">None</span></code> or blank means no extra flags.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mesokit.cli._agent.build_prompt">
 <span class="sig-prename descclassname"><span class="pre">mesokit.cli._agent.</span></span><span class="sig-name descname"><span class="pre">build_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skill</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#mesokit.cli._agent.build_prompt" title="Link to this definition">¶</a></dt>
 <dd><p>Compose the prompt handed to the agent.</p>
+<p>The skill’s text is embedded verbatim: the agent runs with access to
+the project directory only, and the skill lives in the installed
+package, outside it. Embedding needs no extra grant for either agent
+(a <code class="docutils literal notranslate"><span class="pre">--add-dir</span></code> on site-packages would make it writable), and works
+the same from a wheel, an editable install, or a checkout.</p>
 </dd></dl>
 
 </section>
@@ -687,6 +814,14 @@ package is installed from a wheel or in editable mode.</p>
 <li><a class="reference internal" href="#data">Data</a></li>
 <li><a class="reference internal" href="#api">API</a><ul>
 <li><a class="reference internal" href="#mesokit.cli._agent.SKILL_NAME"><code class="docutils literal notranslate"><span class="pre">SKILL_NAME</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.Launch"><code class="docutils literal notranslate"><span class="pre">Launch</span></code></a><ul>
+<li><a class="reference internal" href="#mesokit.cli._agent.Launch.prompt"><code class="docutils literal notranslate"><span class="pre">Launch.prompt</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.Launch.cwd"><code class="docutils literal notranslate"><span class="pre">Launch.cwd</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.Launch.read_dirs"><code class="docutils literal notranslate"><span class="pre">Launch.read_dirs</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.Launch.write_dirs"><code class="docutils literal notranslate"><span class="pre">Launch.write_dirs</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.Launch.extra_args"><code class="docutils literal notranslate"><span class="pre">Launch.extra_args</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#mesokit.cli._agent.AgentSpec"><code class="docutils literal notranslate"><span class="pre">AgentSpec</span></code></a><ul>
 <li><a class="reference internal" href="#mesokit.cli._agent.AgentSpec.binary"><code class="docutils literal notranslate"><span class="pre">AgentSpec.binary</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._agent.AgentSpec.argv"><code class="docutils literal notranslate"><span class="pre">AgentSpec.argv</span></code></a></li>
@@ -707,11 +842,18 @@ package is installed from a wheel or in editable mode.</p>
 </li>
 <li><a class="reference internal" href="#mesokit.cli._agent._run_foreground"><code class="docutils literal notranslate"><span class="pre">_run_foreground()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._agent._run_tmux"><code class="docutils literal notranslate"><span class="pre">_run_tmux()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.tmux_command"><code class="docutils literal notranslate"><span class="pre">tmux_command()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.claude_allowed_tools"><code class="docutils literal notranslate"><span class="pre">claude_allowed_tools()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent._claude_argv"><code class="docutils literal notranslate"><span class="pre">_claude_argv()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent._codex_argv"><code class="docutils literal notranslate"><span class="pre">_codex_argv()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._agent.AGENTS"><code class="docutils literal notranslate"><span class="pre">AGENTS</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._agent.BACKENDS"><code class="docutils literal notranslate"><span class="pre">BACKENDS</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._agent.installed"><code class="docutils literal notranslate"><span class="pre">installed()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._agent.not_installed_message"><code class="docutils literal notranslate"><span class="pre">not_installed_message()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._agent.skill_path"><code class="docutils literal notranslate"><span class="pre">skill_path()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.skill_body"><code class="docutils literal notranslate"><span class="pre">skill_body()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.outside"><code class="docutils literal notranslate"><span class="pre">outside()</span></code></a></li>
+<li><a class="reference internal" href="#mesokit.cli._agent.parse_extra_args"><code class="docutils literal notranslate"><span class="pre">parse_extra_args()</span></code></a></li>
 <li><a class="reference internal" href="#mesokit.cli._agent.build_prompt"><code class="docutils literal notranslate"><span class="pre">build_prompt()</span></code></a></li>
 </ul>
 </li>

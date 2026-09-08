@@ -83,6 +83,14 @@
   - ```{autodoc2-docstring} mesokit.cli.data._jsonable
     :summary:
     ```
+* - {py:obj}`validate_ <mesokit.cli.data.validate_>`
+  - ```{autodoc2-docstring} mesokit.cli.data.validate_
+    :summary:
+    ```
+* - {py:obj}`_validate_file <mesokit.cli.data._validate_file>`
+  - ```{autodoc2-docstring} mesokit.cli.data._validate_file
+    :summary:
+    ```
 * - {py:obj}`parse <mesokit.cli.data.parse>`
   - ```{autodoc2-docstring} mesokit.cli.data.parse
     :summary:
@@ -291,7 +299,21 @@
 ```
 ````
 
-````{py:function} parse(file: typing.Annotated[pathlib.Path, typer.Option('--file', help='Input dataset to convert (any format).')], output: typing.Annotated[pathlib.Path | None, typer.Option('--output', help='HDF5 path to write. Defaults to data/parsed/<stem>.h5.')] = None, hint: typing.Annotated[str | None, typer.Option('--hint', help="Extra instructions for the agent (e.g. 'time dim is t, var is u').")] = None, agent: typing.Annotated[str, typer.Option('--agent', help=_AGENT_HELP)] = 'claude', backend: typing.Annotated[str, typer.Option('--backend', help=_BACKEND_HELP)] = 'foreground', name: typing.Annotated[str | None, typer.Option('--name', help='If given, register the produced HDF5 under this name on success.')] = None, force: typing.Annotated[bool, typer.Option('--force', help='Overwrite an existing registry entry.')] = False) -> None
+````{py:function} validate_(file: typing.Annotated[pathlib.Path, typer.Argument(help='HDF5 file to check against the v1 cache contract.')]) -> None
+:canonical: mesokit.cli.data.validate_
+
+```{autodoc2-docstring} mesokit.cli.data.validate_
+```
+````
+
+````{py:function} _validate_file(file: pathlib.Path) -> mesokit.data.validate.ValidationReport
+:canonical: mesokit.cli.data._validate_file
+
+```{autodoc2-docstring} mesokit.cli.data._validate_file
+```
+````
+
+````{py:function} parse(file: typing.Annotated[pathlib.Path, typer.Option('--file', help='Input dataset to convert (any format).')], output: typing.Annotated[pathlib.Path | None, typer.Option('--output', help='HDF5 path to write. Defaults to data/parsed/<stem>.h5.')] = None, hint: typing.Annotated[str | None, typer.Option('--hint', help="Extra instructions for the agent (e.g. 'time dim is t, var is u').")] = None, agent: typing.Annotated[str, typer.Option('--agent', help=_AGENT_HELP)] = 'claude', backend: typing.Annotated[str, typer.Option('--backend', help=_BACKEND_HELP)] = 'foreground', agent_args: typing.Annotated[str | None, typer.Option('--agent-args', help="Extra flags for the agent command, appended verbatim (split like a shell), e.g. '--model opus' or '--allowedTools Bash(uv run:*)'.")] = None, name: typing.Annotated[str | None, typer.Option('--name', help='If given, register the produced HDF5 under this name on success.')] = None, force: typing.Annotated[bool, typer.Option('--force', help='Replace an existing output file and an existing registry entry.')] = False) -> None
 :canonical: mesokit.cli.data.parse
 
 ```{autodoc2-docstring} mesokit.cli.data.parse

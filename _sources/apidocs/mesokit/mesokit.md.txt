@@ -23,6 +23,15 @@ mesokit.models
 mesokit.cli
 ```
 
+## Submodules
+
+```{toctree}
+:titlesonly:
+:maxdepth: 1
+
+mesokit.__main__
+```
+
 ## Package Contents
 
 ### Data

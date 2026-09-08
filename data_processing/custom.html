@@ -365,6 +365,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../apidocs/mesokit/mesokit.cli.main.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.cli.main</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../apidocs/mesokit/mesokit.__main__.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mesokit.__main__</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -474,7 +475,9 @@ groups are created up-front so even a metadata-light export is conforming.</p>
 </section>
 <section id="validating">
 <h2>Validating<a class="headerlink" href="#validating" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">mesokit.data.validate(path)</span></code> runs the full set of schema checks and
+<p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">validate</span> <span class="pre">data/my_data.h5</span></code> prints the inferred metadata, or
+each failing check with a non-zero exit, without registering anything.
+From Python, <code class="docutils literal notranslate"><span class="pre">mesokit.data.validate(path)</span></code> runs the same checks and
 returns a <code class="docutils literal notranslate"><span class="pre">ValidationReport</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mesokit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate</span>
 

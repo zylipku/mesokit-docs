@@ -55,8 +55,8 @@
   - ```{autodoc2-docstring} mesokit.cli.train._instantiate_dataset
     :summary:
     ```
-* - {py:obj}`_instantiate_loader <mesokit.cli.train._instantiate_loader>`
-  - ```{autodoc2-docstring} mesokit.cli.train._instantiate_loader
+* - {py:obj}`_dataloader_config <mesokit.cli.train._dataloader_config>`
+  - ```{autodoc2-docstring} mesokit.cli.train._dataloader_config
     :summary:
     ```
 * - {py:obj}`_trainer_config <mesokit.cli.train._trainer_config>`
@@ -264,10 +264,10 @@
 ```
 ````
 
-````{py:function} _instantiate_loader(cfg: omegaconf.DictConfig, torch_dataset: object, *, batch_size: int | None) -> torch.utils.data.DataLoader
-:canonical: mesokit.cli.train._instantiate_loader
+````{py:function} _dataloader_config(cfg: omegaconf.DictConfig, *, batch_size: int | None) -> omegaconf.DictConfig
+:canonical: mesokit.cli.train._dataloader_config
 
-```{autodoc2-docstring} mesokit.cli.train._instantiate_loader
+```{autodoc2-docstring} mesokit.cli.train._dataloader_config
 ```
 ````
 

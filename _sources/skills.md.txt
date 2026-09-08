@@ -120,15 +120,19 @@ mesokit data parse --file ~/runs/field.nc --hint "variable phi, dims (member, ti
 
 The skill detects which mode it is in from the prompt: with a pinned input
 and output path it skips the interview. Only the conversion skill has a
-worker mode; the others are interactive by nature. The options are in the
-[Command-Line Reference](cli.md) under `mesokit data parse`.
+worker mode; the others are interactive by nature. Because a worker cannot
+answer permission prompts, `parse` grants what the conversion needs on the
+agent's command line (writes in your project directory, Python and
+`mesokit`) and prints that command line. The options and the exact grants
+are in the [Command-Line Reference](cli.md) under `mesokit data parse`.
 
 ## What to expect
 
 - **The agent runs real commands.** It will read your files, write under
   `data/`, `checkpoints/`, `figs/`, `.mesokit/` and the `configs/` recipe
   folders, and launch `mesokit` commands — your agent will show its usual
-  permission prompts. Nothing it produces there should be committed.
+  permission prompts (the `mesokit data parse` worker gets its grants up
+  front instead). Nothing it produces there should be committed.
 - **Small before large.** Every skill starts with a smoke-sized run (a few
   trajectories, one epoch on CPU) and tells you before something will run
   long or use the GPU.

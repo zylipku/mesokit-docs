@@ -15,6 +15,10 @@
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`Launch <mesokit.cli._agent.Launch>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.Launch
+    :summary:
+    ```
 * - {py:obj}`AgentSpec <mesokit.cli._agent.AgentSpec>`
   - ```{autodoc2-docstring} mesokit.cli._agent.AgentSpec
     :summary:
@@ -43,6 +47,22 @@
   - ```{autodoc2-docstring} mesokit.cli._agent._run_tmux
     :summary:
     ```
+* - {py:obj}`tmux_command <mesokit.cli._agent.tmux_command>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.tmux_command
+    :summary:
+    ```
+* - {py:obj}`claude_allowed_tools <mesokit.cli._agent.claude_allowed_tools>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.claude_allowed_tools
+    :summary:
+    ```
+* - {py:obj}`_claude_argv <mesokit.cli._agent._claude_argv>`
+  - ```{autodoc2-docstring} mesokit.cli._agent._claude_argv
+    :summary:
+    ```
+* - {py:obj}`_codex_argv <mesokit.cli._agent._codex_argv>`
+  - ```{autodoc2-docstring} mesokit.cli._agent._codex_argv
+    :summary:
+    ```
 * - {py:obj}`installed <mesokit.cli._agent.installed>`
   - ```{autodoc2-docstring} mesokit.cli._agent.installed
     :summary:
@@ -53,6 +73,18 @@
     ```
 * - {py:obj}`skill_path <mesokit.cli._agent.skill_path>`
   - ```{autodoc2-docstring} mesokit.cli._agent.skill_path
+    :summary:
+    ```
+* - {py:obj}`skill_body <mesokit.cli._agent.skill_body>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.skill_body
+    :summary:
+    ```
+* - {py:obj}`outside <mesokit.cli._agent.outside>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.outside
+    :summary:
+    ```
+* - {py:obj}`parse_extra_args <mesokit.cli._agent.parse_extra_args>`
+  - ```{autodoc2-docstring} mesokit.cli._agent.parse_extra_args
     :summary:
     ```
 * - {py:obj}`build_prompt <mesokit.cli._agent.build_prompt>`
@@ -93,6 +125,69 @@
 
 ````
 
+`````{py:class} Launch
+:canonical: mesokit.cli._agent.Launch
+
+```{autodoc2-docstring} mesokit.cli._agent.Launch
+```
+
+````{py:attribute} prompt
+:canonical: mesokit.cli._agent.Launch.prompt
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.Launch.prompt
+```
+
+````
+
+````{py:attribute} cwd
+:canonical: mesokit.cli._agent.Launch.cwd
+:type: pathlib.Path
+:value: >
+   None
+
+```{autodoc2-docstring} mesokit.cli._agent.Launch.cwd
+```
+
+````
+
+````{py:attribute} read_dirs
+:canonical: mesokit.cli._agent.Launch.read_dirs
+:type: tuple[pathlib.Path, ...]
+:value: >
+   ()
+
+```{autodoc2-docstring} mesokit.cli._agent.Launch.read_dirs
+```
+
+````
+
+````{py:attribute} write_dirs
+:canonical: mesokit.cli._agent.Launch.write_dirs
+:type: tuple[pathlib.Path, ...]
+:value: >
+   ()
+
+```{autodoc2-docstring} mesokit.cli._agent.Launch.write_dirs
+```
+
+````
+
+````{py:attribute} extra_args
+:canonical: mesokit.cli._agent.Launch.extra_args
+:type: tuple[str, ...]
+:value: >
+   ()
+
+```{autodoc2-docstring} mesokit.cli._agent.Launch.extra_args
+```
+
+````
+
+`````
+
 `````{py:class} AgentSpec
 :canonical: mesokit.cli._agent.AgentSpec
 
@@ -112,7 +207,7 @@
 
 ````{py:attribute} argv
 :canonical: mesokit.cli._agent.AgentSpec.argv
-:type: collections.abc.Callable[[str], list[str]]
+:type: collections.abc.Callable[[mesokit.cli._agent.Launch], list[str]]
 :value: >
    None
 
@@ -230,6 +325,34 @@
 ```
 ````
 
+````{py:function} tmux_command(argv: list[str]) -> str
+:canonical: mesokit.cli._agent.tmux_command
+
+```{autodoc2-docstring} mesokit.cli._agent.tmux_command
+```
+````
+
+````{py:function} claude_allowed_tools() -> list[str]
+:canonical: mesokit.cli._agent.claude_allowed_tools
+
+```{autodoc2-docstring} mesokit.cli._agent.claude_allowed_tools
+```
+````
+
+````{py:function} _claude_argv(launch: mesokit.cli._agent.Launch) -> list[str]
+:canonical: mesokit.cli._agent._claude_argv
+
+```{autodoc2-docstring} mesokit.cli._agent._claude_argv
+```
+````
+
+````{py:function} _codex_argv(launch: mesokit.cli._agent.Launch) -> list[str]
+:canonical: mesokit.cli._agent._codex_argv
+
+```{autodoc2-docstring} mesokit.cli._agent._codex_argv
+```
+````
+
 ````{py:data} AGENTS
 :canonical: mesokit.cli._agent.AGENTS
 :type: dict[str, mesokit.cli._agent.AgentSpec]
@@ -270,6 +393,27 @@
 :canonical: mesokit.cli._agent.skill_path
 
 ```{autodoc2-docstring} mesokit.cli._agent.skill_path
+```
+````
+
+````{py:function} skill_body(skill: pathlib.Path) -> str
+:canonical: mesokit.cli._agent.skill_body
+
+```{autodoc2-docstring} mesokit.cli._agent.skill_body
+```
+````
+
+````{py:function} outside(cwd: pathlib.Path, path: pathlib.Path) -> tuple[pathlib.Path, ...]
+:canonical: mesokit.cli._agent.outside
+
+```{autodoc2-docstring} mesokit.cli._agent.outside
+```
+````
+
+````{py:function} parse_extra_args(spec: str | None) -> tuple[str, ...]
+:canonical: mesokit.cli._agent.parse_extra_args
+
+```{autodoc2-docstring} mesokit.cli._agent.parse_extra_args
 ```
 ````
 

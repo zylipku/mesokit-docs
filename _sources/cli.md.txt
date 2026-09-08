@@ -9,7 +9,7 @@ groups, `skills` and `agent`, set up a coding agent to drive the same
 commands.
 
 ```text
-mesokit data      avail | list | generate | register | parse
+mesokit data      avail | list | generate | register | validate | parse
 mesokit train
 mesokit sweep
 mesokit model     list | register
@@ -295,7 +295,32 @@ Invalid value: sanity check failed for /tmp/bad.h5; not registered
 
 Writing a conforming file is a few lines of `h5py`; see
 [Custom Datasets](data_processing/custom.md). To check a file without
-registering it, use the Python helper `mesokit.data.validate(path)`.
+registering it, use `mesokit data validate` below (or the Python helper
+`mesokit.data.validate(path)`).
+
+### `mesokit data validate`
+
+Check a file against the v1 contract and print the inferred metadata,
+without touching the registry. `register` runs the same check before it
+writes an entry, and the agent behind `parse` runs it on its own output.
+
+```sh
+mesokit data validate FILE
+```
+
+```text
+validated /scratch/md/slab_density.h5
+dyn=binary_lj_slab
+n_traj=3
+…
+```
+
+A non-conforming file prints each failing check and exits with status `2`:
+
+```text
+  cannot open /tmp/bad.h5 as HDF5: Unable to synchronously open file (file signature not found)
+Invalid value: validation failed for /tmp/bad.h5
+```
 
 ### `mesokit data parse`
 
@@ -309,18 +334,19 @@ them into an agent for conversational use.
 ```sh
 mesokit data parse --file FILE [--output PATH] [--hint TEXT]
                    [--agent claude|codex] [--backend foreground|tmux]
-                   [--name NAME] [--force]
+                   [--agent-args "FLAGS"] [--name NAME] [--force]
 ```
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `--file FILE` | required | Input in any format (`.npz`, `.npy`, `.nc`, `.pt`, non-conforming `.h5`, …). |
-| `--output PATH` | `data/parsed/<stem>.h5` | Where the agent must write the v1 file. |
+| `--file FILE` | required | Input in any format (`.npz`, `.npy`, `.nc`, `.pt`, non-conforming `.h5`, …). It may live outside the working directory. |
+| `--output PATH` | `data/parsed/<stem>.h5` | Where the agent must write the v1 file. Must not exist yet, unless `--force` is given. |
 | `--hint TEXT` | none | Free-form instructions appended to the agent's prompt (axis names, units, which variable is the field, …). |
 | `--agent` | `claude` | Agent CLI: `claude` (runs `claude -p …`) or `codex` (runs `codex exec …`). Checked first: if the command is not installed, `parse` stops and prints the official installation guide to follow. |
 | `--backend` | `foreground` | `foreground` blocks and streams the agent's output; `tmux` detaches into a session. |
+| `--agent-args "FLAGS"` | none | Extra flags for the agent command, split like a shell and appended after the built-in ones: `"--model opus"`, `"--allowedTools Bash(uv run:*)"`, `"-c model=o3"`. |
 | `--name NAME` | none | Register the produced file under this name on success. Without it the file is only validated. |
-| `--force` | off | Replace an existing registry entry. |
+| `--force` | off | Replace an existing output file, and an existing registry entry of the same name. |
 
 Before anything is created or launched, the command checks that the
 agent's CLI (`claude` or `codex`) is installed in the shell it runs in. If
@@ -329,10 +355,45 @@ it is not, it exits at once and names the official installation guide:
 [Codex CLI](https://developers.openai.com/codex/cli). Install the agent
 there, confirm `claude --version` (or `codex --version`) works, and re-run.
 
-The prompt tells the agent where the skill file is, which file to convert,
-where to write, and to self-verify by running the validator until it
-passes. In the foreground backend the command returns when the agent exits;
-a non-zero agent exit, or a missing output file, is an error.
+**What the agent may do.** The agent runs non-interactively (`claude -p`,
+`codex exec`), so nothing can be approved once it has started: `parse`
+grants what a conversion needs on the command line, no more, and prints
+that command line (the `argv` line below) so the grants are visible. It
+works from any directory, a plain folder that is not a git checkout
+included; the agent's working directory is the one you run `mesokit` in.
+
+- `claude`: `--permission-mode acceptEdits`, which auto-approves file
+  writes inside the working directory and nothing else; `--allowedTools`
+  listing the Bash commands `python`, `python3`, the interpreter `mesokit`
+  itself runs in, `mesokit` and `pixi run`; and `--add-dir` for the input's
+  and the output's directories when they lie outside the working
+  directory. Neither `--dangerously-skip-permissions` nor
+  `bypassPermissions` is used.
+- `codex`: the `workspace-write` sandbox (commands may write under the
+  working directory and read anywhere; no network), set as
+  `-c sandbox_mode=workspace-write` so that a `--sandbox` given through
+  `--agent-args` overrides it; `--add-dir` for an output directory outside
+  the working directory; and `--skip-git-repo-check`.
+
+For both, stdin is closed (`/dev/null`; each CLI would otherwise read a
+piped stdin as more prompt). A different model, a wider allowlist or
+another sandbox go through `--agent-args`, for example
+`--agent-args "--sandbox danger-full-access"` on a machine where Codex's
+bubblewrap sandbox cannot start.
+
+**The prompt.** The skill's text is embedded in the prompt — nothing
+outside the project has to be readable — together with the input and
+output paths, the interpreter to use (the one `mesokit` runs in, so a
+`pipx` install works too), the self-check
+`<python> -m mesokit data validate <output>` to repeat until it passes,
+and your `--hint`. The agent is told not to register anything; `parse`
+does that itself on return.
+
+**On return.** In the foreground backend the command returns when the
+agent exits. A non-zero exit, or an output file the agent did not write,
+is an error. A file that already sits at the output path is refused before
+the agent is launched (with `--force` it is removed first), so what gets
+validated is always the agent's own work.
 
 ```sh
 mesokit data parse --file ~/runs/burgers.npz \
@@ -342,11 +403,12 @@ mesokit data parse --file ~/runs/burgers.npz \
 
 ```text
 launching agent 'claude' via backend 'foreground'
-  skill : /home/me/mesokit/src/mesokit/skills/mesokit_convert_data/SKILL.md
+  skill : /home/me/.venv/lib/python3.12/site-packages/mesokit/skills/mesokit_convert_data/SKILL.md (embedded in the prompt)
   input : /home/me/runs/burgers.npz
-  output: /home/me/mesokit/data/parsed/burgers.h5
+  output: /home/me/project/data/parsed/burgers.h5
+  argv  : claude -p --permission-mode acceptEdits --allowedTools 'Bash(python:*),…' --add-dir /home/me/runs -- <prompt>
 … agent transcript …
-registered 'burgers_v0' -> /home/me/mesokit/data/parsed/burgers.h5
+registered 'burgers_v0' -> /home/me/project/data/parsed/burgers.h5
 dyn=burgers_1d
 …
 ```
@@ -363,8 +425,9 @@ when the agent finishes, validate / register with:
 
 Errors: `agent 'claude' is not installed` (with the official installation
 guide to follow), `unknown agent 'x'; available: claude, codex`, `backend 'tmux' requires the tmux binary on
-PATH`, `agent exited with code N`, `agent finished but <output> was not
-written`.
+PATH`, `output <path> already exists; pass --force to replace it, or
+--output for another path`, `agent exited with code N`, `agent finished
+but <output> was not written`.
 
 ## `mesokit train`
 
@@ -984,7 +1047,9 @@ A registry entry, for reference:
 | `dataset 'x' already registered; pass --force to overwrite` | Name collision. | Choose another `--name`, or add `--force`. In a `sweep`, `--reuse-data` trains on the existing dataset instead. |
 | `unknown parameter 'x' for simulator …; accepted: …` | A `--set` / `--param` key is not a keyword argument of the simulator. | Pick a key from the `accepted` list (they are the keys of the data recipe). |
 | `allen_cahn_1d needs Dedalus, which is not installed` (or `… needs LAMMPS …`) | The simulator's solver back-end is a conda-forge package that `pip install mesokit` cannot bring in. | `pixi add dedalus` / `pixi add lammps` (or `conda install -c conda-forge …`) in the environment `mesokit` runs in; see [Installation](#installation). |
-| `sanity check failed for …; not registered` | The file violates the v1 contract; the specific checks are printed above the message. | Fix the writer — see [Data Structure](data_processing/structure.md) — or run `mesokit.data.validate(path)` in Python for the full report. |
+| `sanity check failed for …; not registered` (or `validation failed for …`) | The file violates the v1 contract; the specific checks are printed above the message. | Fix the writer — see [Data Structure](data_processing/structure.md) — and re-check with `mesokit data validate FILE`. |
+| `output … already exists; pass --force to replace it` | `data parse` found a file at the output path before launching the agent. | Add `--force` to replace it, or pick another `--output`. |
+| `unknown artifact 'x' for checkpoint 'y'; available: …` | `interpret extract` was given an artifact the model does not expose. | Pick one from the list (`mesokit interpret list --model y`). |
 | `dataset 'x' is not registered and is not an existing HDF5 path` | `--data` matched neither a name nor a file. | `mesokit data list`, or pass the path. |
 | `registered dataset 'x' points to missing file` | The file was moved or deleted after registration. | Re-register with the new path and `--force`, or regenerate. |
 | `checkpoint 'x' is not registered` | `interpret` needs a name from `mesokit model list`. | Train, or `mesokit model register`. |
@@ -1003,7 +1068,7 @@ registries and the config lookup.
 | --- | --- |
 | `mesokit data avail` | `mesokit.data.available()` |
 | `mesokit data generate --dyn X` | `ds = mesokit.data.simulate("X", **kwargs); ds.save_hdf5(path)` |
-| `mesokit data register --file F` | `report = mesokit.data.validate(F)` (no registry write) |
+| `mesokit data validate F` / `register --file F` | `report = mesokit.data.validate(F)` (no registry write) |
 | `mesokit train` | `TrajectoryDataset.load_hdf5(path)` → a `mesokit.data.datasets` adapter → `DataLoader` → `mesokit.trainers.get_trainer(name)(...).fit(model, loader)` |
 | `mesokit sweep` | `mesokit.cli.sweep.run_sweep("X", "arch", {"eps": [0.05, 0.1]})` — the registries and naming included; returns the table rows |
 | `mesokit model list` | read `.mesokit/checkpoints.json` |
