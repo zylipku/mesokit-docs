@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_equivalents.html">Python Equivalents</a></li>
@@ -441,7 +441,7 @@ out: it writes a file that deliberately does <em>not</em> conform, to practise
 <p>List the predefined simulator recipes compiled into the package (alias:
 <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">available</span></code>). This is the catalog of what <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> can
 run, independent of what has been generated on this machine.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>DYN                       SIMULATOR
@@ -464,7 +464,7 @@ dynamics. A dataset whose <code class="docutils literal notranslate"><span class
 listed under that name; anything else lands in a trailing <code class="docutils literal notranslate"><span class="pre">custom:</span></code> group.
 The second column says whether the file still exists (<code class="docutils literal notranslate"><span class="pre">yes</span></code>) or the registry
 points at something that has been moved or deleted (<code class="docutils literal notranslate"><span class="pre">MISSING</span></code>).</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>list
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>list
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>allen_cahn_1d:
@@ -484,8 +484,15 @@ custom:
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code><a class="headerlink" href="#mesokit-data-generate" title="Link to this heading">¶</a></h2>
 <p>Run a predefined simulator from a recipe, write the trajectories to HDF5,
 validate the file and register it.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>DYN<span class="w"> </span><span class="o">[</span>--config<span class="w"> </span>STEM<span class="o">]</span><span class="w"> </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="w"> </span><span class="p">|</span><span class="w"> </span>--no-registry<span class="o">]</span>
-<span class="w">                      </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span><span class="w"> </span><span class="o">[</span>--set<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="w"> </span>...<span class="o">]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>DYN<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--config<span class="w"> </span>STEM<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>--no-registry<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--set<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="w"> </span>...<span class="o">]</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -542,7 +549,7 @@ result is instantiated (every key in the YAML is a keyword argument of the
 simulator, and <code class="docutils literal notranslate"><span class="pre">verbose</span></code> is forwarded); the returned <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code> is
 saved; the saved file is run through the same validator as <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">register</span></code>;
 on success the registry entry is written and the summary is printed.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_smoke
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_smoke
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>wrote data/allen_cahn_1d/ac_smoke.h5 (1019.3 KiB)
@@ -556,14 +563,20 @@ on success the registry entry is written and the summary is printed.</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">dt</span></code> is the one step of a uniform time grid, or <code class="docutils literal notranslate"><span class="pre">non-uniform</span></code> when the
 saved times do not sit on one to within the v1 tolerance — as here, where
-101 <code class="docutils literal notranslate"><span class="pre">float32</span></code> times a millisecond apart drift in the seventh digit. It is a
-statement about the file, not a fault; models read <code class="docutils literal notranslate"><span class="pre">times</span></code> itself.</p>
+101 <code class="docutils literal notranslate"><span class="pre">float32</span></code> times a millisecond apart drift in the seventh digit. It describes the
+saved times rather than a validation failure. Training uses a fixed step;
+see <a class="reference internal" href="../training.html#time-step"><span class="std std-ref">Time step</span></a> for how to set it.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-v</span></code> keeps Dedalus’s per-step log and reports progress as one line per ten
 percent of the run. Both go to stderr — mesokit points the solver’s own log
 handler there — so the block below is still all of stdout, and the two
 streams stay separable in a log. It adds the rest of what the validator
 inferred:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_smoke<span class="w"> </span>--force<span class="w"> </span>-v
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>fdr<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>ac_smoke<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--force<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>wrote data/allen_cahn_1d/ac_smoke.h5 (1019.3 KiB)
@@ -599,28 +612,36 @@ run `mesokit data validate data/scratch.h5` to check the file against the v1 con
 is allowed — sweeps and re-runs depend on it — so this is a warning, not the
 refusal <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">parse</span></code> makes.</p>
 <p>More examples:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># The reference dataset, auto-named allen_cahn_1d_v0 (then _v1, _v2, … on repeats).</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># The reference dataset, auto-named allen_cahn_1d_v0 (then _v1, _v2, … on repeats).</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d
 
-<span class="c1"># A variant recipe: configs/data/ising_2d/kac.yaml (Kac interaction).</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--config<span class="w"> </span>kac<span class="w"> </span>--name<span class="w"> </span>ising_kac_T07
+<span class="gp">$ </span><span class="c1"># A variant recipe: configs/data/ising_2d/kac.yaml (Kac interaction).</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--config<span class="w"> </span>kac<span class="w"> </span>--name<span class="w"> </span>ising_kac_T07
 
-<span class="c1"># Write somewhere else and keep it out of the registry (scratch experiments).</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>cahn_hilliard_2d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--output<span class="w"> </span>/tmp/ch_test.h5<span class="w"> </span>--no-registry
+<span class="gp">$ </span><span class="c1"># Write somewhere else and keep it out of the registry (scratch experiments).</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>cahn_hilliard_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>fdr<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output<span class="w"> </span>/tmp/ch_test.h5<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--no-registry
 
-<span class="c1"># Re-run a recipe you changed and replace the previous entry of the same name.</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span>--name<span class="w"> </span>kdv_long<span class="w"> </span>--force
+<span class="gp">$ </span><span class="c1"># Re-run a recipe you changed and replace the previous entry of the same name.</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span>--name<span class="w"> </span>kdv_long<span class="w"> </span>--force
 
-<span class="c1"># Watch Dedalus&#39;s per-step log, and print the full metadata at the end.</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>-v
+<span class="gp">$ </span><span class="c1"># Watch Dedalus&#39;s per-step log, and print the full metadata at the end.</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>-v
 
-<span class="c1"># One-off parameter change without a new recipe file.</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--set<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05<span class="w"> </span>--set<span class="w"> </span><span class="nv">seed</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>--name<span class="w"> </span>ac_eps0.05_s1
+<span class="gp">$ </span><span class="c1"># One-off parameter change without a new recipe file.</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="nv">seed</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>ac_eps0.05_s1
 </pre></div>
 </div>
 <p>To change parameters for good, add a sibling YAML under <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/</span></code>
 (copy <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code>, edit, pick it with <code class="docutils literal notranslate"><span class="pre">--config</span></code>); for a one-off run use
-<code class="docutils literal notranslate"><span class="pre">--set</span></code>, and for a whole grid of values use <a class="reference internal" href="sweep.html#mesokit-sweep"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code></span></a>.
+<code class="docutils literal notranslate"><span class="pre">--set</span></code>, and for a whole grid of values use <a class="reference internal" href="sweep.html#mesokit-sweep"><span class="std std-ref">mesokit sweep</span></a>.
 Every predefined recipe also ships <code class="docutils literal notranslate"><span class="pre">fdr.yaml</span></code>, a seconds-long “fast dev run”
 for trying the pipeline.
 Some recipes are heavy — the default <code class="docutils literal notranslate"><span class="pre">cahn_hilliard_2d</span></code> takes about ten
@@ -628,7 +649,7 @@ minutes and <code class="docutils literal notranslate"><span class="pre">peridyn
 sections of <a class="reference internal" href="../data_processing/predefined.html"><span class="std std-doc">Predefined Datasets</span></a> give sizes
 and timings.</p>
 <p>Errors you may see:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invalid value: config dir not found: /home/me/mesokit/configs/data/nope
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invalid value: no recipe dir configs/data/nope in any of: …
 Invalid value: no config &#39;nope&#39; under /home/me/mesokit/configs/data/allen_cahn_1d; available: default, fdr
 Invalid value: --name and --no-registry are mutually exclusive
 Invalid value: dataset &#39;ac_smoke&#39; already registered; pass --force to overwrite
@@ -638,8 +659,9 @@ Invalid value: output data is a directory; pass --output with a file path
 Invalid value: cahn_hilliard_2d: round(T/dt)=10 must be a positive multiple of save_every=20
 </pre></div>
 </div>
-<p>The first one also appears when you run from the wrong directory: recipes
-are looked up in <code class="docutils literal notranslate"><span class="pre">./configs/data/</span></code>, not inside the package.</p>
+<p>For a custom simulator, check that its recipe is in your project’s
+<code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/</span></code> directory, or pass a YAML path with <code class="docutils literal notranslate"><span class="pre">--config</span></code>.
+Built-in recipes are also looked up in the installed package and checkout.</p>
 <p>The last one is the simulator itself rejecting the parameters it was given,
 prefixed with the <code class="docutils literal notranslate"><span class="pre">dyn</span></code> it came from; a <code class="docutils literal notranslate"><span class="pre">--set</span></code> that a recipe accepts but the
 solver cannot honour surfaces here rather than as a Hydra traceback, and the
@@ -652,7 +674,11 @@ parameters being wrong.</p>
 <h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code><a class="headerlink" href="#mesokit-data-register" title="Link to this heading">¶</a></h2>
 <p>Validate an HDF5 file you produced yourself against the v1 cache contract
 and register it under a name.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>NAME<span class="w"> </span>--file<span class="w"> </span>FILE.h5<span class="w"> </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>NAME<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file<span class="w"> </span>FILE.h5<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -688,7 +714,7 @@ and register it under a name.</p>
 the three metadata groups and the optional <code class="docutils literal notranslate"><span class="pre">channel_names</span></code>. Its verdict is
 the <code class="docutils literal notranslate"><span class="pre">check:</span></code> row: <code class="docutils literal notranslate"><span class="pre">passed</span></code> (in green on a terminal) naming the contract the
 file was checked against, and nothing is registered unless it says so.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>ac_scratch<span class="w"> </span>--file<span class="w"> </span>data/scratch.h5
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>ac_scratch<span class="w"> </span>--file<span class="w"> </span>data/scratch.h5
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;ac_scratch&#39; -&gt; /home/me/project/data/scratch.h5 (1019.3 KiB)
@@ -730,7 +756,7 @@ registering it, use <code class="docutils literal notranslate"><span class="pre"
 <p>Check a file against the v1 contract and print the inferred metadata,
 without touching the registry. <code class="docutils literal notranslate"><span class="pre">register</span></code> runs the same check before it
 writes an entry, and the agent behind <code class="docutils literal notranslate"><span class="pre">parse</span></code> runs it on its own output.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>validate<span class="w"> </span>FILE<span class="w"> </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>validate<span class="w"> </span>FILE<span class="w"> </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>validated /home/me/project/data/scratch.h5 (1019.3 KiB)
@@ -762,9 +788,9 @@ Invalid value: validation failed for /home/me/project/data/demo/allen_cahn_1d_de
 <section id="mesokit-data-demo">
 <span id="id2"></span><h2><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code><a class="headerlink" href="#mesokit-data-demo" title="Link to this heading">¶</a></h2>
 <p>Write a small, deliberately non-conforming dataset to practise
-<a class="reference internal" href="#mesokit-data-parse"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code></a> on, so you can see the
+<a class="reference internal" href="#mesokit-data-parse"><span class="std std-ref">mesokit data parse</span></a> on, so you can see the
 conversion work without one of your own files.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo<span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--format<span class="w"> </span>npz<span class="p">|</span>h5<span class="o">]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>demo<span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--format<span class="w"> </span>npz<span class="p">|</span>h5<span class="o">]</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -794,7 +820,7 @@ channel axis, integer frame indices instead of times, and flat scalars
 instead of the three metadata groups. Every fact the v1 cache needs is in the
 file; none of it is where the schema wants it. The content is a fixed-seed
 constant, so re-running writes the same arrays.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>wrote data/demo/allen_cahn_1d_demo.npz (npz, 208.5 KiB)
@@ -825,9 +851,15 @@ package, then validate (and optionally register) the result. The skill
 itself, and the five others that cover training and extending, are
 described in <a class="reference internal" href="../skills.html"><span class="std std-doc">Agent Skills</span></a>; <a class="reference internal" href="skills.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></span></a>
 installs them into an agent for conversational use.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>FILE<span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--hint<span class="w"> </span>TEXT<span class="o">]</span>
-<span class="w">                   </span><span class="o">[</span>--agent<span class="w"> </span>claude<span class="p">|</span>codex<span class="o">]</span><span class="w"> </span><span class="o">[</span>--backend<span class="w"> </span>foreground<span class="p">|</span>tmux<span class="o">]</span>
-<span class="w">                   </span><span class="o">[</span>--agent-args<span class="w"> </span><span class="s2">&quot;FLAGS&quot;</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file<span class="w"> </span>FILE<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--hint<span class="w"> </span>TEXT<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--agent<span class="w"> </span>claude<span class="p">|</span>codex<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--backend<span class="w"> </span>foreground<span class="p">|</span>tmux<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--agent-args<span class="w"> </span><span class="s2">&quot;FLAGS&quot;</span><span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--force<span class="o">]</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -919,8 +951,8 @@ the agent is launched (with <code class="docutils literal notranslate"><span cla
 validated is always the agent’s own work.</p>
 <p>If you have no file of your own to hand, <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code> writes one to
 practise on; the run below is exactly that, start to finish:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
-mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>launching agent &#39;claude&#39; via backend &#39;foreground&#39;
@@ -945,7 +977,8 @@ Without <code class="docutils literal notranslate"><span class="pre">--name</spa
 <code class="docutils literal notranslate"><span class="pre">pass</span> <span class="pre">--name</span> <span class="pre">to</span> <span class="pre">also</span> <span class="pre">register</span> <span class="pre">this</span> <span class="pre">dataset.</span></code></p>
 <p>Your own file works the same way, with <code class="docutils literal notranslate"><span class="pre">--hint</span></code> carrying whatever the arrays
 do not say for themselves:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>~/runs/burgers.npz<span class="w"> </span><span class="se">\</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file<span class="w"> </span>~/runs/burgers.npz<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--hint<span class="w"> </span><span class="s2">&quot;arrays u (traj, time, x) and t; domain is [0, 2π) periodic; call it burgers_1d&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--name<span class="w"> </span>burgers_v0
 </pre></div>

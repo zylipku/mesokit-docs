@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/python_equivalents.html">Python Equivalents</a></li>
@@ -426,9 +426,9 @@
           <section class="tex2jax_ignore mathjax_ignore" id="data-processing">
 <h1>Data Processing<a class="headerlink" href="#data-processing" title="Link to this heading">¶</a></h1>
 <p>A <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> dataset is an HDF5 file holding a bundle of trajectories on a
-shared time grid. This page is the user-facing entry point for generating
-built-in datasets, bringing your own data into <code class="docutils literal notranslate"><span class="pre">mesokit</span></code>, validating files,
-and understanding the shared on-disk contract.</p>
+shared time grid. Generate one with a built-in simulator, or import your
+own trajectories into the same format. Once the file is validated and
+registered, you can use its name in training and interpretation commands.</p>
 <p>The same data contract is what <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code> produces, what
 <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code> accepts from external sources, and what every model
 and interpretability extractor consumes. Keeping this one file format

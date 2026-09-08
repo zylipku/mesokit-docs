@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/python_equivalents.html">Python Equivalents</a></li>
@@ -511,7 +511,7 @@ groups. A failed report lists each violated check with a one-line
 explanation; see the common validator errors table in
 <a class="reference internal" href="custom.html"><span class="std std-doc">Custom Datasets</span></a> for representative fixes.</p>
 <p>Once the report is clean, register the file:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>external_demo_v0<span class="w"> </span>--file<span class="w"> </span>data/external.h5
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>external_demo_v0<span class="w"> </span>--file<span class="w"> </span>data/external.h5
 </pre></div>
 </div>
 <p>The command re-runs the same check and says so on its first row, which is
@@ -555,7 +555,7 @@ contract with <code class="docutils literal notranslate"><span class="pre">n_cha
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset(ds,</span> <span class="pre">channel=0)</span></code> yields <code class="docutils literal notranslate"><span class="pre">(u_t,</span> <span class="pre">u_{t+1})</span></code> pairs for the
 first field, <code class="docutils literal notranslate"><span class="pre">channel=1</span></code> for the second, and <code class="docutils literal notranslate"><span class="pre">channel=None</span></code> pairs of
-<code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">Nx,</span> <span class="pre">Ny)</span></code> states holding both, which is what a model trained on both
+<code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">Nx)</span></code> states holding both, which is what a model trained on both
 fields at once takes (<code class="docutils literal notranslate"><span class="pre">dataset.channel:</span> <span class="pre">null</span></code> in a recipe; see
 <a class="reference internal" href="../models.html"><span class="std std-doc">Models</span></a>). The on-disk schema is identical; only the size
 of the channel axis and the content of <code class="docutils literal notranslate"><span class="pre">channel_names</span></code> change.</p>

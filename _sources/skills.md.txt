@@ -1,263 +1,138 @@
 # Agent Skills
 
-`mesokit` ships six *skills*: markdown instruction files that a coding
-agent (Claude Code, Codex CLI) reads when you ask it to do a mesokit task.
-Each one packages the judgment the reference pages leave to the reader —
-which axis is time in your file, which model family fits your data and
-what its recipe must contain, how to plug your own equation into the
-registries — as a single procedure that ends with a self-check the agent
-must pass before it reports success. They live inside the installed
-package, so they are available wherever `mesokit` is, and
-`mesokit skills install` copies them into the folder your agent scans.
+You can ask a coding agent to help convert data, train a model, or add a
+custom extension. `mesokit` includes six skills: task guides that the
+agent reads to carry out these workflows using mesokit's commands and
+Python API.
 
-Skills are not required to use mesokit. Everything they do is a sequence of
-documented commands and Python calls; they exist so that an agent does the
-sequence correctly on the first try, and asks you only what it cannot read
-from your files.
+Skills are optional. You can follow the same workflows yourself through
+the [Quickstart](quickstart.md) and the rest of this guide.
 
-## Before you start
+## Set up your project
 
-- A coding agent is installed, following its official guide:
-  [Claude Code](https://code.claude.com/docs/en/setup) or the
-  [Codex CLI](https://developers.openai.com/codex/cli). `mesokit data parse`
-  checks for the `claude` / `codex` command before it does anything and, if
-  the command is missing, stops with a pointer to that guide.
-- `mesokit` is importable in the shell the agent runs commands in. In the
-  mesokit checkout that means the agent prefixes commands with `pixi run`
-  (the skills say so); in your own project it means the environment mesokit
-  is installed in is active when you start the agent (see
-  [Installation](installation.md)).
-- Start the agent in your **project root**: the directory that holds
-  `configs/` and where the `.mesokit/` registries live. All `mesokit`
-  commands assume it.
-- Outside the mesokit checkout, run `mesokit agent init` once in your
-  project (next section): it writes the agent's project guidance and
-  installs the skills.
+Install a supported coding agent using its official instructions:
+[Claude Code](https://code.claude.com/docs/en/setup) or
+[Codex CLI](https://developers.openai.com/codex/cli).
+See {ref}`how to use CLI <running-the-cli>`.
 
-## Which skill, when
+From your project directory, set up the agent you use:
 
-```text
-your data already exists (.npz, .nc, .pt, foreign .h5) ──► mesokit-convert-data ──┐
-your own equation / solver / generator ─────────────────► mesokit-add-simulator ──┤
-                                                                                  ▼
-                                                              registered dataset (.mesokit/datasets.json)
-                                                                                  │
-                                    shipped family (fno, spectral_onsagernet, onsagernet)
-                                                                                  │
-                                                                           mesokit-train ──► checkpoint + `potential` artifact
-                                                                                  │
-                          the toolkit lacks …   a model ─────► mesokit-add-model ─┤
-                                                a loss / loop ► mesokit-add-trainer ┤
-                                                a diagnostic ─► mesokit-add-artifact ┘
+```console
+$ mesokit agent init --agent claude
 ```
 
-| Skill | Ask for it when you want to … | It will … |
+For Codex, use `--agent codex`; for both, use `--agent both`. This writes
+project guidance and installs the skills in the appropriate project
+folders. Start your agent from that same directory so it can find your
+recipes and registered datasets.
+
+See [`mesokit agent`](cli/agent.md) for the files created and how existing
+guidance is preserved. In the mesokit checkout, project guidance is
+already present; use `mesokit skills install --agent codex` to install
+project skills for Codex.
+
+## Choose a task
+
+Describe your task in ordinary language and include the files, dataset
+names, or checkpoints you want to use. You can also name a skill
+explicitly; in Claude Code, for example, use `/mesokit-train`.
+
+| Skill | Use it to | Typical result |
 | --- | --- | --- |
-| `mesokit-convert-data` | bring an existing file into mesokit | inspect the file, ask once if the axis layout is unclear, write a `mesokit-trajectory` HDF5 v1 file with the metadata groups filled in, run the validator until it passes, register the dataset if you gave a name |
-| `mesokit-add-simulator` | generate datasets from your own equation or code | wrap it as a registered simulator with the metadata `mesokit train` needs (`dt`, box, grid), wire a `configs/data/<dyn>/` recipe, generate a small dataset, validate it and run a physical sanity check |
-| `mesokit-train` | fit a model and read what it learned | read the dataset's grid and `dt`, choose the family and potential for your goal, write or adapt the recipe with the grid checked against the data, run a one-epoch CPU smoke pass, train, then extract and interpret the `potential` artifact (custom models from `plugins/` the same way) |
-| `mesokit-add-model` | a model mesokit does not ship | prefer a new potential or operator block for a shipped family when that suffices; otherwise write a `DynamicsModel` in your module, run the structural smoke test (protocol, shapes, gradients, wrong-grid error), train two epochs |
-| `mesokit-add-trainer` | a different loss, schedule or loop | check whether `LitTrainer`'s options already cover it; if not, write a plain-PyTorch `fit()` registered under your model, and smoke it against the persistence baseline |
-| `mesokit-add-artifact` | a plot or number read off a trained model | build an artifact class with `summary` / `plot` / `save`, wire it into your model or compute it post hoc from a checkpoint, and place it beside the shipped `potential` artifact with `compare` |
+| `mesokit-convert-data` | Import an existing file such as `.npz`, `.nc`, `.pt`, or a foreign HDF5 file | A validated mesokit HDF5 file, optionally registered by name |
+| `mesokit-add-simulator` | Generate data from your own equation or solver | A simulator module and a data recipe, checked on a small run |
+| `mesokit-train` | Fit a model and inspect what it learned | A training recipe, checkpoint, and interpretation of its artifacts |
+| `mesokit-add-model` | Add a model or a component such as a potential or mobility operator | A Python extension checked for shapes, gradients, and training compatibility |
+| `mesokit-add-trainer` | Use a different objective or training loop | Trainer settings or a custom trainer, checked on a small run |
+| `mesokit-add-artifact` | Read a new diagnostic from a trained model | An artifact with a summary and figure, optionally compared with existing artifacts |
 
-All shipped skills carry the `mesokit-` prefix so they stay distinguishable
-in an agent's shared skill folder. The full text of each is in the package
-(`mesokit skills path <name>`) and, in a checkout, under
-`.claude/skills/<name>/SKILL.md`.
+## Example requests
 
-## Installing the skills into your agent
+**Convert existing data:**
 
-In a project of your own, `mesokit agent init` does the whole setup in one
-step: it writes an `AGENTS.md` with the conventions for using mesokit from
-that directory (plus a `CLAUDE.md` import shim so Claude Code reads the
-same text) and installs the skills — see `mesokit agent` in the
-[Command-Line Reference](cli/agent.md). The commands below install the skills
-alone.
+> I have `runs/burgers.npz` with `u` shaped (200, 101, 256) and a time
+> array `t`. The axes are trajectory, time, and position; the domain is
+> [0, 2π), periodic. Import it as `burgers_v0`.
 
-Inside the mesokit checkout, Claude Code already sees the skills
-(`.claude/skills/` holds a copy of each). Anywhere else — a project of your
-own with mesokit installed, or Codex in any directory — copy them into
-the folder the agent scans:
+The agent inspects the file, writes the HDF5 cache, validates it, and
+registers the requested name. If essential metadata is missing, it asks
+for that information.
 
-```sh
-mesokit skills list                                   # what ships, one line each
-mesokit skills path mesokit-train                     # where the SKILL.md is
-mesokit skills install                                # all six -> ./.claude/skills/   (Claude Code, this project)
-mesokit skills install --scope user                   # all six -> ~/.claude/skills/   (Claude Code, every project)
-mesokit skills install --agent codex                  # all six -> ./.agents/skills/   (Codex, this project)
-mesokit skills install --agent codex --scope user     # all six -> $CODEX_HOME/skills/ (default ~/.codex/skills)
-mesokit skills install mesokit-train --dest ~/my-skills   # one skill, explicit folder
-```
+**Train and interpret:**
 
-| Option | Default | Meaning |
-| --- | --- | --- |
-| `NAME …` | all shipped skills | Which skills to copy; `--all` is the explicit form. |
-| `--agent` | `claude` | Whose folder layout to use: `claude` or `codex`. |
-| `--scope` | `project` | `project` writes under the current directory, `user` under your home. |
-| `--dest DIR` | none | Explicit target folder; overrides `--agent` / `--scope`. |
-| `--force` | off | Replace a skill folder that already exists. |
+> Train Spectral OnsagerNet on `burgers_v0`. Start with a short CPU run,
+> then show me the loss curve and explain the learned potential.
 
-The copy is a snapshot of the installed mesokit version: after upgrading
-mesokit, re-run the command with `--force`. The agent picks up new skills
-at its next session — in Claude Code type `/` and the `mesokit-…` entries
-appear; Codex lists installed skills in its skills view.
+The agent checks the data and training settings, runs a small fit, and
+uses the checkpoint's artifacts to describe what the model learned.
 
-## Invoking a skill
+**Add your own solver:**
 
-**Conversationally.** Describe the task in your own words; the skill's
-description tells the agent when it applies. In Claude Code you can also
-name it: `/mesokit-train`. The agent asks one round of questions for what
-it cannot read from your files, does the work in your project directory,
-runs the skill's self-check, and reports back with the files, commands and
-numbers. This is the mode for all six skills.
+> My `heat_1d.py` solves the heat equation on a periodic grid. Make it
+> available through `mesokit data generate` and check that the generated
+> trajectories conserve the spatial mean.
 
-**As a worker.** `mesokit data parse` launches an agent non-interactively
-(`claude -p` or `codex exec`), hands it the `mesokit-convert-data` skill
-and your file, and validates the result when the agent exits:
+The agent creates an extension in your project and a matching recipe.
+See [Custom Simulators](data_processing/custom_simulator.md) for the
+interface used by this workflow.
 
-```sh
-mesokit data parse --file ~/runs/field.nc --hint "variable phi, dims (member, time, x)" --name phi_v0
-```
+**Add a diagnostic:**
 
-The skill detects which mode it is in from the prompt: with a pinned input
-and output path it skips the interview. Only the conversion skill has a
-worker mode; the others are interactive by nature. Because a worker cannot
-answer permission prompts, `parse` grants what the conversion needs on the
-agent's command line (writes in your project directory, Python and
-`mesokit`) and prints that command line. The options and the exact grants
-are in the [Command-Line Reference](cli/data.md) under `mesokit data parse`.
+> From checkpoint `son_demo`, plot the learned mobility against squared
+> wavenumber and compare it with the `potential` artifact.
+
+The agent can compute this from the saved model and create a figure
+without changing the model itself; see
+[Custom Artifacts](interpretability/custom_artifact.md).
 
 ## What to expect
 
-- **The agent runs real commands.** It will read your files, write under
-  `data/`, `checkpoints/`, `figs/`, `.mesokit/` and the `configs/` recipe
-  folders, and launch `mesokit` commands — your agent will show its usual
-  permission prompts (the `mesokit data parse` worker gets its grants up
-  front instead). Nothing it produces there should be committed.
-- **Small before large.** Every skill starts with a smoke-sized run (a few
-  trajectories, one epoch on CPU) and tells you before something will run
-  long or use the GPU.
-- **It checks itself.** The conversion skill reports success only when
-  `mesokit.data.validate` passes; the model skill refuses to train before
-  the structural test passes; the artifact skill verifies against a known
-  case.
-- **It does not change the mesokit package.** The `add-*` skills write into
-  your module and stop, with an explanation, when a request would need a
-  change under `src/mesokit/`.
-- **It does not decide what your data is.** When the axis layout, the box
-  or the goal of the fit cannot be read from the file or the request, the
-  skill asks — in one round, not a drip of questions.
+The agent runs commands and writes files in your project: data under
+`data/`, trained runs under `checkpoints/`, and figures under `figs/`.
+Extensions go in your own Python modules, usually under `plugins/`, and
+reusable settings go under `configs/`.
 
-## Examples
+The skills start with small runs and include checks before reporting
+results. Validation confirms the file format; it does not establish that
+the data or learned model is physically correct. Review the reported
+assumptions, metrics, and plots when deciding what to run next.
 
-Each example is a request you could type, what the agent does under the
-skill, and what you get. Paths are illustrative.
+## Convert a file directly from the command line
 
-### Convert a file
+`mesokit data parse` launches an installed agent for a single conversion,
+then validates the output and optionally registers it:
 
-> I have `~/runs/burgers.npz` with arrays `u` of shape (200, 101, 256) and
-> `t`; the domain is [0, 2π) periodic. Make it a mesokit dataset called
-> `burgers_v0`.
-
-The agent inspects the arrays, recognises `(traj, time, x)` from the hint,
-writes `data/parsed/burgers.h5` with `dyn = "burgers_1d"`, `Lx = 2π`,
-`dt = t[1] - t[0]` and `source` pointing at your file, runs the validator,
-and registers the name:
-
-```text
-registered 'burgers_v0' -> /home/me/project/data/parsed/burgers.h5 (19.7 MiB)
-  check:      passed (mesokit-trajectory v1)
-  dyn:        burgers_1d
-  shape:      200 traj x 101 steps x 1 channel, grid 256 (float32)
-  dt:         0.01
-  channels:   u
+```console
+$ mesokit data parse \
+  --file runs/field.nc \
+  --hint "variable phi, dimensions (member, time, x)" \
+  --name phi_v0
 ```
 
-Had the hint been missing, it would have asked which axis is time before
-writing anything.
+To try it with a supplied practice file:
 
-To watch this happen without a file of your own, `mesokit data demo` writes
-a deliberately non-conforming one to practise on:
-
-```sh
-mesokit data demo
-mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
+```console
+$ mesokit data demo
+$ mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name ac_imported
 ```
 
-### Generate data from your own equation
+This runs without an interactive conversation. The command prints the
+agent invocation, including its permissions. See
+{ref}`mesokit data parse <mesokit-data-parse>` for agent selection,
+output paths, and foreground or detached execution.
 
-> Here is my `heat_1d.py` with an explicit-Euler solver for
-> `u_t = κ u_xx` on a periodic grid. Make mesokit generate datasets from
-> it.
+## Inspect or refresh installed skills
 
-The agent wraps the solver as `simulate_heat_1d(*, n_traj, Nx, Lx, T,
-n_time, kappa, seed, verbose)` registered as `heat_1d`, stores `dt`, `Lx`
-and `kappa` in the metadata groups, writes
-`configs/data/heat_1d/default.yaml`, generates a small dataset with
-`mesokit data generate --dyn heat_1d` with the wrapper in `plugins/`, and checks that the
-mean of `u` is conserved along one trajectory before handing over to
-training.
-
-### Train and interpret
-
-> Train Spectral OnsagerNet on `burgers_v0` and show me the potential.
-
-The agent reads the grid (256 points, `Lx = 2π`, `dt = 0.01`), chooses
-`spectral_onsagernet_1d`, copies the Allen–Cahn recipe to
-`configs/train/burgers_1d/spectral_onsagernet_1d/default.yaml` with
-`Nx: 256`, runs
-
-```sh
-mesokit train --model spectral_onsagernet_1d --dyn burgers_1d --data burgers_v0 --epochs 1 --device cpu --no-registry
-mesokit train --model spectral_onsagernet_1d --dyn burgers_1d --data burgers_v0 --name burgers_son
-mesokit interpret extract --model burgers_son --artifact potential --output figs/burgers_son.png
+```console
+$ mesokit skills list
+$ mesokit skills path mesokit-train
+$ mesokit skills install --agent codex --force
 ```
 
-and reports the loss curve, the figure path, and a reading of it: for
-Burgers it will point out the non-zero reactive multipliers `Im Kw` as the
-signature of the advective (reversible) part, and suggest `--config
-coercive` for a richer potential.
+Installed skills are copies of the version bundled with mesokit. Refresh
+them after upgrading and start a new agent session. If you also want to
+refresh the project's mesokit guidance, use
+`mesokit agent init --agent codex --force`.
 
-### Add a model
-
-> Spectral OnsagerNet's potentials are all local. I want one with a
-> non-local kernel `∫∫ u(x) K(x − y) u(y)`.
-
-The agent recognises this as a new potential, not a new model: it writes a
-`SpectralPotential` subclass in your module with the kernel as learnable
-Fourier multipliers (`dVdu_h`, `L_hat`, `N_hat`), checks its gradient
-against finite differences, plugs it into `SpectralOnsagerNet1d(...,
-potential=...)`, and trains two epochs from Python. The shipped `potential`
-artifact still works, so the next step is `mesokit-train`'s Python path.
-
-### Change the training objective
-
-> Train my model on three-step rollouts instead of next-frame prediction.
-
-The agent first checks `LitTrainer(rollout_steps=3)` with a training view
-whose targets are the next three frames — no new code — and only writes a
-custom `fit()` if you also want a term `LitTrainer` cannot express. Either
-way it reports the smoke loss against the persistence baseline so "it
-learned something" has a number.
-
-### Read a new diagnostic
-
-> From checkpoint `burgers_son`, plot the learned mobility against `k²`
-> and fit the diffusion constant.
-
-The agent loads the checkpoint from its saved `config.yaml`, writes a
-`MobilitySpectrum` artifact (`summary`, `plot`, `save`) that fits
-`Km ≈ D k²`, saves `figs/burgers_son_mobility.png`, places it beside the
-shipped `potential` artifact with `compare`, and states the fitted `D` with
-the caveat that a non-zero `Km(0)` would mean the dynamics is not
-conserved.
-
-## Writing your own
-
-A skill is a folder with a `SKILL.md` whose YAML frontmatter has `name`
-and `description` (the description is what tells the agent when to use
-it — include the phrasings that should trigger it and the cases that
-should not), followed by the instructions. Keep it one procedure with a
-self-check, not a copy of the reference docs, and avoid links relative to
-the repository so the file works after it is copied. The shipped skills are
-the templates; `mesokit skills path <name>` prints one to start from.
+[`mesokit skills`](cli/skills.md) covers installing selected skills,
+user-wide installation, and custom destination folders.

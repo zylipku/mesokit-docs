@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/python_equivalents.html">Python Equivalents</a></li>
@@ -529,7 +529,7 @@ dataset is physically meaningful; that is the simulator’s responsibility.</p>
 <section id="registering">
 <h2>Registering<a class="headerlink" href="#registering" title="Link to this heading">¶</a></h2>
 <p>Once a file validates, register it under a name:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>my_dataset<span class="w"> </span>--file<span class="w"> </span>data/my_data.h5
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>my_dataset<span class="w"> </span>--file<span class="w"> </span>data/my_data.h5
 </pre></div>
 </div>
 <p>This re-runs <code class="docutils literal notranslate"><span class="pre">validate(path)</span></code>, then writes a record into the local
@@ -571,12 +571,12 @@ registers what it produced. The
 <a class="reference internal" href="../cli/data.html#mesokit-data-parse"><span class="std std-ref">Command-Line Reference</span></a> covers the flags and
 the permissions it grants.</p>
 <p>To see that work before pointing it at your own data,
-<a class="reference internal" href="../cli/data.html#mesokit-data-demo"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code></span></a> writes a small file that is
+<a class="reference internal" href="../cli/data.html#mesokit-data-demo"><span class="std std-ref">mesokit data demo</span></a> writes a small file that is
 deliberately <em>not</em> conforming — a real 1-D Allen-Cahn run stored with the axes
 in the wrong order, no channel axis, frame indices instead of times, and flat
 scalars instead of the three metadata groups:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
-mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;allen_cahn_demo_v0&#39; -&gt; /home/me/project/data/parsed/allen_cahn_1d_demo.h5 (213.7 KiB)

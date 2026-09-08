@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/python_equivalents.html">Python Equivalents</a></li>
@@ -505,7 +505,7 @@ four without its back-end stops with the exact command to run:</p>
 <section id="listing-what-s-available">
 <h2>Listing What’s Available<a class="headerlink" href="#listing-what-s-available" title="Link to this heading">¶</a></h2>
 <p>From the CLI:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
 </pre></div>
 </div>
 <p>prints the registered simulators along with the Python target each one
@@ -523,7 +523,7 @@ workflow.</p>
 <section id="generating-from-the-cli">
 <h2>Generating From the CLI<a class="headerlink" href="#generating-from-the-cli" title="Link to this heading">¶</a></h2>
 <p>The most common entry point is the <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> subcommand:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>default
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>default
 </pre></div>
 </div>
 <p>This runs the registered simulator with the parameters from
@@ -534,7 +534,7 @@ that auto-generated name (<code class="docutils literal notranslate"><span class
 <code class="docutils literal notranslate"><span class="pre">fdr.yaml</span></code> (“fast dev run”: a few trajectories, seconds of compute) under
 <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/</span></code>; some ship further variants (for example
 <code class="docutils literal notranslate"><span class="pre">configs/data/ising_2d/kac.yaml</span></code>). Select one by stem:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--config<span class="w"> </span>kac
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--config<span class="w"> </span>kac
 </pre></div>
 </div>
 <p>Useful flags:</p>
@@ -623,6 +623,16 @@ same v1 layout as one produced by the minimal external-writer snippet in
 </section>
 <section id="simulator-catalog">
 <h2>Simulator Catalog<a class="headerlink" href="#simulator-catalog" title="Link to this heading">¶</a></h2>
+<p>Jump to a system:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#allen-cahn-1d">Allen–Cahn, 1D</a></p></li>
+<li><p><a class="reference internal" href="#allen-cahn-2d">Allen–Cahn, 2D</a></p></li>
+<li><p><a class="reference internal" href="#kdv-1d">Korteweg–de Vries</a></p></li>
+<li><p><a class="reference internal" href="#cahn-hilliard-2d">Cahn–Hilliard</a></p></li>
+<li><p><a class="reference internal" href="#ising-2d">Ising</a></p></li>
+<li><p><a class="reference internal" href="#llg-lattice-2d">Landau–Lifshitz–Gilbert</a></p></li>
+<li><p><a class="reference internal" href="#peridynamics-fracture-2d">Peridynamic fracture</a></p></li>
+</ul>
 <p>Each entry gives the model, what the trajectories represent, the complete
 numerical scheme (discretisation, time stepping, de-aliasing, stability
 limits, what is conserved exactly and what is not), the initial-condition

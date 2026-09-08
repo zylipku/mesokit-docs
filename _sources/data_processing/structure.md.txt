@@ -30,7 +30,7 @@ conventions around it.
 ## Cache File (HDF5)
 
 The cache file is the source of truth for interchange. The Python helper
-[`TrajectoryDataset.save_hdf5`](../../src/mesokit/data/trajectory.py)
+{py:meth}`mesokit.data.trajectory.TrajectoryDataset.save_hdf5`
 produces this layout, and the matching `load_hdf5` parses it back; an
 external exporter (numpy / MATLAB / a custom solver) can produce the
 same layout directly with `h5py` (see [Custom Datasets](custom.md)).
@@ -118,8 +118,7 @@ a channel up-front (see below).
   must keep the attribute in sync with the array.
 - `times` must have a floating dtype. Its precision is not declared
   separately; pick `float64` if step sizes need it.
-- Group attributes are passed through `h5py` and round-tripped via the
-  shared decoder in [`_hdf5.py`](../../src/mesokit/data/_hdf5.py) so
+- Group attributes are saved through `h5py` and decoded on load, so
   `bytes`/`str`, 0-d NumPy arrays, and list-shaped values come back as
   native Python types.
 - Finite values are required for `data` and `times`; `NaN` / `Inf` are
@@ -127,7 +126,7 @@ a channel up-front (see below).
 
 ## In-Memory Bundle (`TrajectoryDataset`)
 
-[`TrajectoryDataset`](../../src/mesokit/data/trajectory.py) is a Python
+{py:class}`mesokit.data.trajectory.TrajectoryDataset` is a Python
 `@dataclass` (not a `torch.utils.data.Dataset`). It mirrors the cache
 file one-to-one: every required HDF5 entry has a corresponding dataclass
 field, and the three open-content metadata groups become three plain

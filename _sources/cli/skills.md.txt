@@ -7,10 +7,15 @@ and `path` show what is installed and where; `install` copies skills into
 the folder a coding agent scans so they can be invoked conversationally
 outside the mesokit checkout.
 
-```sh
-mesokit skills list
-mesokit skills path NAME
-mesokit skills install [NAME ...] [--all] [--agent claude|codex] [--scope project|user] [--dest DIR] [--force]
+```console
+$ mesokit skills list
+$ mesokit skills path NAME
+$ mesokit skills install [NAME ...] \
+  [--all] \
+  [--agent claude|codex] \
+  [--scope project|user] \
+  [--dest DIR] \
+  [--force]
 ```
 
 | Option | Default | Meaning |
@@ -21,8 +26,8 @@ mesokit skills install [NAME ...] [--all] [--agent claude|codex] [--scope projec
 | `--dest DIR` | none | Explicit target folder; overrides `--agent` / `--scope`. |
 | `--force` | off | Replace a skill folder that already exists (also how to refresh after upgrading mesokit). |
 
-```sh
-mesokit skills list
+```console
+$ mesokit skills list
 ```
 
 ```text
@@ -34,8 +39,8 @@ mesokit-convert-data  Convert a user's dataset (numpy, xarray, torch, externally
 mesokit-train         Train one of mesokit's shipped model families (fno, spectral_onsagernet, onsagernet) on a registered mesokit dataset and read the resulting interpretability artifact
 ```
 
-```sh
-mesokit skills install --agent codex --scope user
+```console
+$ mesokit skills install --agent codex --scope user
 ```
 
 ```text

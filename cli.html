@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/python_equivalents.html">Python Equivalents</a></li>
@@ -425,128 +425,165 @@
         <article role="main" id="furo-main-content">
           <section class="tex2jax_ignore mathjax_ignore" id="command-line-reference">
 <h1>Command-Line Reference<a class="headerlink" href="#command-line-reference" title="Link to this heading">¶</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is the console script installed with the package. It mirrors the
-pipeline — <strong>produce data → train → index the checkpoint → interpret</strong> — as
-four command groups plus <code class="docutils literal notranslate"><span class="pre">sweep</span></code>, which runs the first two stages over a
-parameter grid, and keeps two project-local registries so that anything you
-generate or train once can be referred to by name afterwards. Two more
-groups, <code class="docutils literal notranslate"><span class="pre">skills</span></code> and <code class="docutils literal notranslate"><span class="pre">agent</span></code>, set up a coding agent to drive the same
-commands.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>mesokit data      avail | list | generate | register | validate | parse
-mesokit train
-mesokit sweep
-mesokit model     list | register
-mesokit interpret list | extract | explain
-mesokit skills    list | path | install
-mesokit agent     init
+<p>Use <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> to generate or import trajectory data, train models, manage
+saved checkpoints, and extract figures describing what a model learned.
+For a first run, follow the <a class="reference internal" href="quickstart.html"><span class="std std-doc">Quickstart</span></a>. For combinations
+of commands, see <a class="reference internal" href="cli/recipes.html"><span class="std std-doc">CLI Workflows</span></a>.</p>
+<section id="how-to-use-the-cli">
+<span id="running-the-cli"></span><h2>How to use the CLI<a class="headerlink" href="#how-to-use-the-cli" title="Link to this heading">¶</a></h2>
+<p>The examples in this guide assume <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is available in your shell.
+In a Pixi or uv project, prefix each command with <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">run</span></code> or <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span></code>,
+respectively:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pixi<span class="w"> </span>run<span class="w"> </span>mesokit<span class="w"> </span>--help
+<span class="gp">$ </span>uv<span class="w"> </span>run<span class="w"> </span>mesokit<span class="w"> </span>--help
 </pre></div>
 </div>
-<p>Every command and subcommand accepts <code class="docutils literal notranslate"><span class="pre">--help</span></code>. This section is the complete
-reference; the <a class="reference internal" href="quickstart.html"><span class="std std-doc">Quickstart</span></a> is the shortest path through it.</p>
-<section id="conventions">
-<h2>Conventions<a class="headerlink" href="#conventions" title="Link to this heading">¶</a></h2>
-<p><strong>Plugins.</strong> Every command first imports <code class="docutils literal notranslate"><span class="pre">./plugins/</span></code> — each
-<code class="docutils literal notranslate"><span class="pre">plugins/&lt;name&gt;.py</span></code> and <code class="docutils literal notranslate"><span class="pre">plugins/&lt;name&gt;/</span></code> package, names starting with <code class="docutils literal notranslate"><span class="pre">_</span></code>
-skipped — so a project’s own simulators, models, trainers and artifacts
-register themselves and recipes can name their classes. A plugin that fails
-to import stops the command with the module and the error.</p>
-<p><strong>Run from the repository root.</strong> The CLI resolves three things relative to
-the current working directory:</p>
+<p>Choose the command for your environment. With an activated environment
+that has mesokit installed, use <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">--help</span></code> directly.</p>
+</section>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>What</p></th>
-<th class="head"><p>Where</p></th>
-<th class="head"><p>Used by</p></th>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Purpose</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Data recipes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/&lt;stem&gt;.yaml</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="cli/data.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span></code></span></a></p></td>
+<td><p>List simulators; generate, validate, register, or convert datasets</p></td>
 </tr>
-<tr class="row-odd"><td><p>Training recipes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;model&gt;/&lt;stem&gt;.yaml</span></code> (falls back to the copy inside the installed package)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">train</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="cli/train.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code></span></a></p></td>
+<td><p>Train a model or continue from saved weights</p></td>
 </tr>
-<tr class="row-even"><td><p>Registries</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">.mesokit/datasets.json</span></code>, <code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code></p></td>
-<td><p>every command that takes a name</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="cli/sweep.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code></span></a></p></td>
+<td><p>Run an experiment over a grid of simulation or training parameters</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cli/model.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span></code></span></a></p></td>
+<td><p>List, inspect, tag, register, remove, or synchronize checkpoints</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cli/interpret.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></span></a></p></td>
+<td><p>List artifacts and save their figures</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="cli/skills.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></span></a></p></td>
+<td><p>List and install coding-agent skills</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="cli/agent.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></span></a></p></td>
+<td><p>Set up a coding agent for your project</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Outputs also land in the working directory: <code class="docutils literal notranslate"><span class="pre">data/&lt;dyn&gt;/</span></code> for generated
-HDF5 files, <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;run&gt;/</span></code> for training runs —
-<code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/&lt;run&gt;/</span></code> for runs grouped by <code class="docutils literal notranslate"><span class="pre">--experiment</span></code>,
-registered as <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>. All of these are gitignored.</p>
-<p><strong>Environment.</strong> Prefix commands with <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">run</span></code> (or run inside <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">shell</span></code>)
-unless <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is already on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> (see
-<a class="reference internal" href="installation.html#running-the-cli"><span class="std std-ref">Running the CLI</span></a>):</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>run<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
-</pre></div>
-</div>
-<p><strong>Names versus paths.</strong> Wherever a command takes a dataset (<code class="docutils literal notranslate"><span class="pre">--data</span></code>) it
-accepts either a registered name or a path to an HDF5 file; wherever it takes
-a checkpoint (<code class="docutils literal notranslate"><span class="pre">--model</span></code> in <code class="docutils literal notranslate"><span class="pre">interpret</span></code>, <code class="docutils literal notranslate"><span class="pre">--from</span></code> in <code class="docutils literal notranslate"><span class="pre">train</span></code>, the <code class="docutils literal notranslate"><span class="pre">model</span></code>
-subcommands) it needs a registered name — <code class="docutils literal notranslate"><span class="pre">&lt;run&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>; a
-bare run name is accepted when only one experiment holds it. Registries
-store <strong>pointers</strong>, never copies, so deleting a file leaves a dangling entry
-(<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">list</span></code> flags it as <code class="docutils literal notranslate"><span class="pre">MISSING</span></code>; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">prune</span></code> drops
-checkpoint entries whose file is gone).</p>
-<p><strong>Automatic versioned names.</strong> When you do not pass <code class="docutils literal notranslate"><span class="pre">--name</span></code>, generated
-datasets are registered as <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v0</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v1</span></code>, … and trained checkpoints
-as <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v0</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v1</span></code>, … — always the next free slot (free in the
-registry and on disk), so repeated runs never overwrite each other. Passing
-an explicit <code class="docutils literal notranslate"><span class="pre">--name</span></code> that is already registered, or whose run directory
-already holds a checkpoint, is an error unless you add <code class="docutils literal notranslate"><span class="pre">--force</span></code>.</p>
-<p><strong>Quiet by default.</strong> A simulator keeps the underlying solver’s log to itself
-and reports progress on stderr, so stdout carries only the command’s own
-output. The progress line overwrites itself and is written only when stderr
-is a terminal: a redirected, piped or captured run prints nothing but the
-result, instead of thousands of carriage-return records in a log file.
-<code class="docutils literal notranslate"><span class="pre">--verbose</span></code> / <code class="docutils literal notranslate"><span class="pre">-v</span></code> (<code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code>, <code class="docutils literal notranslate"><span class="pre">sweep</span></code>, and, for the metadata rows
-alone, <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">register</span></code> / <code class="docutils literal notranslate"><span class="pre">validate</span></code> / <code class="docutils literal notranslate"><span class="pre">parse</span></code>) leaves the solver’s own log in
-place — on stderr, where mesokit puts it even for a back-end that logs to
-stdout by default — reports progress as plain newline-terminated lines that
-survive a pipe, and prints the full metadata. Training is the exception:
-Lightning’s progress bar is a recipe key, <code class="docutils literal notranslate"><span class="pre">trainer.enable_progress_bar</span></code>, not
-a CLI flag, and it writes to stdout.</p>
-<p><strong>Errors and exit codes.</strong> Argument and lookup problems (unknown dynamics,
-missing file, name collision, failed validation, a simulator that rejects its
-parameters) are reported as <code class="docutils literal notranslate"><span class="pre">Invalid</span> <span class="pre">value:</span> <span class="pre">…</span></code> and exit with status <code class="docutils literal notranslate"><span class="pre">2</span></code>; the
-offending file or name is never registered. Everything else surfaces as a
-Python traceback with status <code class="docutils literal notranslate"><span class="pre">1</span></code>, including a failure of mesokit’s own code:
-only the simulator’s own exceptions are summarised, and <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--verbose</span></code> restores the traceback for those. A missing solver back-end is the
-one error that is never a traceback, <code class="docutils literal notranslate"><span class="pre">-v</span></code> included — the install command is
-the whole answer.</p>
-<p><strong>Shell completion.</strong> <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">--install-completion</span></code> installs completion for
-the current shell; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">--show-completion</span></code> prints it instead.</p>
+<p>Every command accepts <code class="docutils literal notranslate"><span class="pre">--help</span></code>, for example <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--help</span></code>.
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">--install-completion</span></code> installs shell completion;
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">--show-completion</span></code> prints the completion script.</p>
 </section>
-<section id="pipeline-at-a-glance">
-<h2>Pipeline at a Glance<a class="headerlink" href="#pipeline-at-a-glance" title="Link to this heading">¶</a></h2>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>configs/data/&lt;dyn&gt;/default.yaml ──► mesokit data generate ──► data/&lt;dyn&gt;/&lt;name&gt;.h5 ──┐
-your_solver.h5 ──────────────────► mesokit data register ──────────────────────────────┤
-any_format.{npz,nc,pt,…} ────────► mesokit data parse ────► data/parsed/&lt;stem&gt;.h5 ─────┤
-   ▲ mesokit data demo writes one to practise on                                       ▼
-                                                                          .mesokit/datasets.json
-                                                                                       │
-configs/train/&lt;dyn&gt;/&lt;model&gt;/default.yaml ─────────────────► mesokit train ◄────────────┘
-                                                                  │
-                                        checkpoints/&lt;dyn&gt;/&lt;run&gt;/{model.pt, config.yaml, history.json, run.json}
-                                        checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/&lt;run&gt;/…  + runs.json    (--experiment)
-                                                                  │
-                                                      .mesokit/checkpoints.json ◄── mesokit model register / sync
-                                                                  │          (mesokit model list / show / tag / remove / prune)
-                                                       mesokit interpret list / extract ──► figs/*.png
-
-mesokit sweep --param KEY=V1,V2,… [--train-param KEY.PATH=V1,V2,…] = data generate + train per grid point
-                                                            ──► checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/{&lt;run&gt;/…, runs.json}
-</pre></div>
+<section id="project-directory-and-environment">
+<h2>Project directory and environment<a class="headerlink" href="#project-directory-and-environment" title="Link to this heading">¶</a></h2>
+<p>Run commands from the <strong>project directory</strong> where you keep your work.
+It can be any folder. Relative paths, local recipes, <code class="docutils literal notranslate"><span class="pre">plugins/</span></code>, and the
+<code class="docutils literal notranslate"><span class="pre">.mesokit/</span></code> registries are resolved from this directory.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Content</p></th>
+<th class="head"><p>Default location</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Generated datasets</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data/&lt;dyn&gt;/&lt;name&gt;.h5</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Training runs</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;run&gt;/</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Runs grouped with <code class="docutils literal notranslate"><span class="pre">--experiment</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/&lt;run&gt;/</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Dataset and checkpoint indexes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.mesokit/datasets.json</span></code>, <code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Your data recipes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/&lt;stem&gt;.yaml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Your training recipes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;model&gt;/&lt;stem&gt;.yaml</span></code></p></td>
+</tr>
+</tbody>
+</table>
 </div>
+<p>Recipes are YAML configuration files. Lookup checks the project’s recipe
+directory first, then the installed package, then the checkout for an
+editable installation. <code class="docutils literal notranslate"><span class="pre">--config</span></code> also accepts a YAML path. See
+<a class="reference internal" href="training/recipes.html"><span class="std std-doc">Training Recipes</span></a> for lookup details and overrides.</p>
 </section>
-<section id="how-to-use-this-section">
-<h2>How to Use This Section<a class="headerlink" href="#how-to-use-this-section" title="Link to this heading">¶</a></h2>
+<section id="names-and-paths">
+<h2>Names and paths<a class="headerlink" href="#names-and-paths" title="Link to this heading">¶</a></h2>
+<p>A <strong>model architecture</strong> is a family such as <code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d</span></code>.
+A <strong>checkpoint</strong> is a saved training result, such as <code class="docutils literal notranslate"><span class="pre">son_demo</span></code>. The
+meaning of <code class="docutils literal notranslate"><span class="pre">--model</span></code> depends on the command:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Argument</p></th>
+<th class="head"><p>Accepts</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">train</span> <span class="pre">--model</span></code>, <code class="docutils literal notranslate"><span class="pre">sweep</span> <span class="pre">--model</span></code></p></td>
+<td><p>Architecture name</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">train</span> <span class="pre">--data</span></code>, <code class="docutils literal notranslate"><span class="pre">sweep</span> <span class="pre">--data</span></code></p></td>
+<td><p>Registered dataset name or HDF5 path</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">interpret</span> <span class="pre">--model</span></code>, <code class="docutils literal notranslate"><span class="pre">train</span> <span class="pre">--from</span></code></p></td>
+<td><p>Registered checkpoint name</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">register</span> <span class="pre">--model</span></code></p></td>
+<td><p>Name to assign to the checkpoint being registered</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Inside an experiment, checkpoint names are <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>. A bare
+run name also works when it is unambiguous. Registries store paths to
+files, not copies: moving or deleting a file can leave an entry pointing
+to a missing file. See <a class="reference internal" href="cli/model.html"><span class="std std-doc">checkpoint management</span></a>.</p>
+<p>Without <code class="docutils literal notranslate"><span class="pre">--name</span></code>, datasets use the next available <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v&lt;n&gt;</span></code> name and
+training runs outside experiments use <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v&lt;n&gt;</span></code>. Experiments use
+names based on the changed parameters; see <a class="reference internal" href="cli/train.html#experiments"><span class="std std-ref">Experiments</span></a>.
+Explicit name collisions are refused unless the command supports and is
+given <code class="docutils literal notranslate"><span class="pre">--force</span></code>. File replacement rules differ by command and are listed
+in each command’s option table.</p>
+</section>
+<section id="custom-extensions">
+<h2>Custom extensions<a class="headerlink" href="#custom-extensions" title="Link to this heading">¶</a></h2>
+<p>Each command imports Python modules and packages in <code class="docutils literal notranslate"><span class="pre">./plugins/</span></code> before
+running. Names beginning with <code class="docutils literal notranslate"><span class="pre">_</span></code> or <code class="docutils literal notranslate"><span class="pre">.</span></code> are skipped. An import failure
+stops the command and identifies the module and error. This lets your
+simulators, models, and trainers register names used by the CLI, and lets
+recipes refer to their classes through <code class="docutils literal notranslate"><span class="pre">_target_</span></code>.</p>
+<p>Start with <a class="reference internal" href="data_processing/custom_simulator.html"><span class="std std-doc">Custom Simulators</span></a>,
+<a class="reference internal" href="models/custom_model.html"><span class="std std-doc">Custom Models</span></a>, <a class="reference internal" href="training/custom_trainer.html"><span class="std std-doc">Custom Trainers</span></a>,
+or <a class="reference internal" href="interpretability/custom_artifact.html"><span class="std std-doc">Custom Artifacts</span></a>.</p>
+</section>
+<section id="output-and-errors">
+<h2>Output and errors<a class="headerlink" href="#output-and-errors" title="Link to this heading">¶</a></h2>
+<p>Data generation normally hides solver logs and shows progress on stderr
+only in a terminal. Use <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> / <code class="docutils literal notranslate"><span class="pre">-v</span></code> for solver logs, additional
+metadata, and progress lines that remain readable in redirected output.
+Training uses Lightning’s progress bar, controlled by the recipe key
+<code class="docutils literal notranslate"><span class="pre">trainer.enable_progress_bar</span></code>.</p>
+<p>Argument, lookup, and validation errors normally exit with status <code class="docutils literal notranslate"><span class="pre">2</span></code>.
+Unexpected failures produce a traceback and status <code class="docutils literal notranslate"><span class="pre">1</span></code>. A simulator error
+is summarized by default; <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span> <span class="pre">-v</span></code> includes its traceback.
+Missing solver dependencies always produce an installation hint. Sweeps
+continue past individual failed runs and exit with status <code class="docutils literal notranslate"><span class="pre">1</span></code> if any
+point failed. See <a class="reference internal" href="cli/troubleshooting.html"><span class="std std-doc">Troubleshooting</span></a> for common fixes.</p>
+</section>
+<section id="reference-pages">
+<h2>Reference pages<a class="headerlink" href="#reference-pages" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="cli/data.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span></code></span></a></p></li>
 <li><p><a class="reference internal" href="cli/train.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code></span></a></p></li>
@@ -555,7 +592,7 @@ mesokit sweep --param KEY=V1,V2,… [--train-param KEY.PATH=V1,V2,…] = data ge
 <li><p><a class="reference internal" href="cli/interpret.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></span></a></p></li>
 <li><p><a class="reference internal" href="cli/skills.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></span></a></p></li>
 <li><p><a class="reference internal" href="cli/agent.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></span></a></p></li>
-<li><p><a class="reference internal" href="cli/recipes.html"><span class="std std-doc">Recipes</span></a></p></li>
+<li><p><a class="reference internal" href="cli/recipes.html"><span class="std std-doc">CLI Workflows</span></a></p></li>
 <li><p><a class="reference internal" href="cli/files.html"><span class="std std-doc">Files the CLI Reads and Writes</span></a></p></li>
 <li><p><a class="reference internal" href="cli/troubleshooting.html"><span class="std std-doc">Troubleshooting</span></a></p></li>
 <li><p><a class="reference internal" href="cli/python_equivalents.html"><span class="std std-doc">Python Equivalents</span></a></p></li>
@@ -621,9 +658,13 @@ mesokit sweep --param KEY=V1,V2,… [--train-param KEY.PATH=V1,V2,…] = data ge
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Command-Line Reference</a><ul>
-<li><a class="reference internal" href="#conventions">Conventions</a></li>
-<li><a class="reference internal" href="#pipeline-at-a-glance">Pipeline at a Glance</a></li>
-<li><a class="reference internal" href="#how-to-use-this-section">How to Use This Section</a></li>
+<li><a class="reference internal" href="#how-to-use-the-cli">How to use the CLI</a></li>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#project-directory-and-environment">Project directory and environment</a></li>
+<li><a class="reference internal" href="#names-and-paths">Names and paths</a></li>
+<li><a class="reference internal" href="#custom-extensions">Custom extensions</a></li>
+<li><a class="reference internal" href="#output-and-errors">Output and errors</a></li>
+<li><a class="reference internal" href="#reference-pages">Reference pages</a></li>
 </ul>
 </li>
 </ul>

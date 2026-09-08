@@ -31,6 +31,10 @@
   - ```{autodoc2-docstring} mesokit.cli.train.train_command
     :summary:
     ```
+* - {py:obj}`print_train_result <mesokit.cli.train.print_train_result>`
+  - ```{autodoc2-docstring} mesokit.cli.train.print_train_result
+    :summary:
+    ```
 * - {py:obj}`_metrics_line <mesokit.cli.train._metrics_line>`
   - ```{autodoc2-docstring} mesokit.cli.train._metrics_line
     :summary:
@@ -119,6 +123,10 @@
   - ```{autodoc2-docstring} mesokit.cli.train._load_trajectory
     :summary:
     ```
+* - {py:obj}`_resolve_trajectory <mesokit.cli.train._resolve_trajectory>`
+  - ```{autodoc2-docstring} mesokit.cli.train._resolve_trajectory
+    :summary:
+    ```
 * - {py:obj}`_infer_dt <mesokit.cli.train._infer_dt>`
   - ```{autodoc2-docstring} mesokit.cli.train._infer_dt
     :summary:
@@ -175,6 +183,13 @@
 :canonical: mesokit.cli.train.train_command
 
 ```{autodoc2-docstring} mesokit.cli.train.train_command
+```
+````
+
+````{py:function} print_train_result(run: TrainRun) -> None
+:canonical: mesokit.cli.train.print_train_result
+
+```{autodoc2-docstring} mesokit.cli.train.print_train_result
 ```
 ````
 
@@ -456,6 +471,13 @@
 :canonical: mesokit.cli.train._load_trajectory
 
 ```{autodoc2-docstring} mesokit.cli.train._load_trajectory
+```
+````
+
+````{py:function} _resolve_trajectory(data: str) -> tuple[str | None, pathlib.Path]
+:canonical: mesokit.cli.train._resolve_trajectory
+
+```{autodoc2-docstring} mesokit.cli.train._resolve_trajectory
 ```
 ````
 

@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/python_equivalents.html">Python Equivalents</a></li>
@@ -434,9 +434,8 @@ instead, see <a class="reference internal" href="custom.html"><span class="std s
 <section id="where-extensions-live">
 <h2>Where Extensions Live<a class="headerlink" href="#where-extensions-live" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>Put your code in <code class="docutils literal notranslate"><span class="pre">plugins/</span></code> in the directory you run <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> from — the
-mesokit checkout for extension work (the folder is gitignored, so your code
-never collides with upstream), or any project directory. Every <code class="docutils literal notranslate"><span class="pre">mesokit</span></code>
+<li><p>Put your code in <code class="docutils literal notranslate"><span class="pre">plugins/</span></code> in your project directory. You can use your
+own project or work in the mesokit checkout. Every <code class="docutils literal notranslate"><span class="pre">mesokit</span></code>
 command imports <code class="docutils literal notranslate"><span class="pre">plugins/&lt;name&gt;.py</span></code> and <code class="docutils literal notranslate"><span class="pre">plugins/&lt;name&gt;/</span></code> packages before
 running, so registered names and <code class="docutils literal notranslate"><span class="pre">_target_</span></code> paths resolve. A package
 installed into the environment works too.</p></li>
@@ -528,7 +527,8 @@ nothing else is needed:</p>
 <span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 </pre></div>
 </div>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>decay_1d<span class="w">      </span><span class="c1"># writes + registers decay_1d_v0</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># writes + registers decay_1d_v0</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>decay_1d
 </pre></div>
 </div>
 <p>Sibling files under <code class="docutils literal notranslate"><span class="pre">configs/data/decay_1d/</span></code> are variants selected by stem
@@ -539,9 +539,11 @@ wrote some other way are covered in <a class="reference internal" href="custom.h
 </section>
 <section id="next">
 <h2>Next<a class="headerlink" href="#next" title="Link to this heading">¶</a></h2>
-<p>Training a shipped model on your dynamics needs a recipe under
-<code class="docutils literal notranslate"><span class="pre">configs/train/decay_1d/&lt;model&gt;/default.yaml</span></code> with the same grid; see
-<a class="reference internal" href="../training/recipes.html"><span class="std std-doc">Training Recipes</span></a>.</p>
+<p>Train a shipped model on the registered dataset with
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--model</span> <span class="pre">&lt;model&gt;</span> <span class="pre">--data</span> <span class="pre">decay_1d_v0</span></code>. The command fills in
+the grid from the dataset and uses defaults when no recipe exists.
+<a class="reference internal" href="../training/recipes.html"><span class="std std-doc">Training Recipes</span></a> explains how to save reusable
+settings.</p>
 </section>
 </section>
 

@@ -27,6 +27,10 @@
   - ```{autodoc2-docstring} mesokit.cli.sweep.point_suffix
     :summary:
     ```
+* - {py:obj}`_unique_names <mesokit.cli.sweep._unique_names>`
+  - ```{autodoc2-docstring} mesokit.cli.sweep._unique_names
+    :summary:
+    ```
 * - {py:obj}`grid <mesokit.cli.sweep.grid>`
   - ```{autodoc2-docstring} mesokit.cli.sweep.grid
     :summary:
@@ -45,6 +49,10 @@
     ```
 * - {py:obj}`_override_spec <mesokit.cli.sweep._override_spec>`
   - ```{autodoc2-docstring} mesokit.cli.sweep._override_spec
+    :summary:
+    ```
+* - {py:obj}`_yaml_value <mesokit.cli.sweep._yaml_value>`
+  - ```{autodoc2-docstring} mesokit.cli.sweep._yaml_value
     :summary:
     ```
 * - {py:obj}`_table_row <mesokit.cli.sweep._table_row>`
@@ -106,31 +114,38 @@
 ````{py:data} _TRAIN_PARAM_HELP
 :canonical: mesokit.cli.sweep._TRAIN_PARAM_HELP
 :value: >
-   'Training axis KEY.PATH=V1,V2,... over a training-recipe key such as trainer.lr or model.n_modes; rep...'
+   'Training axis KEY.PATH=V1,V2,... over a training-recipe key such as trainer.lr or model.n_modes; YAM...'
 
 ```{autodoc2-docstring} mesokit.cli.sweep._TRAIN_PARAM_HELP
 ```
 
 ````
 
-````{py:function} sweep_command(dyn: typing.Annotated[str, typer.Option('--dyn', help='Dynamics name, e.g. allen_cahn_1d.')], model: typing.Annotated[str, typer.Option('--model', help='Registered model architecture name.')], param: typing.Annotated[list[str] | None, typer.Option('--param', metavar='KEY=V1,V2,...', help=_PARAM_HELP)] = None, train_param: typing.Annotated[list[str] | None, typer.Option('--train-param', metavar='KEY.PATH=V1,V2,...', help=_TRAIN_PARAM_HELP)] = None, data: typing.Annotated[str | None, typer.Option('--data', help='Registered dataset name or HDF5 path every point trains on (no --param).')] = None, experiment: typing.Annotated[str | None, typer.Option('--experiment', help='Experiment the checkpoints are grouped under: checkpoints/<dyn>/EXPERIMENT/<run>/. Defaults to <model>_<axes>_<timestamp>.')] = None, data_config: typing.Annotated[str, typer.Option('--data-config', help='Data recipe stem under configs/data/<dyn>/.')] = 'default', config: typing.Annotated[str, typer.Option('--config', help='Training recipe stem under configs/train/<dyn>/<model>/.')] = 'default', trainer: typing.Annotated[str | None, typer.Option('--trainer', help='Trainer name. Defaults to the model name.')] = None, name_prefix: typing.Annotated[str | None, typer.Option('--name-prefix', help='Prefix of every generated dataset name. Defaults to <dyn>.')] = None, tag: typing.Annotated[list[str] | None, typer.Option('--tag', help='Tag recorded on every run; repeatable.')] = None, epochs: typing.Annotated[int | None, typer.Option('--epochs', help='Override trainer.max_epochs.')] = None, batch_size: typing.Annotated[int | None, typer.Option('--batch-size', help='Override dataloader.batch_size.')] = None, device: typing.Annotated[str | None, typer.Option('--device', help='Override accelerator: auto, cpu, gpu.')] = None, reuse_data: typing.Annotated[bool, typer.Option('--reuse-data', help='Skip generation when a dataset of the same name is registered and on disk.')] = False, force: typing.Annotated[bool, typer.Option('--force', help='Overwrite existing dataset and checkpoint registry entries.')] = False, dry_run: typing.Annotated[bool, typer.Option('--dry-run', help='Print the plan (names and overrides) and exit without running anything.')] = False, verbose: typing.Annotated[bool, typer.Option('--verbose', '-v', help="Leave each point's solver log alone and report its progress in a pipe-safe form.")] = False) -> None
+````{py:function} sweep_command(model: typing.Annotated[str, typer.Option('--model', help='Registered model architecture name.')], dyn: typing.Annotated[str | None, typer.Option('--dyn', help="Dynamics name. Defaults to the dataset's own `dyn`; required with --param.")] = None, param: typing.Annotated[list[str] | None, typer.Option('--param', metavar='KEY=V1,V2,...', help=_PARAM_HELP)] = None, train_param: typing.Annotated[list[str] | None, typer.Option('--train-param', metavar='KEY.PATH=V1,V2,...', help=_TRAIN_PARAM_HELP)] = None, data: typing.Annotated[str | None, typer.Option('--data', help='Registered dataset name or HDF5 path every point trains on (no --param).')] = None, experiment: typing.Annotated[str | None, typer.Option('--experiment', help='Experiment the checkpoints are grouped under: checkpoints/<dyn>/EXPERIMENT/<run>/. Defaults to <model>_<axes>_<timestamp>.')] = None, data_config: typing.Annotated[str, typer.Option('--data-config', help='Data recipe stem under configs/data/<dyn>/ or a YAML path.')] = 'default', config: typing.Annotated[str, typer.Option('--config', help='Training recipe stem under configs/train/<dyn>/<model>/ or a YAML path.')] = 'default', set_: typing.Annotated[list[str] | None, typer.Option('--set', metavar='KEY=VALUE', help='Fixed training-recipe override for every point; repeatable.')] = None, trainer: typing.Annotated[str | None, typer.Option('--trainer', help='Trainer name. Defaults to the model name.')] = None, name_prefix: typing.Annotated[str | None, typer.Option('--name-prefix', help='Prefix of every generated dataset name. Defaults to <dyn>.')] = None, tag: typing.Annotated[list[str] | None, typer.Option('--tag', help='Tag recorded on every run; repeatable.')] = None, epochs: typing.Annotated[int | None, typer.Option('--epochs', help='Override trainer.max_epochs.')] = None, batch_size: typing.Annotated[int | None, typer.Option('--batch-size', help='Override dataloader.batch_size.')] = None, device: typing.Annotated[str | None, typer.Option('--device', help='Override accelerator: auto, cpu, gpu.')] = None, reuse_data: typing.Annotated[bool, typer.Option('--reuse-data', help='Skip generation when a dataset of the same name is registered and on disk.')] = False, force: typing.Annotated[bool, typer.Option('--force', help='Overwrite existing dataset and checkpoint registry entries.')] = False, dry_run: typing.Annotated[bool, typer.Option('--dry-run', help='Print the plan (names and overrides) and exit without running anything.')] = False, verbose: typing.Annotated[bool, typer.Option('--verbose', '-v', help="Leave each point's solver log alone and report its progress in a pipe-safe form.")] = False) -> None
 :canonical: mesokit.cli.sweep.sweep_command
 
 ```{autodoc2-docstring} mesokit.cli.sweep.sweep_command
 ```
 ````
 
-````{py:function} parse_params(specs: collections.abc.Sequence[str]) -> dict[str, list[typing.Any]]
+````{py:function} parse_params(specs: collections.abc.Sequence[str], *, training: bool = False) -> dict[str, list[typing.Any]]
 :canonical: mesokit.cli.sweep.parse_params
 
 ```{autodoc2-docstring} mesokit.cli.sweep.parse_params
 ```
 ````
 
-````{py:function} point_suffix(point: collections.abc.Mapping[str, typing.Any]) -> str
+````{py:function} point_suffix(point: collections.abc.Mapping[str, typing.Any], *, leaves: bool = False) -> str
 :canonical: mesokit.cli.sweep.point_suffix
 
 ```{autodoc2-docstring} mesokit.cli.sweep.point_suffix
+```
+````
+
+````{py:function} _unique_names(names: collections.abc.Sequence[str]) -> list[str]
+:canonical: mesokit.cli.sweep._unique_names
+
+```{autodoc2-docstring} mesokit.cli.sweep._unique_names
 ```
 ````
 
@@ -148,7 +163,7 @@
 ```
 ````
 
-````{py:function} run_sweep(dyn: str, model: str, params: collections.abc.Mapping[str, collections.abc.Sequence[typing.Any]] | None = None, *, train_params: collections.abc.Mapping[str, collections.abc.Sequence[typing.Any]] | None = None, data: str | None = None, experiment: str | None = None, data_config: str = 'default', config: str = 'default', trainer: str | None = None, name_prefix: str | None = None, tags: collections.abc.Sequence[str] | None = None, epochs: int | None = None, batch_size: int | None = None, device: str | None = None, reuse_data: bool = False, force: bool = False, dry_run: bool = False, verbose: bool = False) -> list[dict[str, typing.Any]]
+````{py:function} run_sweep(dyn: str | None = None, model: str | None = None, params: collections.abc.Mapping[str, collections.abc.Sequence[typing.Any]] | None = None, *, train_params: collections.abc.Mapping[str, collections.abc.Sequence[typing.Any]] | None = None, data: str | None = None, experiment: str | None = None, data_config: str = 'default', config: str = 'default', overrides: collections.abc.Sequence[str] | None = None, trainer: str | None = None, name_prefix: str | None = None, tags: collections.abc.Sequence[str] | None = None, epochs: int | None = None, batch_size: int | None = None, device: str | None = None, reuse_data: bool = False, force: bool = False, dry_run: bool = False, verbose: bool = False) -> list[dict[str, typing.Any]]
 :canonical: mesokit.cli.sweep.run_sweep
 
 ```{autodoc2-docstring} mesokit.cli.sweep.run_sweep
@@ -166,6 +181,13 @@
 :canonical: mesokit.cli.sweep._override_spec
 
 ```{autodoc2-docstring} mesokit.cli.sweep._override_spec
+```
+````
+
+````{py:function} _yaml_value(value: typing.Any) -> str
+:canonical: mesokit.cli.sweep._yaml_value
+
+```{autodoc2-docstring} mesokit.cli.sweep._yaml_value
 ```
 ````
 

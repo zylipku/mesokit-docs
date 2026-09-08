@@ -1,9 +1,9 @@
 # Data Processing
 
 A `mesokit` dataset is an HDF5 file holding a bundle of trajectories on a
-shared time grid. This page is the user-facing entry point for generating
-built-in datasets, bringing your own data into `mesokit`, validating files,
-and understanding the shared on-disk contract.
+shared time grid. Generate one with a built-in simulator, or import your
+own trajectories into the same format. Once the file is validated and
+registered, you can use its name in training and interpretation commands.
 
 The same data contract is what `mesokit data generate` produces, what
 `mesokit data register` accepts from external sources, and what every model

@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_equivalents.html">Python Equivalents</a></li>
@@ -427,11 +427,23 @@
 <span id="id1"></span><h1><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code><a class="headerlink" href="#mesokit-train" title="Link to this heading">¶</a></h1>
 <p>Train a registered model architecture on a dataset through the trainer
 registered for that model, write a run directory, and index the checkpoint.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>ARCH<span class="w"> </span>--data<span class="w"> </span>NAME_OR_PATH<span class="w"> </span><span class="o">[</span>--dyn<span class="w"> </span>DYN<span class="o">]</span>
-<span class="w">              </span><span class="o">[</span>--config<span class="w"> </span>STEM<span class="p">|</span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--set<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--trainer<span class="w"> </span>NAME<span class="o">]</span>
-<span class="w">              </span><span class="o">[</span>--experiment<span class="w"> </span>E<span class="o">]</span><span class="w"> </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="w"> </span><span class="p">|</span><span class="w"> </span>--no-registry<span class="o">]</span><span class="w"> </span><span class="o">[</span>--from<span class="w"> </span>CKPT<span class="o">]</span>
-<span class="w">              </span><span class="o">[</span>--tag<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--notes<span class="w"> </span>TEXT<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span>
-<span class="w">              </span><span class="o">[</span>--epochs<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="o">[</span>--batch-size<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="o">[</span>--device<span class="w"> </span>auto<span class="p">|</span>cpu<span class="p">|</span>gpu<span class="o">]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>ARCH<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>NAME_OR_PATH<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--dyn<span class="w"> </span>DYN<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--config<span class="w"> </span>STEM<span class="p">|</span>PATH<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--set<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--trainer<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--experiment<span class="w"> </span>E<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--name<span class="w"> </span>NAME<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>--no-registry<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--from<span class="w"> </span>CKPT<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--tag<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--notes<span class="w"> </span>TEXT<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--epochs<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--batch-size<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--device<span class="w"> </span>auto<span class="p">|</span>cpu<span class="p">|</span>gpu<span class="o">]</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -469,7 +481,7 @@ registered for that model, write a run directory, and index the checkpoint.</p>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">E</span></code></p></td>
 <td><p>none</p></td>
-<td><p>Group the run: it lands in <code class="docutils literal notranslate"><span class="pre">checkpoints/DYN/E/&lt;run&gt;/</span></code>, is registered as <code class="docutils literal notranslate"><span class="pre">E/&lt;run&gt;</span></code>, and <code class="docutils literal notranslate"><span class="pre">E/runs.json</span></code> gets a row (see <a class="reference internal" href="#experiments">Experiments</a> below).</p></td>
+<td><p>Group the run: it lands in <code class="docutils literal notranslate"><span class="pre">checkpoints/DYN/E/&lt;run&gt;/</span></code>, is registered as <code class="docutils literal notranslate"><span class="pre">E/&lt;run&gt;</span></code>, and <code class="docutils literal notranslate"><span class="pre">E/runs.json</span></code> gets a row (see <a class="reference internal" href="#experiments"><span class="std std-ref">Experiments</span></a> below).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">NAME</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ARCH_v&lt;n&gt;</span></code>; in an experiment <code class="docutils literal notranslate"><span class="pre">ARCH_&lt;key&gt;&lt;value&gt;…</span></code> from <code class="docutils literal notranslate"><span class="pre">--set</span></code>, else <code class="docutils literal notranslate"><span class="pre">ARCH_r&lt;nn&gt;</span></code></p></td>
@@ -495,6 +507,18 @@ registered for that model, write a run directory, and index the checkpoint.</p>
 <td><p>off</p></td>
 <td><p>Replace an existing checkpoint entry of the same name and reuse its run directory (stale Lightning <code class="docutils literal notranslate"><span class="pre">.ckpt</span></code> files are cleared first).</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--epochs</span> <span class="pre">N</span></code></p></td>
+<td><p>from config</p></td>
+<td><p>Override <code class="docutils literal notranslate"><span class="pre">trainer.max_epochs</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--batch-size</span> <span class="pre">N</span></code></p></td>
+<td><p>from config</p></td>
+<td><p>Override <code class="docutils literal notranslate"><span class="pre">dataloader.batch_size</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--device</span></code></p></td>
+<td><p>from config</p></td>
+<td><p>Override <code class="docutils literal notranslate"><span class="pre">trainer.accelerator</span></code>: <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">cpu</span></code> or <code class="docutils literal notranslate"><span class="pre">gpu</span></code>.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -506,20 +530,23 @@ absent). A box length written in the recipe or passed with <code class="docutils
 kept; a written <code class="docutils literal notranslate"><span class="pre">Nx</span></code> / <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> / <code class="docutils literal notranslate"><span class="pre">in_dim</span></code> that contradicts the
 dataset is refused before training, naming the key. The shipped recipes
 carry no grid keys. The saved <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> records the completed
-configuration.
-| <code class="docutils literal notranslate"><span class="pre">--epochs</span> <span class="pre">N</span></code> | from config | Override <code class="docutils literal notranslate"><span class="pre">trainer.max_epochs</span></code>. |
-| <code class="docutils literal notranslate"><span class="pre">--batch-size</span> <span class="pre">N</span></code> | from config | Override <code class="docutils literal notranslate"><span class="pre">dataloader.batch_size</span></code>. |
-| <code class="docutils literal notranslate"><span class="pre">--device</span></code> | from config | Override <code class="docutils literal notranslate"><span class="pre">trainer.accelerator</span></code>: <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">cpu</span></code> or <code class="docutils literal notranslate"><span class="pre">gpu</span></code>. |</p>
+configuration.</p>
 <p>A training recipe has four sections — <code class="docutils literal notranslate"><span class="pre">model</span></code> (constructor kwargs),
 <code class="docutils literal notranslate"><span class="pre">dataset</span></code> (which <code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code> view of the trajectories to
 train on, e.g. <code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset</span></code> with a <code class="docutils literal notranslate"><span class="pre">stride</span></code>), <code class="docutils literal notranslate"><span class="pre">dataloader</span></code>, and
 <code class="docutils literal notranslate"><span class="pre">trainer</span></code> (epochs, optimiser, scheduler, accelerator, rollout steps, …).
 If the recipe leaves <code class="docutils literal notranslate"><span class="pre">trainer.dt</span></code> unset, the step is taken from the
 dataset’s <code class="docutils literal notranslate"><span class="pre">numerical/dt</span></code> attribute, or else from the spacing of <code class="docutils literal notranslate"><span class="pre">times</span></code>.
-The name collision check runs <strong>before</strong> training starts, so a duplicate
-<code class="docutils literal notranslate"><span class="pre">--name</span></code> fails fast.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--epochs<span class="w"> </span><span class="m">20</span><span class="w"> </span>--device<span class="w"> </span>cpu
+This inference does not account for a view’s <code class="docutils literal notranslate"><span class="pre">stride</span></code> or a solver step
+that differs from the saved frame spacing; see
+<a class="reference internal" href="../training.html#time-step"><span class="std std-ref">Time step</span></a>. The name collision check runs
+before training starts, so a duplicate <code class="docutils literal notranslate"><span class="pre">--name</span></code> fails fast.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="w"> </span>cpu
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>… Lightning progress …
@@ -558,30 +585,64 @@ trained &#39;spectral_onsagernet_1d&#39; with &#39;spectral_onsagernet_1d&#39;
 </table>
 </div>
 <p>More examples:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Train on a file that was never registered (registry name stays empty in the record).</span>
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>fno1d<span class="w"> </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span>--data<span class="w"> </span>/tmp/kdv_scratch.h5<span class="w"> </span>--config<span class="w"> </span>default<span class="w"> </span>--epochs<span class="w"> </span><span class="m">5</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># Train on a file that was never registered (registry name stays empty in the record).</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>fno1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>kdv_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>/tmp/kdv_scratch.h5<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>default<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">5</span>
 
-<span class="c1"># Give the run a meaningful name and overwrite a previous attempt.</span>
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>ac_eps05<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--name<span class="w"> </span>son_eps05_long<span class="w"> </span>--epochs<span class="w"> </span><span class="m">200</span><span class="w"> </span>--force
+<span class="gp">$ </span><span class="c1"># Give the run a meaningful name and overwrite a previous attempt.</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>ac_eps05<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>son_eps05_long<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--force
 
-<span class="c1"># A hyper-parameter variant: copy default.yaml to configs/train/allen_cahn_1d/spectral_onsagernet_1d/lr1e-4.yaml, then</span>
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--config<span class="w"> </span>lr1e-4
+<span class="gp">$ </span><span class="c1"># A hyper-parameter variant: copy default.yaml to configs/train/allen_cahn_1d/spectral_onsagernet_1d/lr1e-4.yaml, then</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>lr1e-4
 
-<span class="c1"># Throw-away run that must not pollute the checkpoint index (`mesokit model prune` deletes such run directories).</span>
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>fno1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--epochs<span class="w"> </span><span class="m">1</span><span class="w"> </span>--device<span class="w"> </span>cpu<span class="w"> </span>--no-registry
+<span class="gp">$ </span><span class="c1"># Throw-away run that must not pollute the checkpoint index (`mesokit model prune` deletes such run directories).</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>fno1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="w"> </span>cpu<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--no-registry
 
-<span class="c1"># Tag runs so `mesokit model list --tag paper` finds them later.</span>
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span>1e-4<span class="w"> </span>--tag<span class="w"> </span>paper<span class="w"> </span>--notes<span class="w"> </span><span class="s2">&quot;lr scan, best&quot;</span>
+<span class="gp">$ </span><span class="c1"># Tag runs so `mesokit model list --tag paper` finds them later.</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span>1e-4<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--tag<span class="w"> </span>paper<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--notes<span class="w"> </span><span class="s2">&quot;lr scan, best&quot;</span>
 
-<span class="c1"># Three learning rates side by side, under one experiment: checkpoints/allen_cahn_1d/lr-scan/{…_lr0.001, …_lr0.0001, …_lr1e-05}/</span>
-<span class="k">for</span><span class="w"> </span>lr<span class="w"> </span><span class="k">in</span><span class="w"> </span>1e-3<span class="w"> </span>1e-4<span class="w"> </span>1e-5<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span><span class="nv">$lr</span><span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
-<span class="k">done</span>
-mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
+<span class="gp">$ </span><span class="c1"># Three learning rates side by side, under one experiment: checkpoints/allen_cahn_1d/lr-scan/{…_lr0.001, …_lr0.0001, …_lr1e-05}/</span>
+<span class="gp">$ </span><span class="k">for</span><span class="w"> </span>lr<span class="w"> </span><span class="k">in</span><span class="w"> </span>1e-3<span class="w"> </span>1e-4<span class="w"> </span>1e-5<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="go">  mesokit train \</span>
+<span class="go">    --model spectral_onsagernet_1d \</span>
+<span class="go">    --data allen_cahn_1d_v0 \</span>
+<span class="go">    --experiment lr-scan \</span>
+<span class="go">    --set trainer.lr=$lr \</span>
+<span class="go">    --epochs 20</span>
+<span class="go">done</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
 
-<span class="c1"># Keep training the best one for 200 more epochs, at a lower rate.</span>
-mesokit<span class="w"> </span>train<span class="w"> </span>--from<span class="w"> </span>lr-scan/spectral_onsagernet_1d_lr0.0001<span class="w"> </span>--name<span class="w"> </span>lr-scan/son_long<span class="w"> </span>--epochs<span class="w"> </span><span class="m">200</span><span class="w"> </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span>3e-5
+<span class="gp">$ </span><span class="c1"># Keep training the best one for 200 more epochs, at a lower rate.</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from<span class="w"> </span>lr-scan/spectral_onsagernet_1d_lr0.0001<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>lr-scan/son_long<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span>3e-5
 </pre></div>
 </div>
 <section id="experiments">
@@ -614,9 +675,8 @@ replaces its row, so does every point of a <code class="docutils literal notrans
 entry. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">sync</span></code> rebuilds the table from the run directories.</p>
 <p>Two things to know:</p>
 <ul class="simple">
-<li><p>Stems differ in how long a recipe trains, not in the grid it fits: no
-shipped recipe writes a grid key, so every stem runs on any grid of its
-dynamics. <code class="docutils literal notranslate"><span class="pre">configs/train/allen_cahn_1d/spectral_onsagernet_1d/</span></code> ships
+<li><p>Recipe variants can change the model’s components or training settings.
+The shipped recipes leave grid sizes to be inferred from the dataset. <code class="docutils literal notranslate"><span class="pre">configs/train/allen_cahn_1d/spectral_onsagernet_1d/</span></code> ships
 <code class="docutils literal notranslate"><span class="pre">fdr.yaml</span></code>, the training-side counterpart of the data recipe of the same
 name: <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> with the epoch budget cut, so
 <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--model</span> <span class="pre">spectral_onsagernet_1d</span> <span class="pre">--data</span> <span class="pre">ac_fdr</span> <span class="pre">--config</span> <span class="pre">fdr</span></code>

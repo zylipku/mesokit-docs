@@ -10,25 +10,41 @@ dataset is generated per value, as `data generate --set` would), and
 land under `checkpoints/<dyn>/<experiment>/`, the table is that experiment's
 `runs.json`. This is the built-in form of the "for eps in …" shell loop.
 
-```sh
-mesokit sweep --dyn DYN --model ARCH [--param KEY=V1,V2,... ...] [--train-param KEY.PATH=V1,V2,... ...]
-              [--data NAME_OR_PATH] [--experiment E] [--tag T ...]
-              [--data-config STEM] [--config STEM] [--trainer NAME] [--name-prefix PREFIX]
-              [--epochs N] [--batch-size N] [--device auto|cpu|gpu]
-              [--reuse-data] [--force] [--dry-run] [--verbose|-v]
+```console
+$ mesokit sweep \
+  --model ARCH \
+  [--dyn DYN] \
+  [--param KEY=V1,V2,... ...] \
+  [--train-param KEY.PATH=V1,V2,... ...] \
+  [--data NAME_OR_PATH] \
+  [--experiment E] \
+  [--tag T ...] \
+  [--data-config STEM_OR_PATH] \
+  [--config STEM_OR_PATH] \
+  [--set KEY=VALUE ...] \
+  [--trainer NAME] \
+  [--name-prefix PREFIX] \
+  [--epochs N] \
+  [--batch-size N] \
+  [--device auto|cpu|gpu] \
+  [--reuse-data] \
+  [--force] \
+  [--dry-run] \
+  [--verbose|-v]
 ```
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `--dyn DYN` | required | Dynamics name; selects `configs/data/DYN/` and `configs/train/DYN/ARCH/`. |
+| `--dyn DYN` | from dataset | Dynamics name; selects `configs/data/DYN/` and `configs/train/DYN/ARCH/`. Required when generating data with `--param`. |
 | `--model ARCH` | required | Architecture name from the model registry. |
 | `--param KEY=V1,V2,...` | repeatable | A data axis. `KEY` is a keyword argument of the simulator (as for `data generate --set`); each value is read as int, float, bool or string. |
-| `--train-param KEY.PATH=V1,V2,...` | repeatable | A training axis over a recipe key (`trainer.lr`, `model.n_modes`, `dataset.stride`); values as above. At least one axis of either kind is required; all axes form one Cartesian product, data axes outermost. |
+| `--train-param KEY.PATH=V1,V2,...` | repeatable | A training axis over a recipe key (`trainer.lr`, `model.n_modes`, `dataset.stride`), using the same YAML types as `train --set`. At least one axis of either kind is required; all axes form one Cartesian product, data axes outermost. |
 | `--data NAME_OR_PATH` | none | The dataset every point trains on, when there is no `--param` axis (required then, refused otherwise). |
 | `--experiment E` | `ARCH_<axes>_<timestamp>` | The experiment the runs are grouped under. |
 | `--tag T` | none | Tag recorded on every run; repeatable. |
-| `--data-config STEM` | `default` | Data recipe `configs/data/DYN/STEM.yaml` the overrides are applied to. |
-| `--config STEM` | `default` | Training recipe `configs/train/DYN/ARCH/STEM.yaml`. |
+| `--data-config STEM_OR_PATH` | `default` | Data recipe `configs/data/DYN/STEM.yaml`, or a YAML file path. |
+| `--config STEM_OR_PATH` | `default` | Training recipe `configs/train/DYN/ARCH/STEM.yaml`, or a YAML file path. Uses the same recipe lookup and built-in defaults as `train`. |
+| `--set KEY=VALUE` | none | Fixed training-recipe override applied to every point; repeatable, as for `train`. |
 | `--trainer NAME` | `= --model` | Trainer registry name. |
 | `--name-prefix PREFIX` | `DYN` | Prefix of every generated dataset name (see below). |
 | `--epochs N`, `--batch-size N`, `--device` | from config | Forwarded to every training run, as for `train`. |
@@ -36,6 +52,14 @@ mesokit sweep --dyn DYN --model ARCH [--param KEY=V1,V2,... ...] [--train-param 
 | `--force` | off | Replace existing dataset and checkpoint entries of the same names. |
 | `--dry-run` | off | Print the plan — names and overrides per point — and exit without running anything. |
 | `--verbose`, `-v` | off | Forwarded to each point's data generation, as for `data generate`: the solver's own log stays, progress is reported in a pipe-safe form. |
+
+Training settings are applied in this order: recipe, `--set`,
+`--train-param`, then `--epochs`, `--batch-size`, and `--device`. Later
+settings take precedence. For example, use `--set dataset.stride=2` to keep
+the training view fixed while scanning `--train-param trainer.lr=1e-3,1e-4`.
+Quote axes containing lists or strings with commas, such as
+`--train-param 'model.widths=[32,64],[64,128]'` for a model with a `widths`
+setting.
 
 **Names.** A data point `eps=0.05, T=0.5` gives the dataset
 `<prefix>_eps0.05_T0.5`; a run is named `<model>_<key><value>[_…]` over both
@@ -46,6 +70,16 @@ as `<experiment>/<run>`. Floats are written compactly: `1.0` becomes `1`,
 sweep with `--experiment E --reuse-data --force` retrains on the existing
 data and replaces the rows. A dataset is generated once per data point and
 shared by that point's training runs (`reused` in the table).
+Fixed `--set` values are recorded in `params` alongside the training axes;
+only the scan axes determine run names.
+Numeric signs are preserved. If different points have the same rendered
+name (for example, `"a,b"` and `"a-b"`, or `true` and `"true"`), the
+colliding dataset or run names receive `_p1`, `_p2`, … suffixes in grid
+order, skipping names already used by other points. The same grid produces
+the same names in dry-run and when repeated with `--reuse-data --force`.
+
+Each completed point prints the same checkpoint, saved config, and metrics
+summary as `mesokit train`, followed at the end by the sweep's results table.
 
 **Failures.** Every point runs to the end of the grid: a point whose
 simulator or trainer raises is marked `FAILED` in the table with the error
@@ -53,9 +87,15 @@ message, the remaining points still run, and the command exits with status
 `1` at the end. Problems that would break every point — a missing recipe, a
 parameter the simulator does not accept — are reported before anything runs.
 
-```sh
-mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d --param eps=0.05,0.1,0.2 \
-  --experiment eps-scan --data-config fdr --epochs 2 --device cpu
+```console
+$ mesokit sweep \
+  --dyn allen_cahn_1d \
+  --model spectral_onsagernet_1d \
+  --param eps=0.05,0.1,0.2 \
+  --experiment eps-scan \
+  --data-config fdr \
+  --epochs 2 \
+  --device cpu
 ```
 
 ```text
@@ -97,23 +137,44 @@ which returns the list of row dicts.
 
 More examples:
 
-```sh
-# A learning-rate scan on an existing dataset: no generation, three checkpoints under lr-scan/.
-mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d --data allen_cahn_1d_v0 \
-  --train-param trainer.lr=1e-3,1e-4,1e-5 --experiment lr-scan --epochs 20
-mesokit model list --experiment lr-scan --sort train_loss
+```console
+$ # A learning-rate scan on an existing dataset: no generation, three checkpoints under lr-scan/.
+$ mesokit sweep \
+  --model spectral_onsagernet_1d \
+  --data allen_cahn_1d_v0 \
+  --set dataset.stride=2 \
+  --train-param trainer.lr=1e-3,1e-4,1e-5 \
+  --experiment lr-scan \
+  --epochs 20
+$ mesokit model list --experiment lr-scan --sort train_loss
 
-# Data axes times training axes: 2 datasets, 4 checkpoints; see the names before committing to the runs.
-mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d \
-  --param eps=0.05,0.1 --train-param trainer.lr=1e-3,1e-4 --dry-run
+$ # Data axes times training axes: 2 datasets, 4 checkpoints; see the names before committing to the runs.
+$ mesokit sweep \
+  --dyn allen_cahn_1d \
+  --model spectral_onsagernet_1d \
+  --param eps=0.05,0.1 \
+  --train-param trainer.lr=1e-3,1e-4 \
+  --dry-run
 
-# Retrain a grid whose datasets already exist, replacing the old checkpoints and rows.
-mesokit sweep --dyn allen_cahn_1d --model fno1d --param eps=0.05,0.1,0.2 \
-  --experiment eps-scan --reuse-data --force --epochs 50
+$ # Retrain a grid whose datasets already exist, replacing the old checkpoints and rows.
+$ mesokit sweep \
+  --dyn allen_cahn_1d \
+  --model fno1d \
+  --param eps=0.05,0.1,0.2 \
+  --experiment eps-scan \
+  --reuse-data \
+  --force \
+  --epochs 50
 
-# Custom prefix, variant training recipe.
-mesokit sweep --dyn ising_2d --model spectral_onsagernet_2d --param T=1.5,2.0,2.5 \
-  --data-config kac --name-prefix ising_kac --config default --epochs 20
+$ # Custom prefix, variant training recipe.
+$ mesokit sweep \
+  --dyn ising_2d \
+  --model spectral_onsagernet_2d \
+  --param T=1.5,2.0,2.5 \
+  --data-config kac \
+  --name-prefix ising_kac \
+  --config default \
+  --epochs 20
 ```
 
 Errors:

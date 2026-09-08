@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/python_equivalents.html">Python Equivalents</a></li>
@@ -425,310 +425,153 @@
         <article role="main" id="furo-main-content">
           <section class="tex2jax_ignore mathjax_ignore" id="agent-skills">
 <h1>Agent Skills<a class="headerlink" href="#agent-skills" title="Link to this heading">¶</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">mesokit</span></code> ships six <em>skills</em>: markdown instruction files that a coding
-agent (Claude Code, Codex CLI) reads when you ask it to do a mesokit task.
-Each one packages the judgment the reference pages leave to the reader —
-which axis is time in your file, which model family fits your data and
-what its recipe must contain, how to plug your own equation into the
-registries — as a single procedure that ends with a self-check the agent
-must pass before it reports success. They live inside the installed
-package, so they are available wherever <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is, and
-<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span> <span class="pre">install</span></code> copies them into the folder your agent scans.</p>
-<p>Skills are not required to use mesokit. Everything they do is a sequence of
-documented commands and Python calls; they exist so that an agent does the
-sequence correctly on the first try, and asks you only what it cannot read
-from your files.</p>
-<section id="before-you-start">
-<h2>Before you start<a class="headerlink" href="#before-you-start" title="Link to this heading">¶</a></h2>
-<ul class="simple">
-<li><p>A coding agent is installed, following its official guide:
-<a class="reference external" href="https://code.claude.com/docs/en/setup">Claude Code</a> or the
-<a class="reference external" href="https://developers.openai.com/codex/cli">Codex CLI</a>. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code>
-checks for the <code class="docutils literal notranslate"><span class="pre">claude</span></code> / <code class="docutils literal notranslate"><span class="pre">codex</span></code> command before it does anything and, if
-the command is missing, stops with a pointer to that guide.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is importable in the shell the agent runs commands in. In the
-mesokit checkout that means the agent prefixes commands with <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">run</span></code>
-(the skills say so); in your own project it means the environment mesokit
-is installed in is active when you start the agent (see
-<a class="reference internal" href="installation.html"><span class="std std-doc">Installation</span></a>).</p></li>
-<li><p>Start the agent in your <strong>project root</strong>: the directory that holds
-<code class="docutils literal notranslate"><span class="pre">configs/</span></code> and where the <code class="docutils literal notranslate"><span class="pre">.mesokit/</span></code> registries live. All <code class="docutils literal notranslate"><span class="pre">mesokit</span></code>
-commands assume it.</p></li>
-<li><p>Outside the mesokit checkout, run <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span> <span class="pre">init</span></code> once in your
-project (next section): it writes the agent’s project guidance and
-installs the skills.</p></li>
-</ul>
-</section>
-<section id="which-skill-when">
-<h2>Which skill, when<a class="headerlink" href="#which-skill-when" title="Link to this heading">¶</a></h2>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>your data already exists (.npz, .nc, .pt, foreign .h5) ──► mesokit-convert-data ──┐
-your own equation / solver / generator ─────────────────► mesokit-add-simulator ──┤
-                                                                                  ▼
-                                                              registered dataset (.mesokit/datasets.json)
-                                                                                  │
-                                    shipped family (fno, spectral_onsagernet, onsagernet)
-                                                                                  │
-                                                                           mesokit-train ──► checkpoint + `potential` artifact
-                                                                                  │
-                          the toolkit lacks …   a model ─────► mesokit-add-model ─┤
-                                                a loss / loop ► mesokit-add-trainer ┤
-                                                a diagnostic ─► mesokit-add-artifact ┘
+<p>You can ask a coding agent to help convert data, train a model, or add a
+custom extension. <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> includes six skills: task guides that the
+agent reads to carry out these workflows using mesokit’s commands and
+Python API.</p>
+<p>Skills are optional. You can follow the same workflows yourself through
+the <a class="reference internal" href="quickstart.html"><span class="std std-doc">Quickstart</span></a> and the rest of this guide.</p>
+<section id="set-up-your-project">
+<h2>Set up your project<a class="headerlink" href="#set-up-your-project" title="Link to this heading">¶</a></h2>
+<p>Install a supported coding agent using its official instructions:
+<a class="reference external" href="https://code.claude.com/docs/en/setup">Claude Code</a> or
+<a class="reference external" href="https://developers.openai.com/codex/cli">Codex CLI</a>.
+See <a class="reference internal" href="cli.html#running-the-cli"><span class="std std-ref">how to use CLI</span></a>.</p>
+<p>From your project directory, set up the agent you use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>agent<span class="w"> </span>init<span class="w"> </span>--agent<span class="w"> </span>claude
 </pre></div>
 </div>
+<p>For Codex, use <code class="docutils literal notranslate"><span class="pre">--agent</span> <span class="pre">codex</span></code>; for both, use <code class="docutils literal notranslate"><span class="pre">--agent</span> <span class="pre">both</span></code>. This writes
+project guidance and installs the skills in the appropriate project
+folders. Start your agent from that same directory so it can find your
+recipes and registered datasets.</p>
+<p>See <a class="reference internal" href="cli/agent.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></span></a> for the files created and how existing
+guidance is preserved. In the mesokit checkout, project guidance is
+already present; use <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span> <span class="pre">install</span> <span class="pre">--agent</span> <span class="pre">codex</span></code> to install
+project skills for Codex.</p>
+</section>
+<section id="choose-a-task">
+<h2>Choose a task<a class="headerlink" href="#choose-a-task" title="Link to this heading">¶</a></h2>
+<p>Describe your task in ordinary language and include the files, dataset
+names, or checkpoints you want to use. You can also name a skill
+explicitly; in Claude Code, for example, use <code class="docutils literal notranslate"><span class="pre">/mesokit-train</span></code>.</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Skill</p></th>
-<th class="head"><p>Ask for it when you want to …</p></th>
-<th class="head"><p>It will …</p></th>
+<th class="head"><p>Use it to</p></th>
+<th class="head"><p>Typical result</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit-convert-data</span></code></p></td>
-<td><p>bring an existing file into mesokit</p></td>
-<td><p>inspect the file, ask once if the axis layout is unclear, write a <code class="docutils literal notranslate"><span class="pre">mesokit-trajectory</span></code> HDF5 v1 file with the metadata groups filled in, run the validator until it passes, register the dataset if you gave a name</p></td>
+<td><p>Import an existing file such as <code class="docutils literal notranslate"><span class="pre">.npz</span></code>, <code class="docutils literal notranslate"><span class="pre">.nc</span></code>, <code class="docutils literal notranslate"><span class="pre">.pt</span></code>, or a foreign HDF5 file</p></td>
+<td><p>A validated mesokit HDF5 file, optionally registered by name</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit-add-simulator</span></code></p></td>
-<td><p>generate datasets from your own equation or code</p></td>
-<td><p>wrap it as a registered simulator with the metadata <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> needs (<code class="docutils literal notranslate"><span class="pre">dt</span></code>, box, grid), wire a <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/</span></code> recipe, generate a small dataset, validate it and run a physical sanity check</p></td>
+<td><p>Generate data from your own equation or solver</p></td>
+<td><p>A simulator module and a data recipe, checked on a small run</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit-train</span></code></p></td>
-<td><p>fit a model and read what it learned</p></td>
-<td><p>read the dataset’s grid and <code class="docutils literal notranslate"><span class="pre">dt</span></code>, choose the family and potential for your goal, write or adapt the recipe with the grid checked against the data, run a one-epoch CPU smoke pass, train, then extract and interpret the <code class="docutils literal notranslate"><span class="pre">potential</span></code> artifact (custom models from <code class="docutils literal notranslate"><span class="pre">plugins/</span></code> the same way)</p></td>
+<td><p>Fit a model and inspect what it learned</p></td>
+<td><p>A training recipe, checkpoint, and interpretation of its artifacts</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit-add-model</span></code></p></td>
-<td><p>a model mesokit does not ship</p></td>
-<td><p>prefer a new potential or operator block for a shipped family when that suffices; otherwise write a <code class="docutils literal notranslate"><span class="pre">DynamicsModel</span></code> in your module, run the structural smoke test (protocol, shapes, gradients, wrong-grid error), train two epochs</p></td>
+<td><p>Add a model or a component such as a potential or mobility operator</p></td>
+<td><p>A Python extension checked for shapes, gradients, and training compatibility</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit-add-trainer</span></code></p></td>
-<td><p>a different loss, schedule or loop</p></td>
-<td><p>check whether <code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code>’s options already cover it; if not, write a plain-PyTorch <code class="docutils literal notranslate"><span class="pre">fit()</span></code> registered under your model, and smoke it against the persistence baseline</p></td>
+<td><p>Use a different objective or training loop</p></td>
+<td><p>Trainer settings or a custom trainer, checked on a small run</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mesokit-add-artifact</span></code></p></td>
-<td><p>a plot or number read off a trained model</p></td>
-<td><p>build an artifact class with <code class="docutils literal notranslate"><span class="pre">summary</span></code> / <code class="docutils literal notranslate"><span class="pre">plot</span></code> / <code class="docutils literal notranslate"><span class="pre">save</span></code>, wire it into your model or compute it post hoc from a checkpoint, and place it beside the shipped <code class="docutils literal notranslate"><span class="pre">potential</span></code> artifact with <code class="docutils literal notranslate"><span class="pre">compare</span></code></p></td>
+<td><p>Read a new diagnostic from a trained model</p></td>
+<td><p>An artifact with a summary and figure, optionally compared with existing artifacts</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>All shipped skills carry the <code class="docutils literal notranslate"><span class="pre">mesokit-</span></code> prefix so they stay distinguishable
-in an agent’s shared skill folder. The full text of each is in the package
-(<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span> <span class="pre">path</span> <span class="pre">&lt;name&gt;</span></code>) and, in a checkout, under
-<code class="docutils literal notranslate"><span class="pre">.claude/skills/&lt;name&gt;/SKILL.md</span></code>.</p>
 </section>
-<section id="installing-the-skills-into-your-agent">
-<h2>Installing the skills into your agent<a class="headerlink" href="#installing-the-skills-into-your-agent" title="Link to this heading">¶</a></h2>
-<p>In a project of your own, <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span> <span class="pre">init</span></code> does the whole setup in one
-step: it writes an <code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code> with the conventions for using mesokit from
-that directory (plus a <code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> import shim so Claude Code reads the
-same text) and installs the skills — see <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code> in the
-<a class="reference internal" href="cli/agent.html"><span class="std std-doc">Command-Line Reference</span></a>. The commands below install the skills
-alone.</p>
-<p>Inside the mesokit checkout, Claude Code already sees the skills
-(<code class="docutils literal notranslate"><span class="pre">.claude/skills/</span></code> holds a copy of each). Anywhere else — a project of your
-own with mesokit installed, or Codex in any directory — copy them into
-the folder the agent scans:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>skills<span class="w"> </span>list<span class="w">                                   </span><span class="c1"># what ships, one line each</span>
-mesokit<span class="w"> </span>skills<span class="w"> </span>path<span class="w"> </span>mesokit-train<span class="w">                     </span><span class="c1"># where the SKILL.md is</span>
-mesokit<span class="w"> </span>skills<span class="w"> </span>install<span class="w">                                </span><span class="c1"># all six -&gt; ./.claude/skills/   (Claude Code, this project)</span>
-mesokit<span class="w"> </span>skills<span class="w"> </span>install<span class="w"> </span>--scope<span class="w"> </span>user<span class="w">                   </span><span class="c1"># all six -&gt; ~/.claude/skills/   (Claude Code, every project)</span>
-mesokit<span class="w"> </span>skills<span class="w"> </span>install<span class="w"> </span>--agent<span class="w"> </span>codex<span class="w">                  </span><span class="c1"># all six -&gt; ./.agents/skills/   (Codex, this project)</span>
-mesokit<span class="w"> </span>skills<span class="w"> </span>install<span class="w"> </span>--agent<span class="w"> </span>codex<span class="w"> </span>--scope<span class="w"> </span>user<span class="w">     </span><span class="c1"># all six -&gt; $CODEX_HOME/skills/ (default ~/.codex/skills)</span>
-mesokit<span class="w"> </span>skills<span class="w"> </span>install<span class="w"> </span>mesokit-train<span class="w"> </span>--dest<span class="w"> </span>~/my-skills<span class="w">   </span><span class="c1"># one skill, explicit folder</span>
-</pre></div>
-</div>
-<div class="table-wrapper colwidths-auto docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Option</p></th>
-<th class="head"><p>Default</p></th>
-<th class="head"><p>Meaning</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NAME</span> <span class="pre">…</span></code></p></td>
-<td><p>all shipped skills</p></td>
-<td><p>Which skills to copy; <code class="docutils literal notranslate"><span class="pre">--all</span></code> is the explicit form.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--agent</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">claude</span></code></p></td>
-<td><p>Whose folder layout to use: <code class="docutils literal notranslate"><span class="pre">claude</span></code> or <code class="docutils literal notranslate"><span class="pre">codex</span></code>.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--scope</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">project</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">project</span></code> writes under the current directory, <code class="docutils literal notranslate"><span class="pre">user</span></code> under your home.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--dest</span> <span class="pre">DIR</span></code></p></td>
-<td><p>none</p></td>
-<td><p>Explicit target folder; overrides <code class="docutils literal notranslate"><span class="pre">--agent</span></code> / <code class="docutils literal notranslate"><span class="pre">--scope</span></code>.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
-<td><p>off</p></td>
-<td><p>Replace a skill folder that already exists.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>The copy is a snapshot of the installed mesokit version: after upgrading
-mesokit, re-run the command with <code class="docutils literal notranslate"><span class="pre">--force</span></code>. The agent picks up new skills
-at its next session — in Claude Code type <code class="docutils literal notranslate"><span class="pre">/</span></code> and the <code class="docutils literal notranslate"><span class="pre">mesokit-…</span></code> entries
-appear; Codex lists installed skills in its skills view.</p>
-</section>
-<section id="invoking-a-skill">
-<h2>Invoking a skill<a class="headerlink" href="#invoking-a-skill" title="Link to this heading">¶</a></h2>
-<p><strong>Conversationally.</strong> Describe the task in your own words; the skill’s
-description tells the agent when it applies. In Claude Code you can also
-name it: <code class="docutils literal notranslate"><span class="pre">/mesokit-train</span></code>. The agent asks one round of questions for what
-it cannot read from your files, does the work in your project directory,
-runs the skill’s self-check, and reports back with the files, commands and
-numbers. This is the mode for all six skills.</p>
-<p><strong>As a worker.</strong> <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code> launches an agent non-interactively
-(<code class="docutils literal notranslate"><span class="pre">claude</span> <span class="pre">-p</span></code> or <code class="docutils literal notranslate"><span class="pre">codex</span> <span class="pre">exec</span></code>), hands it the <code class="docutils literal notranslate"><span class="pre">mesokit-convert-data</span></code> skill
-and your file, and validates the result when the agent exits:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>~/runs/field.nc<span class="w"> </span>--hint<span class="w"> </span><span class="s2">&quot;variable phi, dims (member, time, x)&quot;</span><span class="w"> </span>--name<span class="w"> </span>phi_v0
-</pre></div>
-</div>
-<p>The skill detects which mode it is in from the prompt: with a pinned input
-and output path it skips the interview. Only the conversion skill has a
-worker mode; the others are interactive by nature. Because a worker cannot
-answer permission prompts, <code class="docutils literal notranslate"><span class="pre">parse</span></code> grants what the conversion needs on the
-agent’s command line (writes in your project directory, Python and
-<code class="docutils literal notranslate"><span class="pre">mesokit</span></code>) and prints that command line. The options and the exact grants
-are in the <a class="reference internal" href="cli/data.html"><span class="std std-doc">Command-Line Reference</span></a> under <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code>.</p>
+<section id="example-requests">
+<h2>Example requests<a class="headerlink" href="#example-requests" title="Link to this heading">¶</a></h2>
+<p><strong>Convert existing data:</strong></p>
+<blockquote>
+<div><p>I have <code class="docutils literal notranslate"><span class="pre">runs/burgers.npz</span></code> with <code class="docutils literal notranslate"><span class="pre">u</span></code> shaped (200, 101, 256) and a time
+array <code class="docutils literal notranslate"><span class="pre">t</span></code>. The axes are trajectory, time, and position; the domain is
+[0, 2π), periodic. Import it as <code class="docutils literal notranslate"><span class="pre">burgers_v0</span></code>.</p>
+</div></blockquote>
+<p>The agent inspects the file, writes the HDF5 cache, validates it, and
+registers the requested name. If essential metadata is missing, it asks
+for that information.</p>
+<p><strong>Train and interpret:</strong></p>
+<blockquote>
+<div><p>Train Spectral OnsagerNet on <code class="docutils literal notranslate"><span class="pre">burgers_v0</span></code>. Start with a short CPU run,
+then show me the loss curve and explain the learned potential.</p>
+</div></blockquote>
+<p>The agent checks the data and training settings, runs a small fit, and
+uses the checkpoint’s artifacts to describe what the model learned.</p>
+<p><strong>Add your own solver:</strong></p>
+<blockquote>
+<div><p>My <code class="docutils literal notranslate"><span class="pre">heat_1d.py</span></code> solves the heat equation on a periodic grid. Make it
+available through <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code> and check that the generated
+trajectories conserve the spatial mean.</p>
+</div></blockquote>
+<p>The agent creates an extension in your project and a matching recipe.
+See <a class="reference internal" href="data_processing/custom_simulator.html"><span class="std std-doc">Custom Simulators</span></a> for the
+interface used by this workflow.</p>
+<p><strong>Add a diagnostic:</strong></p>
+<blockquote>
+<div><p>From checkpoint <code class="docutils literal notranslate"><span class="pre">son_demo</span></code>, plot the learned mobility against squared
+wavenumber and compare it with the <code class="docutils literal notranslate"><span class="pre">potential</span></code> artifact.</p>
+</div></blockquote>
+<p>The agent can compute this from the saved model and create a figure
+without changing the model itself; see
+<a class="reference internal" href="interpretability/custom_artifact.html"><span class="std std-doc">Custom Artifacts</span></a>.</p>
 </section>
 <section id="what-to-expect">
 <h2>What to expect<a class="headerlink" href="#what-to-expect" title="Link to this heading">¶</a></h2>
-<ul class="simple">
-<li><p><strong>The agent runs real commands.</strong> It will read your files, write under
-<code class="docutils literal notranslate"><span class="pre">data/</span></code>, <code class="docutils literal notranslate"><span class="pre">checkpoints/</span></code>, <code class="docutils literal notranslate"><span class="pre">figs/</span></code>, <code class="docutils literal notranslate"><span class="pre">.mesokit/</span></code> and the <code class="docutils literal notranslate"><span class="pre">configs/</span></code> recipe
-folders, and launch <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> commands — your agent will show its usual
-permission prompts (the <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code> worker gets its grants up
-front instead). Nothing it produces there should be committed.</p></li>
-<li><p><strong>Small before large.</strong> Every skill starts with a smoke-sized run (a few
-trajectories, one epoch on CPU) and tells you before something will run
-long or use the GPU.</p></li>
-<li><p><strong>It checks itself.</strong> The conversion skill reports success only when
-<code class="docutils literal notranslate"><span class="pre">mesokit.data.validate</span></code> passes; the model skill refuses to train before
-the structural test passes; the artifact skill verifies against a known
-case.</p></li>
-<li><p><strong>It does not change the mesokit package.</strong> The <code class="docutils literal notranslate"><span class="pre">add-*</span></code> skills write into
-your module and stop, with an explanation, when a request would need a
-change under <code class="docutils literal notranslate"><span class="pre">src/mesokit/</span></code>.</p></li>
-<li><p><strong>It does not decide what your data is.</strong> When the axis layout, the box
-or the goal of the fit cannot be read from the file or the request, the
-skill asks — in one round, not a drip of questions.</p></li>
-</ul>
+<p>The agent runs commands and writes files in your project: data under
+<code class="docutils literal notranslate"><span class="pre">data/</span></code>, trained runs under <code class="docutils literal notranslate"><span class="pre">checkpoints/</span></code>, and figures under <code class="docutils literal notranslate"><span class="pre">figs/</span></code>.
+Extensions go in your own Python modules, usually under <code class="docutils literal notranslate"><span class="pre">plugins/</span></code>, and
+reusable settings go under <code class="docutils literal notranslate"><span class="pre">configs/</span></code>.</p>
+<p>The skills start with small runs and include checks before reporting
+results. Validation confirms the file format; it does not establish that
+the data or learned model is physically correct. Review the reported
+assumptions, metrics, and plots when deciding what to run next.</p>
 </section>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
-<p>Each example is a request you could type, what the agent does under the
-skill, and what you get. Paths are illustrative.</p>
-<section id="convert-a-file">
-<h3>Convert a file<a class="headerlink" href="#convert-a-file" title="Link to this heading">¶</a></h3>
-<blockquote>
-<div><p>I have <code class="docutils literal notranslate"><span class="pre">~/runs/burgers.npz</span></code> with arrays <code class="docutils literal notranslate"><span class="pre">u</span></code> of shape (200, 101, 256) and
-<code class="docutils literal notranslate"><span class="pre">t</span></code>; the domain is [0, 2π) periodic. Make it a mesokit dataset called
-<code class="docutils literal notranslate"><span class="pre">burgers_v0</span></code>.</p>
-</div></blockquote>
-<p>The agent inspects the arrays, recognises <code class="docutils literal notranslate"><span class="pre">(traj,</span> <span class="pre">time,</span> <span class="pre">x)</span></code> from the hint,
-writes <code class="docutils literal notranslate"><span class="pre">data/parsed/burgers.h5</span></code> with <code class="docutils literal notranslate"><span class="pre">dyn</span> <span class="pre">=</span> <span class="pre">&quot;burgers_1d&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">Lx</span> <span class="pre">=</span> <span class="pre">2π</span></code>,
-<code class="docutils literal notranslate"><span class="pre">dt</span> <span class="pre">=</span> <span class="pre">t[1]</span> <span class="pre">-</span> <span class="pre">t[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">source</span></code> pointing at your file, runs the validator,
-and registers the name:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>registered &#39;burgers_v0&#39; -&gt; /home/me/project/data/parsed/burgers.h5 (19.7 MiB)
-  check:      passed (mesokit-trajectory v1)
-  dyn:        burgers_1d
-  shape:      200 traj x 101 steps x 1 channel, grid 256 (float32)
-  dt:         0.01
-  channels:   u
+<section id="convert-a-file-directly-from-the-command-line">
+<h2>Convert a file directly from the command line<a class="headerlink" href="#convert-a-file-directly-from-the-command-line" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code> launches an installed agent for a single conversion,
+then validates the output and optionally registers it:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file<span class="w"> </span>runs/field.nc<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--hint<span class="w"> </span><span class="s2">&quot;variable phi, dimensions (member, time, x)&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>phi_v0
 </pre></div>
 </div>
-<p>Had the hint been missing, it would have asked which axis is time before
-writing anything.</p>
-<p>To watch this happen without a file of your own, <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code> writes
-a deliberately non-conforming one to practise on:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
-mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
+<p>To try it with a supplied practice file:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>demo
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>ac_imported
 </pre></div>
 </div>
+<p>This runs without an interactive conversation. The command prints the
+agent invocation, including its permissions. See
+<a class="reference internal" href="cli/data.html#mesokit-data-parse"><span class="std std-ref">mesokit data parse</span></a> for agent selection,
+output paths, and foreground or detached execution.</p>
 </section>
-<section id="generate-data-from-your-own-equation">
-<h3>Generate data from your own equation<a class="headerlink" href="#generate-data-from-your-own-equation" title="Link to this heading">¶</a></h3>
-<blockquote>
-<div><p>Here is my <code class="docutils literal notranslate"><span class="pre">heat_1d.py</span></code> with an explicit-Euler solver for
-<code class="docutils literal notranslate"><span class="pre">u_t</span> <span class="pre">=</span> <span class="pre">κ</span> <span class="pre">u_xx</span></code> on a periodic grid. Make mesokit generate datasets from
-it.</p>
-</div></blockquote>
-<p>The agent wraps the solver as <code class="docutils literal notranslate"><span class="pre">simulate_heat_1d(*,</span> <span class="pre">n_traj,</span> <span class="pre">Nx,</span> <span class="pre">Lx,</span> <span class="pre">T,</span> <span class="pre">n_time,</span> <span class="pre">kappa,</span> <span class="pre">seed,</span> <span class="pre">verbose)</span></code> registered as <code class="docutils literal notranslate"><span class="pre">heat_1d</span></code>, stores <code class="docutils literal notranslate"><span class="pre">dt</span></code>, <code class="docutils literal notranslate"><span class="pre">Lx</span></code>
-and <code class="docutils literal notranslate"><span class="pre">kappa</span></code> in the metadata groups, writes
-<code class="docutils literal notranslate"><span class="pre">configs/data/heat_1d/default.yaml</span></code>, generates a small dataset with
-<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--dyn</span> <span class="pre">heat_1d</span></code> with the wrapper in <code class="docutils literal notranslate"><span class="pre">plugins/</span></code>, and checks that the
-mean of <code class="docutils literal notranslate"><span class="pre">u</span></code> is conserved along one trajectory before handing over to
-training.</p>
-</section>
-<section id="train-and-interpret">
-<h3>Train and interpret<a class="headerlink" href="#train-and-interpret" title="Link to this heading">¶</a></h3>
-<blockquote>
-<div><p>Train Spectral OnsagerNet on <code class="docutils literal notranslate"><span class="pre">burgers_v0</span></code> and show me the potential.</p>
-</div></blockquote>
-<p>The agent reads the grid (256 points, <code class="docutils literal notranslate"><span class="pre">Lx</span> <span class="pre">=</span> <span class="pre">2π</span></code>, <code class="docutils literal notranslate"><span class="pre">dt</span> <span class="pre">=</span> <span class="pre">0.01</span></code>), chooses
-<code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d</span></code>, copies the Allen–Cahn recipe to
-<code class="docutils literal notranslate"><span class="pre">configs/train/burgers_1d/spectral_onsagernet_1d/default.yaml</span></code> with
-<code class="docutils literal notranslate"><span class="pre">Nx:</span> <span class="pre">256</span></code>, runs</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>burgers_1d<span class="w"> </span>--data<span class="w"> </span>burgers_v0<span class="w"> </span>--epochs<span class="w"> </span><span class="m">1</span><span class="w"> </span>--device<span class="w"> </span>cpu<span class="w"> </span>--no-registry
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>burgers_1d<span class="w"> </span>--data<span class="w"> </span>burgers_v0<span class="w"> </span>--name<span class="w"> </span>burgers_son
-mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>burgers_son<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/burgers_son.png
+<section id="inspect-or-refresh-installed-skills">
+<h2>Inspect or refresh installed skills<a class="headerlink" href="#inspect-or-refresh-installed-skills" title="Link to this heading">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>skills<span class="w"> </span>list
+<span class="gp">$ </span>mesokit<span class="w"> </span>skills<span class="w"> </span>path<span class="w"> </span>mesokit-train
+<span class="gp">$ </span>mesokit<span class="w"> </span>skills<span class="w"> </span>install<span class="w"> </span>--agent<span class="w"> </span>codex<span class="w"> </span>--force
 </pre></div>
 </div>
-<p>and reports the loss curve, the figure path, and a reading of it: for
-Burgers it will point out the non-zero reactive multipliers <code class="docutils literal notranslate"><span class="pre">Im</span> <span class="pre">Kw</span></code> as the
-signature of the advective (reversible) part, and suggest <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">coercive</span></code> for a richer potential.</p>
-</section>
-<section id="add-a-model">
-<h3>Add a model<a class="headerlink" href="#add-a-model" title="Link to this heading">¶</a></h3>
-<blockquote>
-<div><p>Spectral OnsagerNet’s potentials are all local. I want one with a
-non-local kernel <code class="docutils literal notranslate"><span class="pre">∫∫</span> <span class="pre">u(x)</span> <span class="pre">K(x</span> <span class="pre">−</span> <span class="pre">y)</span> <span class="pre">u(y)</span></code>.</p>
-</div></blockquote>
-<p>The agent recognises this as a new potential, not a new model: it writes a
-<code class="docutils literal notranslate"><span class="pre">SpectralPotential</span></code> subclass in your module with the kernel as learnable
-Fourier multipliers (<code class="docutils literal notranslate"><span class="pre">dVdu_h</span></code>, <code class="docutils literal notranslate"><span class="pre">L_hat</span></code>, <code class="docutils literal notranslate"><span class="pre">N_hat</span></code>), checks its gradient
-against finite differences, plugs it into <code class="docutils literal notranslate"><span class="pre">SpectralOnsagerNet1d(...,</span> <span class="pre">potential=...)</span></code>, and trains two epochs from Python. The shipped <code class="docutils literal notranslate"><span class="pre">potential</span></code>
-artifact still works, so the next step is <code class="docutils literal notranslate"><span class="pre">mesokit-train</span></code>’s Python path.</p>
-</section>
-<section id="change-the-training-objective">
-<h3>Change the training objective<a class="headerlink" href="#change-the-training-objective" title="Link to this heading">¶</a></h3>
-<blockquote>
-<div><p>Train my model on three-step rollouts instead of next-frame prediction.</p>
-</div></blockquote>
-<p>The agent first checks <code class="docutils literal notranslate"><span class="pre">LitTrainer(rollout_steps=3)</span></code> with a training view
-whose targets are the next three frames — no new code — and only writes a
-custom <code class="docutils literal notranslate"><span class="pre">fit()</span></code> if you also want a term <code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code> cannot express. Either
-way it reports the smoke loss against the persistence baseline so “it
-learned something” has a number.</p>
-</section>
-<section id="read-a-new-diagnostic">
-<h3>Read a new diagnostic<a class="headerlink" href="#read-a-new-diagnostic" title="Link to this heading">¶</a></h3>
-<blockquote>
-<div><p>From checkpoint <code class="docutils literal notranslate"><span class="pre">burgers_son</span></code>, plot the learned mobility against <code class="docutils literal notranslate"><span class="pre">k²</span></code>
-and fit the diffusion constant.</p>
-</div></blockquote>
-<p>The agent loads the checkpoint from its saved <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, writes a
-<code class="docutils literal notranslate"><span class="pre">MobilitySpectrum</span></code> artifact (<code class="docutils literal notranslate"><span class="pre">summary</span></code>, <code class="docutils literal notranslate"><span class="pre">plot</span></code>, <code class="docutils literal notranslate"><span class="pre">save</span></code>) that fits
-<code class="docutils literal notranslate"><span class="pre">Km</span> <span class="pre">≈</span> <span class="pre">D</span> <span class="pre">k²</span></code>, saves <code class="docutils literal notranslate"><span class="pre">figs/burgers_son_mobility.png</span></code>, places it beside the
-shipped <code class="docutils literal notranslate"><span class="pre">potential</span></code> artifact with <code class="docutils literal notranslate"><span class="pre">compare</span></code>, and states the fitted <code class="docutils literal notranslate"><span class="pre">D</span></code> with
-the caveat that a non-zero <code class="docutils literal notranslate"><span class="pre">Km(0)</span></code> would mean the dynamics is not
-conserved.</p>
-</section>
-</section>
-<section id="writing-your-own">
-<h2>Writing your own<a class="headerlink" href="#writing-your-own" title="Link to this heading">¶</a></h2>
-<p>A skill is a folder with a <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code> whose YAML frontmatter has <code class="docutils literal notranslate"><span class="pre">name</span></code>
-and <code class="docutils literal notranslate"><span class="pre">description</span></code> (the description is what tells the agent when to use
-it — include the phrasings that should trigger it and the cases that
-should not), followed by the instructions. Keep it one procedure with a
-self-check, not a copy of the reference docs, and avoid links relative to
-the repository so the file works after it is copied. The shipped skills are
-the templates; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span> <span class="pre">path</span> <span class="pre">&lt;name&gt;</span></code> prints one to start from.</p>
+<p>Installed skills are copies of the version bundled with mesokit. Refresh
+them after upgrading and start a new agent session. If you also want to
+refresh the project’s mesokit guidance, use
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span> <span class="pre">init</span> <span class="pre">--agent</span> <span class="pre">codex</span> <span class="pre">--force</span></code>.</p>
+<p><a class="reference internal" href="cli/skills.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></span></a> covers installing selected skills,
+user-wide installation, and custom destination folders.</p>
 </section>
 </section>
 
@@ -788,21 +631,12 @@ the templates; <code class="docutils literal notranslate"><span class="pre">meso
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Agent Skills</a><ul>
-<li><a class="reference internal" href="#before-you-start">Before you start</a></li>
-<li><a class="reference internal" href="#which-skill-when">Which skill, when</a></li>
-<li><a class="reference internal" href="#installing-the-skills-into-your-agent">Installing the skills into your agent</a></li>
-<li><a class="reference internal" href="#invoking-a-skill">Invoking a skill</a></li>
+<li><a class="reference internal" href="#set-up-your-project">Set up your project</a></li>
+<li><a class="reference internal" href="#choose-a-task">Choose a task</a></li>
+<li><a class="reference internal" href="#example-requests">Example requests</a></li>
 <li><a class="reference internal" href="#what-to-expect">What to expect</a></li>
-<li><a class="reference internal" href="#examples">Examples</a><ul>
-<li><a class="reference internal" href="#convert-a-file">Convert a file</a></li>
-<li><a class="reference internal" href="#generate-data-from-your-own-equation">Generate data from your own equation</a></li>
-<li><a class="reference internal" href="#train-and-interpret">Train and interpret</a></li>
-<li><a class="reference internal" href="#add-a-model">Add a model</a></li>
-<li><a class="reference internal" href="#change-the-training-objective">Change the training objective</a></li>
-<li><a class="reference internal" href="#read-a-new-diagnostic">Read a new diagnostic</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#writing-your-own">Writing your own</a></li>
+<li><a class="reference internal" href="#convert-a-file-directly-from-the-command-line">Convert a file directly from the command line</a></li>
+<li><a class="reference internal" href="#inspect-or-refresh-installed-skills">Inspect or refresh installed skills</a></li>
 </ul>
 </li>
 </ul>

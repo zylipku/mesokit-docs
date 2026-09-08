@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/python_equivalents.html">Python Equivalents</a></li>
@@ -425,13 +425,13 @@
         <article role="main" id="furo-main-content">
           <section class="tex2jax_ignore mathjax_ignore" id="interpretability">
 <h1>Interpretability<a class="headerlink" href="#interpretability" title="Link to this heading">¶</a></h1>
-<p>Interpretability is the product framing of <code class="docutils literal notranslate"><span class="pre">mesokit</span></code>: predictive accuracy
-is a precondition, the headline is what a trained model lets you <em>read</em>.
-A model expresses that through <strong>artifacts</strong> — self-describing objects
-with a summary, a plot and a file writer — that the CLI extracts from a
-registered checkpoint and that the Python API builds from any model
-object. This page is the entry point for the artifact contract, the two
-ways to get one, and the comparison harness.</p>
+<p>Use interpretability artifacts to inspect what a trained model learned:
+a free-energy landscape, mobility and reactive spectra, or prediction
+errors at different spatial scales. Each artifact provides a text summary
+and a figure that you can save or compare with another model’s results.</p>
+<p>The CLI extracts artifacts from registered checkpoints. In Python, you
+can build them directly from a model object. Check prediction quality
+alongside these diagnostics when drawing physical conclusions.</p>
 <section id="what-an-artifact-is">
 <h2>What an Artifact Is<a class="headerlink" href="#what-an-artifact-is" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">mesokit.interpret.InterpretabilityArtifact</span></code> is a structural protocol.
@@ -489,9 +489,11 @@ with <code class="docutils literal notranslate"><span class="pre">artifact(name)
 </section>
 <section id="from-the-command-line">
 <h2>From the Command Line<a class="headerlink" href="#from-the-command-line" title="Link to this heading">¶</a></h2>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;<span class="w">                                   </span><span class="c1"># names from list_artifacts()</span>
-mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/potential.png
-mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;<span class="w"> </span>--artifact<span class="w"> </span>all<span class="w"> </span>--output<span class="w"> </span>figs/&lt;checkpoint&gt;/<span class="w">   </span><span class="c1"># one PNG per artifact</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># names from list_artifacts()</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;
+<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/potential.png
+<span class="gp">$ </span><span class="c1"># one PNG per artifact</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>&lt;checkpoint&gt;<span class="w"> </span>--artifact<span class="w"> </span>all<span class="w"> </span>--output<span class="w"> </span>figs/&lt;checkpoint&gt;/
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">extract</span></code> (alias <code class="docutils literal notranslate"><span class="pre">explain</span></code>) rebuilds the model from the checkpoint’s saved
@@ -500,8 +502,8 @@ the dataset the checkpoint was trained on (<code class="docutils literal notrans
 5000, caps how many frames such artifacts use). With a single artifact
 name it prints <code class="docutils literal notranslate"><span class="pre">summary()</span></code> and writes <code class="docutils literal notranslate"><span class="pre">--output</span></code> as a file; with <code class="docutils literal notranslate"><span class="pre">all</span></code> (or
 <code class="docutils literal notranslate"><span class="pre">*</span></code>) <code class="docutils literal notranslate"><span class="pre">--output</span></code> must be a <strong>directory</strong> (no suffix) and one
-<code class="docutils literal notranslate"><span class="pre">&lt;artifact_name&gt;.png</span></code> is written per artifact, without summaries. Every
-option is in the <a class="reference internal" href="cli/interpret.html"><span class="std std-doc">Command-Line Reference</span></a>.</p>
+<code class="docutils literal notranslate"><span class="pre">&lt;model_name&gt;_&lt;artifact_name&gt;.png</span></code> is written per artifact, without
+summaries. Every option is in the <a class="reference internal" href="cli/interpret.html"><span class="std std-doc">Command-Line Reference</span></a>.</p>
 </section>
 <section id="from-python">
 <h2>From Python<a class="headerlink" href="#from-python" title="Link to this heading">¶</a></h2>
@@ -529,10 +531,10 @@ by every command) or installed; from Python, import the module first.</p>
 </section>
 <section id="comparing-artifacts">
 <h2>Comparing Artifacts<a class="headerlink" href="#comparing-artifacts" title="Link to this heading">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">mesokit.interpret.compare(artifacts)</span></code> returns an <code class="docutils literal notranslate"><span class="pre">ArtifactPlotter</span></code>, the
-harness the CLI itself uses. It relies only on the protocol surface, so
-artifacts from different families and from your own classes sit side by
-side:</p>
+<p><code class="docutils literal notranslate"><span class="pre">mesokit.interpret.compare(artifacts)</span></code> returns an <code class="docutils literal notranslate"><span class="pre">ArtifactPlotter</span></code>, a
+helper for arranging artifacts in a figure. It uses the shared artifact
+interface, so you can place results from different model families or your
+own classes side by side:</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -557,7 +559,7 @@ side:</p>
 <td><p>write that figure</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">save_all(output_dir,</span> <span class="pre">*,</span> <span class="pre">extension=&quot;png&quot;)</span></code></p></td>
-<td><p>one file per artifact, named <code class="docutils literal notranslate"><span class="pre">&lt;artifact_name&gt;.&lt;extension&gt;</span></code></p></td>
+<td><p>one file per artifact, named <code class="docutils literal notranslate"><span class="pre">&lt;model_name&gt;_&lt;artifact_name&gt;.&lt;extension&gt;</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">save_one(artifact_name,</span> <span class="pre">output)</span></code></p></td>
 <td><p>one artifact to one file</p></td>

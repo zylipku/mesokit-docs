@@ -114,8 +114,8 @@ dataset is physically meaningful; that is the simulator's responsibility.
 
 Once a file validates, register it under a name:
 
-```sh
-mesokit data register --name my_dataset --file data/my_data.h5
+```console
+$ mesokit data register --name my_dataset --file data/my_data.h5
 ```
 
 This re-runs `validate(path)`, then writes a record into the local
@@ -158,18 +158,18 @@ If the data is not HDF5 at all — a NumPy archive, a NetCDF file, torch
 tensors next to a JSON sidecar — `mesokit data parse` hands the conversion to
 a coding agent you already have installed, then validates and (with `--name`)
 registers what it produced. The
-[Command-Line Reference](#mesokit-data-parse) covers the flags and
+{ref}`Command-Line Reference <mesokit-data-parse>` covers the flags and
 the permissions it grants.
 
 To see that work before pointing it at your own data,
-[`mesokit data demo`](#mesokit-data-demo) writes a small file that is
+{ref}`mesokit data demo <mesokit-data-demo>` writes a small file that is
 deliberately *not* conforming — a real 1-D Allen-Cahn run stored with the axes
 in the wrong order, no channel axis, frame indices instead of times, and flat
 scalars instead of the three metadata groups:
 
-```sh
-mesokit data demo
-mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
+```console
+$ mesokit data demo
+$ mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
 ```
 
 ```text

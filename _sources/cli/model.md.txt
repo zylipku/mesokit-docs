@@ -5,7 +5,7 @@ Manage the project-local index of **trained checkpoints**
 that one is populated by the package and inspected from Python with
 `mesokit.models.available()`.
 
-Every entry mirrors the run's `run.json` (see [`mesokit train`](#mesokit-train)):
+Every entry mirrors the run's `run.json` (see {ref}`mesokit train <mesokit-train>`):
 the model, dataset and recipe it came from, the `--set` overrides as
 `params`, the final `metrics`, `created`, `tags` and `notes`, plus the paths.
 Entries written by earlier versions (schema 1: paths and names only) are
@@ -14,9 +14,17 @@ schema 2 on its next write.
 
 ## `mesokit model list`
 
-```sh
-mesokit model list [--dyn D] [--model ARCH] [--experiment E] [--dataset NAME] [--tag T ...]
-                   [--sort COLUMN] [--reverse] [--format table|json|csv] [--columns a,b,...]
+```console
+$ mesokit model list \
+  [--dyn D] \
+  [--model ARCH] \
+  [--experiment E] \
+  [--dataset NAME] \
+  [--tag T ...] \
+  [--sort COLUMN] \
+  [--reverse] \
+  [--format table|json|csv] \
+  [--columns a,b,...]
 ```
 
 ```text
@@ -41,8 +49,8 @@ says otherwise; with nothing registered it prints `(no checkpoints registered)`.
 
 ## `mesokit model show`
 
-```sh
-mesokit model show NAME
+```console
+$ mesokit model show NAME
 ```
 
 ```text
@@ -77,8 +85,13 @@ only one experiment holds it.
 Index a checkpoint that was trained elsewhere (a notebook, a cluster job,
 another machine). Only pointers are stored; nothing is copied.
 
-```sh
-mesokit model register --model NAME --file CKPT.pt --config CONFIG.yaml [--tag T ...] [--force]
+```console
+$ mesokit model register \
+  --model NAME \
+  --file CKPT.pt \
+  --config CONFIG.yaml \
+  [--tag T ...] \
+  [--force]
 ```
 
 | Option | Meaning |
@@ -89,8 +102,11 @@ mesokit model register --model NAME --file CKPT.pt --config CONFIG.yaml [--tag T
 | `--tag T` | Tag recorded on the entry; repeatable. |
 | `--force` | Replace an existing entry. |
 
-```sh
-mesokit model register --model son_cluster_run --file ~/jobs/1234/model.pt --config ~/jobs/1234/config.yaml
+```console
+$ mesokit model register \
+  --model son_cluster_run \
+  --file ~/jobs/1234/model.pt \
+  --config ~/jobs/1234/config.yaml
 ```
 
 ```text
@@ -107,8 +123,8 @@ parameter names, so Lightning-style checkpoints load unchanged.
 
 ## `mesokit model tag`
 
-```sh
-mesokit model tag NAME [--add T ...] [--remove T ...] [--notes TEXT]
+```console
+$ mesokit model tag NAME [--add T ...] [--remove T ...] [--notes TEXT]
 ```
 
 Adds or drops tags on a run, or rewrites its notes; the registry entry and
@@ -117,8 +133,8 @@ training time).
 
 ## `mesokit model remove`
 
-```sh
-mesokit model remove NAME [--delete-files]
+```console
+$ mesokit model remove NAME [--delete-files]
 ```
 
 Drops the entry. With `--delete-files` the run directory `mesokit train`
@@ -127,8 +143,8 @@ directory of its own, so its files are left where they are.
 
 ## `mesokit model prune`
 
-```sh
-mesokit model prune [--dry-run]
+```console
+$ mesokit model prune [--dry-run]
 ```
 
 Reconciles the index with the disk: entries whose `model.pt` is gone are
@@ -148,8 +164,8 @@ would remove run directory /home/me/mesokit/checkpoints/allen_cahn_1d/son_crashe
 
 ## `mesokit model sync`
 
-```sh
-mesokit model sync [--import-sweeps]
+```console
+$ mesokit model sync [--import-sweeps]
 ```
 
 Rebuilds the index from the run directories: every completed run (a

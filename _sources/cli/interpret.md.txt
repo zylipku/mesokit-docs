@@ -23,8 +23,8 @@ instance).
 
 ## `mesokit interpret list`
 
-```sh
-mesokit interpret list --model CKPT_NAME
+```console
+$ mesokit interpret list --model CKPT_NAME
 ```
 
 ```text
@@ -41,9 +41,17 @@ it needs the checkpoint's dataset for the grid and the error spectrum.
 Build one artifact (or all of them), print its one-paragraph summary, and
 save its figure. `mesokit interpret explain` is an exact alias.
 
-```sh
-mesokit interpret extract --model CKPT_NAME --artifact NAME --output FILE.png [--max-snapshots N]
-mesokit interpret extract --model CKPT_NAME --artifact all  --output DIR/     [--max-snapshots N]
+```console
+$ mesokit interpret extract \
+  --model CKPT_NAME \
+  --artifact NAME \
+  --output FILE.png \
+  [--max-snapshots N]
+$ mesokit interpret extract \
+  --model CKPT_NAME \
+  --artifact all \
+  --output DIR/ \
+  [--max-snapshots N]
 ```
 
 | Option | Default | Meaning |
@@ -53,8 +61,11 @@ mesokit interpret extract --model CKPT_NAME --artifact all  --output DIR/     [-
 | `--output` | required | Target file; the extension selects the matplotlib format (`.png`, `.pdf`, `.svg`, …). An existing figure is replaced, with a `warning: overwriting …` line on stderr. With `--artifact all` it must be a directory — a path with an extension is rejected — and one PNG per artifact, named `<model>_<artifact>.png`, is written inside it. |
 | `--max-snapshots N` | `5000` | Cap on the number of reference snapshots handed to data-backed artifacts. Lower it to speed up extraction on large datasets. |
 
-```sh
-mesokit interpret extract --model spectral_onsagernet_1d_v0 --artifact potential --output figs/potential.png
+```console
+$ mesokit interpret extract \
+  --model spectral_onsagernet_1d_v0 \
+  --artifact potential \
+  --output figs/potential.png
 ```
 
 ```text
@@ -62,12 +73,16 @@ spectral_onsagernet_1d on allen_cahn_1d exposes a PolynomialPotential potential.
 saved: /home/me/mesokit/figs/potential.png
 ```
 
-```sh
-# Everything the model offers, one file each, into a directory.
-mesokit interpret explain --model son_eps05_long --artifact all --output figs/son_eps05_long/
+```console
+$ # Everything the model offers, one file each, into a directory.
+$ mesokit interpret explain --model son_eps05_long --artifact all --output figs/son_eps05_long/
 
-# Vector output for a paper, fewer reference snapshots.
-mesokit interpret extract --model son_eps05_long --artifact potential --output figs/potential.pdf --max-snapshots 500
+$ # Vector output for a paper, fewer reference snapshots.
+$ mesokit interpret extract \
+  --model son_eps05_long \
+  --artifact potential \
+  --output figs/potential.pdf \
+  --max-snapshots 500
 ```
 
 Errors:
@@ -77,5 +92,5 @@ Invalid value: checkpoint 'nope' is not registered
 Invalid value: registered checkpoint path does not exist: /home/me/mesokit/checkpoints/allen_cahn_1d/old/model.pt
 Invalid value: --output must be a directory when --artifact all
 Invalid value: checkpoint 'x' has no model config and no model_name; register a config produced by `mesokit train`
-KeyError: "unknown artifact(s) ['x']; available: ['potential']"      # a traceback, exit status 1
+Invalid value: unknown artifact 'x' for checkpoint 'y'; available: potential
 ```

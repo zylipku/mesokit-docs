@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/python_equivalents.html">Python Equivalents</a></li>
@@ -437,13 +437,17 @@ format, and when to write your own.</p>
 <p><code class="docutils literal notranslate"><span class="pre">configs/&lt;kind&gt;/&lt;parts&gt;/&lt;stem&gt;.yaml</span></code> is looked up in order:</p>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">./configs/</span></code> in the working directory — your project’s own recipes,
-which shadow the shipped ones of the same name;</p></li>
+whose first matching recipe directory takes precedence over the
+shipped directory;</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">mesokit/configs/</span></code> inside the installed package — the shipped recipes
 (this is what a <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> user gets);</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">configs/</span></code> at the repository root — the same files in an editable
 install from a checkout.</p></li>
 </ol>
-<p><code class="docutils literal notranslate"><span class="pre">--config</span></code> may also be a path to any YAML file, which bypasses the lookup.
+<p>For a named variant, lookup uses the first matching recipe directory;
+if that directory lacks the requested stem, it reports an error rather
+than trying the next directory. <code class="docutils literal notranslate"><span class="pre">--config</span></code> may also be a path to any YAML
+file, which bypasses the lookup.
 <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code> uses the same rule for <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/</span></code>.</p>
 </section>
 <section id="recipes-are-optional">
@@ -453,7 +457,11 @@ synthesises one: the model’s constructor defaults plus the dataset’s grid,
 <code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset</span></code> with <code class="docutils literal notranslate"><span class="pre">stride:</span> <span class="pre">1</span></code>, dataloader defaults, and the
 registered trainer’s defaults. <code class="docutils literal notranslate"><span class="pre">--set</span> <span class="pre">key.path=value</span></code> (repeatable, values
 parsed as YAML) changes any key on top of a recipe or of those defaults:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>my_data<span class="w"> </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span>1e-4<span class="w"> </span>--set<span class="w"> </span>model.potential.eps<span class="o">=</span><span class="m">0</span>.05
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>my_data<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span>1e-4<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>model.potential.eps<span class="o">=</span><span class="m">0</span>.05
 </pre></div>
 </div>
 <p>The completed configuration is written to
@@ -475,11 +483,12 @@ worth naming and sharing; otherwise <code class="docutils literal notranslate"><
 <p><code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;</span></code> is the dataset’s dynamics name, <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;</span></code> the registered
 architecture name, and <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;</span></code> the recipe selected by <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;stem&gt;</span></code>
 (default <code class="docutils literal notranslate"><span class="pre">default</span></code>). Sibling files are variants of the same architecture,
-differing in how long they train rather than in what they fit:
+which can select different components or training settings:
 <code class="docutils literal notranslate"><span class="pre">smoke.yaml</span></code> recipes are the test fixtures (one epoch, pinned to the CPU,
-no progress bar), and <code class="docutils literal notranslate"><span class="pre">allen_cahn_1d/spectral_onsagernet_1d</span></code> also ships
-<code class="docutils literal notranslate"><span class="pre">fdr.yaml</span></code>, a “fast dev run” that is <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> with the epoch budget
-cut, matching the data recipe of the same name. No shipped recipe writes a
+no progress bar), and the 1D Allen–Cahn recipes for <code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d</span></code>
+and <code class="docutils literal notranslate"><span class="pre">onsagernet_1d</span></code> also ship <code class="docutils literal notranslate"><span class="pre">fdr.yaml</span></code>, a “fast dev run” that is
+<code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> with the epoch budget cut to 5, matching the data recipe of
+the same name. No shipped recipe writes a
 grid key, so each runs on any grid of its dynamics.</p>
 <p>The data side has the same convention: <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/default.yaml</span></code>
 is the recipe <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--dyn</span> <span class="pre">&lt;dyn&gt;</span></code> uses, and its <code class="docutils literal notranslate"><span class="pre">_target_</span></code>
@@ -524,7 +533,9 @@ with <code class="docutils literal notranslate"><span class="pre">traj=&lt;the</
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">trainer</span></code></strong> — hyperparameters of the trainer registered for the model
 (<code class="docutils literal notranslate"><span class="pre">--trainer</span></code> overrides the name; a model with no trainer of its own gets
 <code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code>; any class can be named by <code class="docutils literal notranslate"><span class="pre">trainer._target_</span></code>); <code class="docutils literal notranslate"><span class="pre">dt:</span> <span class="pre">null</span></code>
-means “infer from the data”. <code class="docutils literal notranslate"><span class="pre">--epochs</span></code>
+uses <code class="docutils literal notranslate"><span class="pre">numerical[&quot;dt&quot;]</span></code> when present, otherwise the first interval in
+<code class="docutils literal notranslate"><span class="pre">times</span></code>. Check that this matches the training pairs; see
+<a class="reference internal" href="../training.html#time-step"><span class="std std-ref">Time step</span></a>. <code class="docutils literal notranslate"><span class="pre">--epochs</span></code>
 overrides <code class="docutils literal notranslate"><span class="pre">max_epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">--device</span></code> overrides <code class="docutils literal notranslate"><span class="pre">accelerator</span></code>. The full
 option list is on <a class="reference internal" href="lit_trainer.html"><span class="std std-doc">LitTrainer</span></a>.</p></li>
 </ul>
@@ -558,7 +569,11 @@ dimension, for example
 <code class="docutils literal notranslate"><span class="pre">configs/train/allen_cahn_1d/spectral_onsagernet_1d/default.yaml</span></code> to
 <code class="docutils literal notranslate"><span class="pre">configs/train/decay_1d/spectral_onsagernet_1d/default.yaml</span></code> (nothing in
 it depends on the grid), then:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>decay_1d_v0<span class="w"> </span>--epochs<span class="w"> </span><span class="m">5</span><span class="w"> </span>--device<span class="w"> </span>cpu
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>decay_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="w"> </span>cpu
 </pre></div>
 </div>
 <p>The saved <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;run&gt;/config.yaml</span></code> is the resolved recipe

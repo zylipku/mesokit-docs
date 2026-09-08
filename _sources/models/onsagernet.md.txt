@@ -104,14 +104,17 @@ when the checkpoint was trained on an Allen–Cahn dataset.
 ## Recipes
 
 ```text
-configs/train/allen_cahn_1d/onsagernet_1d/{default,circulant,smoke}.yaml
+configs/train/allen_cahn_1d/onsagernet_1d/{default,circulant,fdr,smoke}.yaml
 configs/train/kdv_1d/onsagernet_1d/default.yaml
 configs/train/allen_cahn_2d/onsagernet_2d/{default,smoke}.yaml
 ```
 
 `default.yaml` is the original low-rank design ($M$ of rank 8, $W$ of rank
 4, both from MLPs of the state); `circulant.yaml` swaps both for the
-convolution blocks; the KdV recipe keeps $W$ and steps with `rk4`; the 2D
+convolution blocks. The 1D Allen–Cahn `fdr.yaml` keeps the default model and
+training settings but cuts the epoch budget to 5, matching the spectral
+family's fast dev run and the data recipe of the same name. The KdV recipe
+keeps $W$ and steps with `rk4`; the 2D
 recipes use a circulant $M$ and no $W$ because the potential MLP already
 holds $16384 \times 256$ weights in its first layer on the 128² grid. The
 blocks are nested under `model.potential`, `model.dissipation` and

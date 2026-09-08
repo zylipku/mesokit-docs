@@ -1,12 +1,13 @@
 # Interpretability
 
-Interpretability is the product framing of `mesokit`: predictive accuracy
-is a precondition, the headline is what a trained model lets you *read*.
-A model expresses that through **artifacts** — self-describing objects
-with a summary, a plot and a file writer — that the CLI extracts from a
-registered checkpoint and that the Python API builds from any model
-object. This page is the entry point for the artifact contract, the two
-ways to get one, and the comparison harness.
+Use interpretability artifacts to inspect what a trained model learned:
+a free-energy landscape, mobility and reactive spectra, or prediction
+errors at different spatial scales. Each artifact provides a text summary
+and a figure that you can save or compare with another model's results.
+
+The CLI extracts artifacts from registered checkpoints. In Python, you
+can build them directly from a model object. Check prediction quality
+alongside these diagnostics when drawing physical conclusions.
 
 ## What an Artifact Is
 
@@ -34,10 +35,12 @@ with `artifact(name)`. What the shipped families provide:
 
 ## From the Command Line
 
-```sh
-mesokit interpret list --model <checkpoint>                                   # names from list_artifacts()
-mesokit interpret extract --model <checkpoint> --artifact potential --output figs/potential.png
-mesokit interpret extract --model <checkpoint> --artifact all --output figs/<checkpoint>/   # one PNG per artifact
+```console
+$ # names from list_artifacts()
+$ mesokit interpret list --model <checkpoint>
+$ mesokit interpret extract --model <checkpoint> --artifact potential --output figs/potential.png
+$ # one PNG per artifact
+$ mesokit interpret extract --model <checkpoint> --artifact all --output figs/<checkpoint>/
 ```
 
 `extract` (alias `explain`) rebuilds the model from the checkpoint's saved
@@ -46,8 +49,8 @@ the dataset the checkpoint was trained on (`--max-snapshots`, default
 5000, caps how many frames such artifacts use). With a single artifact
 name it prints `summary()` and writes `--output` as a file; with `all` (or
 `*`) `--output` must be a **directory** (no suffix) and one
-`<artifact_name>.png` is written per artifact, without summaries. Every
-option is in the [Command-Line Reference](cli/interpret.md).
+`<model_name>_<artifact_name>.png` is written per artifact, without
+summaries. Every option is in the [Command-Line Reference](cli/interpret.md).
 
 ## From Python
 
@@ -78,10 +81,10 @@ by every command) or installed; from Python, import the module first.
 
 ## Comparing Artifacts
 
-`mesokit.interpret.compare(artifacts)` returns an `ArtifactPlotter`, the
-harness the CLI itself uses. It relies only on the protocol surface, so
-artifacts from different families and from your own classes sit side by
-side:
+`mesokit.interpret.compare(artifacts)` returns an `ArtifactPlotter`, a
+helper for arranging artifacts in a figure. It uses the shared artifact
+interface, so you can place results from different model families or your
+own classes side by side:
 
 | `ArtifactPlotter` | Does |
 | --- | --- |
@@ -90,7 +93,7 @@ side:
 | `names()` | the artifact names in order |
 | `plot()` | one axis per artifact in a row, returns the figure |
 | `save(path, *, dpi=180, close=True)` | write that figure |
-| `save_all(output_dir, *, extension="png")` | one file per artifact, named `<artifact_name>.<extension>` |
+| `save_all(output_dir, *, extension="png")` | one file per artifact, named `<model_name>_<artifact_name>.<extension>` |
 | `save_one(artifact_name, output)` | one artifact to one file |
 
 ```python

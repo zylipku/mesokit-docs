@@ -229,7 +229,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/python_equivalents.html">Python Equivalents</a></li>
@@ -668,15 +668,17 @@
 </li>
         <li><a href="apidocs/mesokit/mesokit.data.ising.ising_2d.html#mesokit.data.ising.ising_2d._local_field">_local_field() (in module mesokit.data.ising.ising_2d)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="apidocs/mesokit/mesokit.trainers.lit_trainer._lit_module.html#mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin._loss">_loss() (mesokit.trainers.lit_trainer._lit_module._DynamicsLitModuleMixin method)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.data.demo.html#mesokit.data.demo._LX">_LX (in module mesokit.data.demo)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="apidocs/mesokit/mesokit.cli._report.html#mesokit.cli._report._MAX_CHANNEL_NAMES">_MAX_CHANNEL_NAMES (in module mesokit.cli._report)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.cli.model.html#mesokit.cli.model._metric">_metric() (in module mesokit.cli.model)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._metrics_line">_metrics_line() (in module mesokit.cli.train)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.cli.model.html#mesokit.cli.model._metrics_text">_metrics_text() (in module mesokit.cli.model)</a>
 </li>
@@ -806,6 +808,8 @@
 </li>
         <li><a href="apidocs/mesokit/mesokit.models.fno.artifacts.html#mesokit.models.fno.artifacts._resolve_grid">_resolve_grid() (in module mesokit.models.fno.artifacts)</a>
 </li>
+        <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._resolve_trajectory">_resolve_trajectory() (in module mesokit.cli.train)</a>
+</li>
         <li><a href="apidocs/mesokit/mesokit.cli.train.html#mesokit.cli.train._resolved_config">_resolved_config() (in module mesokit.cli.train)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.data.cahn_hilliard.cahn_hilliard_2d.html#mesokit.data.cahn_hilliard.cahn_hilliard_2d._rfft2">_rfft2() (in module mesokit.data.cahn_hilliard.cahn_hilliard_2d)</a>
@@ -878,6 +882,8 @@
 </li>
         <li><a href="apidocs/mesokit/mesokit.data.cahn_hilliard.cahn_hilliard_2d.html#mesokit.data.cahn_hilliard.cahn_hilliard_2d._truncate_spectrum">_truncate_spectrum() (in module mesokit.data.cahn_hilliard.cahn_hilliard_2d)</a>
 </li>
+        <li><a href="apidocs/mesokit/mesokit.cli.sweep.html#mesokit.cli.sweep._unique_names">_unique_names() (in module mesokit.cli.sweep)</a>
+</li>
         <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data._unwrap_instantiation">_unwrap_instantiation() (in module mesokit.cli.data)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.cli.skills.html#mesokit.cli.skills._user_dir">_user_dir() (in module mesokit.cli.skills)</a>
@@ -917,6 +923,8 @@
         <li><a href="apidocs/mesokit/mesokit.cli._registry_store.html#mesokit.cli._registry_store.RegistryStore._write">_write() (mesokit.cli._registry_store.RegistryStore method)</a>
 </li>
         <li><a href="apidocs/mesokit/mesokit.cli._recipes.html#mesokit.cli._recipes._YAML_SUFFIXES">_YAML_SUFFIXES (in module mesokit.cli._recipes)</a>
+</li>
+        <li><a href="apidocs/mesokit/mesokit.cli.sweep.html#mesokit.cli.sweep._yaml_value">_yaml_value() (in module mesokit.cli.sweep)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -2775,8 +2783,6 @@
 </li>
         <li><a href="apidocs/mesokit/mesokit.cli.data.html#mesokit.cli.data.parse_override">parse_override() (in module mesokit.cli.data)</a>
 </li>
-        <li><a href="apidocs/mesokit/mesokit.cli.sweep.html#mesokit.cli.sweep.parse_params">parse_params() (in module mesokit.cli.sweep)</a>
-</li>
         <li><a href="apidocs/mesokit/mesokit.cli._runs.html#mesokit.cli._runs.RunDir.path">path (mesokit.cli._runs.RunDir attribute)</a>
 
         <ul>
@@ -3149,8 +3155,6 @@
           <li><a href="apidocs/mesokit/mesokit.models.spectral_onsagernet.artifacts.html#mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape.summary">(mesokit.models.spectral_onsagernet.artifacts.PotentialLandscape method)</a>
 </li>
         </ul></li>
-        <li><a href="apidocs/mesokit/mesokit.cli.sweep.html#mesokit.cli.sweep.sweep_command">sweep_command() (in module mesokit.cli.sweep)</a>
-</li>
         <li><a href="apidocs/mesokit/mesokit.cli.model.html#mesokit.cli.model.sync">sync() (in module mesokit.cli.model)</a>
 </li>
     </ul></td>

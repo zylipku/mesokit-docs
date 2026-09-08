@@ -1,27 +1,27 @@
 # mesokit
 
-A toolkit for learning **mesoscopic dynamics** from data. The product
-framing is **interpretability** — predictive accuracy is a precondition,
-not the headline.
+Learn mesoscopic dynamics from trajectory data, then inspect what the
+model learned. `mesokit` brings together data generation and import,
+model training, and diagnostics such as learned free energies, mobility
+spectra, and prediction errors by spatial scale.
 
-The user guide follows the stages of the toolkit. Start with
-[Installation](installation.md), then the [Quickstart](quickstart.md)
-for the first end-to-end run, and then:
+Start with [Installation](installation.md), then follow the
+[Quickstart](quickstart.md) to generate a small dataset, train a model,
+and plot its learned potential.
 
-- [Data Processing](data_processing.md) — the trajectory-dataset contract,
-  the shipped simulators, bringing your own files or your own equation.
-- [Models](models.md) — what the shipped families compute (Spectral
-  OnsagerNet, classical OnsagerNet, FNO), how to choose, and how to write
-  your own.
-- [Training](training.md) — what is fitted, the `mesokit train` recipes,
-  the training views, the shipped `LitTrainer`, and custom trainers.
-- [Interpretability](interpretability.md) — the artifact contract, the
-  potential artifact and how to read it, comparing artifacts, and custom
-  ones.
+## Explore the guide
 
-The [Command-Line Reference](cli.md) documents every `mesokit` command
-with examples, and [Agent Skills](skills.md) explains the skills a coding
-agent can use to do each stage for you.
+| Your task | Read |
+| --- | --- |
+| Generate trajectories or import existing data | [Data Processing](data_processing.md) |
+| Choose a model and understand its assumptions | [Models](models.md) |
+| Configure training and work with saved runs | [Training](training.md) |
+| Read and compare what models learned | [Interpretability](interpretability.md) |
+| Look up a command or option | [Command-Line Reference](cli.md) |
+| Use a coding agent to help with these tasks | [Agent Skills](skills.md) |
+
+Each stage includes a *Custom* page for using your own simulator, model,
+trainer, or diagnostic from your own Python module.
 
 ```{toctree}
 :maxdepth: 2

@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_equivalents.html">Python Equivalents</a></li>
@@ -432,11 +432,26 @@ dataset is generated per value, as <code class="docutils literal notranslate"><s
 (several checkpoints on the same dataset, as <code class="docutils literal notranslate"><span class="pre">train</span> <span class="pre">--set</span></code> would). The runs
 land under <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/</span></code>, the table is that experiment’s
 <code class="docutils literal notranslate"><span class="pre">runs.json</span></code>. This is the built-in form of the “for eps in …” shell loop.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>DYN<span class="w"> </span>--model<span class="w"> </span>ARCH<span class="w"> </span><span class="o">[</span>--param<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>V1,V2,...<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--train-param<span class="w"> </span>KEY.PATH<span class="o">=</span>V1,V2,...<span class="w"> </span>...<span class="o">]</span>
-<span class="w">              </span><span class="o">[</span>--data<span class="w"> </span>NAME_OR_PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--experiment<span class="w"> </span>E<span class="o">]</span><span class="w"> </span><span class="o">[</span>--tag<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span>
-<span class="w">              </span><span class="o">[</span>--data-config<span class="w"> </span>STEM<span class="o">]</span><span class="w"> </span><span class="o">[</span>--config<span class="w"> </span>STEM<span class="o">]</span><span class="w"> </span><span class="o">[</span>--trainer<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span><span class="o">[</span>--name-prefix<span class="w"> </span>PREFIX<span class="o">]</span>
-<span class="w">              </span><span class="o">[</span>--epochs<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="o">[</span>--batch-size<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="o">[</span>--device<span class="w"> </span>auto<span class="p">|</span>cpu<span class="p">|</span>gpu<span class="o">]</span>
-<span class="w">              </span><span class="o">[</span>--reuse-data<span class="o">]</span><span class="w"> </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>ARCH<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--dyn<span class="w"> </span>DYN<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--param<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>V1,V2,...<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--train-param<span class="w"> </span>KEY.PATH<span class="o">=</span>V1,V2,...<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--data<span class="w"> </span>NAME_OR_PATH<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--experiment<span class="w"> </span>E<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--tag<span class="w"> </span>T<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--data-config<span class="w"> </span>STEM_OR_PATH<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--config<span class="w"> </span>STEM_OR_PATH<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--set<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--trainer<span class="w"> </span>NAME<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--name-prefix<span class="w"> </span>PREFIX<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--epochs<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--batch-size<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--device<span class="w"> </span>auto<span class="p">|</span>cpu<span class="p">|</span>gpu<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--reuse-data<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--force<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--dry-run<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">[</span>--verbose<span class="p">|</span>-v<span class="o">]</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -449,8 +464,8 @@ land under <code class="docutils literal notranslate"><span class="pre">checkpoi
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dyn</span> <span class="pre">DYN</span></code></p></td>
-<td><p>required</p></td>
-<td><p>Dynamics name; selects <code class="docutils literal notranslate"><span class="pre">configs/data/DYN/</span></code> and <code class="docutils literal notranslate"><span class="pre">configs/train/DYN/ARCH/</span></code>.</p></td>
+<td><p>from dataset</p></td>
+<td><p>Dynamics name; selects <code class="docutils literal notranslate"><span class="pre">configs/data/DYN/</span></code> and <code class="docutils literal notranslate"><span class="pre">configs/train/DYN/ARCH/</span></code>. Required when generating data with <code class="docutils literal notranslate"><span class="pre">--param</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--model</span> <span class="pre">ARCH</span></code></p></td>
 <td><p>required</p></td>
@@ -462,7 +477,7 @@ land under <code class="docutils literal notranslate"><span class="pre">checkpoi
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--train-param</span> <span class="pre">KEY.PATH=V1,V2,...</span></code></p></td>
 <td><p>repeatable</p></td>
-<td><p>A training axis over a recipe key (<code class="docutils literal notranslate"><span class="pre">trainer.lr</span></code>, <code class="docutils literal notranslate"><span class="pre">model.n_modes</span></code>, <code class="docutils literal notranslate"><span class="pre">dataset.stride</span></code>); values as above. At least one axis of either kind is required; all axes form one Cartesian product, data axes outermost.</p></td>
+<td><p>A training axis over a recipe key (<code class="docutils literal notranslate"><span class="pre">trainer.lr</span></code>, <code class="docutils literal notranslate"><span class="pre">model.n_modes</span></code>, <code class="docutils literal notranslate"><span class="pre">dataset.stride</span></code>), using the same YAML types as <code class="docutils literal notranslate"><span class="pre">train</span> <span class="pre">--set</span></code>. At least one axis of either kind is required; all axes form one Cartesian product, data axes outermost.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--data</span> <span class="pre">NAME_OR_PATH</span></code></p></td>
 <td><p>none</p></td>
@@ -476,45 +491,56 @@ land under <code class="docutils literal notranslate"><span class="pre">checkpoi
 <td><p>none</p></td>
 <td><p>Tag recorded on every run; repeatable.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--data-config</span> <span class="pre">STEM</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--data-config</span> <span class="pre">STEM_OR_PATH</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">default</span></code></p></td>
-<td><p>Data recipe <code class="docutils literal notranslate"><span class="pre">configs/data/DYN/STEM.yaml</span></code> the overrides are applied to.</p></td>
+<td><p>Data recipe <code class="docutils literal notranslate"><span class="pre">configs/data/DYN/STEM.yaml</span></code>, or a YAML file path.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">STEM</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">STEM_OR_PATH</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">default</span></code></p></td>
-<td><p>Training recipe <code class="docutils literal notranslate"><span class="pre">configs/train/DYN/ARCH/STEM.yaml</span></code>.</p></td>
+<td><p>Training recipe <code class="docutils literal notranslate"><span class="pre">configs/train/DYN/ARCH/STEM.yaml</span></code>, or a YAML file path. Uses the same recipe lookup and built-in defaults as <code class="docutils literal notranslate"><span class="pre">train</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--trainer</span> <span class="pre">NAME</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--set</span> <span class="pre">KEY=VALUE</span></code></p></td>
+<td><p>none</p></td>
+<td><p>Fixed training-recipe override applied to every point; repeatable, as for <code class="docutils literal notranslate"><span class="pre">train</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--trainer</span> <span class="pre">NAME</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">--model</span></code></p></td>
 <td><p>Trainer registry name.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--name-prefix</span> <span class="pre">PREFIX</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--name-prefix</span> <span class="pre">PREFIX</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">DYN</span></code></p></td>
 <td><p>Prefix of every generated dataset name (see below).</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--epochs</span> <span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">--batch-size</span> <span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">--device</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--epochs</span> <span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">--batch-size</span> <span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">--device</span></code></p></td>
 <td><p>from config</p></td>
 <td><p>Forwarded to every training run, as for <code class="docutils literal notranslate"><span class="pre">train</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--reuse-data</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--reuse-data</span></code></p></td>
 <td><p>off</p></td>
 <td><p>Skip generation for a point whose dataset name is already registered and whose file exists; train on it instead. Without it, a point whose name is registered fails before its solve (<code class="docutils literal notranslate"><span class="pre">already</span> <span class="pre">registered;</span> <span class="pre">pass</span> <span class="pre">--force</span></code>), and with <code class="docutils literal notranslate"><span class="pre">--force</span></code> the file is replaced and said so on stderr, one <code class="docutils literal notranslate"><span class="pre">warning:</span> <span class="pre">overwriting</span> <span class="pre">…</span></code> line per point.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--force</span></code></p></td>
 <td><p>off</p></td>
 <td><p>Replace existing dataset and checkpoint entries of the same names.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dry-run</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--dry-run</span></code></p></td>
 <td><p>off</p></td>
 <td><p>Print the plan — names and overrides per point — and exit without running anything.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code>, <code class="docutils literal notranslate"><span class="pre">-v</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code>, <code class="docutils literal notranslate"><span class="pre">-v</span></code></p></td>
 <td><p>off</p></td>
 <td><p>Forwarded to each point’s data generation, as for <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code>: the solver’s own log stays, progress is reported in a pipe-safe form.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<p>Training settings are applied in this order: recipe, <code class="docutils literal notranslate"><span class="pre">--set</span></code>,
+<code class="docutils literal notranslate"><span class="pre">--train-param</span></code>, then <code class="docutils literal notranslate"><span class="pre">--epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">--batch-size</span></code>, and <code class="docutils literal notranslate"><span class="pre">--device</span></code>. Later
+settings take precedence. For example, use <code class="docutils literal notranslate"><span class="pre">--set</span> <span class="pre">dataset.stride=2</span></code> to keep
+the training view fixed while scanning <code class="docutils literal notranslate"><span class="pre">--train-param</span> <span class="pre">trainer.lr=1e-3,1e-4</span></code>.
+Quote axes containing lists or strings with commas, such as
+<code class="docutils literal notranslate"><span class="pre">--train-param</span> <span class="pre">'model.widths=[32,64],[64,128]'</span></code> for a model with a <code class="docutils literal notranslate"><span class="pre">widths</span></code>
+setting.</p>
 <p><strong>Names.</strong> A data point <code class="docutils literal notranslate"><span class="pre">eps=0.05,</span> <span class="pre">T=0.5</span></code> gives the dataset
 <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;_eps0.05_T0.5</span></code>; a run is named <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_&lt;key&gt;&lt;value&gt;[_…]</span></code> over both
 kinds of axis, training keys by their last component (<code class="docutils literal notranslate"><span class="pre">eps=0.05,</span> <span class="pre">trainer.lr=1e-3</span></code> → <code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d_eps0.05_lr0.001</span></code>), and registered
@@ -522,14 +548,29 @@ as <code class="docutils literal notranslate"><span class="pre">&lt;experiment&g
 <code class="docutils literal notranslate"><span class="pre">2e-5</span></code> becomes <code class="docutils literal notranslate"><span class="pre">2e-05</span></code>. The names are deterministic, so re-running the same
 sweep with <code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">E</span> <span class="pre">--reuse-data</span> <span class="pre">--force</span></code> retrains on the existing
 data and replaces the rows. A dataset is generated once per data point and
-shared by that point’s training runs (<code class="docutils literal notranslate"><span class="pre">reused</span></code> in the table).</p>
+shared by that point’s training runs (<code class="docutils literal notranslate"><span class="pre">reused</span></code> in the table).
+Fixed <code class="docutils literal notranslate"><span class="pre">--set</span></code> values are recorded in <code class="docutils literal notranslate"><span class="pre">params</span></code> alongside the training axes;
+only the scan axes determine run names.
+Numeric signs are preserved. If different points have the same rendered
+name (for example, <code class="docutils literal notranslate"><span class="pre">&quot;a,b&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;a-b&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;true&quot;</span></code>), the
+colliding dataset or run names receive <code class="docutils literal notranslate"><span class="pre">_p1</span></code>, <code class="docutils literal notranslate"><span class="pre">_p2</span></code>, … suffixes in grid
+order, skipping names already used by other points. The same grid produces
+the same names in dry-run and when repeated with <code class="docutils literal notranslate"><span class="pre">--reuse-data</span> <span class="pre">--force</span></code>.</p>
+<p>Each completed point prints the same checkpoint, saved config, and metrics
+summary as <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code>, followed at the end by the sweep’s results table.</p>
 <p><strong>Failures.</strong> Every point runs to the end of the grid: a point whose
 simulator or trainer raises is marked <code class="docutils literal notranslate"><span class="pre">FAILED</span></code> in the table with the error
 message, the remaining points still run, and the command exits with status
 <code class="docutils literal notranslate"><span class="pre">1</span></code> at the end. Problems that would break every point — a missing recipe, a
 parameter the simulator does not accept — are reported before anything runs.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1,0.2<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--experiment<span class="w"> </span>eps-scan<span class="w"> </span>--data-config<span class="w"> </span>fdr<span class="w"> </span>--epochs<span class="w"> </span><span class="m">2</span><span class="w"> </span>--device<span class="w"> </span>cpu
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1,0.2<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--experiment<span class="w"> </span>eps-scan<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data-config<span class="w"> </span>fdr<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="w"> </span>cpu
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>experiment &#39;eps-scan&#39;: 3 point(s) under checkpoints/allen_cahn_1d/eps-scan
@@ -565,22 +606,43 @@ runs):</p>
 <code class="docutils literal notranslate"><span class="pre">mesokit.cli.sweep.run_sweep(dyn,</span> <span class="pre">model,</span> <span class="pre">{&quot;eps&quot;:</span> <span class="pre">[0.05,</span> <span class="pre">0.1,</span> <span class="pre">0.2]},</span> <span class="pre">train_params={&quot;trainer.lr&quot;:</span> <span class="pre">[1e-3,</span> <span class="pre">1e-4]},</span> <span class="pre">experiment=&quot;scan&quot;,</span> <span class="pre">epochs=2,</span> <span class="pre">device=&quot;cpu&quot;)</span></code>,
 which returns the list of row dicts.</p>
 <p>More examples:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># A learning-rate scan on an existing dataset: no generation, three checkpoints under lr-scan/.</span>
-mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4,1e-5<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
-mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># A learning-rate scan on an existing dataset: no generation, three checkpoints under lr-scan/.</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>dataset.stride<span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4,1e-5<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">20</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
 
-<span class="c1"># Data axes times training axes: 2 datasets, 4 checkpoints; see the names before committing to the runs.</span>
-mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1<span class="w"> </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4<span class="w"> </span>--dry-run
+<span class="gp">$ </span><span class="c1"># Data axes times training axes: 2 datasets, 4 checkpoints; see the names before committing to the runs.</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dry-run
 
-<span class="c1"># Retrain a grid whose datasets already exist, replacing the old checkpoints and rows.</span>
-mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>fno1d<span class="w"> </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1,0.2<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--experiment<span class="w"> </span>eps-scan<span class="w"> </span>--reuse-data<span class="w"> </span>--force<span class="w"> </span>--epochs<span class="w"> </span><span class="m">50</span>
+<span class="gp">$ </span><span class="c1"># Retrain a grid whose datasets already exist, replacing the old checkpoints and rows.</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>fno1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1,0.2<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--experiment<span class="w"> </span>eps-scan<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--reuse-data<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--force<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">50</span>
 
-<span class="c1"># Custom prefix, variant training recipe.</span>
-mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_2d<span class="w"> </span>--param<span class="w"> </span><span class="nv">T</span><span class="o">=</span><span class="m">1</span>.5,2.0,2.5<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--data-config<span class="w"> </span>kac<span class="w"> </span>--name-prefix<span class="w"> </span>ising_kac<span class="w"> </span>--config<span class="w"> </span>default<span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
+<span class="gp">$ </span><span class="c1"># Custom prefix, variant training recipe.</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--param<span class="w"> </span><span class="nv">T</span><span class="o">=</span><span class="m">1</span>.5,2.0,2.5<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data-config<span class="w"> </span>kac<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name-prefix<span class="w"> </span>ising_kac<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>default<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">20</span>
 </pre></div>
 </div>
 <p>Errors:</p>

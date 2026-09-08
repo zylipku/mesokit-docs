@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/python_equivalents.html">Python Equivalents</a></li>
@@ -425,232 +425,152 @@
         <article role="main" id="furo-main-content">
           <section class="tex2jax_ignore mathjax_ignore" id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h1>
-<p>Generate a dataset, train a model, and extract an interpretability
-artifact — end to end. It assumes <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is installed and runnable;
-<a class="reference internal" href="installation.html"><span class="std std-doc">Installation</span></a> has the routes, the requirements and the
-two conda-forge solver back-ends. Every command runs from a
-<strong>project directory</strong>: the folder where <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> keeps the datasets it
-generates (<code class="docutils literal notranslate"><span class="pre">data/</span></code>), the checkpoints, the figures and its <code class="docutils literal notranslate"><span class="pre">.mesokit/</span></code>
-registries. Any directory works; nothing has to be written by hand there.</p>
-<p>This page shows the happy path; every option, output file, error message
-and more examples are in the <a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a>.</p>
-<section id="data-generation">
-<h2>Data generation<a class="headerlink" href="#data-generation" title="Link to this heading">¶</a></h2>
-<p>To see the catalog of pre-defined simulator recipes:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>avail<span class="w">   </span><span class="c1"># alias: mesokit data available</span>
+<p>Generate a small Allen–Cahn dataset, train Spectral OnsagerNet, and plot
+its learned potential. This example uses ten trajectories and one CPU
+training epoch to check the workflow; use a longer run to study model
+quality.</p>
+<section id="before-you-start">
+<h2>Before you start<a class="headerlink" href="#before-you-start" title="Link to this heading">¶</a></h2>
+<p>Install <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> and the Dedalus solver used by this example, following
+<a class="reference internal" href="installation.html"><span class="std std-doc">Installation</span></a>. Run the commands from one <strong>project
+directory</strong>: a folder where you want to keep your datasets, checkpoints,
+and figures. It does not have to be the mesokit repository.</p>
+<p>See <a class="reference internal" href="cli.html#running-the-cli"><span class="std std-ref">how to use CLI</span></a>.</p>
+</section>
+<section id="generate-data">
+<h2>1. Generate data<a class="headerlink" href="#generate-data" title="Link to this heading">¶</a></h2>
+<p>To list all available simulators, run:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
 DYN<span class="w">                       </span>SIMULATOR
 allen_cahn_1d<span class="w">             </span>mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d
 allen_cahn_2d<span class="w">             </span>mesokit.data.allen_cahn.allen_cahn_2d.simulate_allen_cahn_2d
 cahn_hilliard_2d<span class="w">          </span>mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
-...<span class="w"> </span>&lt;truncated&gt;
+...<span class="w"> </span>&lt;truncated&gt;<span class="w"> </span>...
 </pre></div>
 </div>
-<p>To generate a demo with the <code class="docutils literal notranslate"><span class="pre">fdr</span></code> (fast-dev-run) config:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w">    </span><span class="c1"># reads configs/data/allen_cahn_1d/fdr.yaml</span>
+<p>The section <a class="reference internal" href="data_processing/predefined.html"><span class="std std-doc">Predefined Datasets</span></a> describes the equations,
+parameters, and solver requirements.</p>
+<p>For a quick demonstration, generate a small Allen–Cahn dataset with the <code class="docutils literal notranslate"><span class="pre">fdr</span></code> (fast dev run) recipe.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pixi<span class="w"> </span>add<span class="w"> </span>dedalus<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pixi<span class="w"> </span>install
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_demo
 </pre></div>
 </div>
-<p>To see which datasets are actually registered on this machine — grouped
-by dynamics, with <code class="docutils literal notranslate"><span class="pre">custom:</span></code> at the bottom for entries whose <code class="docutils literal notranslate"><span class="pre">dyn</span></code> isn’t a
-registered simulator — and the cache path for each:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>list
+<p>The <code class="docutils literal notranslate"><span class="pre">fdr</span></code> recipe generates ten trajectories with 101 saved
+frames and 256 grid points. The command writes <code class="docutils literal notranslate"><span class="pre">data/allen_cahn_1d/ac_demo.h5</span></code>,
+validates its format, and registers it as <code class="docutils literal notranslate"><span class="pre">ac_demo</span></code>.</p>
+<p>Only registered datasets are accepted for model training, and <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span></code> has automatically done so. To manually register a dataset, use</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>ac_demo_manually_registered<span class="w"> </span>--file<span class="w"> </span>data/allen_cahn_1d/ac_demo.h5
 </pre></div>
 </div>
-<section id="generating-from-a-predefined-recipe">
-<h3>Generating From a Predefined Recipe<a class="headerlink" href="#generating-from-a-predefined-recipe" title="Link to this heading">¶</a></h3>
-<p>Pre-defined datasets are generated on demand. The resulting file is
-auto-registered so the next <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">list</span></code> shows it as cached and
-downstream commands can refer to it by name. With no <code class="docutils literal notranslate"><span class="pre">--name</span></code>, the dataset
-is registered as <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v0</span></code>; repeated runs (e.g. with different parameters)
-get <code class="docutils literal notranslate"><span class="pre">_v1</span></code>, <code class="docutils literal notranslate"><span class="pre">_v2</span></code>, …. With no <code class="docutils literal notranslate"><span class="pre">--output</span></code>, the file is written to
-<code class="docutils literal notranslate"><span class="pre">data/&lt;dyn&gt;/&lt;name&gt;.h5</span></code>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w">                                          </span><span class="c1"># save to data/allen_cahn_1d/allen_cahn_1d_v0.h5</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w">                                          </span><span class="c1"># data/allen_cahn_1d/allen_cahn_1d_v1.h5 (a repeated run gives v1)</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--name<span class="w"> </span>my_run<span class="w">                            </span><span class="c1"># a custom name produces data/allen_cahn_1d/my_run.h5</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--output<span class="w"> </span>data/scratch.h5<span class="w"> </span>--no-registry<span class="w">   </span><span class="c1"># explicit path, skip registration</span>
+<p>To check all registered datasets, run:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>list
+allen_cahn_1d:
+<span class="w">  </span>ac_demo<span class="w">                      </span>yes<span class="w">  </span>/path/to/project/data/allen_cahn_1d/ac_demo.h5
+<span class="w">  </span>ac_demo_manually_registered<span class="w">  </span>yes<span class="w">  </span>/path/to/project/data/allen_cahn_1d/ac_demo.h5
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">--name</span></code> and <code class="docutils literal notranslate"><span class="pre">--no-registry</span></code> are mutually exclusive.</p>
-<p>Pass <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> to surface the underlying solver’s per-step logs (default
-is a single concise progress line on stderr).</p>
-<p>Each dynamics has its own config folder under <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/</span></code>, with a
-<code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> used when <code class="docutils literal notranslate"><span class="pre">--config</span></code> is not passed. To run a variant config,
-drop a sibling YAML next to <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> and select it by stem (no extension):</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w">    </span><span class="c1"># reads configs/data/allen_cahn_1d/fdr.yaml</span>
-</pre></div>
-</div>
-<p>Each run prints what it wrote, whether the file passed the sanity check, and
-its shape. That last command, the seconds-long <code class="docutils literal notranslate"><span class="pre">fdr</span></code> recipe, prints:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>wrote data/allen_cahn_1d/allen_cahn_1d_v0.h5 (1019.3 KiB)
-  check:      passed (mesokit-trajectory v1)
-  dyn:        allen_cahn_1d
-  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
-  dt:         non-uniform
-  channels:   u
-  registry:   allen_cahn_1d_v0
-</pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">default</span></code> recipe above is the full reference dataset — 1000 trajectories,
-about 99 MiB — so its block reads <code class="docutils literal notranslate"><span class="pre">1000</span> <span class="pre">traj</span></code> and takes minutes rather than
-seconds.</p>
-<p>Pass <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> (or <code class="docutils literal notranslate"><span class="pre">-v</span></code>) to add the full metadata and keep the solver’s own
-per-step logs. By default the solver is quiet and progress is shown only when
-stderr is a terminal, so a redirected run leaves a clean log. An <code class="docutils literal notranslate"><span class="pre">--output</span></code>
-that already exists is replaced, with a warning on stderr first; a <code class="docutils literal notranslate"><span class="pre">--name</span></code>
-that is already registered is refused before the solver runs, unless
-<code class="docutils literal notranslate"><span class="pre">--force</span></code>.</p>
+<p>A registered name is a shortcut to a file in this project. You can pass
+<code class="docutils literal notranslate"><span class="pre">ac_demo</span></code> to later commands instead of typing its path. Use a different
+name if you have already run this example.</p>
 </section>
-<section id="registering-a-custom-dataset">
-<h3>Registering a Custom Dataset<a class="headerlink" href="#registering-a-custom-dataset" title="Link to this heading">¶</a></h3>
-<p>For data produced outside <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> (a separate solver, MD trajectories,
-a finite-difference export), write an HDF5 file that follows the cache
-contract and register it under a name:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>DATASET_NAME<span class="w"> </span>--file<span class="w"> </span>data/my_data.h5
-</pre></div>
-</div>
-<p>This runs a sanity check to verify the file is in the expected format, then
-prints the same block as <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> — the <code class="docutils literal notranslate"><span class="pre">check:</span></code> row is the verdict,
-<code class="docutils literal notranslate"><span class="pre">passed</span> <span class="pre">(mesokit-trajectory</span> <span class="pre">v1)</span></code> when the file conforms, and nothing is
-registered otherwise. A failing file names each violated check on stderr, in
-red, and exits with status <code class="docutils literal notranslate"><span class="pre">2</span></code>. To run the check without registering
-anything, use <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">validate</span> <span class="pre">FILE</span></code>.
-The full cache-file contract — required datasets, root attributes, and
-metadata groups — is documented in <a class="reference internal" href="data_processing.html"><span class="std std-doc">Data Processing</span></a>, with
-end-to-end snippets in <a class="reference internal" href="data_processing/examples.html"><span class="std std-doc">Examples</span></a>.</p>
-</section>
-<section id="parsing-an-arbitrary-dataset-with-an-agent">
-<h3>Parsing An Arbitrary Dataset With An Agent<a class="headerlink" href="#parsing-an-arbitrary-dataset-with-an-agent" title="Link to this heading">¶</a></h3>
-<p>If your data is in a format that does not already match the cache
-contract (xarray, raw numpy, torch tensors + JSON/YAML metadata, …), you
-can hand the conversion off to an LLM coding agent you already have
-installed. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code> hands the agent the cache-contract skill
-shipped with the package (embedded in its prompt), your file, and
-(optionally) any extra hints; on success it validates the produced HDF5
-and — when <code class="docutils literal notranslate"><span class="pre">--name</span></code> is given — registers it the same way <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">register</span></code> would. It works from any directory, including a plain project
-folder that is not a git checkout.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>path/to/raw_data.nc<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--hint<span class="w"> </span><span class="s2">&quot;time dim is `t`, var is `u`&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--agent<span class="w"> </span>claude<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--name<span class="w"> </span>from_agent
-</pre></div>
-</div>
-<p>To watch it work before trusting it with your own data, <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">demo</span></code>
-writes a small, deliberately non-conforming file for exactly that:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo<span class="w">                                                                    </span><span class="c1"># data/demo/allen_cahn_1d_demo.npz</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
-</pre></div>
-</div>
-<p>Flags:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--agent</span></code>: which agent CLI to invoke (<code class="docutils literal notranslate"><span class="pre">claude</span></code>, <code class="docutils literal notranslate"><span class="pre">codex</span></code>). The command
-checks for it before doing anything else; if it is not installed it
-stops and points you at the official installation guide
-(<a class="reference external" href="https://code.claude.com/docs/en/setup">Claude Code</a>,
-<a class="reference external" href="https://developers.openai.com/codex/cli">Codex CLI</a>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--backend</span></code>: <code class="docutils literal notranslate"><span class="pre">foreground</span></code> (default; streams the agent’s output and
-blocks) or <code class="docutils literal notranslate"><span class="pre">tmux</span></code> (detaches into a session you can attach to later).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--hint</span></code>: free-form prompt fragment appended to the task.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--output</span></code>: where to write the converted HDF5; defaults to
-<code class="docutils literal notranslate"><span class="pre">data/parsed/&lt;input_stem&gt;.h5</span></code>. An existing file there is refused
-unless you pass <code class="docutils literal notranslate"><span class="pre">--force</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code>: register the output under this name on success.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--agent-args</span></code>: extra flags for the agent command (<code class="docutils literal notranslate"><span class="pre">&quot;--model</span> <span class="pre">opus&quot;</span></code>).</p></li>
-</ul>
-<p>The agent runs non-interactively, so <code class="docutils literal notranslate"><span class="pre">parse</span></code> grants the permissions the
-conversion needs up front — file writes in the working directory (and in
-the output’s directory), Python and the <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> command, read access to
-the input’s directory — and prints the command line it launches. The
-exact grants per agent are in the
-<a class="reference internal" href="cli/data.html"><span class="std std-doc">Command-Line Reference</span></a> under <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code>.</p>
-<p>The same skill, plus five more for training and extending, can be used
-conversationally in your agent; see <a class="reference internal" href="skills.html"><span class="std std-doc">Agent Skills</span></a>.</p>
-</section>
-</section>
-<section id="training-models">
-<h2>Training Models<a class="headerlink" href="#training-models" title="Link to this heading">¶</a></h2>
-<p>Training is routed through trainer classes under <code class="docutils literal notranslate"><span class="pre">mesokit.trainers</span></code>
-(the full picture, including the Python API, is in <a class="reference internal" href="training.html"><span class="std std-doc">Training</span></a>).
-The CLI keeps the surface uniform: <code class="docutils literal notranslate"><span class="pre">--model</span></code> resolves the architecture,
-<code class="docutils literal notranslate"><span class="pre">--trainer</span></code> optionally overrides the default trainer, and <code class="docutils literal notranslate"><span class="pre">--data</span></code> can be
-either a registered dataset name or a path to an HDF5 file.</p>
-<p>To train Spectral OnsagerNet on a registered Allen-Cahn dataset:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<section id="train-a-model">
+<h2>2. Train a model<a class="headerlink" href="#train-a-model" title="Link to this heading">¶</a></h2>
+<p>To train with a predefined model, run</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--config<span class="w"> </span>default
+<span class="w">  </span>--data<span class="w"> </span>ac_demo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>son_demo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>fdr<span class="w"> </span><span class="c1"># for demo</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">--dyn</span></code> can be omitted (it is read from the dataset), and so can the grid:
-<code class="docutils literal notranslate"><span class="pre">Nx</span></code>, <code class="docutils literal notranslate"><span class="pre">Lx</span></code> and friends are filled from the dataset’s metadata. The shipped
-recipes under <code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;model&gt;/</span></code> come with the package; each
-selects the model constructor, the <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code> wrapper (for example
-<code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset</span></code>), dataloader options, and trainer hyperparameters,
-and any key can be changed for one run with <code class="docutils literal notranslate"><span class="pre">--set</span></code>. Without a recipe for
-a dataset / model pair, built-in defaults are used. Convenience overrides
-are available for common knobs:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--epochs<span class="w"> </span><span class="m">5</span><span class="w"> </span>--batch-size<span class="w"> </span><span class="m">8</span><span class="w"> </span>--device<span class="w"> </span>cpu<span class="w"> </span>--set<span class="w"> </span>trainer.lr<span class="o">=</span>1e-4
+<p>For hyperparameter sweeps, we use</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>ac_demo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>fdr<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4<span class="w"> </span><span class="c1"># parameter sweep</span>
 </pre></div>
 </div>
-<p>The trainer writes a run directory at <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;run_id&gt;/</span></code>
-containing <code class="docutils literal notranslate"><span class="pre">model.pt</span></code> (plain <code class="docutils literal notranslate"><span class="pre">state_dict</span></code>, no Lightning required to load),
-<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, and <code class="docutils literal notranslate"><span class="pre">history.json</span></code>. Unless <code class="docutils literal notranslate"><span class="pre">--no-registry</span></code> is passed, the
-run is registered in <code class="docutils literal notranslate"><span class="pre">.mesokit/checkpoints.json</span></code> under <code class="docutils literal notranslate"><span class="pre">--name</span></code> or the
-next <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;_v&lt;n&gt;</span></code> slot.</p>
-<p>To list registered checkpoints, with the dataset, the <code class="docutils literal notranslate"><span class="pre">--set</span></code> keys and the
-final loss of each (<code class="docutils literal notranslate"><span class="pre">--sort</span> <span class="pre">train_loss</span></code> ranks them; <code class="docutils literal notranslate"><span class="pre">--format</span> <span class="pre">json</span></code> for a
-notebook):</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>list
+<p>Show all trained checkpoints with</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>model<span class="w"> </span>list
+NAME<span class="w">                                                     </span>MODEL<span class="w">                   </span>DATASET<span class="w">  </span>PARAMS<span class="w">             </span>TRAIN_LOSS<span class="w">  </span>EPOCHS<span class="w">  </span>TIME<span class="w">  </span>CREATED<span class="w">              </span>TAGS
+onsagernet_1d_lr_20260908-230905/onsagernet_1d_lr0.0001<span class="w">  </span>onsagernet_1d<span class="w">           </span>ac_demo<span class="w">  </span>trainer.lr<span class="o">=</span><span class="m">0</span>.0001<span class="w">  </span><span class="m">0</span>.000112<span class="w">    </span><span class="m">5</span><span class="w">       </span><span class="m">7</span>.6s<span class="w">  </span><span class="m">2026</span>-09-08T23:09:17<span class="w">  </span>-
+onsagernet_1d_lr_20260908-230905/onsagernet_1d_lr0.001<span class="w">   </span>onsagernet_1d<span class="w">           </span>ac_demo<span class="w">  </span>trainer.lr<span class="o">=</span><span class="m">0</span>.001<span class="w">   </span><span class="m">0</span>.000112<span class="w">    </span><span class="m">5</span><span class="w">       </span><span class="m">9</span>.2s<span class="w">  </span><span class="m">2026</span>-09-08T23:09:06<span class="w">  </span>-
+son_demo<span class="w">                                                 </span>spectral_onsagernet_1d<span class="w">  </span>ac_demo<span class="w">  </span>-<span class="w">                  </span><span class="m">0</span>.000112<span class="w">    </span><span class="m">5</span><span class="w">       </span><span class="m">8</span>.1s<span class="w">  </span><span class="m">2026</span>-09-08T22:32:17<span class="w">  </span>-
 </pre></div>
 </div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>NAME                       MODEL                   DATASET           PARAMS             TRAIN_LOSS  EPOCHS  TIME   CREATED              TAGS
-spectral_onsagernet_1d_v0  spectral_onsagernet_1d  allen_cahn_1d_v0  -                  0.0004203   100     51.0s  2026-09-08T10:15:02  -
-spectral_onsagernet_1d_v1  spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.0001  0.0003117   5       2.6s   2026-09-08T10:21:40  -
+<p>Inspect a single saved run with:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>model<span class="w"> </span>show<span class="w"> </span>son_demo
 </pre></div>
 </div>
-<p>Runs that belong together — a learning-rate scan, say — go under one
-experiment with <code class="docutils literal notranslate"><span class="pre">--experiment</span> <span class="pre">lr-scan</span></code> (the run directory becomes
-<code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/lr-scan/&lt;run&gt;/</span></code>, the name <code class="docutils literal notranslate"><span class="pre">lr-scan/&lt;run&gt;</span></code>), or through
-<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span> <span class="pre">--train-param</span> <span class="pre">trainer.lr=1e-3,1e-4,1e-5</span> <span class="pre">--data</span> <span class="pre">allen_cahn_1d_v0</span> <span class="pre">…</span></code>,
-which does the loop and writes the table; <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">show</span> <span class="pre">&lt;name&gt;</span></code>
-prints one run’s record and the command that reproduces it.</p>
-<p>To register an externally trained checkpoint:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span>--model<span class="w"> </span>MODEL_NAME<span class="w"> </span>--file<span class="w"> </span>path/to/checkpoint.pt<span class="w"> </span>--config<span class="w"> </span>path/to/config.yaml
+<p>To start a new
+run from these weights:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>train<span class="w"> </span>--from<span class="w"> </span>son_demo<span class="w"> </span>--name<span class="w"> </span>son_long<span class="w"> </span>--epochs<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="c1"># 5+100 epochs in total</span>
 </pre></div>
 </div>
-<p>This adds the model to the registry, making it available for downstream
-evaluation and comparison.</p>
+<p>The flag <code class="docutils literal notranslate"><span class="pre">--from</span></code> loads the weights
+and saved configuration; it starts a new optimizer rather than restoring
+the previous optimizer state.</p>
 </section>
-<section id="interpretability-artifacts">
-<h2>Interpretability Artifacts<a class="headerlink" href="#interpretability-artifacts" title="Link to this heading">¶</a></h2>
-<p>Some models optionally produce an <code class="docutils literal notranslate"><span class="pre">InterpretabilityArtifact</span></code> — a
-structured, self-describing object containing a human-readable view of
-what the model learned (a learned free-energy landscape, a per-mode error
-spectrum, …); see <a class="reference internal" href="interpretability.html"><span class="std std-doc">Interpretability</span></a> for the contract
-and how to read the shipped artifact.</p>
-<p>To see available artifacts for a registered model:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>MODEL_NAME
+<section id="plot-the-learned-potential">
+<h2>3. Plot the learned potential<a class="headerlink" href="#plot-the-learned-potential" title="Link to this heading">¶</a></h2>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>son_demo
+son_demo:
+<span class="w">  </span>potential
+$<span class="w"> </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>son_demo<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/son_demo.png
 </pre></div>
 </div>
-<p>To extract and visualize one:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>MODEL_NAME<span class="w"> </span>--artifact<span class="w"> </span>ARTIFACT_NAME<span class="w"> </span>--output<span class="w"> </span>figs/artifact.png<span class="w"> </span><span class="c1"># or mesokit interpret explain</span>
+<p>The second command prints a summary and saves a figure. The <code class="docutils literal notranslate"><span class="pre">potential</span></code>
+artifact shows a slice of the learned free energy and the model’s mobility
+and reactive spectra. For Allen–Cahn data it also compares the learned
+energy with the analytic reference over dataset snapshots.</p>
+<p>Use <a class="reference internal" href="interpretability/potential.html"><span class="std std-doc">The Potential Artifact</span></a> to read the
+panels. A short training run demonstrates extraction; its potential need
+not yet match the physical free energy. To inspect the longer fit, replace
+<code class="docutils literal notranslate"><span class="pre">son_demo</span></code> with <code class="docutils literal notranslate"><span class="pre">son_long</span></code> and choose a new output filename.</p>
+</section>
+<section id="use-your-own-data">
+<h2>Use your own data<a class="headerlink" href="#use-your-own-data" title="Link to this heading">¶</a></h2>
+<p>If you already have a file in mesokit’s HDF5 format, validate and register it:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>my_data<span class="w"> </span>--file<span class="w"> </span>data/my_data.h5
+</pre></div>
+</div>
+<p>For other formats, <a class="reference internal" href="data_processing/custom.html"><span class="std std-doc">Custom Datasets</span></a> shows how
+to write a compatible file. It also covers <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">parse</span></code>, which
+uses an installed coding agent to convert a file for you.</p>
+<p>For demonstration, we use</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>demo<span class="w"> </span>--format<span class="w"> </span>npz<span class="w"> </span>--output<span class="w"> </span>my_dataset.npz
+</pre></div>
+</div>
+<p>to generate a test dataset without the correct HDF5 structure. Then we convert it to HDF5 with</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>my_dataset.npz<span class="w"> </span><span class="c1"># use claude by default</span>
+$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--file<span class="w"> </span>data/parsed/my_dataset.h5<span class="w"> </span>--name<span class="w"> </span>my_npz_data
+</pre></div>
+</div>
+<p>or a single line:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>my_dataset.npz<span class="w"> </span>--name<span class="w"> </span>my_npz_data
+</pre></div>
+</div>
+<p>Then check the file and register it:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>list
+allen_cahn_1d:
+<span class="w">  </span>ac_demo<span class="w">                      </span>yes<span class="w">  </span>/home/zhuoyuan/tmp/Projects/mesokit-project/data/allen_cahn_1d/ac_demo.h5
+<span class="w">  </span>ac_demo_manually_registered<span class="w">  </span>yes<span class="w">  </span>/home/zhuoyuan/tmp/Projects/mesokit-project/data/allen_cahn_1d/ac_demo.h5
+<span class="w">  </span>my_npz_dataset<span class="w">               </span>yes<span class="w">  </span>/home/zhuoyuan/tmp/Projects/mesokit-project/data/parsed/my_dataset.h5<span class="w"> </span><span class="c1"># newly registered</span>
 </pre></div>
 </div>
 </section>
-<section id="next-steps">
-<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
-<p>Each stage above has its own section of the guide:</p>
+<section id="continue">
+<h2>Continue<a class="headerlink" href="#continue" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="data_processing.html"><span class="std std-doc">Data Processing</span></a> — the schema when authoring or
-registering your own HDF5 files (<a class="reference internal" href="data_processing/structure.html"><span class="std std-doc">Data Structure</span></a>,
-<a class="reference internal" href="data_processing/custom.html"><span class="std std-doc">Custom Datasets</span></a>, <a class="reference internal" href="data_processing/examples.html"><span class="std std-doc">Examples</span></a>)
-and generating data from your own equation
-(<a class="reference internal" href="data_processing/custom_simulator.html"><span class="std std-doc">Custom Simulators</span></a>).</p></li>
-<li><p><a class="reference internal" href="models.html"><span class="std std-doc">Models</span></a> — what each family computes and how to choose.</p></li>
-<li><p><a class="reference internal" href="training.html"><span class="std std-doc">Training</span></a> — recipes, training views, the shipped trainer’s
-options, and training from Python.</p></li>
-<li><p><a class="reference internal" href="interpretability.html"><span class="std std-doc">Interpretability</span></a> — reading the potential artifact
-and building your own.</p></li>
+<li><p><a class="reference internal" href="models.html"><span class="std std-doc">Models</span></a>: choose between Spectral OnsagerNet, classical
+OnsagerNet, and FNO.</p></li>
+<li><p><a class="reference internal" href="training/recipes.html"><span class="std std-doc">Training Recipes</span></a>: keep reusable settings or
+change them for one run with <code class="docutils literal notranslate"><span class="pre">--set</span></code>.</p></li>
+<li><p><a class="reference internal" href="cli/recipes.html"><span class="std std-doc">CLI Workflows</span></a>: parameter sweeps, other datasets,
+and checkpoint management.</p></li>
+<li><p><a class="reference internal" href="skills.html"><span class="std std-doc">Agent Skills</span></a>: ask a coding agent to help with data,
+training, or custom extensions.</p></li>
 </ul>
 </section>
 </section>
@@ -711,15 +631,12 @@ and building your own.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Quickstart</a><ul>
-<li><a class="reference internal" href="#data-generation">Data generation</a><ul>
-<li><a class="reference internal" href="#generating-from-a-predefined-recipe">Generating From a Predefined Recipe</a></li>
-<li><a class="reference internal" href="#registering-a-custom-dataset">Registering a Custom Dataset</a></li>
-<li><a class="reference internal" href="#parsing-an-arbitrary-dataset-with-an-agent">Parsing An Arbitrary Dataset With An Agent</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#training-models">Training Models</a></li>
-<li><a class="reference internal" href="#interpretability-artifacts">Interpretability Artifacts</a></li>
-<li><a class="reference internal" href="#next-steps">Next Steps</a></li>
+<li><a class="reference internal" href="#before-you-start">Before you start</a></li>
+<li><a class="reference internal" href="#generate-data">1. Generate data</a></li>
+<li><a class="reference internal" href="#train-a-model">2. Train a model</a></li>
+<li><a class="reference internal" href="#plot-the-learned-potential">3. Plot the learned potential</a></li>
+<li><a class="reference internal" href="#use-your-own-data">Use your own data</a></li>
+<li><a class="reference internal" href="#continue">Continue</a></li>
 </ul>
 </li>
 </ul>

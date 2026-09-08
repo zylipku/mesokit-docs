@@ -18,8 +18,8 @@ List the predefined simulator recipes compiled into the package (alias:
 `mesokit data available`). This is the catalog of what `data generate` can
 run, independent of what has been generated on this machine.
 
-```sh
-mesokit data avail
+```console
+$ mesokit data avail
 ```
 
 ```text
@@ -44,8 +44,8 @@ listed under that name; anything else lands in a trailing `custom:` group.
 The second column says whether the file still exists (`yes`) or the registry
 points at something that has been moved or deleted (`MISSING`).
 
-```sh
-mesokit data list
+```console
+$ mesokit data list
 ```
 
 ```text
@@ -67,9 +67,16 @@ With nothing registered it prints `(no datasets)`.
 Run a predefined simulator from a recipe, write the trajectories to HDF5,
 validate the file and register it.
 
-```sh
-mesokit data generate --dyn DYN [--config STEM] [--name NAME | --no-registry]
-                      [--output PATH] [--force] [--verbose|-v] [--set KEY=VALUE ...]
+```console
+$ mesokit data generate \
+  --dyn DYN \
+  [--config STEM] \
+  [--name NAME \
+  | --no-registry] \
+  [--output PATH] \
+  [--force] \
+  [--verbose|-v] \
+  [--set KEY=VALUE ...]
 ```
 
 | Option | Default | Meaning |
@@ -94,8 +101,8 @@ simulator, and `verbose` is forwarded); the returned `TrajectoryDataset` is
 saved; the saved file is run through the same validator as `data register`;
 on success the registry entry is written and the summary is printed.
 
-```sh
-mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_smoke
+```console
+$ mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_smoke
 ```
 
 ```text
@@ -110,8 +117,9 @@ wrote data/allen_cahn_1d/ac_smoke.h5 (1019.3 KiB)
 
 `dt` is the one step of a uniform time grid, or `non-uniform` when the
 saved times do not sit on one to within the v1 tolerance — as here, where
-101 `float32` times a millisecond apart drift in the seventh digit. It is a
-statement about the file, not a fault; models read `times` itself.
+101 `float32` times a millisecond apart drift in the seventh digit. It describes the
+saved times rather than a validation failure. Training uses a fixed step;
+see {ref}`Time step <time-step>` for how to set it.
 
 `-v` keeps Dedalus's per-step log and reports progress as one line per ten
 percent of the run. Both go to stderr — mesokit points the solver's own log
@@ -119,8 +127,13 @@ handler there — so the block below is still all of stdout, and the two
 streams stay separable in a log. It adds the rest of what the validator
 inferred:
 
-```sh
-mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_smoke --force -v
+```console
+$ mesokit data generate \
+  --dyn allen_cahn_1d \
+  --config fdr \
+  --name ac_smoke \
+  --force \
+  -v
 ```
 
 ```text
@@ -161,29 +174,37 @@ refusal `data parse` makes.
 
 More examples:
 
-```sh
-# The reference dataset, auto-named allen_cahn_1d_v0 (then _v1, _v2, … on repeats).
-mesokit data generate --dyn allen_cahn_1d
+```console
+$ # The reference dataset, auto-named allen_cahn_1d_v0 (then _v1, _v2, … on repeats).
+$ mesokit data generate --dyn allen_cahn_1d
 
-# A variant recipe: configs/data/ising_2d/kac.yaml (Kac interaction).
-mesokit data generate --dyn ising_2d --config kac --name ising_kac_T07
+$ # A variant recipe: configs/data/ising_2d/kac.yaml (Kac interaction).
+$ mesokit data generate --dyn ising_2d --config kac --name ising_kac_T07
 
-# Write somewhere else and keep it out of the registry (scratch experiments).
-mesokit data generate --dyn cahn_hilliard_2d --config fdr --output /tmp/ch_test.h5 --no-registry
+$ # Write somewhere else and keep it out of the registry (scratch experiments).
+$ mesokit data generate \
+  --dyn cahn_hilliard_2d \
+  --config fdr \
+  --output /tmp/ch_test.h5 \
+  --no-registry
 
-# Re-run a recipe you changed and replace the previous entry of the same name.
-mesokit data generate --dyn kdv_1d --name kdv_long --force
+$ # Re-run a recipe you changed and replace the previous entry of the same name.
+$ mesokit data generate --dyn kdv_1d --name kdv_long --force
 
-# Watch Dedalus's per-step log, and print the full metadata at the end.
-mesokit data generate --dyn kdv_1d --config fdr -v
+$ # Watch Dedalus's per-step log, and print the full metadata at the end.
+$ mesokit data generate --dyn kdv_1d --config fdr -v
 
-# One-off parameter change without a new recipe file.
-mesokit data generate --dyn allen_cahn_1d --set eps=0.05 --set seed=1 --name ac_eps0.05_s1
+$ # One-off parameter change without a new recipe file.
+$ mesokit data generate \
+  --dyn allen_cahn_1d \
+  --set eps=0.05 \
+  --set seed=1 \
+  --name ac_eps0.05_s1
 ```
 
 To change parameters for good, add a sibling YAML under `configs/data/<dyn>/`
 (copy `default.yaml`, edit, pick it with `--config`); for a one-off run use
-`--set`, and for a whole grid of values use [`mesokit sweep`](#mesokit-sweep).
+`--set`, and for a whole grid of values use {ref}`mesokit sweep <mesokit-sweep>`.
 Every predefined recipe also ships `fdr.yaml`, a seconds-long "fast dev run"
 for trying the pipeline.
 Some recipes are heavy — the default `cahn_hilliard_2d` takes about ten
@@ -194,7 +215,7 @@ and timings.
 Errors you may see:
 
 ```text
-Invalid value: config dir not found: /home/me/mesokit/configs/data/nope
+Invalid value: no recipe dir configs/data/nope in any of: …
 Invalid value: no config 'nope' under /home/me/mesokit/configs/data/allen_cahn_1d; available: default, fdr
 Invalid value: --name and --no-registry are mutually exclusive
 Invalid value: dataset 'ac_smoke' already registered; pass --force to overwrite
@@ -204,8 +225,9 @@ Invalid value: output data is a directory; pass --output with a file path
 Invalid value: cahn_hilliard_2d: round(T/dt)=10 must be a positive multiple of save_every=20
 ```
 
-The first one also appears when you run from the wrong directory: recipes
-are looked up in `./configs/data/`, not inside the package.
+For a custom simulator, check that its recipe is in your project's
+`configs/data/<dyn>/` directory, or pass a YAML path with `--config`.
+Built-in recipes are also looked up in the installed package and checkout.
 
 The last one is the simulator itself rejecting the parameters it was given,
 prefixed with the `dyn` it came from; a `--set` that a recipe accepts but the
@@ -220,8 +242,12 @@ parameters being wrong.
 Validate an HDF5 file you produced yourself against the v1 cache contract
 and register it under a name.
 
-```sh
-mesokit data register --name NAME --file FILE.h5 [--force] [--verbose|-v]
+```console
+$ mesokit data register \
+  --name NAME \
+  --file FILE.h5 \
+  [--force] \
+  [--verbose|-v]
 ```
 
 | Option | Default | Meaning |
@@ -237,8 +263,8 @@ the three metadata groups and the optional `channel_names`. Its verdict is
 the `check:` row: `passed` (in green on a terminal) naming the contract the
 file was checked against, and nothing is registered unless it says so.
 
-```sh
-mesokit data register --name ac_scratch --file data/scratch.h5
+```console
+$ mesokit data register --name ac_scratch --file data/scratch.h5
 ```
 
 ```text
@@ -288,8 +314,8 @@ Check a file against the v1 contract and print the inferred metadata,
 without touching the registry. `register` runs the same check before it
 writes an entry, and the agent behind `parse` runs it on its own output.
 
-```sh
-mesokit data validate FILE [--verbose|-v]
+```console
+$ mesokit data validate FILE [--verbose|-v]
 ```
 
 ```text
@@ -326,11 +352,11 @@ Invalid value: validation failed for /home/me/project/data/demo/allen_cahn_1d_de
 ## `mesokit data demo`
 
 Write a small, deliberately non-conforming dataset to practise
-[`mesokit data parse`](#mesokit-data-parse) on, so you can see the
+{ref}`mesokit data parse <mesokit-data-parse>` on, so you can see the
 conversion work without one of your own files.
 
-```sh
-mesokit data demo [--output PATH] [--format npz|h5]
+```console
+$ mesokit data demo [--output PATH] [--format npz|h5]
 ```
 
 | Option | Default | Meaning |
@@ -346,8 +372,8 @@ instead of the three metadata groups. Every fact the v1 cache needs is in the
 file; none of it is where the schema wants it. The content is a fixed-seed
 constant, so re-running writes the same arrays.
 
-```sh
-mesokit data demo
+```console
+$ mesokit data demo
 ```
 
 ```text
@@ -384,10 +410,16 @@ itself, and the five others that cover training and extending, are
 described in [Agent Skills](../skills.md); [`mesokit skills`](skills.md)
 installs them into an agent for conversational use.
 
-```sh
-mesokit data parse --file FILE [--output PATH] [--hint TEXT]
-                   [--agent claude|codex] [--backend foreground|tmux]
-                   [--agent-args "FLAGS"] [--name NAME] [--force]
+```console
+$ mesokit data parse \
+  --file FILE \
+  [--output PATH] \
+  [--hint TEXT] \
+  [--agent claude|codex] \
+  [--backend foreground|tmux] \
+  [--agent-args "FLAGS"] \
+  [--name NAME] \
+  [--force]
 ```
 
 | Option | Default | Meaning |
@@ -451,9 +483,9 @@ validated is always the agent's own work.
 If you have no file of your own to hand, `mesokit data demo` writes one to
 practise on; the run below is exactly that, start to finish:
 
-```sh
-mesokit data demo
-mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
+```console
+$ mesokit data demo
+$ mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
 ```
 
 ```text
@@ -481,8 +513,9 @@ Without `--name` the tail reads `validated <path>` instead, followed by
 Your own file works the same way, with `--hint` carrying whatever the arrays
 do not say for themselves:
 
-```sh
-mesokit data parse --file ~/runs/burgers.npz \
+```console
+$ mesokit data parse \
+  --file ~/runs/burgers.npz \
   --hint "arrays u (traj, time, x) and t; domain is [0, 2π) periodic; call it burgers_1d" \
   --name burgers_v0
 ```

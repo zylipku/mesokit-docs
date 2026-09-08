@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/python_equivalents.html">Python Equivalents</a></li>
@@ -504,7 +504,7 @@ are what training and rollout see.</p>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CoerciveAutogradPotential</span></code></p></td>
 <td><p><span class="math notranslate nohighlight">\(\int \tfrac{a}{2}u^2 + F_\theta(u)\,dx + \int \tfrac{b}{2}\lvert\nabla u\rvert^2\,dx + \lvert v_\theta(\hat u_{\text{low}})\rvert\)</span>, <span class="math notranslate nohighlight">\(a, b \ge 0\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(a, b\)</span>, pointwise MLP <span class="math notranslate nohighlight">\(F_\theta\)</span>, complex MLP <span class="math notranslate nohighlight">\(v_\theta\)</span> on the lowest <code class="docutils literal notranslate"><span class="pre">v_truncate</span></code> modes per axis (<code class="docutils literal notranslate"><span class="pre">v_truncate</span></code><span class="math notranslate nohighlight">\(^d\)</span> inputs)</p></td>
-<td><p>the headline interpretable choice: pointwise, local and nonlocal energy read off separately</p></td>
+<td><p>inspect pointwise, gradient, and nonlocal energy separately</p></td>
 </tr>
 </tbody>
 </table>
@@ -580,8 +580,8 @@ configs/train/ising_2d/spectral_onsagernet_2d/default.yaml
 </pre></div>
 </div>
 <p>A potential is selected by nesting it under <code class="docutils literal notranslate"><span class="pre">model.potential</span></code> in the recipe;
-<code class="docutils literal notranslate"><span class="pre">null</span></code> means the polynomial default, and the <code class="docutils literal notranslate"><span class="pre">coercive.yaml</span></code> recipes are the
-headline configuration (sine final activations, <code class="docutils literal notranslate"><span class="pre">v_truncate</span> <span class="pre">=</span> <span class="pre">16</span></code>). The
+<code class="docutils literal notranslate"><span class="pre">null</span></code> means the polynomial default. The <code class="docutils literal notranslate"><span class="pre">coercive.yaml</span></code> recipes use the
+coercive potential (sine final activations, <code class="docutils literal notranslate"><span class="pre">v_truncate</span> <span class="pre">=</span> <span class="pre">16</span></code>). The
 potential’s <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code> / <code class="docutils literal notranslate"><span class="pre">domain</span></code> must match the model’s <code class="docutils literal notranslate"><span class="pre">Nx</span></code>, <code class="docutils literal notranslate"><span class="pre">Ny</span></code>,
 <code class="docutils literal notranslate"><span class="pre">Lx</span></code>, <code class="docutils literal notranslate"><span class="pre">Ly</span></code>, which in turn must match the dataset. The recipe format is
 described in <a class="reference internal" href="../training/recipes.html"><span class="std std-doc">Training Recipes</span></a>.</p>

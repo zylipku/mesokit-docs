@@ -13,13 +13,17 @@ format, and when to write your own.
 `configs/<kind>/<parts>/<stem>.yaml` is looked up in order:
 
 1. `./configs/` in the working directory — your project's own recipes,
-   which shadow the shipped ones of the same name;
+   whose first matching recipe directory takes precedence over the
+   shipped directory;
 2. `mesokit/configs/` inside the installed package — the shipped recipes
    (this is what a `pip install` user gets);
 3. `configs/` at the repository root — the same files in an editable
    install from a checkout.
 
-`--config` may also be a path to any YAML file, which bypasses the lookup.
+For a named variant, lookup uses the first matching recipe directory;
+if that directory lacks the requested stem, it reports an error rather
+than trying the next directory. `--config` may also be a path to any YAML
+file, which bypasses the lookup.
 `mesokit data generate` uses the same rule for `configs/data/<dyn>/`.
 
 ## Recipes Are Optional
@@ -30,8 +34,12 @@ synthesises one: the model's constructor defaults plus the dataset's grid,
 registered trainer's defaults. `--set key.path=value` (repeatable, values
 parsed as YAML) changes any key on top of a recipe or of those defaults:
 
-```sh
-mesokit train --model spectral_onsagernet_1d --data my_data --set trainer.lr=1e-4 --set model.potential.eps=0.05
+```console
+$ mesokit train \
+  --model spectral_onsagernet_1d \
+  --data my_data \
+  --set trainer.lr=1e-4 \
+  --set model.potential.eps=0.05
 ```
 
 The completed configuration is written to
@@ -55,11 +63,12 @@ configs/train/<dyn>/<model>/<stem>.yaml
 `<dyn>` is the dataset's dynamics name, `<model>` the registered
 architecture name, and `<stem>` the recipe selected by `--config <stem>`
 (default `default`). Sibling files are variants of the same architecture,
-differing in how long they train rather than in what they fit:
+which can select different components or training settings:
 `smoke.yaml` recipes are the test fixtures (one epoch, pinned to the CPU,
-no progress bar), and `allen_cahn_1d/spectral_onsagernet_1d` also ships
-`fdr.yaml`, a "fast dev run" that is `default.yaml` with the epoch budget
-cut, matching the data recipe of the same name. No shipped recipe writes a
+no progress bar), and the 1D Allen–Cahn recipes for `spectral_onsagernet_1d`
+and `onsagernet_1d` also ship `fdr.yaml`, a "fast dev run" that is
+`default.yaml` with the epoch budget cut to 5, matching the data recipe of
+the same name. No shipped recipe writes a
 grid key, so each runs on any grid of its dynamics.
 
 The data side has the same convention: `configs/data/<dyn>/default.yaml`
@@ -106,7 +115,9 @@ trainer:                  # LitTrainer kwargs (or the registered trainer's)
 - **`trainer`** — hyperparameters of the trainer registered for the model
   (`--trainer` overrides the name; a model with no trainer of its own gets
   `LitTrainer`; any class can be named by `trainer._target_`); `dt: null`
-  means "infer from the data". `--epochs`
+  uses `numerical["dt"]` when present, otherwise the first interval in
+  `times`. Check that this matches the training pairs; see
+  {ref}`Time step <time-step>`. `--epochs`
   overrides `max_epochs`, `--device` overrides `accelerator`. The full
   option list is on [LitTrainer](lit_trainer.md).
 
@@ -140,8 +151,12 @@ dimension, for example
 `configs/train/decay_1d/spectral_onsagernet_1d/default.yaml` (nothing in
 it depends on the grid), then:
 
-```sh
-mesokit train --model spectral_onsagernet_1d --data decay_1d_v0 --epochs 5 --device cpu
+```console
+$ mesokit train \
+  --model spectral_onsagernet_1d \
+  --data decay_1d_v0 \
+  --epochs 5 \
+  --device cpu
 ```
 
 The saved `checkpoints/<dyn>/<run>/config.yaml` is the resolved recipe

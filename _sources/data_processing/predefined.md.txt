@@ -34,14 +34,14 @@ Invalid value: allen_cahn_1d needs Dedalus, which is not installed (No module na
 ```
 
 The same message names `lammps` for `peridynamics_fracture_2d`. See
-[Solver Back-Ends](#solver-backends).
+{ref}`Solver Back-Ends <solver-backends>`.
 
 ## Listing What's Available
 
 From the CLI:
 
-```sh
-mesokit data avail
+```console
+$ mesokit data avail
 ```
 
 prints the registered simulators along with the Python target each one
@@ -62,8 +62,8 @@ workflow.
 
 The most common entry point is the `data generate` subcommand:
 
-```sh
-mesokit data generate --dyn allen_cahn_1d --config default
+```console
+$ mesokit data generate --dyn allen_cahn_1d --config default
 ```
 
 This runs the registered simulator with the parameters from
@@ -76,8 +76,8 @@ Every simulator ships a `default.yaml` (the reference dataset) and an
 `configs/data/<dyn>/`; some ship further variants (for example
 `configs/data/ising_2d/kac.yaml`). Select one by stem:
 
-```sh
-mesokit data generate --dyn ising_2d --config kac
+```console
+$ mesokit data generate --dyn ising_2d --config kac
 ```
 
 Useful flags:
@@ -171,6 +171,17 @@ same v1 layout as one produced by the minimal external-writer snippet in
 [Custom Datasets](custom.md).
 
 ## Simulator Catalog
+
+Jump to a system:
+
+- [Allen–Cahn, 1D](#allen-cahn-1d)
+- [Allen–Cahn, 2D](#allen-cahn-2d)
+- [Korteweg–de Vries](#kdv-1d)
+- [Cahn–Hilliard](#cahn-hilliard-2d)
+- [Ising](#ising-2d)
+- [Landau–Lifshitz–Gilbert](#llg-lattice-2d)
+- [Peridynamic fracture](#peridynamics-fracture-2d)
+
 
 Each entry gives the model, what the trajectories represent, the complete
 numerical scheme (discretisation, time stepping, de-aliasing, stability

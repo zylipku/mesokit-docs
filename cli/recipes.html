@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Files the CLI Reads and Writes" href="files.html"><link rel="prev" title="mesokit agent" href="agent.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Recipes - mesokit</title>
+        <title>CLI Workflows - mesokit</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Recipes</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_equivalents.html">Python Equivalents</a></li>
@@ -423,95 +423,168 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section class="tex2jax_ignore mathjax_ignore" id="recipes">
-<h1>Recipes<a class="headerlink" href="#recipes" title="Link to this heading">¶</a></h1>
+          <section class="tex2jax_ignore mathjax_ignore" id="cli-workflows">
+<h1>CLI Workflows<a class="headerlink" href="#cli-workflows" title="Link to this heading">¶</a></h1>
 <p><strong>Smallest end-to-end run</strong> (seconds on a CPU):</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_fdr
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>ac_fdr<span class="w"> </span>--epochs<span class="w"> </span><span class="m">1</span><span class="w"> </span>--device<span class="w"> </span>cpu
-mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d_v0<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/potential.png
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac_fdr
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>ac_fdr<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="w"> </span>cpu
+<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--artifact<span class="w"> </span>potential<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output<span class="w"> </span>figs/potential.png
 </pre></div>
 </div>
 <p><strong>The reference experiment:</strong></p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w">                       </span><span class="c1"># allen_cahn_1d_v0, 1000 trajectories</span>
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0
-mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d_v0<span class="w"> </span>--artifact<span class="w"> </span>all<span class="w"> </span>--output<span class="w"> </span>figs/son_v0/
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># allen_cahn_1d_v0, 1000 trajectories</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0
+<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d_v0<span class="w"> </span>--artifact<span class="w"> </span>all<span class="w"> </span>--output<span class="w"> </span>figs/son_v0/
 </pre></div>
 </div>
 <p><strong>A parameter sweep with reproducible names</strong> (one dataset and one
 checkpoint per value, grouped under <code class="docutils literal notranslate"><span class="pre">checkpoints/allen_cahn_1d/eps-scan/</span></code>
 with the table in its <code class="docutils literal notranslate"><span class="pre">runs.json</span></code>):</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1,0.2<span class="w"> </span>--experiment<span class="w"> </span>eps-scan
-mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>eps-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--param<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="m">0</span>.05,0.1,0.2<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--experiment<span class="w"> </span>eps-scan
+<span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>eps-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
 </pre></div>
 </div>
 <p><strong>A learning-rate scan on one dataset</strong>, then the best run continued:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>sweep<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4,1e-5<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
-mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
-mesokit<span class="w"> </span>model<span class="w"> </span>show<span class="w"> </span>lr-scan/spectral_onsagernet_1d_lr0.0001
-mesokit<span class="w"> </span>train<span class="w"> </span>--from<span class="w"> </span>lr-scan/spectral_onsagernet_1d_lr0.0001<span class="w"> </span>--name<span class="w"> </span>lr-scan/son_long<span class="w"> </span>--epochs<span class="w"> </span><span class="m">200</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>sweep<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--train-param<span class="w"> </span>trainer.lr<span class="o">=</span>1e-3,1e-4,1e-5<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">20</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>list<span class="w"> </span>--experiment<span class="w"> </span>lr-scan<span class="w"> </span>--sort<span class="w"> </span>train_loss
+<span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>show<span class="w"> </span>lr-scan/spectral_onsagernet_1d_lr0.0001
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span>--from<span class="w"> </span>lr-scan/spectral_onsagernet_1d_lr0.0001<span class="w"> </span>--name<span class="w"> </span>lr-scan/son_long<span class="w"> </span>--epochs<span class="w"> </span><span class="m">200</span>
 </pre></div>
 </div>
 <p>The same thing by hand, if you need a step in between:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span>eps<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.05<span class="w"> </span><span class="m">0</span>.1<span class="w"> </span><span class="m">0</span>.2<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--set<span class="w"> </span><span class="nv">eps</span><span class="o">=</span><span class="nv">$eps</span><span class="w"> </span>--name<span class="w"> </span>ac_eps<span class="nv">$eps</span>
-<span class="w">  </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>ac_eps<span class="nv">$eps</span><span class="w"> </span>--name<span class="w"> </span>son_eps<span class="nv">$eps</span>
-<span class="k">done</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="k">for</span><span class="w"> </span>eps<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.05<span class="w"> </span><span class="m">0</span>.1<span class="w"> </span><span class="m">0</span>.2<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="go">  mesokit data generate --dyn allen_cahn_1d --set eps=$eps --name ac_eps$eps</span>
+<span class="go">  mesokit train \</span>
+<span class="go">    --model spectral_onsagernet_1d \</span>
+<span class="go">    --dyn allen_cahn_1d \</span>
+<span class="go">    --data ac_eps$eps \</span>
+<span class="go">    --name son_eps$eps</span>
+<span class="go">done</span>
 </pre></div>
 </div>
 <p><strong>Your own solver’s output:</strong></p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>my_export.py<span class="w">                                   </span><span class="c1"># writes runs/my_data.h5 in the v1 layout</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>my_v0<span class="w"> </span>--file<span class="w"> </span>runs/my_data.h5
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>fno1d<span class="w"> </span>--dyn<span class="w"> </span>my_dynamics<span class="w"> </span>--data<span class="w"> </span>my_v0<span class="w"> </span>--config<span class="w"> </span>default
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>my_export.py<span class="w">  </span><span class="c1"># writes runs/my_data.h5 in the v1 layout</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>register<span class="w"> </span>--name<span class="w"> </span>my_v0<span class="w"> </span>--file<span class="w"> </span>runs/my_data.h5
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>fno1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>my_dynamics<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>my_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>default
 </pre></div>
 </div>
-<p>The training recipe is looked up at <code class="docutils literal notranslate"><span class="pre">configs/train/my_dynamics/fno1d/default.yaml</span></code>,
-so create that folder (copy one of the shipped recipes) before training on a
-custom <code class="docutils literal notranslate"><span class="pre">dyn</span></code>.</p>
+<p>When there is no recipe directory for <code class="docutils literal notranslate"><span class="pre">my_dynamics/fno1d</span></code>, the command
+uses built-in defaults and reads the grid from the dataset. Use <code class="docutils literal notranslate"><span class="pre">--set</span></code>
+for changes to one run, or save a recipe for settings you want to reuse.
+Check the <a class="reference internal" href="../training.html#time-step"><span class="std std-ref">time step</span></a> before training.</p>
 <p><strong>Data in some other format, converted by an agent:</strong></p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>~/runs/field.nc<span class="w"> </span>--hint<span class="w"> </span><span class="s2">&quot;variable phi, dims (member, time, x)&quot;</span><span class="w"> </span>--name<span class="w"> </span>phi_v0
-mesokit<span class="w"> </span>data<span class="w"> </span>list
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file<span class="w"> </span>~/runs/field.nc<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--hint<span class="w"> </span><span class="s2">&quot;variable phi, dims (member, time, x)&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>phi_v0
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>list
 </pre></div>
 </div>
 <p><strong>Try that conversion without a file of your own:</strong></p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>demo<span class="w">                                                                    </span><span class="c1"># a messy .npz, on purpose</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_demo_v0<span class="w"> </span>--config<span class="w"> </span>smoke<span class="w"> </span>--name<span class="w"> </span>demo_son
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>demo<span class="w">  </span><span class="c1"># a messy .npz, on purpose</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>parse<span class="w"> </span>--file<span class="w"> </span>data/demo/allen_cahn_1d_demo.npz<span class="w"> </span>--name<span class="w"> </span>allen_cahn_demo_v0
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>allen_cahn_demo_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>smoke<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>demo_son
 </pre></div>
 </div>
 <p><strong>Two-dimensional pipeline</strong>, including the physics check that the model
 family reproduces the data-generating equation:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_2d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac2d_fdr<span class="w">        </span><span class="c1"># 4 x 101 x 32 x 32, seconds</span>
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_2d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_2d<span class="w"> </span>--data<span class="w"> </span>ac2d_fdr<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--config<span class="w"> </span>physics_check_smoke<span class="w"> </span>--name<span class="w"> </span>ac2d_check<span class="w">                              </span><span class="c1"># Km = 1, Kw = 0, analytic potential</span>
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_2d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_2d<span class="w"> </span>--data<span class="w"> </span>ac2d_fdr<span class="w"> </span>--config<span class="w"> </span>smoke<span class="w"> </span>--name<span class="w"> </span>ac2d_son
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>fno2d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_2d<span class="w"> </span>--data<span class="w"> </span>ac2d_fdr<span class="w"> </span>--config<span class="w"> </span>smoke<span class="w"> </span>--name<span class="w"> </span>ac2d_fno
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>onsagernet_2d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_2d<span class="w"> </span>--data<span class="w"> </span>ac2d_fdr<span class="w"> </span>--config<span class="w"> </span>smoke<span class="w"> </span>--name<span class="w"> </span>ac2d_on
-mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>ac2d_son<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/ac2d_son.png
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># 4 x 101 x 32 x 32, seconds</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_2d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w"> </span>--name<span class="w"> </span>ac2d_fdr
+<span class="gp">$ </span><span class="c1"># Km = 1, Kw = 0, analytic potential</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>ac2d_fdr<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>physics_check_smoke<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>ac2d_check
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>ac2d_fdr<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>smoke<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>ac2d_son
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>fno2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>ac2d_fdr<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>smoke<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>ac2d_fno
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>onsagernet_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>ac2d_fdr<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>smoke<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>ac2d_on
+<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>ac2d_son<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/ac2d_son.png
 </pre></div>
 </div>
 <p><strong>Classical OnsagerNet</strong> (the grid as a <code class="docutils literal notranslate"><span class="pre">Nx</span></code>-dimensional ODE with learned
 <code class="docutils literal notranslate"><span class="pre">M(x)</span></code>, <code class="docutils literal notranslate"><span class="pre">W(x)</span></code> and a coercive MLP potential) shares the <code class="docutils literal notranslate"><span class="pre">potential</span></code> artifact;
 the <code class="docutils literal notranslate"><span class="pre">circulant</span></code> recipe makes <code class="docutils literal notranslate"><span class="pre">M</span></code> / <code class="docutils literal notranslate"><span class="pre">W</span></code> per-mode multipliers so the artifact
 plots them:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--name<span class="w"> </span>on1d_lowrank
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>onsagernet_1d<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span>--config<span class="w"> </span>circulant<span class="w"> </span>--name<span class="w"> </span>on1d_circ
-mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>on1d_circ<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/on1d_circ.png
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>on1d_lowrank
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>onsagernet_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>allen_cahn_1d_v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>circulant<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>on1d_circ
+<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>extract<span class="w"> </span>--model<span class="w"> </span>on1d_circ<span class="w"> </span>--artifact<span class="w"> </span>potential<span class="w"> </span>--output<span class="w"> </span>figs/on1d_circ.png
 </pre></div>
 </div>
 <p>The other 2D and microscopic datasets train the same way (<code class="docutils literal notranslate"><span class="pre">ising_2d</span></code> and
 <code class="docutils literal notranslate"><span class="pre">cahn_hilliard_2d</span></code> ship <code class="docutils literal notranslate"><span class="pre">fno2d</span></code> / <code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_2d</span></code> recipes):</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--config<span class="w"> </span>kac<span class="w"> </span>--name<span class="w"> </span>ising_kac
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_2d<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--data<span class="w"> </span>ising_kac<span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>cahn_hilliard_2d<span class="w">       </span><span class="c1"># ~10 min, ~210 MB</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>llg_lattice_2d<span class="w">         </span><span class="c1"># 3 channels; the shipped recipes train on all of them</span>
-mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>fno2d<span class="w"> </span>--data<span class="w"> </span>llg_lattice_2d_v0<span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>peridynamics_fracture_2d<span class="w"> </span>--config<span class="w"> </span>fdr
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span>--config<span class="w"> </span>kac<span class="w"> </span>--name<span class="w"> </span>ising_kac
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>spectral_onsagernet_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dyn<span class="w"> </span>ising_2d<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--data<span class="w"> </span>ising_kac<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--epochs<span class="w"> </span><span class="m">20</span>
+<span class="gp">$ </span><span class="c1"># ~10 min, ~210 MB</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>cahn_hilliard_2d
+<span class="gp">$ </span><span class="c1"># 3 channels; the shipped recipes train on all of them</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>llg_lattice_2d
+<span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>fno2d<span class="w"> </span>--data<span class="w"> </span>llg_lattice_2d_v0<span class="w"> </span>--epochs<span class="w"> </span><span class="m">20</span>
+<span class="gp">$ </span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>peridynamics_fracture_2d<span class="w"> </span>--config<span class="w"> </span>fdr
 </pre></div>
 </div>
 <p><strong>Index a checkpoint trained in a notebook and inspect it:</strong></p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span>--model<span class="w"> </span>nb_run<span class="w"> </span>--file<span class="w"> </span>checkpoints/nb/model.pt<span class="w"> </span>--config<span class="w"> </span>checkpoints/nb/config.yaml
-mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>nb_run
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>nb_run<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file<span class="w"> </span>checkpoints/nb/model.pt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>checkpoints/nb/config.yaml
+<span class="gp">$ </span>mesokit<span class="w"> </span>interpret<span class="w"> </span>list<span class="w"> </span>--model<span class="w"> </span>nb_run
 </pre></div>
 </div>
 </section>

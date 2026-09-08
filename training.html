@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/python_equivalents.html">Python Equivalents</a></li>
@@ -426,9 +426,9 @@
           <section class="tex2jax_ignore mathjax_ignore" id="training">
 <h1>Training<a class="headerlink" href="#training" title="Link to this heading">¶</a></h1>
 <p>Training fits a model’s one-step map to consecutive frames of a
-trajectory dataset. This page is the user-facing entry point for what is
-being fitted, the two ways to run it (the <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span></code> command and the
-Python API), and what a run leaves on disk.</p>
+trajectory dataset. You can run training from the command line or Python,
+choose how frames become training samples, and inspect the loss and saved
+checkpoint afterwards.</p>
 <section id="what-is-fitted">
 <h2>What Is Fitted<a class="headerlink" href="#what-is-fitted" title="Link to this heading">¶</a></h2>
 <p>A <code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code> holds frames <code class="docutils literal notranslate"><span class="pre">u(t_j)</span></code> on a shared time grid. A
@@ -442,16 +442,34 @@ the mean-squared error against the second,</p>
 \mathcal L = \operatorname{mean}\bigl\lVert\, \text{model}(u_t, \Delta t) - u_{t+1} \,\bigr\rVert^2 .
 \]</div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">dt</span></code> is read from the dataset (<code class="docutils literal notranslate"><span class="pre">numerical[&quot;dt&quot;]</span></code>, else the spacing of
-<code class="docutils literal notranslate"><span class="pre">times</span></code>) unless the recipe or trainer sets it. <code class="docutils literal notranslate"><span class="pre">rollout_steps</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> compares
+<p><code class="docutils literal notranslate"><span class="pre">dt</span></code> must match the interval between the frames being compared; see
+<a class="reference internal" href="#time-step"><span class="std std-ref">Time step</span></a> below. <code class="docutils literal notranslate"><span class="pre">rollout_steps</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> compares
 a multi-step rollout against the next <code class="docutils literal notranslate"><span class="pre">k</span></code> frames instead. The shipped
 trainer, <code class="docutils literal notranslate"><span class="pre">LitTrainer</span></code>, runs this loop with Lightning for every registered
 family; a useful baseline for the loss is the persistence error
 <span class="math notranslate nohighlight">\(\operatorname{mean}\lVert u_{t+1} - u_t\rVert^2\)</span>, which a model that
 learned nothing reproduces.</p>
 </section>
-<section id="two-ways-to-run-it">
-<h2>Two Ways to Run It<a class="headerlink" href="#two-ways-to-run-it" title="Link to this heading">¶</a></h2>
+<section id="time-step">
+<span id="id1"></span><h2>Time step<a class="headerlink" href="#time-step" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">trainer.dt</span></code> is the interval the model advances on each call. For
+<code class="docutils literal notranslate"><span class="pre">SnapshotPairDataset</span></code>, it should equal the saved frame spacing multiplied
+by <code class="docutils literal notranslate"><span class="pre">dataset.stride</span></code>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">trainer.dt</span></code> is omitted or <code class="docutils literal notranslate"><span class="pre">null</span></code>, the CLI uses <code class="docutils literal notranslate"><span class="pre">numerical[&quot;dt&quot;]</span></code>
+if present, otherwise <code class="docutils literal notranslate"><span class="pre">times[1]</span> <span class="pre">-</span> <span class="pre">times[0]</span></code>. It does not multiply this
+value by <code class="docutils literal notranslate"><span class="pre">stride</span></code>. Some generators store the smaller <strong>solver step</strong> in
+<code class="docutils literal notranslate"><span class="pre">numerical[&quot;dt&quot;]</span></code>, so inspect the saved times and set <code class="docutils literal notranslate"><span class="pre">trainer.dt</span></code>
+explicitly when necessary. The Allen–Cahn <code class="docutils literal notranslate"><span class="pre">fdr</span></code> recipe, for example,
+saves frames every <code class="docutils literal notranslate"><span class="pre">0.001</span></code> time units:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>spectral_onsagernet_1d<span class="w"> </span>--data<span class="w"> </span>ac_demo<span class="w"> </span>--set<span class="w"> </span>trainer.dt<span class="o">=</span><span class="m">0</span>.001
+</pre></div>
+</div>
+<p>For non-uniform saved times, a single fixed <code class="docutils literal notranslate"><span class="pre">dt</span></code> cannot represent every
+pair; resample to a uniform time grid or use a custom training view and
+trainer that handle varying intervals.</p>
+</section>
+<section id="run-training">
+<h2>Run training<a class="headerlink" href="#run-training" title="Link to this heading">¶</a></h2>
 <p><strong>The command.</strong> <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--model</span> <span class="pre">&lt;name&gt;</span> <span class="pre">--dyn</span> <span class="pre">&lt;dyn&gt;</span> <span class="pre">--data</span> <span class="pre">&lt;dataset&gt;</span></code>
 resolves the model class from the registry, the trainer registered for it,
 and the recipe <code class="docutils literal notranslate"><span class="pre">configs/train/&lt;dyn&gt;/&lt;model&gt;/&lt;stem&gt;.yaml</span></code> (<code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;stem&gt;</span></code>, default <code class="docutils literal notranslate"><span class="pre">default</span></code>), then loads the dataset, builds the training
@@ -470,7 +488,10 @@ named by <code class="docutils literal notranslate"><span class="pre">_target_</
 runs <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">generate</span></code> and <code class="docutils literal notranslate"><span class="pre">train</span></code> once per point of a parameter grid, and
 <code class="docutils literal notranslate"><span class="pre">--train-param</span> <span class="pre">trainer.lr=1e-3,1e-4</span></code> scans a training-recipe key on the
 same data (<code class="docutils literal notranslate"><span class="pre">--data</span> <span class="pre">&lt;dataset&gt;</span></code> when there is no simulator axis; the two kinds
-combine). Each run is named after its parameter values and grouped, with
+combine). With existing data, <code class="docutils literal notranslate"><span class="pre">--dyn</span></code> defaults to the dataset’s dynamics,
+as for <code class="docutils literal notranslate"><span class="pre">train</span></code>. Use <code class="docutils literal notranslate"><span class="pre">--set</span> <span class="pre">KEY=VALUE</span></code> for training settings shared by all
+points and <code class="docutils literal notranslate"><span class="pre">--train-param</span></code> for the settings to vary. Each run is named after
+its scanned parameter values and grouped, with
 the summary table <code class="docutils literal notranslate"><span class="pre">runs.json</span></code>, under <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/</span></code>;
 <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--experiment</span> <span class="pre">E</span></code> puts hand-made runs in the same place. See
 <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">sweep</span></code> in the <a class="reference internal" href="cli/sweep.html"><span class="std std-doc">Command-Line Reference</span></a>. The same loop is
@@ -489,7 +510,7 @@ a notebook, and the only one when the data or the loop do not fit a recipe:</p>
 <span class="n">loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">SnapshotPairDataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;spectral_onsagernet_1d&quot;</span><span class="p">)(</span><span class="n">Nx</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Lx</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">physical</span><span class="p">[</span><span class="s2">&quot;Lx&quot;</span><span class="p">]))</span>
-<span class="n">trainer</span> <span class="o">=</span> <span class="n">LitTrainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">numerical</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]),</span> <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">LitTrainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ds</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
                      <span class="n">checkpoint_root</span><span class="o">=</span><span class="s2">&quot;checkpoints/allen_cahn_1d&quot;</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="s2">&quot;son_nb&quot;</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">loader</span><span class="p">)</span>
 
@@ -502,7 +523,10 @@ a notebook, and the only one when the data or the loop do not fit a recipe:</p>
 <p>The grid comes from the dataset (<code class="docutils literal notranslate"><span class="pre">ds.grid_shape</span></code>, <code class="docutils literal notranslate"><span class="pre">ds.physical</span></code>), never
 typed by hand; that is the mismatch the command guards against with its
 recipe. Register the checkpoint afterwards so the CLI can find it:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span>--model<span class="w"> </span>son_nb<span class="w"> </span>--file<span class="w"> </span>checkpoints/allen_cahn_1d/son_nb/model.pt<span class="w"> </span>--config<span class="w"> </span>&lt;your<span class="w"> </span>config.yaml&gt;
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mesokit<span class="w"> </span>model<span class="w"> </span>register<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--model<span class="w"> </span>son_nb<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file<span class="w"> </span>checkpoints/allen_cahn_1d/son_nb/model.pt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--config<span class="w"> </span>&lt;your<span class="w"> </span>config.yaml&gt;
 </pre></div>
 </div>
 <p>Start every new configuration with a smoke-sized run (one or two epochs on
@@ -606,7 +630,8 @@ the <code class="docutils literal notranslate"><span class="pre">fit</span></cod
             <ul>
 <li><a class="reference internal" href="#">Training</a><ul>
 <li><a class="reference internal" href="#what-is-fitted">What Is Fitted</a></li>
-<li><a class="reference internal" href="#two-ways-to-run-it">Two Ways to Run It</a></li>
+<li><a class="reference internal" href="#time-step">Time step</a></li>
+<li><a class="reference internal" href="#run-training">Run training</a></li>
 <li><a class="reference internal" href="#what-a-run-leaves-behind">What a Run Leaves Behind</a></li>
 <li><a class="reference internal" href="#how-to-use-this-section">How to Use This Section</a></li>
 </ul>

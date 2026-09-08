@@ -1,9 +1,7 @@
 # Custom Models
 
-You extend `mesokit` from **your own module**, never by editing
-`src/mesokit/`. Put the module in `plugins/` in the directory you run
-`mesokit` from (the checkout for extension work — the folder is gitignored —
-or any project directory): every `mesokit` command imports what it finds
+Add a model from your own Python module. Put it under `plugins/` in your
+project directory: every `mesokit` command imports what it finds
 there, so a model registered by name through `mesokit.models.register`
 is available to `--model` like a shipped one, and a recipe can name the
 class by `_target_`. From Python, import the module yourself before
@@ -150,9 +148,9 @@ assert model.rollout(u, 3, 1e-2).shape == (4, 4, 64)
 
 With `plugins/my_models.py` in place, the registered name is enough:
 
-```sh
-mesokit train --model linear_decay_1d --data decay_1d_v0 --set trainer.max_epochs=50
-mesokit interpret extract --model linear_decay_1d_v0 --artifact rate --output figs/rate.png
+```console
+$ mesokit train --model linear_decay_1d --data decay_1d_v0 --set trainer.max_epochs=50
+$ mesokit interpret extract --model linear_decay_1d_v0 --artifact rate --output figs/rate.png
 ```
 
 `Nx` is filled from the dataset, `LitTrainer` is the trainer, and `--set`
@@ -183,8 +181,8 @@ trainer:
   accelerator: cpu
 ```
 
-```sh
-mesokit train --model linear_decay_1d --data decay_1d_v0
+```console
+$ mesokit train --model linear_decay_1d --data decay_1d_v0
 ```
 
 The shipped `LitTrainer` trains any `DynamicsModel`; a trainer of your own

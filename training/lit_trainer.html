@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/python_equivalents.html">Python Equivalents</a></li>
@@ -483,7 +483,7 @@ alias kept for older code.</p>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dt</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
-<td><p>Step size handed to <code class="docutils literal notranslate"><span class="pre">model.forward</span></code>. The command replaces it by the dataset’s frame spacing when the recipe says <code class="docutils literal notranslate"><span class="pre">dt:</span> <span class="pre">null</span></code>; from Python pass <code class="docutils literal notranslate"><span class="pre">float(ds.numerical[&quot;dt&quot;])</span></code> (times the view’s <code class="docutils literal notranslate"><span class="pre">stride</span></code>).</p></td>
+<td><p>Step size handed to <code class="docutils literal notranslate"><span class="pre">model.forward</span></code>. With <code class="docutils literal notranslate"><span class="pre">dt:</span> <span class="pre">null</span></code>, the command uses <code class="docutils literal notranslate"><span class="pre">numerical[&quot;dt&quot;]</span></code>, otherwise the first saved time interval. Set it to the interval between training frames; see <a class="reference internal" href="../training.html#time-step"><span class="std std-ref">Time step</span></a>.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">checkpoint_root</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">None</span></code> → <code class="docutils literal notranslate"><span class="pre">checkpoints/unknown</span></code></p></td>

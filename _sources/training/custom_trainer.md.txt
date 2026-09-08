@@ -132,8 +132,8 @@ trainer:
   dt: null
 ```
 
-```sh
-mesokit train --model linear_decay_1d --data decay_1d_v0
+```console
+$ mesokit train --model linear_decay_1d --data decay_1d_v0
 ```
 
 The checkpoint is registered like any other, and `history.json` comes from

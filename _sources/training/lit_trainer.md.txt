@@ -24,7 +24,7 @@ All arguments are keyword-only.
 | `devices` | `1` | Number (or Lightning spec) of devices. |
 | `gradient_clip_val` | `None` | Gradient-norm clipping threshold; `None` disables it. |
 | `rollout_steps` | `1` | `1`: next-frame loss on `(u_t, u_{t+1})` pairs. `k > 1`: the model is rolled `k` steps and compared against targets shaped `(B, k, *grid)`, so the training view must yield those. |
-| `dt` | `1.0` | Step size handed to `model.forward`. The command replaces it by the dataset's frame spacing when the recipe says `dt: null`; from Python pass `float(ds.numerical["dt"])` (times the view's `stride`). |
+| `dt` | `1.0` | Step size handed to `model.forward`. With `dt: null`, the command uses `numerical["dt"]`, otherwise the first saved time interval. Set it to the interval between training frames; see {ref}`Time step <time-step>`. |
 | `checkpoint_root` | `None` → `checkpoints/unknown` | Directory that receives `<run_id>/`; the command passes `checkpoints/<dyn>`. |
 | `run_id` | `None` → random 8-hex id | Run directory name; the command passes the checkpoint name. |
 | `enable_progress_bar` | `True` | Lightning progress bar. |

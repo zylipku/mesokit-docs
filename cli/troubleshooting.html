@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_equivalents.html">Python Equivalents</a></li>
@@ -434,13 +434,13 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config</span> <span class="pre">dir</span> <span class="pre">not</span> <span class="pre">found:</span> <span class="pre">…/configs/data/&lt;dyn&gt;</span></code></p></td>
-<td><p>Not running from the repository root, or <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;</span></code> has no recipe folder.</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">cd</span></code> to the root; check <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">avail</span></code>; create <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/default.yaml</span></code> for a custom simulator.</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">recipe</span> <span class="pre">dir</span> <span class="pre">configs/data/&lt;dyn&gt;</span> <span class="pre">in</span> <span class="pre">any</span> <span class="pre">of:</span> <span class="pre">…</span></code></p></td>
+<td><p>No recipe directory was found in the project, installed package, or checkout.</p></td>
+<td><p>Check the dynamics name. For a custom simulator, create <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/default.yaml</span></code> in your project or pass a YAML path with <code class="docutils literal notranslate"><span class="pre">--config</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">config</span> <span class="pre">'x'</span> <span class="pre">under</span> <span class="pre">…;</span> <span class="pre">available:</span> <span class="pre">default,</span> <span class="pre">fdr</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">--config</span></code> takes a stem, not a filename or path.</p></td>
-<td><p>Drop the <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> and any directory.</p></td>
+<td><p>The selected recipe directory has no variant named <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+<td><p>Use an available stem, such as <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">fdr</span></code>, or pass an existing YAML path. A project’s recipe directory takes precedence over the shipped directory.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">and</span> <span class="pre">--no-registry</span> <span class="pre">are</span> <span class="pre">mutually</span> <span class="pre">exclusive</span></code></p></td>
 <td><p>Both flags given.</p></td>

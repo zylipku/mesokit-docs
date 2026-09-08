@@ -10,8 +10,8 @@ The tutorial lives as a series of Jupyter notebooks under
 in the repository. They are rendered directly on GitHub — click any of the
 links below.
 
-The notebooks are the canonical source: they are the tutorial *and* the
-integration test for the public API.
+Use the notebooks for worked Python examples alongside the command-line
+[Quickstart](quickstart.md).
 
 ## Notebooks
 
@@ -21,8 +21,7 @@ integration test for the public API.
 - `03_baselines.ipynb` — operator and symbolic baselines (FNO, DeepONet,
   SINDy) end-to-end on the same data, including each family's
   interpretability artifact.
-- `04_physics_structured.ipynb` — Spectral OnsagerNet end-to-end, headline
-  interpretability story (`PotentialLandscape`).
+- `04_physics_structured.ipynb` — Spectral OnsagerNet end-to-end, learned potential (`PotentialLandscape`).
 - `05_comparison.ipynb` — side-by-side comparison report driven by
   `mesokit.interpret.compare`.
 

@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/python_equivalents.html">Python Equivalents</a></li>
@@ -473,7 +473,7 @@ conventions around it.</p>
 <section id="cache-file-hdf5">
 <h2>Cache File (HDF5)<a class="headerlink" href="#cache-file-hdf5" title="Link to this heading">¶</a></h2>
 <p>The cache file is the source of truth for interchange. The Python helper
-<a class="reference download internal" download="" href="../_downloads/98f1dcb2c59397bf212ac00dac8d47fd/trajectory.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset.save_hdf5</span></code></span></a>
+<a class="reference internal" href="../apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset.save_hdf5" title="mesokit.data.trajectory.TrajectoryDataset.save_hdf5"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mesokit.data.trajectory.TrajectoryDataset.save_hdf5()</span></code></a>
 produces this layout, and the matching <code class="docutils literal notranslate"><span class="pre">load_hdf5</span></code> parses it back; an
 external exporter (numpy / MATLAB / a custom solver) can produce the
 same layout directly with <code class="docutils literal notranslate"><span class="pre">h5py</span></code> (see <a class="reference internal" href="custom.html"><span class="std std-doc">Custom Datasets</span></a>).</p>
@@ -649,8 +649,7 @@ string declared in the <code class="docutils literal notranslate"><span class="p
 must keep the attribute in sync with the array.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">times</span></code> must have a floating dtype. Its precision is not declared
 separately; pick <code class="docutils literal notranslate"><span class="pre">float64</span></code> if step sizes need it.</p></li>
-<li><p>Group attributes are passed through <code class="docutils literal notranslate"><span class="pre">h5py</span></code> and round-tripped via the
-shared decoder in <a class="reference download internal" download="" href="../_downloads/2834f3b9a0e52a7b780ded5d3d9adb37/_hdf5.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">_hdf5.py</span></code></span></a> so
+<li><p>Group attributes are saved through <code class="docutils literal notranslate"><span class="pre">h5py</span></code> and decoded on load, so
 <code class="docutils literal notranslate"><span class="pre">bytes</span></code>/<code class="docutils literal notranslate"><span class="pre">str</span></code>, 0-d NumPy arrays, and list-shaped values come back as
 native Python types.</p></li>
 <li><p>Finite values are required for <code class="docutils literal notranslate"><span class="pre">data</span></code> and <code class="docutils literal notranslate"><span class="pre">times</span></code>; <code class="docutils literal notranslate"><span class="pre">NaN</span></code> / <code class="docutils literal notranslate"><span class="pre">Inf</span></code> are
@@ -660,7 +659,7 @@ rejected by the validator.</p></li>
 </section>
 <section id="in-memory-bundle-trajectorydataset">
 <h2>In-Memory Bundle (<code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code>)<a class="headerlink" href="#in-memory-bundle-trajectorydataset" title="Link to this heading">¶</a></h2>
-<p><a class="reference download internal" download="" href="../_downloads/98f1dcb2c59397bf212ac00dac8d47fd/trajectory.py"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">TrajectoryDataset</span></code></span></a> is a Python
+<p><a class="reference internal" href="../apidocs/mesokit/mesokit.data.trajectory.html#mesokit.data.trajectory.TrajectoryDataset" title="mesokit.data.trajectory.TrajectoryDataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">mesokit.data.trajectory.TrajectoryDataset</span></code></a> is a Python
 <code class="docutils literal notranslate"><span class="pre">&#64;dataclass</span></code> (not a <code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code>). It mirrors the cache
 file one-to-one: every required HDF5 entry has a corresponding dataclass
 field, and the three open-content metadata groups become three plain

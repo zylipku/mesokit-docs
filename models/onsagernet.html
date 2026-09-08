@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cli/python_equivalents.html">Python Equivalents</a></li>
@@ -585,14 +585,17 @@ when the checkpoint was trained on an Allen–Cahn dataset.</p>
 </section>
 <section id="recipes">
 <h2>Recipes<a class="headerlink" href="#recipes" title="Link to this heading">¶</a></h2>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>configs/train/allen_cahn_1d/onsagernet_1d/{default,circulant,smoke}.yaml
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>configs/train/allen_cahn_1d/onsagernet_1d/{default,circulant,fdr,smoke}.yaml
 configs/train/kdv_1d/onsagernet_1d/default.yaml
 configs/train/allen_cahn_2d/onsagernet_2d/{default,smoke}.yaml
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> is the original low-rank design (<span class="math notranslate nohighlight">\(M\)</span> of rank 8, <span class="math notranslate nohighlight">\(W\)</span> of rank
 4, both from MLPs of the state); <code class="docutils literal notranslate"><span class="pre">circulant.yaml</span></code> swaps both for the
-convolution blocks; the KdV recipe keeps <span class="math notranslate nohighlight">\(W\)</span> and steps with <code class="docutils literal notranslate"><span class="pre">rk4</span></code>; the 2D
+convolution blocks. The 1D Allen–Cahn <code class="docutils literal notranslate"><span class="pre">fdr.yaml</span></code> keeps the default model and
+training settings but cuts the epoch budget to 5, matching the spectral
+family’s fast dev run and the data recipe of the same name. The KdV recipe
+keeps <span class="math notranslate nohighlight">\(W\)</span> and steps with <code class="docutils literal notranslate"><span class="pre">rk4</span></code>; the 2D
 recipes use a circulant <span class="math notranslate nohighlight">\(M\)</span> and no <span class="math notranslate nohighlight">\(W\)</span> because the potential MLP already
 holds <span class="math notranslate nohighlight">\(16384 \times 256\)</span> weights in its first layer on the 128² grid. The
 blocks are nested under <code class="docutils literal notranslate"><span class="pre">model.potential</span></code>, <code class="docutils literal notranslate"><span class="pre">model.dissipation</span></code> and

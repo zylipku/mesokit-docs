@@ -1,87 +1,142 @@
-# Recipes
+# CLI Workflows
 
 **Smallest end-to-end run** (seconds on a CPU):
 
-```sh
-mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_fdr
-mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data ac_fdr --epochs 1 --device cpu
-mesokit interpret extract --model spectral_onsagernet_1d_v0 --artifact potential --output figs/potential.png
+```console
+$ mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_fdr
+$ mesokit train \
+  --model spectral_onsagernet_1d \
+  --dyn allen_cahn_1d \
+  --data ac_fdr \
+  --epochs 1 \
+  --device cpu
+$ mesokit interpret extract \
+  --model spectral_onsagernet_1d_v0 \
+  --artifact potential \
+  --output figs/potential.png
 ```
 
 **The reference experiment:**
 
-```sh
-mesokit data generate --dyn allen_cahn_1d                       # allen_cahn_1d_v0, 1000 trajectories
-mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0
-mesokit interpret extract --model spectral_onsagernet_1d_v0 --artifact all --output figs/son_v0/
+```console
+$ # allen_cahn_1d_v0, 1000 trajectories
+$ mesokit data generate --dyn allen_cahn_1d
+$ mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0
+$ mesokit interpret extract --model spectral_onsagernet_1d_v0 --artifact all --output figs/son_v0/
 ```
 
 **A parameter sweep with reproducible names** (one dataset and one
 checkpoint per value, grouped under `checkpoints/allen_cahn_1d/eps-scan/`
 with the table in its `runs.json`):
 
-```sh
-mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d --param eps=0.05,0.1,0.2 --experiment eps-scan
-mesokit model list --experiment eps-scan --sort train_loss
+```console
+$ mesokit sweep \
+  --dyn allen_cahn_1d \
+  --model spectral_onsagernet_1d \
+  --param eps=0.05,0.1,0.2 \
+  --experiment eps-scan
+$ mesokit model list --experiment eps-scan --sort train_loss
 ```
 
 **A learning-rate scan on one dataset**, then the best run continued:
 
-```sh
-mesokit sweep --dyn allen_cahn_1d --model spectral_onsagernet_1d --data allen_cahn_1d_v0 \
-  --train-param trainer.lr=1e-3,1e-4,1e-5 --experiment lr-scan --epochs 20
-mesokit model list --experiment lr-scan --sort train_loss
-mesokit model show lr-scan/spectral_onsagernet_1d_lr0.0001
-mesokit train --from lr-scan/spectral_onsagernet_1d_lr0.0001 --name lr-scan/son_long --epochs 200
+```console
+$ mesokit sweep \
+  --dyn allen_cahn_1d \
+  --model spectral_onsagernet_1d \
+  --data allen_cahn_1d_v0 \
+  --train-param trainer.lr=1e-3,1e-4,1e-5 \
+  --experiment lr-scan \
+  --epochs 20
+$ mesokit model list --experiment lr-scan --sort train_loss
+$ mesokit model show lr-scan/spectral_onsagernet_1d_lr0.0001
+$ mesokit train --from lr-scan/spectral_onsagernet_1d_lr0.0001 --name lr-scan/son_long --epochs 200
 ```
 
 The same thing by hand, if you need a step in between:
 
-```sh
-for eps in 0.05 0.1 0.2; do
+```console
+$ for eps in 0.05 0.1 0.2; do
   mesokit data generate --dyn allen_cahn_1d --set eps=$eps --name ac_eps$eps
-  mesokit train --model spectral_onsagernet_1d --dyn allen_cahn_1d --data ac_eps$eps --name son_eps$eps
+  mesokit train \
+    --model spectral_onsagernet_1d \
+    --dyn allen_cahn_1d \
+    --data ac_eps$eps \
+    --name son_eps$eps
 done
 ```
 
 **Your own solver's output:**
 
-```sh
-python my_export.py                                   # writes runs/my_data.h5 in the v1 layout
-mesokit data register --name my_v0 --file runs/my_data.h5
-mesokit train --model fno1d --dyn my_dynamics --data my_v0 --config default
+```console
+$ python my_export.py  # writes runs/my_data.h5 in the v1 layout
+$ mesokit data register --name my_v0 --file runs/my_data.h5
+$ mesokit train \
+  --model fno1d \
+  --dyn my_dynamics \
+  --data my_v0 \
+  --config default
 ```
 
-The training recipe is looked up at `configs/train/my_dynamics/fno1d/default.yaml`,
-so create that folder (copy one of the shipped recipes) before training on a
-custom `dyn`.
+When there is no recipe directory for `my_dynamics/fno1d`, the command
+uses built-in defaults and reads the grid from the dataset. Use `--set`
+for changes to one run, or save a recipe for settings you want to reuse.
+Check the {ref}`time step <time-step>` before training.
 
 **Data in some other format, converted by an agent:**
 
-```sh
-mesokit data parse --file ~/runs/field.nc --hint "variable phi, dims (member, time, x)" --name phi_v0
-mesokit data list
+```console
+$ mesokit data parse \
+  --file ~/runs/field.nc \
+  --hint "variable phi, dims (member, time, x)" \
+  --name phi_v0
+$ mesokit data list
 ```
 
 **Try that conversion without a file of your own:**
 
-```sh
-mesokit data demo                                                                    # a messy .npz, on purpose
-mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
-mesokit train --model spectral_onsagernet_1d --data allen_cahn_demo_v0 --config smoke --name demo_son
+```console
+$ mesokit data demo  # a messy .npz, on purpose
+$ mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
+$ mesokit train \
+  --model spectral_onsagernet_1d \
+  --data allen_cahn_demo_v0 \
+  --config smoke \
+  --name demo_son
 ```
 
 **Two-dimensional pipeline**, including the physics check that the model
 family reproduces the data-generating equation:
 
-```sh
-mesokit data generate --dyn allen_cahn_2d --config fdr --name ac2d_fdr        # 4 x 101 x 32 x 32, seconds
-mesokit train --model spectral_onsagernet_2d --dyn allen_cahn_2d --data ac2d_fdr \
-  --config physics_check_smoke --name ac2d_check                              # Km = 1, Kw = 0, analytic potential
-mesokit train --model spectral_onsagernet_2d --dyn allen_cahn_2d --data ac2d_fdr --config smoke --name ac2d_son
-mesokit train --model fno2d --dyn allen_cahn_2d --data ac2d_fdr --config smoke --name ac2d_fno
-mesokit train --model onsagernet_2d --dyn allen_cahn_2d --data ac2d_fdr --config smoke --name ac2d_on
-mesokit interpret extract --model ac2d_son --artifact potential --output figs/ac2d_son.png
+```console
+$ # 4 x 101 x 32 x 32, seconds
+$ mesokit data generate --dyn allen_cahn_2d --config fdr --name ac2d_fdr
+$ # Km = 1, Kw = 0, analytic potential
+$ mesokit train \
+  --model spectral_onsagernet_2d \
+  --dyn allen_cahn_2d \
+  --data ac2d_fdr \
+  --config physics_check_smoke \
+  --name ac2d_check
+$ mesokit train \
+  --model spectral_onsagernet_2d \
+  --dyn allen_cahn_2d \
+  --data ac2d_fdr \
+  --config smoke \
+  --name ac2d_son
+$ mesokit train \
+  --model fno2d \
+  --dyn allen_cahn_2d \
+  --data ac2d_fdr \
+  --config smoke \
+  --name ac2d_fno
+$ mesokit train \
+  --model onsagernet_2d \
+  --dyn allen_cahn_2d \
+  --data ac2d_fdr \
+  --config smoke \
+  --name ac2d_on
+$ mesokit interpret extract --model ac2d_son --artifact potential --output figs/ac2d_son.png
 ```
 
 **Classical OnsagerNet** (the grid as a `Nx`-dimensional ODE with learned
@@ -89,27 +144,45 @@ mesokit interpret extract --model ac2d_son --artifact potential --output figs/ac
 the `circulant` recipe makes `M` / `W` per-mode multipliers so the artifact
 plots them:
 
-```sh
-mesokit train --model onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 --name on1d_lowrank
-mesokit train --model onsagernet_1d --dyn allen_cahn_1d --data allen_cahn_1d_v0 --config circulant --name on1d_circ
-mesokit interpret extract --model on1d_circ --artifact potential --output figs/on1d_circ.png
+```console
+$ mesokit train \
+  --model onsagernet_1d \
+  --dyn allen_cahn_1d \
+  --data allen_cahn_1d_v0 \
+  --name on1d_lowrank
+$ mesokit train \
+  --model onsagernet_1d \
+  --dyn allen_cahn_1d \
+  --data allen_cahn_1d_v0 \
+  --config circulant \
+  --name on1d_circ
+$ mesokit interpret extract --model on1d_circ --artifact potential --output figs/on1d_circ.png
 ```
 
 The other 2D and microscopic datasets train the same way (`ising_2d` and
 `cahn_hilliard_2d` ship `fno2d` / `spectral_onsagernet_2d` recipes):
 
-```sh
-mesokit data generate --dyn ising_2d --config kac --name ising_kac
-mesokit train --model spectral_onsagernet_2d --dyn ising_2d --data ising_kac --epochs 20
-mesokit data generate --dyn cahn_hilliard_2d       # ~10 min, ~210 MB
-mesokit data generate --dyn llg_lattice_2d         # 3 channels; the shipped recipes train on all of them
-mesokit train --model fno2d --data llg_lattice_2d_v0 --epochs 20
-mesokit data generate --dyn peridynamics_fracture_2d --config fdr
+```console
+$ mesokit data generate --dyn ising_2d --config kac --name ising_kac
+$ mesokit train \
+  --model spectral_onsagernet_2d \
+  --dyn ising_2d \
+  --data ising_kac \
+  --epochs 20
+$ # ~10 min, ~210 MB
+$ mesokit data generate --dyn cahn_hilliard_2d
+$ # 3 channels; the shipped recipes train on all of them
+$ mesokit data generate --dyn llg_lattice_2d
+$ mesokit train --model fno2d --data llg_lattice_2d_v0 --epochs 20
+$ mesokit data generate --dyn peridynamics_fracture_2d --config fdr
 ```
 
 **Index a checkpoint trained in a notebook and inspect it:**
 
-```sh
-mesokit model register --model nb_run --file checkpoints/nb/model.pt --config checkpoints/nb/config.yaml
-mesokit interpret list --model nb_run
+```console
+$ mesokit model register \
+  --model nb_run \
+  --file checkpoints/nb/model.pt \
+  --config checkpoints/nb/config.yaml
+$ mesokit interpret list --model nb_run
 ```

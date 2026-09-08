@@ -231,7 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="cli/interpret.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">interpret</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/skills.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">skills</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/agent.html"><code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli/recipes.html">CLI Workflows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/files.html">Files the CLI Reads and Writes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cli/python_equivalents.html">Python Equivalents</a></li>
@@ -425,105 +425,112 @@
         <article role="main" id="furo-main-content">
           <section class="tex2jax_ignore mathjax_ignore" id="installation">
 <span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h1>
-<p>There are two ways to install, for two kinds of use.</p>
-<section id="install-directly-from-repo-walk-around-for-no-pypi-release">
-<h2>Install directly from repo (walk-around for no-pypi release)<a class="headerlink" href="#install-directly-from-repo-walk-around-for-no-pypi-release" title="Link to this heading">¶</a></h2>
-<p><strong>For pixi user</strong>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/path/to/project
-pixi<span class="w"> </span>init<span class="w"> </span><span class="c1"># if not initialized</span>
+<p><code class="docutils literal notranslate"><span class="pre">mesokit</span></code> requires Python 3.12 or later. The instructions below install
+from a local clone of the repository. The repository’s Pixi environment
+is configured for Linux (<code class="docutils literal notranslate"><span class="pre">linux-64</span></code>); CPU training is available with
+<code class="docutils literal notranslate"><span class="pre">--device</span> <span class="pre">cpu</span></code>.</p>
+<section id="install-from-a-clone">
+<h2>Install from a clone<a class="headerlink" href="#install-from-a-clone" title="Link to this heading">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MLDS-NUS/mesokit.git
 </pre></div>
 </div>
-<p>Then add an entry in <code class="docutils literal notranslate"><span class="pre">pixi.toml</span></code>:</p>
-<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[pypi-dependencies]</span><span class="w"> </span><span class="c1"># create it if not exists</span>
-<span class="n">mesokit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="err">PATH</span><span class="mi">_</span><span class="n">TO_MESOKIT</span><span class="p">,</span><span class="w"> </span><span class="n">editable</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span>
-</pre></div>
-</div>
-<p>Then run</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>install
-</pre></div>
-</div>
-<p><strong>For pip/uv user</strong>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/path/to/project
-uv<span class="w"> </span>init<span class="w"> </span><span class="c1"># for uv, if not initialized</span>
-uv<span class="w"> </span>add<span class="w"> </span>--editable<span class="w"> </span>/path/to/mesokit<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>uv<span class="w"> </span>sync<span class="w"> </span><span class="c1"># for uv</span>
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>/path/to/mesokit<span class="w"> </span><span class="c1"># for pip</span>
-</pre></div>
-</div>
-<p id="running-the-cli">Note: To use the mesokit CLI described below, you should either run</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>shell<span class="w"> </span><span class="c1"># for pixi env</span>
-<span class="nb">source</span><span class="w"> </span>.venv/bin/activate<span class="w"> </span><span class="c1"># for uv env</span>
-</pre></div>
-</div>
-<p>or prepend <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">run</span></code> or <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span></code> for each CLI command.</p>
-</section>
-<section id="install-from-pypi-not-supported-yet">
-<h2>Install from PyPI (not supported yet)<a class="headerlink" href="#install-from-pypi-not-supported-yet" title="Link to this heading">¶</a></h2>
-<p>Run</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mesokit<span class="w"> </span><span class="c1"># for pip user</span>
-uv<span class="w"> </span>add<span class="w"> </span>mesokit<span class="w"> </span><span class="c1"># for uv user</span>
-pixi<span class="w"> </span>add<span class="w"> </span>mesokit<span class="w"> </span>--pypi<span class="w"> </span><span class="c1"># for pixi user</span>
+<p>Choose the setup that matches where you want to work.</p>
+<section id="work-in-the-checkout-with-pixi">
+<h3>Work in the checkout with Pixi<a class="headerlink" href="#work-in-the-checkout-with-pixi" title="Link to this heading">¶</a></h3>
+<p>The checkout’s default environment includes mesokit, training and plotting
+dependencies, and the Dedalus and LAMMPS solvers:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>mesokit
+<span class="gp">$ </span>pixi<span class="w"> </span>install
 </pre></div>
 </div>
 </section>
-<section id="mesokit-cli">
-<h2>mesokit CLI<a class="headerlink" href="#mesokit-cli" title="Link to this heading">¶</a></h2>
-<p><strong>Use the toolkit as a package.</strong> Built-in simulators, the three model
-families, training and interpretation are all reachable from the <code class="docutils literal notranslate"><span class="pre">mesokit</span></code>
-command; the shipped recipes travel with the package, and the grid of a
-model is read from the dataset, so no configuration file needs writing:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
-mesokit<span class="w"> </span>agent<span class="w"> </span>init<span class="w">            </span><span class="c1"># optional: set up Claude Code / Codex for this project</span>
+<section id="install-into-your-own-project">
+<h3>Install into your own project<a class="headerlink" href="#install-into-your-own-project" title="Link to this heading">¶</a></h3>
+<p>Use the absolute path to the clone in the examples below.</p>
+<p><strong>Pixi:</strong> from your project directory, run</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pixi<span class="w"> </span>init
+$<span class="w"> </span>pixi<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;python&gt;=3.12&quot;</span>
+$<span class="w"> </span>pixi<span class="w"> </span>install<span class="w"> </span><span class="c1"># optional</span>
 </pre></div>
 </div>
-<p id="solver-backends">A pip install lacks only two solver back-ends that are conda-forge
-packages rather than PyPI ones: Dedalus, behind <code class="docutils literal notranslate"><span class="pre">allen_cahn_1d</span></code>,
-<code class="docutils literal notranslate"><span class="pre">allen_cahn_2d</span></code> and <code class="docutils literal notranslate"><span class="pre">kdv_1d</span></code>, and LAMMPS, behind
-<code class="docutils literal notranslate"><span class="pre">peridynamics_fracture_2d</span></code>. Those four simulators stay listed and, when
-run, stop with a message naming the package to add; everything else,
-training and interpretation on any dataset included, works as is. To have
-them too, install mesokit into an environment that also holds the two
-packages. With conda:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>mesokit<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.12<span class="w"> </span>dedalus<span class="w"> </span>lammps
-conda<span class="w"> </span>activate<span class="w"> </span>mesokit
-pip<span class="w"> </span>install<span class="w"> </span>mesokit
+<p>if the project is
+not initialized.
+Add this entry to its <code class="docutils literal notranslate"><span class="pre">pixi.toml</span></code> (or to the existing
+<code class="docutils literal notranslate"><span class="pre">[pypi-dependencies]</span></code> section), then run <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">install</span></code>:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[pypi-dependencies]</span>
+<span class="n">mesokit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;/path/to/mesokit&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">editable</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
-<p>Or as a <a class="reference external" href="https://pixi.sh">pixi</a> project, which resolves conda-forge and
-PyPI together:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>init<span class="w"> </span>my-project<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>my-project
-pixi<span class="w"> </span>add<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.12<span class="w"> </span>dedalus<span class="w"> </span>lammps<span class="w">     </span><span class="c1"># from conda-forge</span>
-pixi<span class="w"> </span>add<span class="w"> </span>--pypi<span class="w"> </span>mesokit<span class="w">                 </span><span class="c1"># from PyPI</span>
+<p><strong>uv:</strong> from your project directory, run <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">init</span></code> if needed, then:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>uv<span class="w"> </span>add<span class="w"> </span>--editable<span class="w"> </span>/path/to/mesokit
 </pre></div>
 </div>
-<p id="gpu-and-torch"><strong>GPU and torch.</strong> mesokit depends on <code class="docutils literal notranslate"><span class="pre">torch&gt;=2.9,&lt;2.11</span></code>. Up to 2.10 the
-default torch wheel on PyPI is a CUDA 12.8 build, which runs on any CUDA
-12.x or 13.x driver, so a plain install works on a GPU machine with no
-PyTorch index to choose (from 2.11 the default wheel needs a CUDA 13
-driver, which is why the bound is there). A machine without a GPU can skip
-the CUDA libraries, about 3 GB, by installing CPU torch first:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu<span class="w">      </span><span class="c1"># then: pip install mesokit</span>
-pixi<span class="w"> </span>add<span class="w"> </span>--pypi<span class="w"> </span>--index<span class="w"> </span>https://download.pytorch.org/whl/cpu<span class="w"> </span>torch<span class="w">      </span><span class="c1"># pixi: then pixi add --pypi mesokit</span>
+<p><strong>pip:</strong> activate your Python environment, then:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>/path/to/mesokit
 </pre></div>
 </div>
-<p>Until the PyPI release, install from a clone instead of <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">mesokit</span></code> (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">/path/to/mesokit</span></code>), or point the pixi project at
-it: <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">=</span> <span class="pre">{</span> <span class="pre">path</span> <span class="pre">=</span> <span class="pre">&quot;/path/to/mesokit&quot;</span> <span class="pre">}</span></code> under <code class="docutils literal notranslate"><span class="pre">[pypi-dependencies]</span></code>
-in its <code class="docutils literal notranslate"><span class="pre">pixi.toml</span></code>, then <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">install</span></code>.</p>
-<p><strong>Extend the toolkit.</strong> Your own simulators, models, trainers or
-artifacts are Python. Work from a checkout, whose <a class="reference external" href="https://pixi.sh">pixi</a>
-environment provides an editable install, and put your code in its
-<code class="docutils literal notranslate"><span class="pre">plugins/</span></code> folder — gitignored, imported by every <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> command, so a
-model registered there is used by name like a shipped one:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>&lt;this-repo&gt;<span class="w"> </span>mesokit
-<span class="nb">cd</span><span class="w"> </span>mesokit
-pixi<span class="w"> </span>install
-cp<span class="w"> </span>~/my_models.py<span class="w"> </span>plugins/<span class="w">          </span><span class="c1"># @register(&quot;my_model_1d&quot;) inside</span>
-pixi<span class="w"> </span>run<span class="w"> </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>my_model_1d<span class="w"> </span>--data<span class="w"> </span>&lt;dataset&gt;
+<p>These installations include training and interpretation dependencies.
+Some data generators need additional solvers, listed below.</p>
+</section>
+</section>
+<section id="run-the-cli">
+<h2>Run the CLI<a class="headerlink" href="#run-the-cli" title="Link to this heading">¶</a></h2>
+<p>See <a class="reference internal" href="cli.html#running-the-cli"><span class="std std-ref">how to use CLI</span></a>.</p>
+<p>Run from your <strong>project directory</strong>, where datasets, checkpoints, figures,
+and the <code class="docutils literal notranslate"><span class="pre">.mesokit/</span></code> name registries should live. Built-in recipes are
+available with the installation, so this can be any folder.</p>
+</section>
+<section id="optional-solvers-for-data-generation">
+<span id="solver-backends"></span><h2>Optional solvers for data generation<a class="headerlink" href="#optional-solvers-for-data-generation" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Simulator</p></th>
+<th class="head"><p>Additional solver</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">allen_cahn_1d</span></code>, <code class="docutils literal notranslate"><span class="pre">allen_cahn_2d</span></code>, <code class="docutils literal notranslate"><span class="pre">kdv_1d</span></code></p></td>
+<td><p>Dedalus</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">peridynamics_fracture_2d</span></code></p></td>
+<td><p>LAMMPS with the PERI package</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cahn_hilliard_2d</span></code>, <code class="docutils literal notranslate"><span class="pre">ising_2d</span></code>, <code class="docutils literal notranslate"><span class="pre">llg_lattice_2d</span></code></p></td>
+<td><p>None</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The checkout’s default Pixi environment includes both solvers. For a
+separate Pixi project, add the solver you need to that project:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pixi<span class="w"> </span>add<span class="w"> </span>dedalus
+<span class="gp">$ </span>pixi<span class="w"> </span>add<span class="w"> </span>lammps
 </pre></div>
 </div>
-<p>Prefix commands with <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">run</span></code> (or open a pixi shell by running <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">shell</span></code>) if <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is not on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. The <em>Custom</em> pages of this
-guide assume this layout; a <code class="docutils literal notranslate"><span class="pre">plugins/</span></code> folder in any project directory
-works the same way.</p>
-<p>Both need a linux-64 platform with a CUDA-capable GPU (CUDA 12.6 or newer).</p>
+<p>In a conda environment, use <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">dedalus</span></code> or
+<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">lammps</span></code>, then install mesokit into the same
+environment. A missing solver does not prevent training or interpretation
+on existing datasets; running its generator reports which dependency is
+needed.</p>
+</section>
+<section id="cpu-and-gpu-training">
+<span id="gpu-and-torch"></span><h2>CPU and GPU training<a class="headerlink" href="#cpu-and-gpu-training" title="Link to this heading">¶</a></h2>
+<p>Choose the training device with <code class="docutils literal notranslate"><span class="pre">--device</span> <span class="pre">cpu</span></code>, <code class="docutils literal notranslate"><span class="pre">--device</span> <span class="pre">gpu</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">--device</span> <span class="pre">auto</span></code>. Start with a short CPU run to check your setup. GPU
+training requires a CUDA-capable GPU and a driver compatible with the
+PyTorch build in your environment. The checkout’s Pixi environment uses
+PyTorch from the CUDA 12.6 index; the package dependency accepts
+<code class="docutils literal notranslate"><span class="pre">torch&gt;=2.9,&lt;2.11</span></code>.</p>
+</section>
+<section id="next-steps">
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>Follow the <a class="reference internal" href="quickstart.html"><span class="std std-doc">Quickstart</span></a> for a complete run. If you use a
+coding agent, <a class="reference internal" href="skills.html"><span class="std std-doc">Agent Skills</span></a> explains the optional
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span> <span class="pre">init</span></code> setup.</p>
+<p>To add your own simulator, model, trainer, or artifact, put your Python
+module under <code class="docutils literal notranslate"><span class="pre">plugins/</span></code> in your project. The <em>Custom</em> pages explain each
+extension; a separate project works as well as the checkout.</p>
 </section>
 </section>
 
@@ -583,9 +590,15 @@ works the same way.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Installation</a><ul>
-<li><a class="reference internal" href="#install-directly-from-repo-walk-around-for-no-pypi-release">Install directly from repo (walk-around for no-pypi release)</a></li>
-<li><a class="reference internal" href="#install-from-pypi-not-supported-yet">Install from PyPI (not supported yet)</a></li>
-<li><a class="reference internal" href="#mesokit-cli">mesokit CLI</a></li>
+<li><a class="reference internal" href="#install-from-a-clone">Install from a clone</a><ul>
+<li><a class="reference internal" href="#work-in-the-checkout-with-pixi">Work in the checkout with Pixi</a></li>
+<li><a class="reference internal" href="#install-into-your-own-project">Install into your own project</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#run-the-cli">Run the CLI</a></li>
+<li><a class="reference internal" href="#optional-solvers-for-data-generation">Optional solvers for data generation</a></li>
+<li><a class="reference internal" href="#cpu-and-gpu-training">CPU and GPU training</a></li>
+<li><a class="reference internal" href="#next-steps">Next steps</a></li>
 </ul>
 </li>
 </ul>

@@ -1,9 +1,9 @@
 # Training
 
 Training fits a model's one-step map to consecutive frames of a
-trajectory dataset. This page is the user-facing entry point for what is
-being fitted, the two ways to run it (the `mesokit train` command and the
-Python API), and what a run leaves on disk.
+trajectory dataset. You can run training from the command line or Python,
+choose how frames become training samples, and inspect the loss and saved
+checkpoint afterwards.
 
 ## What Is Fitted
 
@@ -17,15 +17,38 @@ $$
 \mathcal L = \operatorname{mean}\bigl\lVert\, \text{model}(u_t, \Delta t) - u_{t+1} \,\bigr\rVert^2 .
 $$
 
-`dt` is read from the dataset (`numerical["dt"]`, else the spacing of
-`times`) unless the recipe or trainer sets it. `rollout_steps > 1` compares
+`dt` must match the interval between the frames being compared; see
+{ref}`Time step <time-step>` below. `rollout_steps > 1` compares
 a multi-step rollout against the next `k` frames instead. The shipped
 trainer, `LitTrainer`, runs this loop with Lightning for every registered
 family; a useful baseline for the loss is the persistence error
 $\operatorname{mean}\lVert u_{t+1} - u_t\rVert^2$, which a model that
 learned nothing reproduces.
 
-## Two Ways to Run It
+(time-step)=
+
+## Time step
+
+`trainer.dt` is the interval the model advances on each call. For
+`SnapshotPairDataset`, it should equal the saved frame spacing multiplied
+by `dataset.stride`.
+
+When `trainer.dt` is omitted or `null`, the CLI uses `numerical["dt"]`
+if present, otherwise `times[1] - times[0]`. It does not multiply this
+value by `stride`. Some generators store the smaller **solver step** in
+`numerical["dt"]`, so inspect the saved times and set `trainer.dt`
+explicitly when necessary. The Allen–Cahn `fdr` recipe, for example,
+saves frames every `0.001` time units:
+
+```console
+$ mesokit train --model spectral_onsagernet_1d --data ac_demo --set trainer.dt=0.001
+```
+
+For non-uniform saved times, a single fixed `dt` cannot represent every
+pair; resample to a uniform time grid or use a custom training view and
+trainer that handle varying intervals.
+
+## Run training
 
 **The command.** `mesokit train --model <name> --dyn <dyn> --data <dataset>`
 resolves the model class from the registry, the trainer registered for it,
@@ -47,7 +70,10 @@ named by `_target_` in the recipe ([Custom Models](models/custom_model.md)). Eve
 runs `data generate` and `train` once per point of a parameter grid, and
 `--train-param trainer.lr=1e-3,1e-4` scans a training-recipe key on the
 same data (`--data <dataset>` when there is no simulator axis; the two kinds
-combine). Each run is named after its parameter values and grouped, with
+combine). With existing data, `--dyn` defaults to the dataset's dynamics,
+as for `train`. Use `--set KEY=VALUE` for training settings shared by all
+points and `--train-param` for the settings to vary. Each run is named after
+its scanned parameter values and grouped, with
 the summary table `runs.json`, under `checkpoints/<dyn>/<experiment>/`;
 `mesokit train --experiment E` puts hand-made runs in the same place. See
 `mesokit sweep` in the [Command-Line Reference](cli/sweep.md). The same loop is
@@ -69,7 +95,7 @@ ds = TrajectoryDataset.load_hdf5("data/allen_cahn_1d/allen_cahn_1d_v0.h5")
 loader = DataLoader(SnapshotPairDataset(ds, stride=1, channel=0), batch_size=32, shuffle=True)
 
 model = get("spectral_onsagernet_1d")(Nx=ds.grid_shape[0], Lx=float(ds.physical["Lx"]))
-trainer = LitTrainer(max_epochs=20, lr=1e-3, dt=float(ds.numerical["dt"]), accelerator="cpu",
+trainer = LitTrainer(max_epochs=20, lr=1e-3, dt=float(ds.times[1] - ds.times[0]), accelerator="cpu",
                      checkpoint_root="checkpoints/allen_cahn_1d", run_id="son_nb")
 result = trainer.fit(model, loader)
 
@@ -83,8 +109,11 @@ The grid comes from the dataset (`ds.grid_shape`, `ds.physical`), never
 typed by hand; that is the mismatch the command guards against with its
 recipe. Register the checkpoint afterwards so the CLI can find it:
 
-```sh
-mesokit model register --model son_nb --file checkpoints/allen_cahn_1d/son_nb/model.pt --config <your config.yaml>
+```console
+$ mesokit model register \
+  --model son_nb \
+  --file checkpoints/allen_cahn_1d/son_nb/model.pt \
+  --config <your config.yaml>
 ```
 
 Start every new configuration with a smoke-sized run (one or two epochs on

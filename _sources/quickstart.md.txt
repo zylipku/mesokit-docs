@@ -1,268 +1,182 @@
 # Quickstart
 
-Generate a dataset, train a model, and extract an interpretability
-artifact — end to end. It assumes `mesokit` is installed and runnable;
-[Installation](installation.md) has the routes, the requirements and the
-two conda-forge solver back-ends. Every command runs from a
-**project directory**: the folder where `mesokit` keeps the datasets it
-generates (`data/`), the checkpoints, the figures and its `.mesokit/`
-registries. Any directory works; nothing has to be written by hand there.
+Generate a small Allen–Cahn dataset, train Spectral OnsagerNet, and plot
+its learned potential. This example uses ten trajectories and one CPU
+training epoch to check the workflow; use a longer run to study model
+quality.
 
-This page shows the happy path; every option, output file, error message
-and more examples are in the [Command-Line Reference](cli.md).
+## Before you start
 
-## Data generation
+Install `mesokit` and the Dedalus solver used by this example, following
+[Installation](installation.md). Run the commands from one **project
+directory**: a folder where you want to keep your datasets, checkpoints,
+and figures. It does not have to be the mesokit repository.
 
-To see the catalog of pre-defined simulator recipes:
+See {ref}`how to use CLI <running-the-cli>`.
 
+## 1. Generate data
+
+To list all available simulators, run:
 ```sh
-$ mesokit data avail   # alias: mesokit data available
+$ mesokit data avail
 DYN                       SIMULATOR
 allen_cahn_1d             mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d
 allen_cahn_2d             mesokit.data.allen_cahn.allen_cahn_2d.simulate_allen_cahn_2d
 cahn_hilliard_2d          mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
-... <truncated>
+... <truncated> ...
 ```
 
-To generate a demo with the `fdr` (fast-dev-run) config:
+The section [Predefined Datasets](data_processing/predefined.md) describes the equations,
+parameters, and solver requirements.
+
+For a quick demonstration, generate a small Allen–Cahn dataset with the `fdr` (fast dev run) recipe.
+
+```console
+$ pixi add dedalus && pixi install
+$ mesokit data generate --dyn allen_cahn_1d --config fdr --name ac_demo
+```
+
+The `fdr` recipe generates ten trajectories with 101 saved
+frames and 256 grid points. The command writes `data/allen_cahn_1d/ac_demo.h5`,
+validates its format, and registers it as `ac_demo`.
+
+Only registered datasets are accepted for model training, and `mesokit data generate` has automatically done so. To manually register a dataset, use
 
 ```sh
-mesokit data generate --dyn allen_cahn_1d --config fdr    # reads configs/data/allen_cahn_1d/fdr.yaml
+$ mesokit data register --name ac_demo_manually_registered --file data/allen_cahn_1d/ac_demo.h5
 ```
 
-To see which datasets are actually registered on this machine — grouped
-by dynamics, with `custom:` at the bottom for entries whose `dyn` isn't a
-registered simulator — and the cache path for each:
+To check all registered datasets, run:
+
 
 ```sh
-mesokit data list
+$ mesokit data list
+allen_cahn_1d:
+  ac_demo                      yes  /path/to/project/data/allen_cahn_1d/ac_demo.h5
+  ac_demo_manually_registered  yes  /path/to/project/data/allen_cahn_1d/ac_demo.h5
 ```
 
-### Generating From a Predefined Recipe
+A registered name is a shortcut to a file in this project. You can pass
+`ac_demo` to later commands instead of typing its path. Use a different
+name if you have already run this example.
 
-Pre-defined datasets are generated on demand. The resulting file is
-auto-registered so the next `mesokit data list` shows it as cached and
-downstream commands can refer to it by name. With no `--name`, the dataset
-is registered as `<dyn>_v0`; repeated runs (e.g. with different parameters)
-get `_v1`, `_v2`, …. With no `--output`, the file is written to
-`data/<dyn>/<name>.h5`:
+## 2. Train a model
+
+To train with a predefined model, run
 
 ```sh
-mesokit data generate --dyn allen_cahn_1d                                          # save to data/allen_cahn_1d/allen_cahn_1d_v0.h5
-mesokit data generate --dyn allen_cahn_1d                                          # data/allen_cahn_1d/allen_cahn_1d_v1.h5 (a repeated run gives v1)
-mesokit data generate --dyn allen_cahn_1d --name my_run                            # a custom name produces data/allen_cahn_1d/my_run.h5
-mesokit data generate --dyn allen_cahn_1d --output data/scratch.h5 --no-registry   # explicit path, skip registration
-```
-
-`--name` and `--no-registry` are mutually exclusive.
-
-Pass `--verbose` to surface the underlying solver's per-step logs (default
-is a single concise progress line on stderr).
-
-Each dynamics has its own config folder under `configs/data/<dyn>/`, with a
-`default.yaml` used when `--config` is not passed. To run a variant config,
-drop a sibling YAML next to `default.yaml` and select it by stem (no extension):
-
-```sh
-mesokit data generate --dyn allen_cahn_1d --config fdr    # reads configs/data/allen_cahn_1d/fdr.yaml
-```
-
-Each run prints what it wrote, whether the file passed the sanity check, and
-its shape. That last command, the seconds-long `fdr` recipe, prints:
-
-```text
-wrote data/allen_cahn_1d/allen_cahn_1d_v0.h5 (1019.3 KiB)
-  check:      passed (mesokit-trajectory v1)
-  dyn:        allen_cahn_1d
-  shape:      10 traj x 101 steps x 1 channel, grid 256 (float32)
-  dt:         non-uniform
-  channels:   u
-  registry:   allen_cahn_1d_v0
-```
-
-The `default` recipe above is the full reference dataset — 1000 trajectories,
-about 99 MiB — so its block reads `1000 traj` and takes minutes rather than
-seconds.
-
-Pass `--verbose` (or `-v`) to add the full metadata and keep the solver's own
-per-step logs. By default the solver is quiet and progress is shown only when
-stderr is a terminal, so a redirected run leaves a clean log. An `--output`
-that already exists is replaced, with a warning on stderr first; a `--name`
-that is already registered is refused before the solver runs, unless
-`--force`.
-
-### Registering a Custom Dataset
-
-For data produced outside `mesokit` (a separate solver, MD trajectories,
-a finite-difference export), write an HDF5 file that follows the cache
-contract and register it under a name:
-
-```sh
-mesokit data register --name DATASET_NAME --file data/my_data.h5
-```
-
-This runs a sanity check to verify the file is in the expected format, then
-prints the same block as `data generate` — the `check:` row is the verdict,
-`passed (mesokit-trajectory v1)` when the file conforms, and nothing is
-registered otherwise. A failing file names each violated check on stderr, in
-red, and exits with status `2`. To run the check without registering
-anything, use `mesokit data validate FILE`.
-The full cache-file contract — required datasets, root attributes, and
-metadata groups — is documented in [Data Processing](data_processing.md), with
-end-to-end snippets in [Examples](data_processing/examples.md).
-
-### Parsing An Arbitrary Dataset With An Agent
-
-If your data is in a format that does not already match the cache
-contract (xarray, raw numpy, torch tensors + JSON/YAML metadata, …), you
-can hand the conversion off to an LLM coding agent you already have
-installed. `mesokit data parse` hands the agent the cache-contract skill
-shipped with the package (embedded in its prompt), your file, and
-(optionally) any extra hints; on success it validates the produced HDF5
-and — when `--name` is given — registers it the same way `mesokit data
-register` would. It works from any directory, including a plain project
-folder that is not a git checkout.
-
-```sh
-mesokit data parse --file path/to/raw_data.nc \
-  --hint "time dim is `t`, var is `u`" \
-  --agent claude \
-  --name from_agent
-```
-
-To watch it work before trusting it with your own data, `mesokit data demo`
-writes a small, deliberately non-conforming file for exactly that:
-
-```sh
-mesokit data demo                                                                    # data/demo/allen_cahn_1d_demo.npz
-mesokit data parse --file data/demo/allen_cahn_1d_demo.npz --name allen_cahn_demo_v0
-```
-
-Flags:
-
-- `--agent`: which agent CLI to invoke (`claude`, `codex`). The command
-  checks for it before doing anything else; if it is not installed it
-  stops and points you at the official installation guide
-  ([Claude Code](https://code.claude.com/docs/en/setup),
-  [Codex CLI](https://developers.openai.com/codex/cli)).
-- `--backend`: `foreground` (default; streams the agent's output and
-  blocks) or `tmux` (detaches into a session you can attach to later).
-- `--hint`: free-form prompt fragment appended to the task.
-- `--output`: where to write the converted HDF5; defaults to
-  `data/parsed/<input_stem>.h5`. An existing file there is refused
-  unless you pass `--force`.
-- `--name`: register the output under this name on success.
-- `--agent-args`: extra flags for the agent command (`"--model opus"`).
-
-The agent runs non-interactively, so `parse` grants the permissions the
-conversion needs up front — file writes in the working directory (and in
-the output's directory), Python and the `mesokit` command, read access to
-the input's directory — and prints the command line it launches. The
-exact grants per agent are in the
-[Command-Line Reference](cli/data.md) under `mesokit data parse`.
-
-The same skill, plus five more for training and extending, can be used
-conversationally in your agent; see [Agent Skills](skills.md).
-
-## Training Models
-
-Training is routed through trainer classes under `mesokit.trainers`
-(the full picture, including the Python API, is in [Training](training.md)).
-The CLI keeps the surface uniform: `--model` resolves the architecture,
-`--trainer` optionally overrides the default trainer, and `--data` can be
-either a registered dataset name or a path to an HDF5 file.
-
-To train Spectral OnsagerNet on a registered Allen-Cahn dataset:
-
-```sh
-mesokit train \
+$ mesokit train \
   --model spectral_onsagernet_1d \
-  --dyn allen_cahn_1d \
-  --data allen_cahn_1d_v0 \
-  --config default
+  --data ac_demo \
+  --name son_demo \
+  --config fdr # for demo
 ```
 
-`--dyn` can be omitted (it is read from the dataset), and so can the grid:
-`Nx`, `Lx` and friends are filled from the dataset's metadata. The shipped
-recipes under `configs/train/<dyn>/<model>/` come with the package; each
-selects the model constructor, the `TrajectoryDataset` wrapper (for example
-`SnapshotPairDataset`), dataloader options, and trainer hyperparameters,
-and any key can be changed for one run with `--set`. Without a recipe for
-a dataset / model pair, built-in defaults are used. Convenience overrides
-are available for common knobs:
+For hyperparameter sweeps, we use
 
 ```sh
-mesokit train --model spectral_onsagernet_1d --data allen_cahn_1d_v0 \
-  --epochs 5 --batch-size 8 --device cpu --set trainer.lr=1e-4
+$ mesokit sweep \
+  --model onsagernet_1d \
+  --data ac_demo \
+  --config fdr \
+  --train-param trainer.lr=1e-3,1e-4 # parameter sweep
 ```
 
-The trainer writes a run directory at `checkpoints/<dyn>/<run_id>/`
-containing `model.pt` (plain `state_dict`, no Lightning required to load),
-`config.yaml`, and `history.json`. Unless `--no-registry` is passed, the
-run is registered in `.mesokit/checkpoints.json` under `--name` or the
-next `<model>_v<n>` slot.
-
-To list registered checkpoints, with the dataset, the `--set` keys and the
-final loss of each (`--sort train_loss` ranks them; `--format json` for a
-notebook):
+Show all trained checkpoints with
 
 ```sh
-mesokit model list
+$ mesokit model list
+NAME                                                     MODEL                   DATASET  PARAMS             TRAIN_LOSS  EPOCHS  TIME  CREATED              TAGS
+onsagernet_1d_lr_20260908-230905/onsagernet_1d_lr0.0001  onsagernet_1d           ac_demo  trainer.lr=0.0001  0.000112    5       7.6s  2026-09-08T23:09:17  -
+onsagernet_1d_lr_20260908-230905/onsagernet_1d_lr0.001   onsagernet_1d           ac_demo  trainer.lr=0.001   0.000112    5       9.2s  2026-09-08T23:09:06  -
+son_demo                                                 spectral_onsagernet_1d  ac_demo  -                  0.000112    5       8.1s  2026-09-08T22:32:17  -
 ```
 
-```text
-NAME                       MODEL                   DATASET           PARAMS             TRAIN_LOSS  EPOCHS  TIME   CREATED              TAGS
-spectral_onsagernet_1d_v0  spectral_onsagernet_1d  allen_cahn_1d_v0  -                  0.0004203   100     51.0s  2026-09-08T10:15:02  -
-spectral_onsagernet_1d_v1  spectral_onsagernet_1d  allen_cahn_1d_v0  trainer.lr=0.0001  0.0003117   5       2.6s   2026-09-08T10:21:40  -
-```
-
-Runs that belong together — a learning-rate scan, say — go under one
-experiment with `--experiment lr-scan` (the run directory becomes
-`checkpoints/<dyn>/lr-scan/<run>/`, the name `lr-scan/<run>`), or through
-`mesokit sweep --train-param trainer.lr=1e-3,1e-4,1e-5 --data allen_cahn_1d_v0 …`,
-which does the loop and writes the table; `mesokit model show <name>`
-prints one run's record and the command that reproduces it.
-
-To register an externally trained checkpoint:
+Inspect a single saved run with:
 
 ```sh
-mesokit model register --model MODEL_NAME --file path/to/checkpoint.pt --config path/to/config.yaml
+$ mesokit model show son_demo
 ```
 
-This adds the model to the registry, making it available for downstream
-evaluation and comparison.
-
-## Interpretability Artifacts
-
-Some models optionally produce an `InterpretabilityArtifact` — a
-structured, self-describing object containing a human-readable view of
-what the model learned (a learned free-energy landscape, a per-mode error
-spectrum, …); see [Interpretability](interpretability.md) for the contract
-and how to read the shipped artifact.
-
-To see available artifacts for a registered model:
+To start a new
+run from these weights:
 
 ```sh
-mesokit interpret list --model MODEL_NAME
+$ mesokit train --from son_demo --name son_long --epochs 100 # 5+100 epochs in total
 ```
 
-To extract and visualize one:
+The flag `--from` loads the weights
+and saved configuration; it starts a new optimizer rather than restoring
+the previous optimizer state.
+
+## 3. Plot the learned potential
 
 ```sh
-mesokit interpret extract --model MODEL_NAME --artifact ARTIFACT_NAME --output figs/artifact.png # or mesokit interpret explain
+$ mesokit interpret list --model son_demo
+son_demo:
+  potential
+$ mesokit interpret extract --model son_demo --artifact potential --output figs/son_demo.png
 ```
 
-## Next Steps
+The second command prints a summary and saves a figure. The `potential`
+artifact shows a slice of the learned free energy and the model's mobility
+and reactive spectra. For Allen–Cahn data it also compares the learned
+energy with the analytic reference over dataset snapshots.
 
-Each stage above has its own section of the guide:
+Use [The Potential Artifact](interpretability/potential.md) to read the
+panels. A short training run demonstrates extraction; its potential need
+not yet match the physical free energy. To inspect the longer fit, replace
+`son_demo` with `son_long` and choose a new output filename.
 
-- [Data Processing](data_processing.md) — the schema when authoring or
-  registering your own HDF5 files ([Data Structure](data_processing/structure.md),
-  [Custom Datasets](data_processing/custom.md), [Examples](data_processing/examples.md))
-  and generating data from your own equation
-  ([Custom Simulators](data_processing/custom_simulator.md)).
-- [Models](models.md) — what each family computes and how to choose.
-- [Training](training.md) — recipes, training views, the shipped trainer's
-  options, and training from Python.
-- [Interpretability](interpretability.md) — reading the potential artifact
-  and building your own.
+## Use your own data
+
+If you already have a file in mesokit's HDF5 format, validate and register it:
+
+```sh
+$ mesokit data register --name my_data --file data/my_data.h5
+```
+
+For other formats, [Custom Datasets](data_processing/custom.md) shows how
+to write a compatible file. It also covers `mesokit data parse`, which
+uses an installed coding agent to convert a file for you.
+
+For demonstration, we use
+
+```sh
+$ mesokit data demo --format npz --output my_dataset.npz
+```
+
+to generate a test dataset without the correct HDF5 structure. Then we convert it to HDF5 with
+
+
+```sh
+$ mesokit data parse --file my_dataset.npz # use claude by default
+$ mesokit data register --file data/parsed/my_dataset.h5 --name my_npz_data
+```
+
+or a single line:
+
+```sh
+$ mesokit data parse --file my_dataset.npz --name my_npz_data
+```
+
+Then check the file and register it:
+
+```sh
+$ mesokit data list
+allen_cahn_1d:
+  ac_demo                      yes  /home/zhuoyuan/tmp/Projects/mesokit-project/data/allen_cahn_1d/ac_demo.h5
+  ac_demo_manually_registered  yes  /home/zhuoyuan/tmp/Projects/mesokit-project/data/allen_cahn_1d/ac_demo.h5
+  my_npz_dataset               yes  /home/zhuoyuan/tmp/Projects/mesokit-project/data/parsed/my_dataset.h5 # newly registered
+```
+
+## Continue
+
+- [Models](models.md): choose between Spectral OnsagerNet, classical
+  OnsagerNet, and FNO.
+- [Training Recipes](training/recipes.md): keep reusable settings or
+  change them for one run with `--set`.
+- [CLI Workflows](cli/recipes.md): parameter sweeps, other datasets,
+  and checkpoint management.
+- [Agent Skills](skills.md): ask a coding agent to help with data,
+  training, or custom extensions.

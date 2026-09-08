@@ -1,121 +1,115 @@
 # Command-Line Reference
 
-`mesokit` is the console script installed with the package. It mirrors the
-pipeline — **produce data → train → index the checkpoint → interpret** — as
-four command groups plus `sweep`, which runs the first two stages over a
-parameter grid, and keeps two project-local registries so that anything you
-generate or train once can be referred to by name afterwards. Two more
-groups, `skills` and `agent`, set up a coding agent to drive the same
-commands.
+Use `mesokit` to generate or import trajectory data, train models, manage
+saved checkpoints, and extract figures describing what a model learned.
+For a first run, follow the [Quickstart](quickstart.md). For combinations
+of commands, see [CLI Workflows](cli/recipes.md).
 
-```text
-mesokit data      avail | list | generate | register | validate | parse
-mesokit train
-mesokit sweep
-mesokit model     list | register
-mesokit interpret list | extract | explain
-mesokit skills    list | path | install
-mesokit agent     init
+(running-the-cli)=
+
+## How to use the CLI
+
+The examples in this guide assume `mesokit` is available in your shell.
+In a Pixi or uv project, prefix each command with `pixi run` or `uv run`,
+respectively:
+
+```console
+$ pixi run mesokit --help
+$ uv run mesokit --help
 ```
 
-Every command and subcommand accepts `--help`. This section is the complete
-reference; the [Quickstart](quickstart.md) is the shortest path through it.
+Choose the command for your environment. With an activated environment
+that has mesokit installed, use `mesokit --help` directly.
 
-## Conventions
+## Commands
 
-**Plugins.** Every command first imports `./plugins/` — each
-`plugins/<name>.py` and `plugins/<name>/` package, names starting with `_`
-skipped — so a project's own simulators, models, trainers and artifacts
-register themselves and recipes can name their classes. A plugin that fails
-to import stops the command with the module and the error.
+| Command | Purpose |
+| --- | --- |
+| [`mesokit data`](cli/data.md) | List simulators; generate, validate, register, or convert datasets |
+| [`mesokit train`](cli/train.md) | Train a model or continue from saved weights |
+| [`mesokit sweep`](cli/sweep.md) | Run an experiment over a grid of simulation or training parameters |
+| [`mesokit model`](cli/model.md) | List, inspect, tag, register, remove, or synchronize checkpoints |
+| [`mesokit interpret`](cli/interpret.md) | List artifacts and save their figures |
+| [`mesokit skills`](cli/skills.md) | List and install coding-agent skills |
+| [`mesokit agent`](cli/agent.md) | Set up a coding agent for your project |
 
-**Run from the repository root.** The CLI resolves three things relative to
-the current working directory:
+Every command accepts `--help`, for example `mesokit train --help`.
+`mesokit --install-completion` installs shell completion;
+`mesokit --show-completion` prints the completion script.
 
-| What | Where | Used by |
-| --- | --- | --- |
-| Data recipes | `configs/data/<dyn>/<stem>.yaml` | `data generate` |
-| Training recipes | `configs/train/<dyn>/<model>/<stem>.yaml` (falls back to the copy inside the installed package) | `train` |
-| Registries | `.mesokit/datasets.json`, `.mesokit/checkpoints.json` | every command that takes a name |
+## Project directory and environment
 
-Outputs also land in the working directory: `data/<dyn>/` for generated
-HDF5 files, `checkpoints/<dyn>/<run>/` for training runs —
-`checkpoints/<dyn>/<experiment>/<run>/` for runs grouped by `--experiment`,
-registered as `<experiment>/<run>`. All of these are gitignored.
+Run commands from the **project directory** where you keep your work.
+It can be any folder. Relative paths, local recipes, `plugins/`, and the
+`.mesokit/` registries are resolved from this directory.
 
-**Environment.** Prefix commands with `pixi run` (or run inside `pixi shell`)
-unless `mesokit` is already on your `PATH` (see
-[Running the CLI](#running-the-cli)):
+| Content | Default location |
+| --- | --- |
+| Generated datasets | `data/<dyn>/<name>.h5` |
+| Training runs | `checkpoints/<dyn>/<run>/` |
+| Runs grouped with `--experiment` | `checkpoints/<dyn>/<experiment>/<run>/` |
+| Dataset and checkpoint indexes | `.mesokit/datasets.json`, `.mesokit/checkpoints.json` |
+| Your data recipes | `configs/data/<dyn>/<stem>.yaml` |
+| Your training recipes | `configs/train/<dyn>/<model>/<stem>.yaml` |
 
-```sh
-pixi run mesokit data avail
-```
+Recipes are YAML configuration files. Lookup checks the project's recipe
+directory first, then the installed package, then the checkout for an
+editable installation. `--config` also accepts a YAML path. See
+[Training Recipes](training/recipes.md) for lookup details and overrides.
 
-**Names versus paths.** Wherever a command takes a dataset (`--data`) it
-accepts either a registered name or a path to an HDF5 file; wherever it takes
-a checkpoint (`--model` in `interpret`, `--from` in `train`, the `model`
-subcommands) it needs a registered name — `<run>` or `<experiment>/<run>`; a
-bare run name is accepted when only one experiment holds it. Registries
-store **pointers**, never copies, so deleting a file leaves a dangling entry
-(`mesokit data list` flags it as `MISSING`; `mesokit model prune` drops
-checkpoint entries whose file is gone).
+## Names and paths
 
-**Automatic versioned names.** When you do not pass `--name`, generated
-datasets are registered as `<dyn>_v0`, `<dyn>_v1`, … and trained checkpoints
-as `<model>_v0`, `<model>_v1`, … — always the next free slot (free in the
-registry and on disk), so repeated runs never overwrite each other. Passing
-an explicit `--name` that is already registered, or whose run directory
-already holds a checkpoint, is an error unless you add `--force`.
+A **model architecture** is a family such as `spectral_onsagernet_1d`.
+A **checkpoint** is a saved training result, such as `son_demo`. The
+meaning of `--model` depends on the command:
 
-**Quiet by default.** A simulator keeps the underlying solver's log to itself
-and reports progress on stderr, so stdout carries only the command's own
-output. The progress line overwrites itself and is written only when stderr
-is a terminal: a redirected, piped or captured run prints nothing but the
-result, instead of thousands of carriage-return records in a log file.
-`--verbose` / `-v` (`data generate`, `sweep`, and, for the metadata rows
-alone, `data register` / `validate` / `parse`) leaves the solver's own log in
-place — on stderr, where mesokit puts it even for a back-end that logs to
-stdout by default — reports progress as plain newline-terminated lines that
-survive a pipe, and prints the full metadata. Training is the exception:
-Lightning's progress bar is a recipe key, `trainer.enable_progress_bar`, not
-a CLI flag, and it writes to stdout.
+| Argument | Accepts |
+| --- | --- |
+| `train --model`, `sweep --model` | Architecture name |
+| `train --data`, `sweep --data` | Registered dataset name or HDF5 path |
+| `interpret --model`, `train --from` | Registered checkpoint name |
+| `model register --model` | Name to assign to the checkpoint being registered |
 
-**Errors and exit codes.** Argument and lookup problems (unknown dynamics,
-missing file, name collision, failed validation, a simulator that rejects its
-parameters) are reported as `Invalid value: …` and exit with status `2`; the
-offending file or name is never registered. Everything else surfaces as a
-Python traceback with status `1`, including a failure of mesokit's own code:
-only the simulator's own exceptions are summarised, and `data generate
---verbose` restores the traceback for those. A missing solver back-end is the
-one error that is never a traceback, `-v` included — the install command is
-the whole answer.
+Inside an experiment, checkpoint names are `<experiment>/<run>`. A bare
+run name also works when it is unambiguous. Registries store paths to
+files, not copies: moving or deleting a file can leave an entry pointing
+to a missing file. See [checkpoint management](cli/model.md).
 
-**Shell completion.** `mesokit --install-completion` installs completion for
-the current shell; `mesokit --show-completion` prints it instead.
+Without `--name`, datasets use the next available `<dyn>_v<n>` name and
+training runs outside experiments use `<model>_v<n>`. Experiments use
+names based on the changed parameters; see {ref}`Experiments <experiments>`.
+Explicit name collisions are refused unless the command supports and is
+given `--force`. File replacement rules differ by command and are listed
+in each command's option table.
 
-## Pipeline at a Glance
+## Custom extensions
 
-```text
-configs/data/<dyn>/default.yaml ──► mesokit data generate ──► data/<dyn>/<name>.h5 ──┐
-your_solver.h5 ──────────────────► mesokit data register ──────────────────────────────┤
-any_format.{npz,nc,pt,…} ────────► mesokit data parse ────► data/parsed/<stem>.h5 ─────┤
-   ▲ mesokit data demo writes one to practise on                                       ▼
-                                                                          .mesokit/datasets.json
-                                                                                       │
-configs/train/<dyn>/<model>/default.yaml ─────────────────► mesokit train ◄────────────┘
-                                                                  │
-                                        checkpoints/<dyn>/<run>/{model.pt, config.yaml, history.json, run.json}
-                                        checkpoints/<dyn>/<experiment>/<run>/…  + runs.json    (--experiment)
-                                                                  │
-                                                      .mesokit/checkpoints.json ◄── mesokit model register / sync
-                                                                  │          (mesokit model list / show / tag / remove / prune)
-                                                       mesokit interpret list / extract ──► figs/*.png
+Each command imports Python modules and packages in `./plugins/` before
+running. Names beginning with `_` or `.` are skipped. An import failure
+stops the command and identifies the module and error. This lets your
+simulators, models, and trainers register names used by the CLI, and lets
+recipes refer to their classes through `_target_`.
 
-mesokit sweep --param KEY=V1,V2,… [--train-param KEY.PATH=V1,V2,…] = data generate + train per grid point
-                                                            ──► checkpoints/<dyn>/<experiment>/{<run>/…, runs.json}
-```
+Start with [Custom Simulators](data_processing/custom_simulator.md),
+[Custom Models](models/custom_model.md), [Custom Trainers](training/custom_trainer.md),
+or [Custom Artifacts](interpretability/custom_artifact.md).
 
-## How to Use This Section
+## Output and errors
+
+Data generation normally hides solver logs and shows progress on stderr
+only in a terminal. Use `--verbose` / `-v` for solver logs, additional
+metadata, and progress lines that remain readable in redirected output.
+Training uses Lightning's progress bar, controlled by the recipe key
+`trainer.enable_progress_bar`.
+
+Argument, lookup, and validation errors normally exit with status `2`.
+Unexpected failures produce a traceback and status `1`. A simulator error
+is summarized by default; `data generate -v` includes its traceback.
+Missing solver dependencies always produce an installation hint. Sweeps
+continue past individual failed runs and exit with status `1` if any
+point failed. See [Troubleshooting](cli/troubleshooting.md) for common fixes.
+
+## Reference pages
 
 - [`mesokit data`](cli/data.md)
 - [`mesokit train`](cli/train.md)
@@ -124,7 +118,7 @@ mesokit sweep --param KEY=V1,V2,… [--train-param KEY.PATH=V1,V2,…] = data ge
 - [`mesokit interpret`](cli/interpret.md)
 - [`mesokit skills`](cli/skills.md)
 - [`mesokit agent`](cli/agent.md)
-- [Recipes](cli/recipes.md)
+- [CLI Workflows](cli/recipes.md)
 - [Files the CLI Reads and Writes](cli/files.md)
 - [Troubleshooting](cli/troubleshooting.md)
 - [Python Equivalents](cli/python_equivalents.md)

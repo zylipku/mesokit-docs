@@ -58,7 +58,7 @@ are what training and rollout see.
 | --- | --- | --- | --- |
 | `PolynomialPotential` (default) | $\int \tfrac{a}{4}u^4 + \tfrac{c}{3}u^3 + \tfrac{b}{2}u^2 + d\,u\,dx$, $a = a_{\sqrt{}}^2$ | $a, b, c, d$ | starter; contains the Allen–Cahn double well at $a = 1$, $b = -1/\varepsilon^2$ |
 | `AllenCahnPotential` | $\int \tfrac12 \lvert\nabla u\rvert^2 + \tfrac{u^4}{4\varepsilon^2} - \tfrac{u^2}{2\varepsilon^2}\,dx$ | nothing | physics check; reference law for the `potential` artifact |
-| `CoerciveAutogradPotential` | $\int \tfrac{a}{2}u^2 + F_\theta(u)\,dx + \int \tfrac{b}{2}\lvert\nabla u\rvert^2\,dx + \lvert v_\theta(\hat u_{\text{low}})\rvert$, $a, b \ge 0$ | $a, b$, pointwise MLP $F_\theta$, complex MLP $v_\theta$ on the lowest `v_truncate` modes per axis (`v_truncate`$^d$ inputs) | the headline interpretable choice: pointwise, local and nonlocal energy read off separately |
+| `CoerciveAutogradPotential` | $\int \tfrac{a}{2}u^2 + F_\theta(u)\,dx + \int \tfrac{b}{2}\lvert\nabla u\rvert^2\,dx + \lvert v_\theta(\hat u_{\text{low}})\rvert$, $a, b \ge 0$ | $a, b$, pointwise MLP $F_\theta$, complex MLP $v_\theta$ on the lowest `v_truncate` modes per axis (`v_truncate`$^d$ inputs) | inspect pointwise, gradient, and nonlocal energy separately |
 
 All potentials share the `SpectralPotential` base, which owns the grid, the
 wavenumbers and $\lvert\mathbf k\rvert^2$, so each is written once for 1D, 2D
@@ -134,8 +134,8 @@ configs/train/ising_2d/spectral_onsagernet_2d/default.yaml
 ```
 
 A potential is selected by nesting it under `model.potential` in the recipe;
-`null` means the polynomial default, and the `coercive.yaml` recipes are the
-headline configuration (sine final activations, `v_truncate = 16`). The
+`null` means the polynomial default. The `coercive.yaml` recipes use the
+coercive potential (sine final activations, `v_truncate = 16`). The
 potential's `grid_shape` / `domain` must match the model's `Nx`, `Ny`,
 `Lx`, `Ly`, which in turn must match the dataset. The recipe format is
 described in [Training Recipes](../training/recipes.md).

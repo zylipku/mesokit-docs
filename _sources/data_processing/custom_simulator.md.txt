@@ -9,9 +9,8 @@ instead, see [Custom Datasets](custom.md).
 
 ## Where Extensions Live
 
-- Put your code in `plugins/` in the directory you run `mesokit` from — the
-  mesokit checkout for extension work (the folder is gitignored, so your code
-  never collides with upstream), or any project directory. Every `mesokit`
+- Put your code in `plugins/` in your project directory. You can use your
+  own project or work in the mesokit checkout. Every `mesokit`
   command imports `plugins/<name>.py` and `plugins/<name>/` packages before
   running, so registered names and `_target_` paths resolve. A package
   installed into the environment works too.
@@ -110,8 +109,9 @@ rate: 1.0
 seed: 0
 ```
 
-```sh
-mesokit data generate --dyn decay_1d      # writes + registers decay_1d_v0
+```console
+$ # writes + registers decay_1d_v0
+$ mesokit data generate --dyn decay_1d
 ```
 
 Sibling files under `configs/data/decay_1d/` are variants selected by stem
@@ -122,6 +122,8 @@ wrote some other way are covered in [Custom Datasets](custom.md).
 
 ## Next
 
-Training a shipped model on your dynamics needs a recipe under
-`configs/train/decay_1d/<model>/default.yaml` with the same grid; see
-[Training Recipes](../training/recipes.md).
+Train a shipped model on the registered dataset with
+`mesokit train --model <model> --data decay_1d_v0`. The command fills in
+the grid from the dataset and uses defaults when no recipe exists.
+[Training Recipes](../training/recipes.md) explains how to save reusable
+settings.
