@@ -1088,9 +1088,14 @@ replaces its row, so does every point of a <code class="docutils literal notrans
 entry. <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">model</span> <span class="pre">sync</span></code> rebuilds the table from the run directories.</p>
 <p>Two things to know:</p>
 <ul class="simple">
-<li><p>The shipped <code class="docutils literal notranslate"><span class="pre">smoke.yaml</span></code> under <code class="docutils literal notranslate"><span class="pre">configs/train/allen_cahn_1d/spectral_onsagernet_1d/</span></code>
-is a test fixture with <code class="docutils literal notranslate"><span class="pre">Nx:</span> <span class="pre">8</span></code>; it does not fit the 256-point datasets.
-For a quick real run use <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">default</span> <span class="pre">--epochs</span> <span class="pre">1</span> <span class="pre">--device</span> <span class="pre">cpu</span></code>.</p></li>
+<li><p>Stems differ in how long a recipe trains, not in the grid it fits: no
+shipped recipe writes a grid key, so every stem runs on any grid of its
+dynamics. <code class="docutils literal notranslate"><span class="pre">configs/train/allen_cahn_1d/spectral_onsagernet_1d/</span></code> ships
+<code class="docutils literal notranslate"><span class="pre">fdr.yaml</span></code>, the training-side counterpart of the data recipe of the same
+name: <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> with the epoch budget cut, so
+<code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">train</span> <span class="pre">--model</span> <span class="pre">spectral_onsagernet_1d</span> <span class="pre">--data</span> <span class="pre">ac_fdr</span> <span class="pre">--config</span> <span class="pre">fdr</span></code>
+finishes in seconds on the <code class="docutils literal notranslate"><span class="pre">fdr</span></code> dataset. Its <code class="docutils literal notranslate"><span class="pre">smoke.yaml</span></code> is the test
+fixture instead, pinned to one CPU epoch with no progress bar.</p></li>
 <li><p>Every shipped architecture is registered once per dimension — <code class="docutils literal notranslate"><span class="pre">fno1d</span></code> /
 <code class="docutils literal notranslate"><span class="pre">fno2d</span></code> / <code class="docutils literal notranslate"><span class="pre">fno3d</span></code>, <code class="docutils literal notranslate"><span class="pre">spectral_onsagernet_1d</span></code> / <code class="docutils literal notranslate"><span class="pre">_2d</span></code> / <code class="docutils literal notranslate"><span class="pre">_3d</span></code> and
 <code class="docutils literal notranslate"><span class="pre">onsagernet_1d</span></code> / <code class="docutils literal notranslate"><span class="pre">_2d</span></code> / <code class="docutils literal notranslate"><span class="pre">_3d</span></code> — pick the suffix that matches the
@@ -1993,8 +1998,8 @@ Nothing under <code class="docutils literal notranslate"><span class="pre">data/
 <td><p>Add <code class="docutils literal notranslate"><span class="pre">--force</span></code> to refresh the section; text outside the markers is kept.</p></td>
 </tr>
 <tr class="row-odd"><td><p>A tensor size mismatch inside the model during <code class="docutils literal notranslate"><span class="pre">train</span></code></p></td>
-<td><p>The recipe’s <code class="docutils literal notranslate"><span class="pre">model.Nx</span></code> does not match the dataset grid (e.g. the 8-point <code class="docutils literal notranslate"><span class="pre">smoke.yaml</span></code> fixture on 256-point data).</p></td>
-<td><p>Use <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">default</span></code> or fix <code class="docutils literal notranslate"><span class="pre">Nx</span></code>.</p></td>
+<td><p>A recipe of your own under <code class="docutils literal notranslate"><span class="pre">configs/train/</span></code> writes a grid key (<code class="docutils literal notranslate"><span class="pre">Nx</span></code>, <code class="docutils literal notranslate"><span class="pre">grid_shape</span></code>, …) that the dataset contradicts.</p></td>
+<td><p>Delete the key and let <code class="docutils literal notranslate"><span class="pre">train</span></code> read the grid from the dataset; the shipped recipes write none.</p></td>
 </tr>
 <tr class="row-even"><td><p>Training is slow or out of memory</p></td>
 <td><p>Default recipes assume a GPU.</p></td>

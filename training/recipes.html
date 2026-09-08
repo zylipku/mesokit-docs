@@ -459,8 +459,12 @@ worth naming and sharing; otherwise <code class="docutils literal notranslate"><
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;</span></code> is the dataset’s dynamics name, <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;</span></code> the registered
 architecture name, and <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;</span></code> the recipe selected by <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;stem&gt;</span></code>
-(default <code class="docutils literal notranslate"><span class="pre">default</span></code>). Sibling files are variants; <code class="docutils literal notranslate"><span class="pre">smoke.yaml</span></code> recipes are
-tiny CPU fixtures (few epochs, small networks). No shipped recipe writes a
+(default <code class="docutils literal notranslate"><span class="pre">default</span></code>). Sibling files are variants of the same architecture,
+differing in how long they train rather than in what they fit:
+<code class="docutils literal notranslate"><span class="pre">smoke.yaml</span></code> recipes are the test fixtures (one epoch, pinned to the CPU,
+no progress bar), and <code class="docutils literal notranslate"><span class="pre">allen_cahn_1d/spectral_onsagernet_1d</span></code> also ships
+<code class="docutils literal notranslate"><span class="pre">fdr.yaml</span></code>, a “fast dev run” that is <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> with the epoch budget
+cut, matching the data recipe of the same name. No shipped recipe writes a
 grid key, so each runs on any grid of its dynamics.</p>
 <p>The data side has the same convention: <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/default.yaml</span></code>
 is the recipe <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">data</span> <span class="pre">generate</span> <span class="pre">--dyn</span> <span class="pre">&lt;dyn&gt;</span></code> uses, and its <code class="docutils literal notranslate"><span class="pre">_target_</span></code>

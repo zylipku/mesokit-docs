@@ -579,9 +579,14 @@ entry. `mesokit model sync` rebuilds the table from the run directories.
 
 Two things to know:
 
-- The shipped `smoke.yaml` under `configs/train/allen_cahn_1d/spectral_onsagernet_1d/`
-  is a test fixture with `Nx: 8`; it does not fit the 256-point datasets.
-  For a quick real run use `--config default --epochs 1 --device cpu`.
+- Stems differ in how long a recipe trains, not in the grid it fits: no
+  shipped recipe writes a grid key, so every stem runs on any grid of its
+  dynamics. `configs/train/allen_cahn_1d/spectral_onsagernet_1d/` ships
+  `fdr.yaml`, the training-side counterpart of the data recipe of the same
+  name: `default.yaml` with the epoch budget cut, so
+  `mesokit train --model spectral_onsagernet_1d --data ac_fdr --config fdr`
+  finishes in seconds on the `fdr` dataset. Its `smoke.yaml` is the test
+  fixture instead, pinned to one CPU epoch with no progress bar.
 - Every shipped architecture is registered once per dimension — `fno1d` /
   `fno2d` / `fno3d`, `spectral_onsagernet_1d` / `_2d` / `_3d` and
   `onsagernet_1d` / `_2d` / `_3d` — pick the suffix that matches the
@@ -1288,7 +1293,7 @@ A registry entry, for reference:
 | `--output must be a directory when --artifact all` | An extension was given with `--artifact all`. | Pass a directory path. |
 | `agent 'claude' is not installed: no claude command on PATH` | The agent CLI is missing from the shell `mesokit` runs in; nothing was launched. | Follow the official installation guide the message names ([Claude Code](https://code.claude.com/docs/en/setup), [Codex CLI](https://developers.openai.com/codex/cli)), check `claude --version`, and re-run; or `--agent codex`. |
 | `AGENTS.md already has a mesokit section; pass --force to rewrite it` | `agent init` was run in this project before. | Add `--force` to refresh the section; text outside the markers is kept. |
-| A tensor size mismatch inside the model during `train` | The recipe's `model.Nx` does not match the dataset grid (e.g. the 8-point `smoke.yaml` fixture on 256-point data). | Use `--config default` or fix `Nx`. |
+| A tensor size mismatch inside the model during `train` | A recipe of your own under `configs/train/` writes a grid key (`Nx`, `grid_shape`, ...) that the dataset contradicts. | Delete the key and let `train` read the grid from the dataset; the shipped recipes write none. |
 | Training is slow or out of memory | Default recipes assume a GPU. | `--device cpu --batch-size 8 --epochs 1` for a smoke run. |
 
 ## Python Equivalents

@@ -54,8 +54,12 @@ configs/train/<dyn>/<model>/<stem>.yaml
 
 `<dyn>` is the dataset's dynamics name, `<model>` the registered
 architecture name, and `<stem>` the recipe selected by `--config <stem>`
-(default `default`). Sibling files are variants; `smoke.yaml` recipes are
-tiny CPU fixtures (few epochs, small networks). No shipped recipe writes a
+(default `default`). Sibling files are variants of the same architecture,
+differing in how long they train rather than in what they fit:
+`smoke.yaml` recipes are the test fixtures (one epoch, pinned to the CPU,
+no progress bar), and `allen_cahn_1d/spectral_onsagernet_1d` also ships
+`fdr.yaml`, a "fast dev run" that is `default.yaml` with the epoch budget
+cut, matching the data recipe of the same name. No shipped recipe writes a
 grid key, so each runs on any grid of its dynamics.
 
 The data side has the same convention: `configs/data/<dyn>/default.yaml`
