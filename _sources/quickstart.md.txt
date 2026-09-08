@@ -11,22 +11,23 @@ registries. Any directory works; nothing has to be written by hand there.
 This page shows the happy path; every option, output file, error message
 and more examples are in the [Command-Line Reference](cli.md).
 
-## Two Ways to Follow This Guide
-
-Every step below is a command or a short script you can run yourself. If
-you use a coding agent (Claude Code, Codex CLI), each step is also a
-*skill* the agent can carry out for you — converting your data, choosing
-and training a model, extending mesokit with your own equation or model.
-See [Agent Skills](skills.md) for what they do and how to install them
-(in your own project, `mesokit agent init` sets the agent up in one step);
-the commands the agent runs are the ones documented here.
-
-## Data Loading
+## Data generation
 
 To see the catalog of pre-defined simulator recipes:
 
 ```sh
-mesokit data avail   # alias: mesokit data available
+$ mesokit data avail   # alias: mesokit data available
+DYN                       SIMULATOR
+allen_cahn_1d             mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d
+allen_cahn_2d             mesokit.data.allen_cahn.allen_cahn_2d.simulate_allen_cahn_2d
+cahn_hilliard_2d          mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
+... <truncated>
+```
+
+To generate a demo with the `fdr` (fast-dev-run) config:
+
+```sh
+mesokit data generate --dyn allen_cahn_1d --config fdr    # reads configs/data/allen_cahn_1d/fdr.yaml
 ```
 
 To see which datasets are actually registered on this machine — grouped
@@ -47,24 +48,21 @@ get `_v1`, `_v2`, …. With no `--output`, the file is written to
 `data/<dyn>/<name>.h5`:
 
 ```sh
-mesokit data generate --dyn allen_cahn_1d                                          # data/allen_cahn_1d/allen_cahn_1d_v0.h5
-mesokit data generate --dyn allen_cahn_1d                                          # data/allen_cahn_1d/allen_cahn_1d_v1.h5 # repeated run -> v1
-mesokit data generate --dyn allen_cahn_1d --name my_run                            # custom name -> data/allen_cahn_1d/my_run.h5
+mesokit data generate --dyn allen_cahn_1d                                          # save to data/allen_cahn_1d/allen_cahn_1d_v0.h5
+mesokit data generate --dyn allen_cahn_1d                                          # data/allen_cahn_1d/allen_cahn_1d_v1.h5 (a repeated run gives v1)
+mesokit data generate --dyn allen_cahn_1d --name my_run                            # a custom name produces data/allen_cahn_1d/my_run.h5
 mesokit data generate --dyn allen_cahn_1d --output data/scratch.h5 --no-registry   # explicit path, skip registration
 ```
 
 `--name` and `--no-registry` are mutually exclusive.
 
+Pass `--verbose` to surface the underlying solver's per-step logs (default
+is a single concise progress line on stderr).
+
 Each dynamics has its own config folder under `configs/data/<dyn>/`, with a
 `default.yaml` used when `--config` is not passed. To run a variant config,
 drop a sibling YAML next to `default.yaml` and select it by stem (no extension):
 
-```sh
-mesokit data generate --dyn allen_cahn_1d --config fdr    # reads configs/data/allen_cahn_1d/fdr.yaml
-```
-
-Pass `--verbose` to surface the underlying solver's per-step logs (default
-is a single concise progress line on stderr).
 
 ### Registering a Custom Dataset
 

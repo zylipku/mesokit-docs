@@ -419,20 +419,19 @@ generates (<code class="docutils literal notranslate"><span class="pre">data/</s
 registries. Any directory works; nothing has to be written by hand there.</p>
 <p>This page shows the happy path; every option, output file, error message
 and more examples are in the <a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a>.</p>
-<section id="two-ways-to-follow-this-guide">
-<h2>Two Ways to Follow This Guide<a class="headerlink" href="#two-ways-to-follow-this-guide" title="Link to this heading">¶</a></h2>
-<p>Every step below is a command or a short script you can run yourself. If
-you use a coding agent (Claude Code, Codex CLI), each step is also a
-<em>skill</em> the agent can carry out for you — converting your data, choosing
-and training a model, extending mesokit with your own equation or model.
-See <a class="reference internal" href="skills.html"><span class="std std-doc">Agent Skills</span></a> for what they do and how to install them
-(in your own project, <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">agent</span> <span class="pre">init</span></code> sets the agent up in one step);
-the commands the agent runs are the ones documented here.</p>
-</section>
-<section id="data-loading">
-<h2>Data Loading<a class="headerlink" href="#data-loading" title="Link to this heading">¶</a></h2>
+<section id="data-generation">
+<h2>Data generation<a class="headerlink" href="#data-generation" title="Link to this heading">¶</a></h2>
 <p>To see the catalog of pre-defined simulator recipes:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>avail<span class="w">   </span><span class="c1"># alias: mesokit data available</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>avail<span class="w">   </span><span class="c1"># alias: mesokit data available</span>
+DYN<span class="w">                       </span>SIMULATOR
+allen_cahn_1d<span class="w">             </span>mesokit.data.allen_cahn.allen_cahn_1d.simulate_allen_cahn_1d
+allen_cahn_2d<span class="w">             </span>mesokit.data.allen_cahn.allen_cahn_2d.simulate_allen_cahn_2d
+cahn_hilliard_2d<span class="w">          </span>mesokit.data.cahn_hilliard.cahn_hilliard_2d.simulate_cahn_hilliard_2d
+...<span class="w"> </span>&lt;truncated&gt;
+</pre></div>
+</div>
+<p>To generate a demo with the <code class="docutils literal notranslate"><span class="pre">fdr</span></code> (fast-dev-run) config:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w">    </span><span class="c1"># reads configs/data/allen_cahn_1d/fdr.yaml</span>
 </pre></div>
 </div>
 <p>To see which datasets are actually registered on this machine — grouped
@@ -449,21 +448,18 @@ downstream commands can refer to it by name. With no <code class="docutils liter
 is registered as <code class="docutils literal notranslate"><span class="pre">&lt;dyn&gt;_v0</span></code>; repeated runs (e.g. with different parameters)
 get <code class="docutils literal notranslate"><span class="pre">_v1</span></code>, <code class="docutils literal notranslate"><span class="pre">_v2</span></code>, …. With no <code class="docutils literal notranslate"><span class="pre">--output</span></code>, the file is written to
 <code class="docutils literal notranslate"><span class="pre">data/&lt;dyn&gt;/&lt;name&gt;.h5</span></code>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w">                                          </span><span class="c1"># data/allen_cahn_1d/allen_cahn_1d_v0.h5</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w">                                          </span><span class="c1"># data/allen_cahn_1d/allen_cahn_1d_v1.h5 # repeated run -&gt; v1</span>
-mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--name<span class="w"> </span>my_run<span class="w">                            </span><span class="c1"># custom name -&gt; data/allen_cahn_1d/my_run.h5</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w">                                          </span><span class="c1"># save to data/allen_cahn_1d/allen_cahn_1d_v0.h5</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w">                                          </span><span class="c1"># data/allen_cahn_1d/allen_cahn_1d_v1.h5 (a repeated run gives v1)</span>
+mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--name<span class="w"> </span>my_run<span class="w">                            </span><span class="c1"># a custom name produces data/allen_cahn_1d/my_run.h5</span>
 mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--output<span class="w"> </span>data/scratch.h5<span class="w"> </span>--no-registry<span class="w">   </span><span class="c1"># explicit path, skip registration</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">--name</span></code> and <code class="docutils literal notranslate"><span class="pre">--no-registry</span></code> are mutually exclusive.</p>
+<p>Pass <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> to surface the underlying solver’s per-step logs (default
+is a single concise progress line on stderr).</p>
 <p>Each dynamics has its own config folder under <code class="docutils literal notranslate"><span class="pre">configs/data/&lt;dyn&gt;/</span></code>, with a
 <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> used when <code class="docutils literal notranslate"><span class="pre">--config</span></code> is not passed. To run a variant config,
 drop a sibling YAML next to <code class="docutils literal notranslate"><span class="pre">default.yaml</span></code> and select it by stem (no extension):</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mesokit<span class="w"> </span>data<span class="w"> </span>generate<span class="w"> </span>--dyn<span class="w"> </span>allen_cahn_1d<span class="w"> </span>--config<span class="w"> </span>fdr<span class="w">    </span><span class="c1"># reads configs/data/allen_cahn_1d/fdr.yaml</span>
-</pre></div>
-</div>
-<p>Pass <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> to surface the underlying solver’s per-step logs (default
-is a single concise progress line on stderr).</p>
 </section>
 <section id="registering-a-custom-dataset">
 <h3>Registering a Custom Dataset<a class="headerlink" href="#registering-a-custom-dataset" title="Link to this heading">¶</a></h3>
@@ -667,8 +663,7 @@ and building your own.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Quickstart</a><ul>
-<li><a class="reference internal" href="#two-ways-to-follow-this-guide">Two Ways to Follow This Guide</a></li>
-<li><a class="reference internal" href="#data-loading">Data Loading</a><ul>
+<li><a class="reference internal" href="#data-generation">Data generation</a><ul>
 <li><a class="reference internal" href="#generating-from-a-predefined-recipe">Generating From a Predefined Recipe</a></li>
 <li><a class="reference internal" href="#registering-a-custom-dataset">Registering a Custom Dataset</a></li>
 <li><a class="reference internal" href="#parsing-an-arbitrary-dataset-with-an-agent">Parsing An Arbitrary Dataset With An Agent</a></li>
