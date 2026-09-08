@@ -1,0 +1,242 @@
+(installation)=
+
+# Installation
+
+`mesokit` is a Python package with one console script, also called
+`mesokit`. Installing it brings the built-in simulators, the three model
+families, training and interpretation: the shipped recipes travel with the
+package and a model's grid is read from the dataset, so nothing has to be
+configured by hand before the first run.
+
+There is no PyPI release yet, so every install route here starts from a
+clone of the repository. The PyPI commands are listed further down; when
+the first release lands they replace the clone in those routes.
+
+## Requirements
+
+- **Python 3.12 or newer.** The package declares
+  `requires-python = ">=3.12"`; 3.12, 3.13 and 3.14 are supported.
+- **A `linux-64` platform with a CUDA-capable GPU, CUDA 12.6 or newer.**
+  This is what mesokit is developed, tested and sized for: the checkout's
+  pixi manifest declares `linux-64`, the shipped training recipes assume a
+  GPU, and the trainer's `accelerator: auto` takes it. See
+  [GPU and torch](#gpu-and-torch) for the torch build that comes with it.
+- **Two solver back-ends come from conda-forge, not PyPI.** Without them,
+  four of the seven built-in simulators cannot generate data; nothing else
+  is affected. See [Solver Back-Ends](#solver-backends).
+
+## Installing From a Clone
+
+Clone the repository once; each route below points a project's environment
+at that folder. All three install it *editable*, so the clone stays the
+single copy of the code and `git pull` in it updates the install with no
+reinstall:
+
+```sh
+git clone https://github.com/MLDS-NUS/mesokit.git /path/to/mesokit
+```
+
+### `pixi`
+
+```sh
+cd /path/to/my-project
+pixi init                                                   # if it is not a pixi workspace yet
+pixi add "python>=3.12"                                     # a pypi dependency needs an interpreter
+pixi add --pypi mesokit --path /path/to/mesokit --editable
+```
+
+The last command writes the dependency into `pixi.toml` and builds the
+environment. The path is stored relative to the manifest:
+
+```toml
+[pypi-dependencies]
+mesokit = { path = "../mesokit", editable = true }
+```
+
+Writing that entry by hand and running `pixi install` does the same, with
+two things to get right. The path is a TOML string, so it has to be
+quoted: an unquoted value is a parse error, whatever it contains. And a
+pixi workspace needs its own Python before it can install anything from
+PyPI: with no `python` under `[dependencies]`, the install stops with
+`No Python interpreter found in the dependencies`.
+
+### `uv`
+
+```sh
+cd /path/to/my-project
+uv init --python 3.12                    # if it is not a uv project yet
+uv add --editable /path/to/mesokit
+```
+
+`uv add` creates `.venv` and installs into it, so no separate `uv sync` is
+needed. The project's own `requires-python` has to admit 3.12:
+`uv init --python 3.12` writes it, while a bare `uv init` takes the floor
+from whichever interpreter it discovers, and anything below 3.12 makes the
+`uv add` unsatisfiable.
+
+### `pip`
+
+```sh
+cd /path/to/my-project
+python -m venv .venv                     # any Python 3.12 or newer
+source .venv/bin/activate
+pip install -e /path/to/mesokit
+```
+
+The virtual environment is not optional on a distribution that marks its
+system Python externally managed (PEP 668), where a bare `pip install`
+is refused.
+
+(running-the-cli)=
+
+## Running the CLI
+
+The `mesokit` command is installed inside the environment, not on your
+`PATH`. Either activate the environment for the session:
+
+```sh
+pixi shell                     # a pixi workspace
+source .venv/bin/activate      # a uv or venv project
+```
+
+or prefix each command:
+
+```sh
+pixi run mesokit data avail
+uv run mesokit data avail
+```
+
+Run it from your project directory either way: the CLI reads `configs/` and
+the `.mesokit/` registries relative to the working directory, and writes
+`data/`, `checkpoints/` and `figs/` there.
+
+## Installing From PyPI (Not Available Yet)
+
+mesokit is not published on PyPI yet, so these commands fail today. When
+the first release lands they replace the clone, one command each:
+
+```sh
+pip install mesokit                            # pip
+uv add mesokit                                 # uv
+pixi add --pypi mesokit                        # pixi, with python under [dependencies]
+```
+
+(solver-backends)=
+
+## Solver Back-Ends: Dedalus and LAMMPS
+
+Two of the solvers behind the built-in simulators are conda-forge packages
+rather than PyPI ones: **Dedalus**, behind `allen_cahn_1d`,
+`allen_cahn_2d` and `kdv_1d`, and **LAMMPS**, behind
+`peridynamics_fracture_2d`. An install from PyPI or from a clone has
+neither.
+
+Nothing breaks without them. `import mesokit` and every command still work,
+all seven simulators stay listed in `mesokit data avail`, the other three
+(`cahn_hilliard_2d`, `ising_2d`, `llg_lattice_2d`) generate data as usual,
+and training and interpretation are unaffected whatever produced the
+dataset. Running one of the four without its back-end stops with a message
+naming the package to install, not a traceback.
+
+To have all seven, install mesokit into an environment that holds the two
+packages as well. With [pixi](https://pixi.sh), which resolves conda-forge
+and PyPI together:
+
+```sh
+pixi add python=3.12 dedalus lammps                          # from conda-forge
+pixi add --pypi mesokit --path /path/to/mesokit --editable   # the clone
+```
+
+With conda:
+
+```sh
+conda create -n mesokit -c conda-forge python=3.12 dedalus lammps
+conda activate mesokit
+pip install -e /path/to/mesokit
+```
+
+The checkout's own environment already has both; see *Working From a
+Checkout* below.
+
+(gpu-and-torch)=
+
+## GPU and torch
+
+mesokit depends on `torch>=2.9,<2.11`. Up to 2.10 the default torch wheel
+on PyPI is a CUDA 12.8 build, which runs on any CUDA 12.x or 13.x driver,
+so a plain install works on a GPU machine with no PyTorch index to choose
+(from 2.11 the default wheel needs a CUDA 13 driver, which is why the bound
+is there).
+
+A machine without a GPU can skip the CUDA libraries, about 3 GB, by taking
+torch from the CPU index before installing mesokit:
+
+```sh
+pip install --index-url https://download.pytorch.org/whl/cpu "torch>=2.9,<2.11"   # pip: then install mesokit
+pixi add --pypi --index https://download.pytorch.org/whl/cpu torch                # pixi: then add mesokit
+```
+
+Repeat mesokit's own bound on the pip line. That index now publishes 2.11
+and later, and an unpinned `pip install torch` from it lands outside the
+bound, so installing mesokit afterwards re-resolves torch from PyPI and
+pulls the CUDA build the recipe exists to avoid. The pixi line needs no
+bound: pixi re-solves the whole environment when mesokit is added, and
+backtracks torch to a CPU wheel inside the bound.
+
+`mesokit train --device cpu` keeps a run off a GPU that is present, which
+is what the wheel check in CI uses; the shipped recipes are still sized for
+one.
+
+## Working From a Checkout
+
+Installing *from* a clone and working *in* one are different things. The
+checkout is a pixi workspace itself, and one command builds an environment
+that already holds an editable mesokit, torch, Dedalus, LAMMPS and the
+plotting and notebook packages:
+
+```sh
+git clone https://github.com/MLDS-NUS/mesokit.git mesokit
+cd mesokit
+pixi install
+pixi run mesokit data avail
+```
+
+That environment is declared for `linux-64` only and pins torch more
+tightly than the package does (`>=2.9,<2.10`, from the CUDA 12.6 index).
+Take this route when you want every simulator without assembling the
+conda-forge packages yourself, or when you are changing mesokit itself.
+
+It is also where your own code goes when you work this way. Your own
+simulators, models, trainers and artifacts are Python that every `mesokit`
+command imports from the `plugins/` folder of the directory it runs in —
+gitignored in the checkout, so it never collides with upstream — and a
+name registered there is used exactly like a shipped one:
+
+```sh
+cp ~/my_models.py plugins/          # @register("my_model_1d") inside
+pixi run mesokit train --model my_model_1d --data <dataset>
+```
+
+A checkout is not required for that: a `plugins/` folder in any project
+directory works the same way. The contracts, with a complete example each,
+are the *Custom* pages of this guide:
+[simulators](data_processing/custom_simulator.md),
+[models](models/custom_model.md), [trainers](training/custom_trainer.md),
+[artifacts](interpretability/custom_artifact.md).
+
+## Checking the Install
+
+With the environment active, or each command prefixed with `pixi run` or
+`uv run` (see [Running the CLI](#running-the-cli)):
+
+```sh
+mesokit --help
+mesokit data avail
+python -c "import mesokit; print(mesokit.__version__)"
+```
+
+`mesokit data avail` lists the built-in simulators whether or not their
+back-ends are installed. From here, the [Quickstart](quickstart.md) is the
+first end-to-end run; with a coding agent, `mesokit agent init` in your
+project directory writes its guidance file and installs the
+[Agent Skills](skills.md).

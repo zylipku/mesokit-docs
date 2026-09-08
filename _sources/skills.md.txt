@@ -24,8 +24,9 @@ from your files.
   the command is missing, stops with a pointer to that guide.
 - `mesokit` is importable in the shell the agent runs commands in. In the
   mesokit checkout that means the agent prefixes commands with `pixi run`
-  (the skills say so); in your own project it means the virtual environment
-  with `pip install mesokit` is active when you start the agent.
+  (the skills say so); in your own project it means the environment mesokit
+  is installed in is active when you start the agent (see
+  [Installation](installation.md)).
 - Start the agent in your **project root**: the directory that holds
   `configs/` and where the `.mesokit/` registries live. All `mesokit`
   commands assume it.
@@ -75,7 +76,7 @@ alone.
 
 Inside the mesokit checkout, Claude Code already sees the skills
 (`.claude/skills/` holds a copy of each). Anywhere else — a project of your
-own with `pip install mesokit`, or Codex in any directory — copy them into
+own with mesokit installed, or Codex in any directory — copy them into
 the folder the agent scans:
 
 ```sh

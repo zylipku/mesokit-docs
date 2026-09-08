@@ -4,9 +4,9 @@ A toolkit for learning **mesoscopic dynamics** from data. The product
 framing is **interpretability** — predictive accuracy is a precondition,
 not the headline.
 
-The user guide follows the stages of the toolkit. Start with the
-[Quickstart](quickstart.md) for installation and the first end-to-end
-run, then:
+The user guide follows the stages of the toolkit. Start with
+[Installation](installation.md), then the [Quickstart](quickstart.md)
+for the first end-to-end run, and then:
 
 - [Data Processing](data_processing.md) — the trajectory-dataset contract,
   the shipped simulators, bringing your own files or your own equation.
@@ -27,6 +27,7 @@ agent can use to do each stage for you.
 :maxdepth: 2
 :caption: User Guide
 
+installation
 quickstart
 data_processing
 models

@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Data Processing" href="data_processing.html"><link rel="prev" title="mesokit" href="index.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Data Processing" href="data_processing.html"><link rel="prev" title="Installation" href="installation.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Quickstart - mesokit</title>
@@ -193,6 +193,7 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Quickstart</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="data_processing.html">Data Processing</a><input aria-label="Toggle navigation of Data Processing" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="data_processing/structure.html">Data Structure</a></li>
@@ -409,76 +410,15 @@
         <article role="main" id="furo-main-content">
           <section class="tex2jax_ignore mathjax_ignore" id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h1>
-<p>Install <code class="docutils literal notranslate"><span class="pre">mesokit</span></code>, generate a dataset, train a model, and extract an
-interpretability artifact — end to end. Every command runs from a
+<p>Generate a dataset, train a model, and extract an interpretability
+artifact — end to end. It assumes <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is installed and runnable;
+<a class="reference internal" href="installation.html"><span class="std std-doc">Installation</span></a> has the routes, the requirements and the
+two conda-forge solver back-ends. Every command runs from a
 <strong>project directory</strong>: the folder where <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> keeps the datasets it
 generates (<code class="docutils literal notranslate"><span class="pre">data/</span></code>), the checkpoints, the figures and its <code class="docutils literal notranslate"><span class="pre">.mesokit/</span></code>
 registries. Any directory works; nothing has to be written by hand there.</p>
-<section id="installation">
-<span id="id1"></span><h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
-<p>There are two ways to install, for two kinds of use.</p>
-<p><strong>Use the toolkit as a package.</strong> Built-in simulators, the three model
-families, training and interpretation are all reachable from the <code class="docutils literal notranslate"><span class="pre">mesokit</span></code>
-command; the shipped recipes travel with the package, and the grid of a
-model is read from the dataset, so no configuration file needs writing:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mesokit<span class="w">           </span><span class="c1"># from PyPI (release pending; from a clone: pip install .)</span>
-mkdir<span class="w"> </span>my-project<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>my-project
-mesokit<span class="w"> </span>data<span class="w"> </span>avail
-mesokit<span class="w"> </span>agent<span class="w"> </span>init<span class="w">            </span><span class="c1"># optional: set up Claude Code / Codex for this project</span>
-</pre></div>
-</div>
-<p>A pip install lacks only two solver back-ends that are conda-forge
-packages rather than PyPI ones: Dedalus, behind <code class="docutils literal notranslate"><span class="pre">allen_cahn_1d</span></code>,
-<code class="docutils literal notranslate"><span class="pre">allen_cahn_2d</span></code> and <code class="docutils literal notranslate"><span class="pre">kdv_1d</span></code>, and LAMMPS, behind
-<code class="docutils literal notranslate"><span class="pre">peridynamics_fracture_2d</span></code>. Those four simulators stay listed and, when
-run, stop with a message naming the package to add; everything else,
-training and interpretation on any dataset included, works as is. To have
-them too, install mesokit into an environment that also holds the two
-packages. With conda:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>mesokit<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.12<span class="w"> </span>dedalus<span class="w"> </span>lammps
-conda<span class="w"> </span>activate<span class="w"> </span>mesokit
-pip<span class="w"> </span>install<span class="w"> </span>mesokit
-</pre></div>
-</div>
-<p>Or as a <a class="reference external" href="https://pixi.sh">pixi</a> project, which resolves conda-forge and
-PyPI together:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>init<span class="w"> </span>my-project<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>my-project
-pixi<span class="w"> </span>add<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.12<span class="w"> </span>dedalus<span class="w"> </span>lammps<span class="w">     </span><span class="c1"># from conda-forge</span>
-pixi<span class="w"> </span>add<span class="w"> </span>--pypi<span class="w"> </span>mesokit<span class="w">                 </span><span class="c1"># from PyPI</span>
-</pre></div>
-</div>
-<p><strong>GPU and torch.</strong> mesokit depends on <code class="docutils literal notranslate"><span class="pre">torch&gt;=2.9,&lt;2.11</span></code>. Up to 2.10 the
-default torch wheel on PyPI is a CUDA 12.8 build, which runs on any CUDA
-12.x or 13.x driver, so a plain install works on a GPU machine with no
-PyTorch index to choose (from 2.11 the default wheel needs a CUDA 13
-driver, which is why the bound is there). A machine without a GPU can skip
-the CUDA libraries, about 3 GB, by installing CPU torch first:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu<span class="w">      </span><span class="c1"># then: pip install mesokit</span>
-pixi<span class="w"> </span>add<span class="w"> </span>--pypi<span class="w"> </span>--index<span class="w"> </span>https://download.pytorch.org/whl/cpu<span class="w"> </span>torch<span class="w">      </span><span class="c1"># pixi: then pixi add --pypi mesokit</span>
-</pre></div>
-</div>
-<p>Until the PyPI release, install from a clone instead of <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">mesokit</span></code> (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">/path/to/mesokit</span></code>), or point the pixi project at
-it: <code class="docutils literal notranslate"><span class="pre">mesokit</span> <span class="pre">=</span> <span class="pre">{</span> <span class="pre">path</span> <span class="pre">=</span> <span class="pre">&quot;/path/to/mesokit&quot;</span> <span class="pre">}</span></code> under <code class="docutils literal notranslate"><span class="pre">[pypi-dependencies]</span></code>
-in its <code class="docutils literal notranslate"><span class="pre">pixi.toml</span></code>, then <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">install</span></code>.</p>
-<p><strong>Extend the toolkit.</strong> Your own simulators, models, trainers or
-artifacts are Python. Work from a checkout, whose <a class="reference external" href="https://pixi.sh">pixi</a>
-environment provides an editable install, and put your code in its
-<code class="docutils literal notranslate"><span class="pre">plugins/</span></code> folder — gitignored, imported by every <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> command, so a
-model registered there is used by name like a shipped one:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>&lt;this-repo&gt;<span class="w"> </span>mesokit
-<span class="nb">cd</span><span class="w"> </span>mesokit
-pixi<span class="w"> </span>install
-cp<span class="w"> </span>~/my_models.py<span class="w"> </span>plugins/<span class="w">          </span><span class="c1"># @register(&quot;my_model_1d&quot;) inside</span>
-pixi<span class="w"> </span>run<span class="w"> </span>mesokit<span class="w"> </span>train<span class="w"> </span>--model<span class="w"> </span>my_model_1d<span class="w"> </span>--data<span class="w"> </span>&lt;dataset&gt;
-</pre></div>
-</div>
-<p>Prefix commands with <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">run</span></code> (or open a pixi shell by running <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">shell</span></code>) if <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is not on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. The <em>Custom</em> pages of this
-guide assume this layout; a <code class="docutils literal notranslate"><span class="pre">plugins/</span></code> folder in any project directory
-works the same way.</p>
-<p>Both need a linux-64 platform with a CUDA-capable GPU (CUDA 12.6 or newer).
-This page shows the happy path; every option, output file, error message
+<p>This page shows the happy path; every option, output file, error message
 and more examples are in the <a class="reference internal" href="cli.html"><span class="std std-doc">Command-Line Reference</span></a>.</p>
-</section>
 <section id="two-ways-to-follow-this-guide">
 <h2>Two Ways to Follow This Guide<a class="headerlink" href="#two-ways-to-follow-this-guide" title="Link to this heading">¶</a></h2>
 <p>Every step below is a command or a short script you can run yourself. If
@@ -685,14 +625,14 @@ and building your own.</p></li>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="index.html">
+          <a class="prev-page" href="installation.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">Installation</div>
                 
               </div>
             </a>
@@ -727,7 +667,6 @@ and building your own.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Quickstart</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#two-ways-to-follow-this-guide">Two Ways to Follow This Guide</a></li>
 <li><a class="reference internal" href="#data-loading">Data Loading</a><ul>
 <li><a class="reference internal" href="#generating-from-a-predefined-recipe">Generating From a Predefined Recipe</a></li>

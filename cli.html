@@ -193,6 +193,7 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="data_processing.html">Data Processing</a><input aria-label="Toggle navigation of Data Processing" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="data_processing/structure.html">Data Structure</a></li>
@@ -465,7 +466,8 @@ HDF5 files, <code class="docutils literal notranslate"><span class="pre">checkpo
 <code class="docutils literal notranslate"><span class="pre">checkpoints/&lt;dyn&gt;/&lt;experiment&gt;/&lt;run&gt;/</span></code> for runs grouped by <code class="docutils literal notranslate"><span class="pre">--experiment</span></code>,
 registered as <code class="docutils literal notranslate"><span class="pre">&lt;experiment&gt;/&lt;run&gt;</span></code>. All of these are gitignored.</p>
 <p><strong>Environment.</strong> Prefix commands with <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">run</span></code> (or run inside <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">shell</span></code>)
-unless <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is already on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>:</p>
+unless <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> is already on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> (see
+<a class="reference internal" href="installation.html#running-the-cli"><span class="std std-ref">Running the CLI</span></a>):</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>run<span class="w"> </span>mesokit<span class="w"> </span>data<span class="w"> </span>avail
 </pre></div>
 </div>
@@ -1936,7 +1938,7 @@ Nothing under <code class="docutils literal notranslate"><span class="pre">data/
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">allen_cahn_1d</span> <span class="pre">needs</span> <span class="pre">Dedalus,</span> <span class="pre">which</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">installed</span></code> (or <code class="docutils literal notranslate"><span class="pre">…</span> <span class="pre">needs</span> <span class="pre">LAMMPS</span> <span class="pre">…</span></code>)</p></td>
 <td><p>The simulator’s solver back-end is a conda-forge package that <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">mesokit</span></code> cannot bring in.</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">add</span> <span class="pre">dedalus</span></code> / <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">add</span> <span class="pre">lammps</span></code> (or <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">…</span></code>) in the environment <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> runs in; see <a class="reference internal" href="quickstart.html#installation"><span class="std std-ref">Installation</span></a>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">add</span> <span class="pre">dedalus</span></code> / <code class="docutils literal notranslate"><span class="pre">pixi</span> <span class="pre">add</span> <span class="pre">lammps</span></code> (or <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">…</span></code>) in the environment <code class="docutils literal notranslate"><span class="pre">mesokit</span></code> runs in; see <a class="reference internal" href="installation.html#solver-backends"><span class="std std-ref">Solver Back-Ends</span></a>.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sanity</span> <span class="pre">check</span> <span class="pre">failed</span> <span class="pre">for</span> <span class="pre">…;</span> <span class="pre">not</span> <span class="pre">registered</span></code> (or <code class="docutils literal notranslate"><span class="pre">validation</span> <span class="pre">failed</span> <span class="pre">for</span> <span class="pre">…</span></code>)</p></td>
 <td><p>The file violates the v1 contract; the specific checks are printed above the message.</p></td>
