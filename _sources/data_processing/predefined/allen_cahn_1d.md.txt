@@ -1,0 +1,119 @@
+(allen-cahn-1d)=
+# `allen_cahn_1d` — Allen–Cahn equation
+
+**Model.** The Allen–Cahn equation is the $L^2$ gradient flow of the
+Ginzburg–Landau free energy with a double-well potential,
+
+$$
+\partial_t u = \partial_{xx} u + \frac{u - u^3}{\varepsilon^2},
+\qquad x \in [0, L_x) \text{ periodic},
+$$
+
+i.e. $\partial_t u = -\delta F/\delta u$ with
+$F[u] = \int \bigl[\tfrac12 |\partial_x u|^2 + \tfrac{1}{4\varepsilon^2}(1 - u^2)^2\bigr]\,dx$.
+The order parameter $u$ relaxes toward the two minima $u = \pm 1$ and forms
+diffuse interfaces of width $O(\varepsilon)$ between them; the total mass
+$\int u\,dx$ is **not** conserved. In one dimension interfaces attract and
+annihilate on exponentially slow time scales, so the trajectories in this
+dataset capture the fast relaxation from a smooth random field to a
+piecewise-constant profile plus the early interface motion.
+
+**Numerical scheme** (Dedalus v3, Fourier–Galerkin in space, SBDF2 in time).
+
+1. *Spatial discretisation.* $u$ is expanded in a real Fourier basis on
+   `Nx` equispaced points of $[0, L_x)$,
+   $u(x) = \sum_{|k| \le N_x/2 - 1} \hat u_k\, e^{ikx}$ with
+   $k \in (2\pi/L_x)\,\mathbb{Z}$ (Dedalus's `RealFourier` drops the
+   Nyquist mode, so $k_{\max} = N_x/2 - 1 = 127$), and $\partial_x \mapsto ik$
+   exactly. The nonlinear term is evaluated pointwise on a grid of
+   `dealias` $\times$ `Nx` $= 512$ points and projected back onto the
+   retained modes (Dedalus `dealias=2`): a factor $2$ is alias-free for a
+   cubic product, since the largest triad sum $3(N_x/2 - 1) = 381$ aliases on
+   the $2N_x$ grid to $381 - 512 = -131$, outside $|k| \le 127$.
+2. *Implicit/explicit split.* The equation is posed as
+   $\partial_t u - \partial_{xx}u = \mathcal{F}(u)$ with
+   $\mathcal{F}(u) = (u - u^3)/\varepsilon^2$: the diffusion operator is the
+   implicit linear part $\mathcal{L} = -\partial_{xx} \mapsto k^2$, and the
+   *whole* reaction term, including its linear piece $u/\varepsilon^2$, is
+   explicit.
+3. *Time stepping.* With $\Delta t =$ `timestep` the SBDF2 update is, mode by
+   mode,
+
+   $$
+   \frac{3\hat u^{n+1}_k - 4\hat u^n_k + \hat u^{n-1}_k}{2\Delta t} + k^2 \hat u^{n+1}_k
+   = 2\hat{\mathcal F}^n_k - \hat{\mathcal F}^{n-1}_k
+   \quad\Longrightarrow\quad
+   \hat u^{n+1}_k = \frac{4\hat u^n_k - \hat u^{n-1}_k + 2\Delta t\,(2\hat{\mathcal F}^n_k - \hat{\mathcal F}^{n-1}_k)}{3 + 2\Delta t\, k^2},
+   $$
+
+   second-order accurate in $\Delta t$; the first step is the first-order
+   SBDF1 (backward Euler on $\mathcal L$, forward Euler on $\mathcal F$), as
+   Dedalus does for the SBDF family. The stiff diffusion term places no
+   restriction on $\Delta t$; the explicit reaction term requires
+   $\Delta t \max|\mathcal F'(u)| = 2\Delta t/\varepsilon^2 \lesssim 1$, i.e.
+   $\Delta t \lesssim \varepsilon^2/2 = 5\times10^{-3}$ at the default
+   $\varepsilon = 0.1$. The default $\Delta t = 4\times10^{-5}$ is two orders
+   of magnitude inside that bound, so the step is set by accuracy of the
+   interface motion, not stability.
+4. *Output cadence.* The solver runs with fixed step until `T`. Frame $0$ is
+   the initial condition and frame $j \ge 1$ is the grid field after
+   iteration $j \cdot$ `T_save_steps`, so
+   `times` $= (0, \Delta t\,\texttt{T\_save\_steps}, 2\Delta t\,\texttt{T\_save\_steps}, \ldots)$:
+   $101$ frames spaced $10^{-3}$ apart with the defaults. Fields are read on
+   the un-padded `Nx` grid.
+5. *Rejection.* A finished trajectory is discarded, and a fresh initial
+   condition drawn, if it contains non-finite values or $\max|u| >$
+   `u_bound`. The random draws are consumed in a fixed order, so `seed`
+   determines the accepted set.
+
+Nothing is conserved by Allen–Cahn, and the scheme does not enforce a
+discrete energy law; $F[u]$ decreases monotonically in practice at the
+default step.
+
+**Initial conditions.** A random sum of sines built as follows: `Nk`
+mode indices are drawn without replacement from
+$\{1, \dots, \texttt{max\_k}\}$; an amplitude $a_j \sim \mathrm{Uniform}(0,1)$
+and a phase $\phi_j \sim \mathrm{Uniform}(0, 2\pi)$ are drawn for *every*
+$j = 1, \dots, \texttt{max\_k}$; the field is
+$\sum_j a_j \sin(\omega_j x + \phi_j)$ with $\omega_j = 2\pi j / \ell$ for
+the selected indices and $\omega_j = 0$ for the others — so each unselected
+index contributes the constant $a_j \sin\phi_j$. The period is
+$\ell = x_{N_x - 1} - x_0 = L_x(1 - 1/N_x)$, the span of the grid rather
+than $L_x$, so the sines are not exactly Fourier modes of the domain. The
+field is normalised to unit standard deviation and then affinely rescaled
+to the range $[-1, 1]$, which removes the constant offset. Trajectories
+whose $|u|$ ever exceeds `u_bound` are rejected and redrawn, so every file
+holds exactly `n_traj` accepted trajectories.
+
+**Parameters** (`configs/data/allen_cahn_1d/default.yaml`):
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `eps` | `0.1` | Interface-width parameter $\varepsilon$. |
+| `n_traj` | `1000` | Accepted trajectories. |
+| `Nx`, `Lx` | `256`, `2π` | Grid points and domain length. |
+| `T` | `0.1` | Final simulated time. |
+| `timestep` | `4e-5` | Solver step. |
+| `T_save_steps` | `25` | Iterations between saved frames. |
+| `Nk`, `max_k` | `3`, `10` | Random-IC mode selection. |
+| `u_bound` | `10.0` | Rejection threshold. |
+| `dealias` | `2` | Dedalus dealiasing factor. |
+| `seed` | `0` | RNG seed (`-1` for non-deterministic). |
+
+**Output.** `(n_traj, 101, 1, Nx)`, `channel_names = ("u",)`, `times` in
+simulation units; `physical = {Lx, T, eps}`,
+`numerical = {Nx, dx, dt, T_save_steps, Nk, max_k, dealias}`,
+`provenance = {seed, u_bound}`.
+
+**References.**
+
+- S. M. Allen and J. W. Cahn, "A microscopic theory for antiphase boundary
+  motion and its application to antiphase domain coarsening",
+  *Acta Metallurgica* **27**, 1085–1095 (1979).
+- K. J. Burns, G. M. Vasil, J. S. Oishi, D. Lecoanet, and B. P. Brown,
+  "Dedalus: A flexible framework for numerical simulations with spectral
+  methods", *Physical Review Research* **2**, 023068 (2020).
+- U. M. Ascher, S. J. Ruuth, and B. T. R. Wetton, "Implicit-explicit methods
+  for time-dependent partial differential equations",
+  *SIAM Journal on Numerical Analysis* **32**, 797–823 (1995) — the SBDF
+  family.

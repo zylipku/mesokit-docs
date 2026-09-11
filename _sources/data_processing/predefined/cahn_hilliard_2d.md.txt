@@ -1,0 +1,152 @@
+(cahn-hilliard-2d)=
+# `cahn_hilliard_2d` — Cahn–Hilliard equation
+
+**Model.** The Cahn–Hilliard equation is the *conserved* ($H^{-1}$)
+gradient flow of the same Ginzburg–Landau free energy,
+
+$$
+\partial_t u = \Delta \mu, \qquad
+\mu = \frac{\delta F}{\delta u} = u^3 - u - \kappa\, \Delta u, \qquad
+F[u] = \int \Bigl[ \tfrac14 (u^2 - 1)^2 + \tfrac{\kappa}{2} |\nabla u|^2 \Bigr]\, d\mathbf{x},
+$$
+
+on the periodic rectangle $[0, L_x) \times [0, L_y)$. Because the flux is
+the gradient of a chemical potential, $\int u\, d\mathbf{x}$ is exactly
+conserved and $F$ decreases monotonically. A homogeneous mixture with
+$|\bar u| < 1/\sqrt{3}$ (inside the spinodal, where $f''(\bar u) = 3\bar u^2 - 1 < 0$)
+is linearly unstable to perturbations with
+$|\mathbf{k}|^2 < (1 - 3\bar u^2)/\kappa$ — for $\bar u = 0$, $|\mathbf k| < 1/\sqrt\kappa$
+with the fastest-growing mode at $|\mathbf{k}| = 1/\sqrt{2\kappa}$: this is
+**spinodal decomposition**. The resulting bicontinuous domain pattern then
+coarsens by Lifshitz–Slyozov–Wagner evaporation–condensation with
+characteristic length $L(t) \sim t^{1/3}$. The trajectories cover the
+quench, the decomposition, and the onset of coarsening.
+
+This is the two-dimensional, single-species prototype for the conserved
+mesoscopic models one obtains by coarse-graining diffusive molecular
+dynamics (binary mixtures, alloys) to a composition field, so it is the
+natural synthetic stand-in while a physical dataset of that kind is being
+prepared.
+
+**Numerical scheme** (NumPy/SciPy, Fourier pseudo-spectral in space, SBDF2 in time).
+
+1. *Spatial discretisation.* The field lives on the `Nx` $\times$ `Ny`
+   equispaced grid $x_i = i\,L_x/N_x$, $y_j = j\,L_y/N_y$ and is represented
+   by its real 2D FFT $\hat u_{\mathbf k}$, $\mathbf k = (k_x, k_y)$ with
+   $k_x \in (2\pi/L_x)\{-N_x/2, \ldots, N_x/2 - 1\}$ and
+   $k_y \in (2\pi/L_y)\{0, \ldots, N_y/2\}$ (the negative $k_y$ half follows
+   from reality). Every derivative is a multiplication:
+   $\Delta \mapsto -|\mathbf k|^2$, $\Delta^2 \mapsto |\mathbf k|^4$.
+2. *Semi-discrete system.* Transforming
+   $\partial_t u = \Delta(u^3) - \Delta u - \kappa \Delta^2 u$ gives, per mode,
+
+   $$
+   \frac{d\hat u_{\mathbf k}}{dt} = \Lambda(\mathbf k)\,\hat u_{\mathbf k} - |\mathbf k|^2\, \widehat{u^3}_{\mathbf k},
+   \qquad
+   \Lambda(\mathbf k) = |\mathbf k|^2 - \kappa |\mathbf k|^4 ,
+   $$
+
+   where $\Lambda$ is the full linear symbol (the anti-diffusive $-\Delta u$
+   and the stabilising $-\kappa\Delta^2 u$ together) and the cubic term is
+   the only nonlinearity.
+3. *De-aliasing of the cubic term.* $\widehat{u^3}$ is computed by zero-padding
+   $\hat u$ to a grid `dealias` $\times$ (`Nx`, `Ny`), transforming to physical
+   space, cubing pointwise, transforming back and truncating to the original
+   band. In this product the Nyquist modes $k_x = -N_x/2$ and $k_y = N_y/2$
+   are dropped so the band is symmetric (they remain in $\hat u$ itself and
+   evolve under the linear symbol). With `dealias = 2` (the default) this is
+   exact:
+   the largest triad sum is $3(N_x/2 - 1)$, which on the $2N_x$ grid aliases
+   to $3(N_x/2-1) - 2N_x < -(N_x/2 - 1)$, outside the retained band. The
+   $2/3$ rule would *not* suffice — it is exact only for quadratic products.
+   `dealias = 1` disables padding (aliasing errors feed the highest modes).
+4. *Time stepping.* Let $\hat N^n = \widehat{(u^n)^3}$ and $\Delta t =$ `dt`.
+   The first step is SBDF1,
+
+   $$
+   \frac{\hat u^1 - \hat u^0}{\Delta t} = \Lambda\, \hat u^1 - |\mathbf k|^2 \hat N^0
+   \quad\Longrightarrow\quad
+   \hat u^1 = \frac{\hat u^0 - \Delta t\,|\mathbf k|^2 \hat N^0}{1 - \Delta t\,\Lambda},
+   $$
+
+   and every later step is SBDF2 with the linear term implicit and the cubic
+   term extrapolated to second order,
+
+   $$
+   \frac{3\hat u^{n+1} - 4\hat u^n + \hat u^{n-1}}{2\Delta t}
+   = \Lambda\, \hat u^{n+1} - |\mathbf k|^2 \bigl(2\hat N^n - \hat N^{n-1}\bigr)
+   \quad\Longrightarrow\quad
+   \hat u^{n+1} = \frac{4\hat u^n - \hat u^{n-1} - 2\Delta t\,|\mathbf k|^2 (2\hat N^n - \hat N^{n-1})}{3 - 2\Delta t\,\Lambda}.
+   $$
+
+   The maximum of $\Lambda$ is $1/(4\kappa)$ (at $|\mathbf k|^2 = 1/(2\kappa)$),
+   so the SBDF1 denominator $1 - \Delta t\Lambda$ is positive for every mode
+   iff $\Delta t < 4\kappa$ and the SBDF2 denominator $3 - 2\Delta t\Lambda$
+   iff $\Delta t < 6\kappa$; the simulator enforces the tighter
+   $\Delta t < 4\kappa$. The stiff $\kappa|\mathbf k|^4$ term being
+   implicit, the practical step limit comes from the explicit cubic term on
+   the interface scale; the default $\Delta t = 0.05$ with $\Delta x = 0.5$,
+   $\kappa = 1$ ran the full $4000$-step default without blow-up or visible
+   oscillation (observed, not asserted by a test). All `n_traj` trajectories
+   are advanced as one batch array `(n_traj, Nx, Ny)`.
+5. *Exact mass conservation.* At $\mathbf k = 0$ both $|\mathbf k|^2$ and
+   $\Lambda$ vanish, so $\hat u_0^1 = \hat u_0^0$ and
+   $\hat u_0^{n+1} = (4\hat u_0^n - \hat u_0^{n-1})/3$, whence
+   $\hat u_0^n = \hat u_0^0$ for all $n$: the mean $\bar u$ is exact in the
+   float64 solver ($\sim 10^{-10}$ drift over the default run) and
+   $\sim 10^{-7}$ as read back from the float32 file. The free energy is not
+   discretely monotone by construction (no stabilisation term is added); a
+   monotone decrease was observed at the default step but is not asserted
+   by a test.
+6. *Output cadence.* Frame $0$ is the initial condition; frame $j$ is the
+   field after $j \cdot$ `save_every` steps, so
+   `times` $= (0, \Delta t\,\texttt{save\_every}, \ldots)$ — $101$ frames
+   $2.0$ time units apart with the defaults. Fields are stored on the
+   un-padded grid in float32.
+
+The default configuration takes about ten minutes on one CPU core and
+writes a ~210 MB file (32 × 101 × 128² float32); `fdr.yaml` runs in
+under a second.
+
+**Initial conditions.** $u(\mathbf{x}, 0) = \bar u + \sigma\, \xi(\mathbf{x})$
+with $\xi$ i.i.d. standard normal at every grid point, i.e. an instantaneous
+quench of a homogeneous mixture of mean composition `u_mean` with thermal
+noise of amplitude `ic_amplitude`. With `u_mean = 0` the two phases occupy
+equal area; off-critical values give droplet morphologies.
+
+**Parameters** (`configs/data/cahn_hilliard_2d/default.yaml`):
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `n_traj` | `32` | Trajectories (independent noise draws). |
+| `Nx`, `Ny` | `128`, `= Nx` | Grid points; must be even. |
+| `Lx`, `Ly` | `64.0`, `= Lx` | Domain size (`dx = 0.5`). |
+| `kappa` | `1.0` | Gradient-energy coefficient; interface width $\sim \sqrt{2\kappa}$. |
+| `T` | `200.0` | Final simulated time. |
+| `dt` | `0.05` | Time step (must satisfy $dt < 4\kappa$; accuracy needs much less). |
+| `save_every` | `40` | Steps between frames (defaults: 4000 steps → 101 frames). |
+| `u_mean` | `0.0` | Mean composition (conserved). |
+| `ic_amplitude` | `0.05` | Initial noise standard deviation. |
+| `dealias` | `2` | Padding factor for the cubic term (`2` is alias-free; `1` disables). |
+| `seed` | `0` | RNG seed (`-1` for non-deterministic). |
+
+**Output.** `(n_traj, n_frames, 1, Nx, Ny)`, `channel_names = ("u",)`,
+`times` in simulation units; `physical = {Lx, Ly, T, kappa}`,
+`numerical = {Nx, Ny, dx, dy, dt, save_every, scheme, dealias}`,
+`provenance = {seed, u_mean, ic_amplitude, generator}`.
+
+**References.**
+
+- J. W. Cahn and J. E. Hilliard, "Free energy of a nonuniform system. I.
+  Interfacial free energy", *Journal of Chemical Physics* **28**, 258–267
+  (1958).
+- J. W. Cahn, "On spinodal decomposition", *Acta Metallurgica* **9**,
+  795–801 (1961).
+- I. M. Lifshitz and V. V. Slyozov, "The kinetics of precipitation from
+  supersaturated solid solutions", *Journal of Physics and Chemistry of
+  Solids* **19**, 35–50 (1961).
+- A. J. Bray, "Theory of phase-ordering kinetics", *Advances in Physics*
+  **43**, 357–459 (1994) — review of coarsening laws.
+- S. A. Orszag, "On the elimination of aliasing in finite-difference schemes
+  by filtering high-wavenumber components", *Journal of the Atmospheric
+  Sciences* **28**, 1074 (1971) — the 2/3 rule.

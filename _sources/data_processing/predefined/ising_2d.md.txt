@@ -1,0 +1,168 @@
+(ising-2d)=
+# `ising_2d` — Ising model with block-spin coarse-graining
+
+**Model.** Spins $s_i \in \{-1, +1\}$ on an $L \times L$ periodic square
+lattice with Hamiltonian (in units $k_B = 1$)
+
+$$
+H(s) = -\tfrac12 \sum_{i \neq j} J(i - j)\, s_i s_j .
+$$
+
+Two couplings are available:
+
+- `interaction: nn` — nearest-neighbour $J = 1$. Onsager's exact solution
+  places the ferromagnetic transition at
+  $T_c = 2 / \ln(1 + \sqrt 2) \approx 2.269$ with spontaneous magnetisation
+  $m(T) = \bigl(1 - \sinh^{-4}(2/T)\bigr)^{1/8}$ below it.
+- `interaction: kac` — a Kac potential of range $\gamma^{-1}$,
+  $J_\gamma(\mathbf{r}) \propto \exp\!\bigl(-\tfrac12 \gamma^2 |\mathbf{r}|^2\bigr)$,
+  truncated at Chebyshev radius `kac_cutoff` and normalised so that
+  $\sum_j J_\gamma(j) = 1$. In this normalisation the mean-field critical
+  temperature is $T_c^{\mathrm{MF}} = 1$, approached from below as
+  $\gamma \to 0$ (Lebowitz–Penrose).
+
+The spins evolve by single-spin-flip dynamics with either Glauber
+(heat-bath) or Metropolis acceptance,
+
+$$
+w_{\text{Glauber}}(\Delta E) = \frac{1}{1 + e^{\Delta E / T}}, \qquad
+w_{\text{Metropolis}}(\Delta E) = \min\bigl(1, e^{-\Delta E / T}\bigr), \qquad
+\Delta E = 2 s_i h_i,\; h_i = \sum_j J(i - j)\, s_j,
+$$
+
+both of which satisfy detailed balance with respect to the Boltzmann weight
+$e^{-H/T}$. Time is measured in Monte Carlo sweeps (one attempted flip per
+site).
+
+**What the data are.** This is the toolkit's microscopic, agent-level
+source: the state is a spin configuration, not a field. The recorded
+observable is the **Kadanoff block spin**
+$m_B = b^{-2} \sum_{i \in B} s_i \in [-1, 1]$ on non-overlapping
+$b \times b$ blocks (`block`), giving a magnetisation field on an
+$(L/b) \times (L/b)$ grid. With the default `T = 2.0 < T_c` and a random
+(infinite-temperature) initial state, the trajectories show domain
+nucleation and curvature-driven coarsening ($L(t) \sim t^{1/2}$, the
+non-conserved Allen–Cahn class); with `ic: ordered` and $T > T_c$ they show
+the decay of magnetisation into the paramagnetic state.
+
+The Kac variant is the case with a *known* mesoscopic limit: for Glauber
+rates and $\gamma \to 0$, on the spatial scale $\gamma^{-1}$ the block
+magnetisation converges to the solution of the nonlocal Allen–Cahn
+equation
+
+$$
+\partial_t m = -m + \tanh\bigl(\beta\, (J_\gamma \ast m)\bigr), \qquad \beta = 1/T,
+$$
+
+(De Masi, Orlandi, Presutti, Triolo). A learned mesoscopic model can
+therefore be checked against a closed-form answer — the free energy
+$\beta^{-1}\bigl[\tfrac{1+m}{2}\ln\tfrac{1+m}{2} + \tfrac{1-m}{2}\ln\tfrac{1-m}{2}\bigr] - \tfrac12 m\,(J_\gamma \ast m)$
+and the interaction kernel $J_\gamma$ itself.
+
+**Numerical scheme** (vectorised single-spin-flip Monte Carlo with exact
+colour-class updates).
+
+1. *State and coupling kernel.* All `n_traj` replicas are one
+   `(n_traj, L, L)` `int8` array. The coupling is stored as a kernel
+   $J(\Delta i, \Delta j)$ on the $L \times L$ torus: for `nn`, $J = 1$ at
+   the four offsets $(\pm1, 0), (0, \pm1)$; for `kac`,
+   $J(\mathbf r) = w(\mathbf r)/\sum_{\mathbf r' \ne 0} w(\mathbf r')$ with
+   $w(\mathbf r) = \exp(-\tfrac12\gamma^2|\mathbf r|^2)$ on the Chebyshev
+   square $\max(|\Delta i|, |\Delta j|) \le$ `kac_cutoff`, $w(\mathbf 0) = 0$.
+   The normalisation $\sum_{\mathbf r} J = 1$ makes the mean-field critical
+   temperature exactly $1$.
+2. *Local field by FFT.* The field on every site of every replica is the
+   circular convolution $h = J \star s$, computed as
+   $h = \mathcal F^{-1}\bigl[\hat J\,\hat s\bigr]$ with a batched real 2D FFT
+   — $O(L^2 \log L)$ per replica regardless of the interaction range, which
+   is what makes the long-range Kac kernel affordable.
+3. *Colour classes.* The lattice is partitioned into classes of mutually
+   non-interacting sites: for `nn` the two checkerboard parities
+   $(i + j) \bmod 2$ (nearest neighbours always have opposite parity); for
+   `kac` the $p^2$ residue classes $(i \bmod p,\ j \bmod p)$ with
+   $p =$ `kac_cutoff` $+ 1$ — two distinct sites of one class differ by a
+   multiple of $p > $ `kac_cutoff` in at least one coordinate, also across
+   the periodic wrap because `L` is required to be a multiple of $p$.
+4. *One sweep.* For each class in a fixed order: recompute $h$ (step 2);
+   for every site $i$ of the class compute $\Delta E_i = 2 s_i h_i$, the
+   energy change of flipping it; draw $r_i \sim \mathrm{Uniform}(0,1)$ and
+   flip iff $r_i < w(\Delta E_i)$ with the Glauber or Metropolis rate
+   given above; write the flipped class back. One sweep visits every site
+   exactly once and is the unit of `times`.
+5. *Why this is exact.* Within a class no site's field depends on another
+   member of the class, so updating them simultaneously produces the same
+   distribution as updating them one after another; sequential single-spin
+   flips with a rate satisfying detailed balance leave the Boltzmann
+   distribution $\propto e^{-H/T}$ invariant, hence so does the sweep. The
+   fixed class order (rather than random site selection) is the standard
+   checkerboard variant: same equilibrium, slightly different short-time
+   relaxation. With random sequential updates one sweep corresponds to one
+   unit of Glauber's continuous time with unit attempt rate per spin.
+6. *Coarse-graining and output.* After every `save_every` sweeps the
+   block-spin field $m_B = b^{-2}\sum_{i \in B} s_i$ is computed by reshaping
+   the lattice into $b \times b$ cells and averaging, and stored in float32.
+   Frame $0$ is the initial configuration.
+7. *Randomness.* All draws (initial spins and flip decisions) come from one
+   `numpy.random.default_rng(seed)` stream, so a run is reproducible for a
+   given `(seed, L, n_traj, …)`.
+
+Requirements: `L` divisible by `block`; `L` even for `nn`; for `kac`, `L`
+divisible by `kac_cutoff + 1` and at least $2\,\texttt{kac\_cutoff} + 1$ so
+the kernel does not wrap onto itself. The default `nn` configuration takes
+a few seconds; `kac` about a minute and a half (64 colour classes, each
+needing an FFT of the whole batch); both write ~10 MB.
+
+**Initial conditions.** `ic: random` — every spin $\pm 1$ with probability
+$\tfrac12$ (infinite temperature); `ic: ordered` — all spins $+1$.
+
+**Parameters** (`configs/data/ising_2d/default.yaml`; `kac.yaml` switches
+the interaction, `fdr.yaml` is the smoke run):
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `L` | `64` | Lattice side. |
+| `T` | `2.0` (`0.7` in `kac.yaml`) | Temperature in units of $J/k_B$. |
+| `n_traj` | `100` | Independent replicas. |
+| `n_sweeps` | `200` | Monte Carlo sweeps. |
+| `save_every` | `2` | Sweeps between frames (defaults: 101 frames). |
+| `block` | `4` | Block-spin side; output grid `L/block`. |
+| `dynamics` | `glauber` | `glauber` or `metropolis`. |
+| `interaction` | `nn` | `nn` or `kac`. |
+| `gamma` | `0.5` | Kac inverse range (`kac` only). |
+| `kac_cutoff` | `7` | Kac kernel truncation radius in lattice units (`kac` only). |
+| `ic` | `random` | `random` or `ordered`. |
+| `seed` | `0` | RNG seed (`-1` for non-deterministic). |
+
+**Output.** `(n_traj, n_frames, 1, L/block, L/block)`,
+`channel_names = ("m",)`, `times` in sweeps;
+`physical = {T, interaction, J, L, Lx, T_c_reference[, gamma]}`
+(`J` is the coupling for `nn` and the kernel sum $=1$ for `kac`;
+`T_c_reference` is Onsager's $T_c$ or the mean-field value $1$),
+`numerical = {block, Nx, dx, n_sweeps, save_every, dynamics, n_colour_classes[, kac_cutoff]}`,
+`provenance = {seed, ic, generator}`.
+
+**References.**
+
+- E. Ising, "Beitrag zur Theorie des Ferromagnetismus", *Zeitschrift für
+  Physik* **31**, 253–258 (1925).
+- L. Onsager, "Crystal statistics. I. A two-dimensional model with an
+  order-disorder transition", *Physical Review* **65**, 117–149 (1944).
+- R. J. Glauber, "Time-dependent statistics of the Ising model", *Journal
+  of Mathematical Physics* **4**, 294–307 (1963).
+- N. Metropolis, A. W. Rosenbluth, M. N. Rosenbluth, A. H. Teller, and
+  E. Teller, "Equation of state calculations by fast computing machines",
+  *Journal of Chemical Physics* **21**, 1087–1092 (1953).
+- L. P. Kadanoff, "Scaling laws for Ising models near $T_c$", *Physics
+  Physique Fizika* **2**, 263–272 (1966) — block spins.
+- M. Kac, G. E. Uhlenbeck, and P. C. Hemmer, "On the van der Waals theory
+  of the vapor–liquid equilibrium. I. Discussion of a one-dimensional
+  model", *Journal of Mathematical Physics* **4**, 216–228 (1963).
+- J. L. Lebowitz and O. Penrose, "Rigorous treatment of the Van der
+  Waals–Maxwell theory of the liquid–vapor transition", *Journal of
+  Mathematical Physics* **7**, 98–113 (1966).
+- A. De Masi, E. Orlandi, E. Presutti, and L. Triolo, "Glauber evolution
+  with Kac potentials: I. Mesoscopic and macroscopic limits, interface
+  dynamics", *Nonlinearity* **7**, 633–696 (1994).
+- M. E. J. Newman and G. T. Barkema, *Monte Carlo Methods in Statistical
+  Physics* (Oxford University Press, 1999) — checkerboard updates and
+  detailed balance.

@@ -1,0 +1,180 @@
+(peridynamics-fracture-2d)=
+# `peridynamics_fracture_2d` — Bond-based peridynamic fracture
+
+**Model.** A two-dimensional plate $[0, L_x] \times [0, L_y]$ is discretised
+as a unit square lattice of peridynamic particles, with a triangular notch
+of depth `notch_len` and mouth width `notch_th` cut into the middle of the
+left edge. Particles interact through the *prototype microelastic brittle*
+(PMB) bond model of Silling and Askari: for a bond with reference vector
+$\boldsymbol{\xi} = \mathbf{x}_j - \mathbf{x}_i$ and relative displacement
+$\boldsymbol{\eta} = \mathbf{u}_j - \mathbf{u}_i$, the pairwise force density is
+
+$$
+\mathbf{f}(\boldsymbol{\eta}, \boldsymbol{\xi}) = c\, s\, \mu(t, \boldsymbol{\xi})\,
+\frac{\boldsymbol{\xi} + \boldsymbol{\eta}}{|\boldsymbol{\xi} + \boldsymbol{\eta}|},
+\qquad
+s = \frac{|\boldsymbol{\xi} + \boldsymbol{\eta}| - |\boldsymbol{\xi}|}{|\boldsymbol{\xi}|},
+$$
+
+for $|\boldsymbol{\xi}| \le \delta$ (the *horizon*), with micromodulus $c$ and
+bond stretch $s$. The history variable $\mu \in \{0, 1\}$ switches
+irreversibly to $0$ once $s$ exceeds the critical stretch
+$s_0 = s_{00} - \alpha\, s_{\min}$, where $s_{\min}$ is the most compressive
+stretch currently seen by the particle. Every particle carries unit density
+and volume; the equation of motion is Newton's second law with the bond
+forces summed over the horizon and integrated by velocity Verlet. Mode-I
+loading is applied as equal and opposite body forces on strips of thickness
+`grip` along the top and bottom edges, ramped linearly from $0$ to
+$F_{\max}$ over `ramp_steps` and then held. The damage of a particle is
+
+$$
+d_i = 1 - \frac{\sum_j \mu_{ij} V_j}{\sum_j V_j},
+$$
+
+the fraction of its bonds that have broken; a crack is a band where $d$
+approaches $1$.
+
+**What the data are.** Particle-level solid mechanics with an irreversible
+internal variable, coarse-grained to fields on a regular mesh — the setting
+of phase-field fracture, where the mesoscopic unknowns are a displacement
+field and a damage field $d(\mathbf{x}) \in [0, 1]$ coupled through an
+energy of Francfort–Marigo / Ambrosio–Tortorelli type. Each trajectory is
+one **loading case**: the values in `F_max` are run one after another and
+stored, in order, as the array `physical["F_max_per_traj"]`, which is the
+toolkit's convention for a parameter that varies from trajectory to
+trajectory. The recorded channels are
+
+| Channel | Meaning |
+| --- | --- |
+| `ux`, `uy` | Kernel-averaged displacement relative to the reference lattice. |
+| `d` | Kernel-averaged damage. |
+| `fx`, `fy` | Kernel-averaged net force per particle (including the applied grip force). |
+| `mask` | $1$ on cells whose kernel support contains at least one particle, $0$ inside the notch. Constant in time. |
+
+**Numerical scheme** (LAMMPS PERI package driven in-process, then kernel
+averaging).
+
+1. *Particle discretisation.* LAMMPS is set up with `units lj`,
+   `dimension 2`, `boundary s s p` (shrink-wrapped in the plane, periodic in
+   the unused $z$), `atom_style peri` and a unit square lattice, so one
+   particle sits at every integer point of $[0, L_x] \times [0, L_y]$ with
+   density and volume $1$. The triangular notch is the intersection of four
+   half-planes — $0 \le x \le$ `notch_len` and between the lines
+   $y = \tfrac{L_y}{2} \mp \bigl(\tfrac{\texttt{notch\_th}}{2} - \sigma x\bigr)$
+   with slope $\sigma = \texttt{notch\_th}/(2\,\texttt{notch\_len})$ — and the
+   particles inside it are deleted ($18\,640$ remain of $161 \times 121$ with
+   the defaults). The strips $y \le$ `grip` and $y \ge L_y -$ `grip` are the
+   `lower` and `upper` groups.
+2. *Bond model.* `pair_style peri/pmb` with `pair_coeff * * c δ s00 alpha`,
+   where $c = c_0 (\delta_0/\delta)^3$. At the first `run` LAMMPS records
+   the *bond family* of every particle: all partners within the horizon
+   $\delta$ in the reference configuration. Thereafter each intact bond
+   exerts the PMB force $c\,s\,(\boldsymbol\xi + \boldsymbol\eta)/|\boldsymbol\xi + \boldsymbol\eta|$
+   times the partner volume (scaled down linearly for partners whose cell
+   straddles the horizon), and is removed for good once $s$ exceeds the
+   smaller of the two endpoints' critical stretches
+   $s_0 = s_{00} - \alpha\, s_{\min}$, where $s_{\min}$ is the most negative
+   stretch currently in that particle's family. A repulsive-only short-range
+   contact force between particles closer than the lattice spacing is part
+   of the style. Damage $d_i$ is `compute damage/atom`, the volume-weighted
+   fraction of broken bonds.
+3. *Time integration.* `fix nve` is velocity Verlet with step $\Delta t =$ `dt`:
+
+   $$
+   \mathbf v^{n+1/2} = \mathbf v^n + \tfrac{\Delta t}{2}\,\mathbf a^n, \qquad
+   \mathbf x^{n+1} = \mathbf x^n + \Delta t\,\mathbf v^{n+1/2}, \qquad
+   \mathbf v^{n+1} = \mathbf v^{n+1/2} + \tfrac{\Delta t}{2}\,\mathbf a^{n+1},
+   $$
+
+   with $\mathbf a = (\mathbf f_{\text{bond}} + \mathbf f_{\text{grip}})/m$,
+   $m = 1$. Particles start at rest on the reference lattice. No damping or
+   thermostat is applied, so elastic waves launched by the loading persist.
+4. *Load ramp.* The grip force is a LAMMPS variable evaluated every step,
+   $F(n) = F_{\max} \min(n/\texttt{ramp\_steps},\, 1)$, applied through
+   `fix addforce` as $+F(n)\,\mathbf e_y$ per particle in `upper` and
+   $-F(n)\,\mathbf e_y$ in `lower`. Ramping avoids the impulsive transient a
+   step load would cause.
+5. *Sampling from the live instance.* The run is advanced in chunks of
+   `save_every` steps; after each chunk positions $\mathbf x_i$, forces
+   $\mathbf f_i$ and damage $d_i$ are read from LAMMPS memory through the
+   Python API, sorted by particle id so they align with the reference
+   lattice. No dump files are written. Frame $0$ is the reference state.
+6. *Coarse-graining.* Cell centres $\mathbf x_a = ((i+\tfrac12)\Delta, (j+\tfrac12)\Delta)$
+   with $\Delta =$ `grid_spacing` tile the plate ($40 \times 30$ cells with
+   the defaults). With the Wendland C2 kernel
+   $K(r) = (1 - r/h)_+^4\,(1 + 4r/h)$, $h =$ `kernel_h`, the averaging
+   matrix is the row-normalised (Shepard) form
+
+   $$
+   W_{ai} = \frac{K(|\mathbf x_a - \mathbf X_i|)}{\sum_j K(|\mathbf x_a - \mathbf X_j|)},
+   \qquad
+   \mathbf u_a = \sum_i W_{ai}\,(\mathbf x_i - \mathbf X_i), \quad
+   d_a = \sum_i W_{ai}\, d_i, \quad
+   \mathbf f_a = \sum_i W_{ai}\, \mathbf f_i ,
+   $$
+
+   built once from the reference positions $\mathbf X_i$ (a KD-tree finds
+   the particles within $h$ of each cell) and reused for every frame, so the
+   averaging is a fixed linear map from particle to grid fields. Cells whose
+   denominator is zero — those inside the notch — get `mask` $= 0$ and zeros
+   in the field channels, because the v1 cache does not admit `NaN`;
+   downstream code should multiply by `mask` or index with it. A notch
+   narrower than about $2h + \Delta$ is not resolved in the mask at all.
+
+The default configuration (four load levels, $18\,640$ particles,
+$16\,000$ steps each) takes roughly $25$ minutes on one CPU core and writes
+~12 MB. In a reference run of the defaults the crack started during the
+ramp and the maximum cell damage reached $\approx 0.87$ by the end at
+$F_{\max} = 0.05$ and $\approx 0.75$ at $0.03$ (observed; the test suite
+only exercises the `fdr.yaml` geometry). `fdr.yaml` runs in under a
+second.
+
+**Initial conditions.** The reference lattice at rest, no thermal
+velocities. The dynamics are deterministic; `seed` is recorded for
+provenance only.
+
+**Parameters** (`configs/data/peridynamics_fracture_2d/default.yaml`):
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `F_max` | `[0.02, 0.03, 0.04, 0.05]` | Peak grip body force; one trajectory per entry. |
+| `Lx`, `Ly` | `160`, `120` | Plate size in particle spacings. |
+| `notch_len`, `notch_th` | `40.0`, `40.0` | Notch depth along $+x$ and mouth width. |
+| `grip` | `5.1` | Thickness of the loaded strips. |
+| `horizon` | `3.015` | Peridynamic horizon $\delta$. |
+| `c0`, `delta0` | `16.0`, `3.01` | Reference micromodulus and horizon; $c = c_0 (\delta_0/\delta)^3$. |
+| `s00`, `alpha` | `0.007`, `0.1` | PMB critical-stretch parameters. |
+| `dt` | `0.004` | Time step. |
+| `n_steps`, `ramp_steps` | `16000`, `4000` | Total steps and load-ramp length. |
+| `save_every` | `160` | Steps between frames (defaults: 101 frames). |
+| `grid_spacing` | `4.0` | Coarse-grid cell size. |
+| `kernel_h` | `2.5` | Wendland kernel radius. |
+| `seed` | `0` | Recorded only. |
+
+**Output.** `(n_traj, n_frames, 6, Lx/grid_spacing, Ly/grid_spacing)`,
+`channel_names = ("ux", "uy", "d", "fx", "fy", "mask")`, `times` in
+simulation units;
+`physical = {Lx, Ly, T, F_max_per_traj, notch_len, notch_th, grip, horizon, c, s00, alpha, ramp_time}`,
+`numerical = {Nx, Ny, dx, dy, dt, save_every, n_steps, ramp_steps, kernel, kernel_h, particle_spacing, n_particles}`,
+`provenance = {seed, generator, engine}`.
+
+**References.**
+
+- S. A. Silling, "Reformulation of elasticity theory for discontinuities and
+  long-range forces", *Journal of the Mechanics and Physics of Solids*
+  **48**, 175–209 (2000).
+- S. A. Silling and E. Askari, "A meshfree method based on the peridynamic
+  model of solid mechanics", *Computers & Structures* **83**, 1526–1535
+  (2005) — the PMB material and the damage definition.
+- M. L. Parks, R. B. Lehoucq, S. J. Plimpton, and S. A. Silling,
+  "Implementing peridynamics within a molecular dynamics code", *Computer
+  Physics Communications* **179**, 777–783 (2008) — the LAMMPS PERI package.
+- H. Wendland, "Piecewise polynomial, positive definite and compactly
+  supported radial functions of minimal degree", *Advances in Computational
+  Mathematics* **4**, 389–396 (1995) — the averaging kernel.
+- G. A. Francfort and J.-J. Marigo, "Revisiting brittle fracture as an
+  energy minimization problem", *Journal of the Mechanics and Physics of
+  Solids* **46**, 1319–1342 (1998); B. Bourdin, G. A. Francfort, and
+  J.-J. Marigo, "Numerical experiments in revisited brittle fracture",
+  *ibid.* **48**, 797–826 (2000) — the phase-field fracture models a
+  mesoscopic description of these data targets.

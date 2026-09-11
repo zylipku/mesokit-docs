@@ -1,0 +1,54 @@
+(allen-cahn-2d)=
+# `allen_cahn_2d` — Allen–Cahn equation on a periodic rectangle
+
+**Model.** The same equation on the torus $[0, L_x) \times [0, L_y)$,
+
+$$
+\partial_t u = \Delta u + \frac{u - u^3}{\varepsilon^2},
+$$
+
+the $L^2$ gradient flow of
+$F[u] = \int \bigl[\tfrac12 |\nabla u|^2 + \tfrac{1}{4\varepsilon^2}(1 - u^2)^2\bigr]\,d\mathbf x$.
+In two dimensions interfaces move by mean curvature (a circular domain of
+radius $R$ shrinks as $\dot R = -1/R$), so the trajectories show the
+relaxation of a smooth random field into $\pm 1$ domains followed by
+curvature-driven coarsening of the domain pattern. This is the training
+target of the 2D Spectral OnsagerNet and the dataset on which the family's
+physics check is run (see [Models](../../models.md)).
+
+**Numerical scheme** (Dedalus v3, Fourier–Galerkin in both directions, SBDF2 in time).
+
+1. *Spatial discretisation.* Two real Fourier bases with `Nx` and `Ny`
+   points and Dedalus `dealias=2`, so every product is evaluated on the
+   $2N_x \times 2N_y$ grid and projected back — alias-free for the cubic
+   term, exactly as in 1D; the Nyquist modes are excluded.
+2. *Implicit/explicit split and time stepping.* Identical to
+   `allen_cahn_1d`: $\partial_t u - \Delta u = (u - u^3)/\varepsilon^2$ with
+   $-\Delta \mapsto |\mathbf k|^2$ implicit and the whole reaction term
+   explicit, SBDF2 per mode with an SBDF1 first step, fixed step
+   `timestep`, stability requirement $\Delta t \lesssim \varepsilon^2/2$.
+3. *Output cadence and rejection.* Frames every `T_save_steps` iterations
+   ($101$ frames spaced $10^{-3}$ apart with the defaults); `u_bound`
+   rejection as in 1D.
+
+**Initial conditions.** A sum of `Nk` plane waves
+$\sum_j a_j \sin(2\pi k^x_j x/L_x + 2\pi k^y_j y/L_y + \phi_j)$ with integer
+wavevectors $(k^x_j, k^y_j)$ drawn without replacement from
+$\{-\texttt{max\_k}, \ldots, \texttt{max\_k}\}^2 \setminus \{(0, 0)\}$,
+$a_j \sim \mathrm{Uniform}(0, 1)$, $\phi_j \sim \mathrm{Uniform}(0, 2\pi)$,
+affinely rescaled to $[-1, 1]$. Unlike the 1D construction the waves are
+exact Fourier modes of the box and no constant offset is introduced.
+
+**Parameters** (`configs/data/allen_cahn_2d/default.yaml`): as for
+`allen_cahn_1d` with `n_traj = 32`, `Nx = Ny = 128`, `Lx = Ly = 2π`,
+`Nk = 5`, `max_k = 5`; `Ny` and `Ly` default to `Nx` and `Lx`.
+
+**Output.** `(n_traj, 101, 1, Nx, Ny)`, `channel_names = ("u",)`;
+`physical = {Lx, Ly, T, eps}`,
+`numerical = {Nx, Ny, dx, dy, dt, T_save_steps, Nk, max_k, dealias}`,
+`provenance = {seed, u_bound}`. The default configuration takes a few
+minutes and writes ~210 MB; `fdr.yaml` (4 × 32²) runs in seconds. Note that
+at $\varepsilon = 0.1$ the 32² grid does **not** resolve the interface
+($\Delta x = 0.196 > \varepsilon$); it is a smoke-test grid.
+
+**References.** As for `allen_cahn_1d`.

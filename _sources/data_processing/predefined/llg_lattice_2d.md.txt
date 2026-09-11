@@ -1,0 +1,138 @@
+(llg-lattice-2d)=
+# `llg_lattice_2d` — Landau–Lifshitz–Gilbert spin lattice
+
+**Model.** Classical unit spins $\mathbf{m}_i \in S^2$ on an
+$N_x \times N_y$ periodic square lattice with Heisenberg energy
+
+$$
+E(\mathbf{m}) = -J \sum_{\langle ij \rangle} \mathbf{m}_i \cdot \mathbf{m}_j
+- K \sum_i (\mathbf{m}_i \cdot \mathbf{e}_z)^2 - h \sum_i \mathbf{m}_i \cdot \mathbf{e}_z ,
+$$
+
+so that the effective field is
+$\mathbf{H}_i = -\partial E / \partial \mathbf{m}_i = J \sum_{j \in \mathrm{nn}(i)} \mathbf{m}_j + 2K\, m_i^z\, \mathbf{e}_z + h\, \mathbf{e}_z$.
+Each spin obeys the Landau–Lifshitz form of the Gilbert equation
+
+$$
+\frac{d\mathbf{m}_i}{dt}
+= -\gamma'\, \mathbf{m}_i \times \mathbf{H}_i
+  \;-\; \gamma' \alpha\, \mathbf{m}_i \times (\mathbf{m}_i \times \mathbf{H}_i),
+\qquad \gamma' = \frac{\gamma}{1 + \alpha^2},
+$$
+
+whose first term is the **reversible** Larmor precession about the local
+field and whose second is the **dissipative** Gilbert damping that drags the
+spin toward the field. Two identities hold exactly for the continuous
+dynamics: $|\mathbf{m}_i| = 1$ for all time, and
+$dE/dt = -\gamma' \alpha \sum_i |\mathbf{m}_i \times \mathbf{H}_i|^2 \le 0$,
+with equality only when $\alpha = 0$ or at an equilibrium
+($\mathbf m_i \parallel \mathbf H_i$ everywhere). The model is at zero
+temperature — no stochastic thermal field — so every trajectory is a
+deterministic relaxation toward the easy axis. Within the recorded window
+(`T = 50`) the lattice is still a multi-domain state with live domain
+walls and spin waves; the uniform ground states
+$\mathbf{m}_i \equiv \pm \mathbf{e}_z$ are reached only much later.
+
+**What the data are.** The toolkit's first multi-channel dataset
+(`n_channel = 3`) and its example of dynamics with a built-in split into a
+skew-symmetric (conservative) and a symmetric positive (dissipative) part —
+precisely the structure $-(M + W)\nabla V$ that Onsager-type mesoscopic
+models assume. It is the lattice-level prototype of atomistic spin dynamics
+and the natural test bed for learning a free energy $E$, a mobility
+$\propto \alpha$, and a reactive coupling $\propto 1$ from data. Coarse-graining
+to a magnetisation field can be done downstream by block averaging the three
+channels.
+
+**Numerical scheme** (classical RK4 with projection onto the sphere).
+
+1. *State and effective field.* All trajectories are one
+   `(n_traj, 3, Nx, Ny)` float64 array. The exchange sum over the four
+   nearest neighbours is formed with periodic shifts of the array
+   (`np.roll` by $\pm1$ along each lattice axis), so
+
+   $$
+   \mathbf H_{ij} = J\,(\mathbf m_{i+1,j} + \mathbf m_{i-1,j} + \mathbf m_{i,j+1} + \mathbf m_{i,j-1})
+   + \bigl(2K\, m^z_{ij} + h\bigr)\,\mathbf e_z .
+   $$
+
+2. *Right-hand side.* With $\gamma' = \gamma/(1+\alpha^2)$,
+   $\mathbf R(\mathbf m) = -\gamma'\,\mathbf m \times \mathbf H - \gamma'\alpha\,\mathbf m \times (\mathbf m \times \mathbf H)$,
+   the cross products taken site-wise over the channel axis.
+3. *Time stepping.* One step of size $\Delta t =$ `dt` is
+
+   $$
+   \begin{aligned}
+   \mathbf k_1 &= \mathbf R(\mathbf m^n), &
+   \mathbf k_2 &= \mathbf R(\mathbf m^n + \tfrac{\Delta t}{2}\mathbf k_1), \\
+   \mathbf k_3 &= \mathbf R(\mathbf m^n + \tfrac{\Delta t}{2}\mathbf k_2), &
+   \mathbf k_4 &= \mathbf R(\mathbf m^n + \Delta t\,\mathbf k_3), \\
+   \tilde{\mathbf m} &= \mathbf m^n + \tfrac{\Delta t}{6}(\mathbf k_1 + 2\mathbf k_2 + 2\mathbf k_3 + \mathbf k_4), &
+   \mathbf m^{n+1}_{ij} &= \tilde{\mathbf m}_{ij} / |\tilde{\mathbf m}_{ij}| .
+   \end{aligned}
+   $$
+
+   RK4 is fourth-order accurate but not norm-preserving; the final
+   projection restores $|\mathbf m_{ij}| = 1$ exactly (to round-off) at
+   every step. The scheme is therefore not a geometric integrator and the
+   energy law $dE/dt \le 0$ is not enforced structurally. It held
+   monotonically frame by frame in a run of the default configuration; the
+   test suite asserts it on a short run with $\alpha = 0.2$, $h = 0.05$ and
+   the same $\Delta t$.
+4. *Step size.* The fastest motion is precession at angular frequency
+   $\gamma' |\mathbf H| \le \gamma'(4J + 2K + |h|) = 4.2$ with the defaults.
+   RK4's stability interval on the imaginary axis is $|\omega \Delta t| < 2\sqrt2$,
+   so $\Delta t = 0.01$ ($\omega\Delta t = 0.042$) is far inside it; the step
+   is chosen for accuracy of the spin-wave phases, not stability.
+5. *Output cadence.* Frame $0$ is the initial configuration; frame $j$ is
+   the state after $j \cdot$ `save_every` steps
+   (`times` $= (0, \Delta t\,\texttt{save\_every}, \ldots)$, $101$ frames
+   $0.5$ apart with the defaults), stored in float32.
+
+The default configuration takes about two minutes on one CPU core and
+writes a ~80 MB file.
+
+**Initial conditions.** `ic: random` — every spin uniformly distributed on
+the sphere (independent Gaussian components, normalised);
+`ic: tilted` — $\mathbf{e}_z$ plus Gaussian noise of scale `ic_tilt`,
+normalised, i.e. a small perturbation of the ground state that excites spin
+waves.
+
+**Parameters** (`configs/data/llg_lattice_2d/default.yaml`):
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `n_traj` | `64` | Trajectories (independent initial spins). |
+| `Nx`, `Ny` | `32`, `= Nx` | Lattice size. |
+| `J` | `1.0` | Exchange coupling (`> 0` ferromagnetic). |
+| `K` | `0.1` | Uniaxial anisotropy along $\mathbf{e}_z$. |
+| `h` | `0.0` | External field along $\mathbf{e}_z$. |
+| `alpha` | `0.1` | Gilbert damping. |
+| `gamma` | `1.0` | Gyromagnetic ratio. |
+| `T` | `50.0` | Final simulated time. |
+| `dt` | `0.01` | RK4 step. |
+| `save_every` | `50` | Steps between frames (defaults: 5000 steps → 101 frames). |
+| `ic`, `ic_tilt` | `random`, `0.3` | Initial-condition family and tilt scale. |
+| `seed` | `0` | RNG seed (`-1` for non-deterministic). |
+
+**Output.** `(n_traj, n_frames, 3, Nx, Ny)`,
+`channel_names = ("mx", "my", "mz")`, `times` in simulation units;
+`physical = {J, K, h, alpha, gamma, T, Lx, Ly}`,
+`numerical = {Nx, Ny, dx, dt, save_every, scheme}`,
+`provenance = {seed, ic, ic_tilt, generator}`.
+
+**References.**
+
+- L. D. Landau and E. M. Lifshitz, "On the theory of the dispersion of
+  magnetic permeability in ferromagnetic bodies", *Physikalische Zeitschrift
+  der Sowjetunion* **8**, 153–169 (1935).
+- T. L. Gilbert, "A phenomenological theory of damping in ferromagnetic
+  materials", *IEEE Transactions on Magnetics* **40**, 3443–3449 (2004);
+  original abstract in *Physical Review* **100**, 1243 (1955).
+- M. Lakshmanan, "The fascinating world of the Landau–Lifshitz–Gilbert
+  equation: an overview", *Philosophical Transactions of the Royal Society A*
+  **369**, 1280–1300 (2011).
+- R. F. L. Evans, W. J. Fan, P. Chureemart, T. A. Ostler, M. O. A. Ellis,
+  and R. W. Chantrell, "Atomistic spin model simulations of magnetic
+  nanomaterials", *Journal of Physics: Condensed Matter* **26**, 103202
+  (2014) — the atomistic-spin-dynamics setting this lattice model
+  abstracts.
